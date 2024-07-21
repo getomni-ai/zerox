@@ -1,20 +1,22 @@
-## zerox ocr
+## Zerox OCR
 
-This is a dead simple way of OCR-ing a document for AI ingestion. Literally just grabbing one page at a time, turning it into an image, and asking GPT to turn the image into markdown.
+A dead simple way of OCR-ing a document for AI ingestion.
 
-Sounds pretty dumb! But with the `gpt-4o-mini` release this method is only slightly more expensive than tools like AWS Textract or Unstructured. And it works with any type of document.
+The general logic:
 
-The general logic is pretty much:
-
-- Pass in a pdf (url or buffer)
-- Turn the pdf into a series of images
+- Pass in a PDF (URL or file buffer)
+- Turn the PDF into a series of images
 - Pass each image to GPT and ask nicely for markdown
 - Aggregate the responses and return markdown
+
+Sounds pretty basic! But with the `gpt-4o-mini` release this method is only slightly more expensive than tools like AWS Textract or Unstructured. And tends to give back better results.
+
+Documents are meant to be a visual representation after all. With weird layouts, tables, charts, etc. The easiest solution
 
 ### Installation
 
 ```sh
-npm install zerox-ocr
+npm install zerox
 ```
 
 ### Usage
@@ -41,8 +43,24 @@ const result = await zerox({
   maintainFormat: false, // Slower but helps maintain consistent formatting.
   cleanup: true, // Clear images from tmp after run.
   outputDir: undefined, // Save combined result.md to a file
-	tempDir: // Directory to use for temporary files (default: system temp directory)
+  tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory)
 });
+```
+
+The `maintainFormat` option trys to return the markdown in a consistent format by passing the output of a prior page in as additional context for the next page. This requires the requests to run synchronously, so it's a lot slower. But valueable if your documents have a lot of tabular data, or frequently have tables that cross pages.
+
+```
+Request #1 => page_1_image
+Request #2 => page_1_markdown + page_2_image
+Request #3 => page_2_markdown + page_3_image
+```
+
+### Requirements
+
+This uses `graphicsmagick` to turn each page into a png. You may need to run:
+
+```sh
+brew install graphicsmagick
 ```
 
 ### Example Output
