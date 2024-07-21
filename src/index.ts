@@ -1,14 +1,11 @@
 import os from "os";
 import fs from "fs-extra";
 import path from "path";
-import dotenv from "dotenv";
 import { getCompletion } from "./openAI";
 import { convertPdfToImages, downloadFile, formatMarkdown } from "./utils";
 import { ZeroxArgs } from "./types";
 
-dotenv.config();
-
-export const documentToMarkdown = async ({
+export const zerox = async ({
   cleanup = true,
   concurrency = 10,
   filePath,

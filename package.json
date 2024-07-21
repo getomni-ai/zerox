@@ -12,7 +12,6 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^1.7.2",
-    "dotenv": "^16.4.5",
     "fs-extra": "^11.2.0",
     "os": "^0.1.2",
     "path": "^0.12.7",
