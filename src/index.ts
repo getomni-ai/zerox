@@ -4,6 +4,7 @@ import path from "path";
 import dotenv from "dotenv";
 import { getCompletion } from "./openAI";
 import { convertPdfToImages, downloadFile, formatMarkdown } from "./utils";
+import { ZeroxArgs } from "./types";
 
 dotenv.config();
 
@@ -13,9 +14,9 @@ export const documentToMarkdown = async ({
   filePath,
   maintainFormat = false,
   openaiAPIKey,
-  outputDir = null,
+  outputDir,
   tempDir = os.tmpdir(),
-}) => {
+}: ZeroxArgs) => {
   let priorPage = "";
   let inputTokenCount = 0;
   let outputTokenCount = 0;
@@ -55,7 +56,7 @@ export const documentToMarkdown = async ({
           maintainFormat,
           priorPage,
         });
-        const formattedMarkdown = formatMarkdown({ text: content });
+        const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
         outputTokenCount += outputTokens;
 
@@ -70,7 +71,7 @@ export const documentToMarkdown = async ({
     }
   } else {
     // Process in parallel with a limit on concurrent pages
-    const processPage = async (image) => {
+    const processPage = async (image: string) => {
       const imagePath = path.join(tempDirectory, image);
       try {
         const { content, inputTokens, outputTokens } = await getCompletion({
@@ -79,7 +80,7 @@ export const documentToMarkdown = async ({
           maintainFormat,
           priorPage,
         });
-        const formattedMarkdown = formatMarkdown({ text: content });
+        const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
         outputTokenCount += outputTokens;
 
@@ -95,7 +96,7 @@ export const documentToMarkdown = async ({
     };
 
     // Function to process pages with concurrency limit
-    const processPagesInBatches = async (images, limit) => {
+    const processPagesInBatches = async (images: string[], limit: number) => {
       const results: any[] = [];
       const executing: any[] = [];
 
@@ -135,14 +136,6 @@ export const documentToMarkdown = async ({
     return { text: el, page: i + 1, contentLength: el.length };
   });
 
-  console.log({
-    completionTime,
-    fileName,
-    inputTokens: inputTokenCount,
-    outputTokens: outputTokenCount,
-    pages: formattedPages,
-  });
-
   return {
     completionTime,
     fileName,
@@ -151,19 +144,3 @@ export const documentToMarkdown = async ({
     pages: formattedPages,
   };
 };
-
-// Example Files
-// https://omniai-commodity-test.s3.amazonaws.com/ContainerArrivalNotice.pdf
-// https://omniai-commodity-test.s3.amazonaws.com/Invoice4.pdf
-// https://omniai-commodity-test.s3.amazonaws.com/certificate of quota eligibility.pdf
-// https://omniai-commodity-test.s3.amazonaws.com/CertificateOfCleanliness.pdf
-
-documentToMarkdown({
-  filePath:
-    "https://omniai-commodity-test.s3.amazonaws.com/CertificateOfCleanliness.pdf",
-  // outputDir: '/Users/tylermaran/code/omni/packages/server/ocr/outputs',
-  // tempDir: '/Users/tylermaran/code/omni/packages/server/ocr/tmp',
-  maintainFormat: false,
-  openaiAPIKey: process.env.OPENAI_API_KEY,
-  concurrency: 10,
-});

@@ -3,13 +3,13 @@ import path from "path";
 import axios from "axios";
 import { fromPath } from "pdf2pic";
 
-export const encodeImageToBase64 = async (imagePath) => {
+export const encodeImageToBase64 = async (imagePath: string) => {
   const imageBuffer = await fs.readFile(imagePath);
   return imageBuffer.toString("base64");
 };
 
 // Strip out the ```markdown wrapper
-export const formatMarkdown = ({ text }) => {
+export const formatMarkdown = (text: string) => {
   const formattedMarkdown = text
     .replace(/^```[a-z]*\n([\s\S]*?)\n```$/g, "$1")
     .replace(/^```\n([\s\S]*?)\n```$/g, "$1");
@@ -42,7 +42,13 @@ export const downloadFile = async ({
 
 // Convert each page to an png and save that image to tmp
 // @TODO: pull dimensions from original document. Also look into rotated pages
-export const convertPdfToImages = async ({ localPath, tempDir }) => {
+export const convertPdfToImages = async ({
+  localPath,
+  tempDir,
+}: {
+  localPath: string;
+  tempDir: string;
+}) => {
   const options = {
     density: 300,
     saveFilename: path.basename(localPath, path.extname(localPath)),
@@ -59,11 +65,14 @@ export const convertPdfToImages = async ({ localPath, tempDir }) => {
     });
     await Promise.all(
       convertResults.map(async (result) => {
+        if (!result || !result.buffer) {
+          throw "Could not convert page to image buffer";
+        }
         const imagePath = path.join(
           tempDir,
           `${options.saveFilename}_page_${result.page}.png`
         );
-        await fs.writeFile(imagePath, result.buffer);
+        fs.writeFile(imagePath, result.buffer);
       })
     );
     return convertResults;

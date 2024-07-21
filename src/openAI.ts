@@ -1,23 +1,13 @@
 import axios from "axios";
 import { encodeImageToBase64 } from "./utils";
-
-interface CompletionResponse {
-  content: string;
-  inputTokens: number;
-  outputTokens: number;
-}
+import { CompletionArgs, CompletionResponse } from "./types";
 
 export const getCompletion = async ({
-  priorPage,
-  imagePath,
   apiKey,
+  imagePath,
   maintainFormat,
-}: {
-  priorPage: string;
-  apiKey: string;
-  imagePath: string;
-  maintainFormat: boolean;
-}): Promise<CompletionResponse> => {
+  priorPage,
+}: CompletionArgs): Promise<CompletionResponse> => {
   const systemPrompt = `
     Convert the following PDF page to markdown. 
     Return only the markdown with no explanation text. 
@@ -52,8 +42,8 @@ export const getCompletion = async ({
     const response = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       {
-        model: "gpt-4o-mini",
         messages,
+        model: "gpt-4o-mini",
         temperature: 0,
       },
       {
