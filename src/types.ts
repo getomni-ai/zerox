@@ -8,6 +8,20 @@ export interface ZeroxArgs {
   tempDir?: string;
 }
 
+export interface Page {
+  content: string;
+  contentLength: number;
+  page: number;
+}
+
+export interface ZeroxOutput {
+  completionTime: number;
+  fileName: string;
+  inputTokens: number;
+  outputTokens: number;
+  pages: Page[];
+}
+
 export interface CompletionResponse {
   content: string;
   inputTokens: number;

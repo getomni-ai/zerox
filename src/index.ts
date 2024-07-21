@@ -3,7 +3,7 @@ import fs from "fs-extra";
 import path from "path";
 import { getCompletion } from "./openAI";
 import { convertPdfToImages, downloadFile, formatMarkdown } from "./utils";
-import { ZeroxArgs } from "./types";
+import { ZeroxArgs, ZeroxOutput } from "./types";
 
 export const zerox = async ({
   cleanup = true,
@@ -13,10 +13,10 @@ export const zerox = async ({
   openaiAPIKey,
   outputDir,
   tempDir = os.tmpdir(),
-}: ZeroxArgs) => {
-  let priorPage = "";
+}: ZeroxArgs): Promise<ZeroxOutput> => {
   let inputTokenCount = 0;
   let outputTokenCount = 0;
+  let priorPage = "";
   const aggregatedMarkdown: string[] = [];
   const startTime = new Date();
 
