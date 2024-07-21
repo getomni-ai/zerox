@@ -19,6 +19,14 @@ Documents are meant to be a visual representation after all. With weird layouts,
 npm install zerox
 ```
 
+### Requirements
+
+This uses `graphicsmagick` to turn each page into a png. You may need to run:
+
+```sh
+brew install graphicsmagick
+```
+
 ### Usage
 
 ```ts
@@ -55,18 +63,48 @@ Request #2 => page_1_markdown + page_2_image
 Request #3 => page_2_markdown + page_3_image
 ```
 
-### Requirements
-
-This uses `graphicsmagick` to turn each page into a png. You may need to run:
-
-```sh
-brew install graphicsmagick
-```
-
 ### Example Output
 
-```
-add example here
+```js
+{
+  completionTime: 10038,
+  fileName: 'invoice_36258',
+  inputTokens: 25543,
+  outputTokens: 210,
+  pages: [
+    {
+      content: '# INVOICE # 36258\n' +
+        '**Date:** Mar 06 2012  \n' +
+        '**Ship Mode:** First Class  \n' +
+        '**Balance Due:** $50.10  \n' +
+        '## Bill To:\n' +
+        'Aaron Bergman  \n' +
+        '98103, Seattle,  \n' +
+        'Washington, United States  \n' +
+        '## Ship To:\n' +
+        'Aaron Bergman  \n' +
+        '98103, Seattle,  \n' +
+        'Washington, United States  \n' +
+        '\n' +
+        '| Item                                       | Quantity | Rate   | Amount  |\n' +
+        '|--------------------------------------------|----------|--------|---------|\n' +
+        "| Global Push Button Manager's Chair, Indigo | 1        | $48.71 | $48.71  |\n" +
+        '| Chairs, Furniture, FUR-CH-4421             |          |        |         |\n' +
+        '\n' +
+        '**Subtotal:** $48.71  \n' +
+        '**Discount (20%):** $9.74  \n' +
+        '**Shipping:** $11.13  \n' +
+        '**Total:** $50.10  \n' +
+        '---\n' +
+        '**Notes:**  \n' +
+        'Thanks for your business!  \n' +
+        '**Terms:**  \n' +
+        'Order ID : CA-2012-AB10015140-40974  ',
+      page: 1,
+      contentLength: 747
+    }
+  ]
+}
 ```
 
 ### License

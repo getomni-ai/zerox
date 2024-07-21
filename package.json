@@ -21,5 +21,19 @@
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.14.11",
     "typescript": "^5.5.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/getomni-ai/zerox.git"
+  },
+  "keywords": [
+    "ocr",
+    "document",
+    "llm"
+  ],
+  "types": "./dist/index.d.ts",
+  "bugs": {
+    "url": "https://github.com/getomni-ai/zerox/issues"
+  },
+  "homepage": "https://github.com/getomni-ai/zerox#readme"
 }

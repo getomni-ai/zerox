@@ -130,7 +130,7 @@ export const zerox = async ({
   const endTime = new Date();
   const completionTime = endTime.getTime() - startTime.getTime();
   const formattedPages = aggregatedMarkdown.map((el, i) => {
-    return { text: el, page: i + 1, contentLength: el.length };
+    return { content: el, page: i + 1, contentLength: el.length };
   });
 
   return {
