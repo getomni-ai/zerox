@@ -1,8 +1,8 @@
+import fetch from "node-fetch";
 import fs from "fs-extra";
 import path from "path";
 import { fromPath } from "pdf2pic";
 import { pipeline } from "stream/promises";
-import { Readable } from "stream";
 
 export const encodeImageToBase64 = async (imagePath: string) => {
   const imageBuffer = await fs.readFile(imagePath);
@@ -32,30 +32,14 @@ export const downloadFile = async ({
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
+  if (!response.body) throw new Error("Response body is null");
 
-  const reader = response.body?.getReader();
-  if (!reader) {
-    throw new Error("Failed to get reader from response body");
-  }
-
-  const stream = new Readable({
-    async read() {
-      const { done, value } = await reader.read();
-      if (done) {
-        this.push(null);
-      } else {
-        this.push(Buffer.from(value));
-      }
-    },
-  });
-
-  await pipeline(stream, writer);
-
+  await pipeline(response.body, writer);
   return localPdfPath;
 };
 
-// Convert each page to an png and save that image to tmp
-// @TODO: pull dimensions from original document. Also look into rotated pages
+// Convert each page to a png and save that image to tmp
+// @TODO: pull dimensions from the original document. Also, look into rotated pages
 export const convertPdfToImages = async ({
   localPath,
   tempDir,
@@ -80,13 +64,13 @@ export const convertPdfToImages = async ({
     await Promise.all(
       convertResults.map(async (result) => {
         if (!result || !result.buffer) {
-          throw "Could not convert page to image buffer";
+          throw new Error("Could not convert page to image buffer");
         }
         const imagePath = path.join(
           tempDir,
           `${options.saveFilename}_page_${result.page}.png`
         );
-        fs.writeFile(imagePath, result.buffer);
+        await fs.writeFile(imagePath, result.buffer);
       })
     );
     return convertResults;

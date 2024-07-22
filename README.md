@@ -28,7 +28,7 @@ brew install graphicsmagick
 ### Usage
 
 ```ts
-import { documentToMarkdown } from "zerox-ocr";
+import { zerox } from "zerox";
 
 const result = await zerox({
   filePath: "path/to/file",

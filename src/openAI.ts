@@ -1,5 +1,6 @@
-import { encodeImageToBase64 } from "./utils";
+import fetch from "node-fetch";
 import { CompletionArgs, CompletionResponse } from "./types";
+import { encodeImageToBase64 } from "./utils";
 
 export const getCompletion = async ({
   apiKey,
@@ -50,7 +51,7 @@ export const getCompletion = async ({
         temperature: 0,
       }),
     });
-    const data = await response.json();
+    const data: any = await response.json();
 
     return {
       content: data.choices[0].message.content,
