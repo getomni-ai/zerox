@@ -1,7 +1,8 @@
 import fs from "fs-extra";
 import path from "path";
-import axios from "axios";
 import { fromPath } from "pdf2pic";
+import { pipeline } from "stream/promises";
+import { Readable } from "stream";
 
 export const encodeImageToBase64 = async (imagePath: string) => {
   const imageBuffer = await fs.readFile(imagePath);
@@ -27,17 +28,30 @@ export const downloadFile = async ({
   const localPdfPath = path.join(tempDir, path.basename(filePath));
   const writer = fs.createWriteStream(localPdfPath);
 
-  const response = await axios({
-    method: "GET",
-    responseType: "stream",
-    url: filePath,
-  });
-  response.data.pipe(writer);
+  const response = await fetch(filePath);
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
 
-  return new Promise((resolve, reject) => {
-    writer.on("finish", () => resolve(localPdfPath));
-    writer.on("error", reject);
+  const reader = response.body?.getReader();
+  if (!reader) {
+    throw new Error("Failed to get reader from response body");
+  }
+
+  const stream = new Readable({
+    async read() {
+      const { done, value } = await reader.read();
+      if (done) {
+        this.push(null);
+      } else {
+        this.push(Buffer.from(value));
+      }
+    },
   });
+
+  await pipeline(stream, writer);
+
+  return localPdfPath;
 };
 
 // Convert each page to an png and save that image to tmp
@@ -51,11 +65,11 @@ export const convertPdfToImages = async ({
 }) => {
   const options = {
     density: 300,
-    saveFilename: path.basename(localPath, path.extname(localPath)),
-    savePath: tempDir,
     format: "png",
     height: 1056,
-    width: 816,
+    preserveAspectRatio: true,
+    saveFilename: path.basename(localPath, path.extname(localPath)),
+    savePath: tempDir,
   };
   const storeAsImage = fromPath(localPath, options);
 
