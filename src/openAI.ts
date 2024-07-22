@@ -11,7 +11,7 @@ export const getCompletion = async ({
   const systemPrompt = `
     Convert the following PDF page to markdown. 
     Return only the markdown with no explanation text. 
-    Include all detail contained within the page.
+    Do not exclude any content from the page.
   `;
 
   // Default system message.
