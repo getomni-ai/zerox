@@ -19,8 +19,6 @@ Sounds pretty basic! But with the `gpt-4o-mini` release this method is only slig
 npm install zerox
 ```
 
-### Requirements
-
 This uses `graphicsmagick` to turn each page into a png. You may need to run:
 
 ```sh
