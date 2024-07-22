@@ -1,4 +1,5 @@
 /src
 *.ts
+!dist/
 .gitignore
 tsconfig.json
