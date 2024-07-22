@@ -3,7 +3,7 @@ export interface ZeroxArgs {
   concurrency?: number;
   filePath: string;
   maintainFormat?: boolean;
-  openaiAPIKey: string;
+  openaiAPIKey?: string;
   outputDir?: string;
   tempDir?: string;
 }
