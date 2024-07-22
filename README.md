@@ -1,3 +1,5 @@
+![Hero Image](./examples/heroImage.png)
+
 ## Zerox OCR
 
 A dead simple way of OCR-ing a document for AI ingestion. Documents are meant to be a visual representation after all. With weird layouts, tables, charts, etc. The vision models just make sense!
