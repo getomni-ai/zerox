@@ -10,7 +10,7 @@ export const zerox = async ({
   concurrency = 10,
   filePath,
   maintainFormat = false,
-  openaiAPIKey,
+  openaiAPIKey = "",
   outputDir,
   tempDir = os.tmpdir(),
 }: ZeroxArgs): Promise<ZeroxOutput> => {
@@ -19,6 +19,14 @@ export const zerox = async ({
   let priorPage = "";
   const aggregatedMarkdown: string[] = [];
   const startTime = new Date();
+
+  // Validators
+  if (!openaiAPIKey || !openaiAPIKey.length) {
+    throw new Error("Missing OpenAI API Key");
+  }
+  if (!filePath || !filePath.length) {
+    throw new Error("Missing file path");
+  }
 
   // Ensure the output directory exists
   if (outputDir) await fs.ensureDir(outputDir);
