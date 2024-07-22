@@ -26,19 +26,25 @@ export const downloadFile = async ({
   tempDir: string;
 }): Promise<string | void> => {
   const localPdfPath = path.join(tempDir, path.basename(filePath));
-  const writer = fs.createWriteStream(localPdfPath);
 
-  const response = await axios({
-    url: filePath,
-    method: "GET",
-    responseType: "stream",
-  });
+  // Check if filePath is a URL
+  if (filePath.startsWith("http://") || filePath.startsWith("https://")) {
+    const writer = fs.createWriteStream(localPdfPath);
 
-  if (response.status !== 200) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
+    const response = await axios({
+      url: filePath,
+      method: "GET",
+      responseType: "stream",
+    });
+
+    if (response.status !== 200) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    await pipeline(response.data, writer);
+  } else {
+    // If filePath is a local file, copy it to the temp directory
+    await fs.copyFile(filePath, localPdfPath);
   }
-  await pipeline(response.data, writer);
-
   return localPdfPath;
 };
 
