@@ -1,17 +1,15 @@
 ## Zerox OCR
 
-A dead simple way of OCR-ing a document for AI ingestion.
+A dead simple way of OCR-ing a document for AI ingestion. Documents are meant to be a visual representation after all. With weird layouts, tables, charts, etc. The vision models just make sense!
 
 The general logic:
 
 - Pass in a PDF (URL or file buffer)
 - Turn the PDF into a series of images
-- Pass each image to GPT and ask nicely for markdown
-- Aggregate the responses and return markdown
+- Pass each image to GPT and ask nicely for Markdown
+- Aggregate the responses and return Markdown
 
 Sounds pretty basic! But with the `gpt-4o-mini` release this method is only slightly more expensive than tools like AWS Textract or Unstructured. And tends to give back better results.
-
-Documents are meant to be a visual representation after all. With weird layouts, tables, charts, etc. The easiest solution
 
 ### Installation
 
