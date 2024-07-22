@@ -1,4 +1,3 @@
-import axios from "axios";
 import { encodeImageToBase64 } from "./utils";
 import { CompletionArgs, CompletionResponse } from "./types";
 
@@ -39,28 +38,27 @@ export const getCompletion = async ({
   });
 
   try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         messages,
         model: "gpt-4o-mini",
         temperature: 0,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      }),
+    });
+    const data = await response.json();
 
     return {
-      content: response.data.choices[0].message.content,
-      inputTokens: response.data.usage.prompt_tokens,
-      outputTokens: response.data.usage.completion_tokens,
+      content: data.choices[0].message.content,
+      inputTokens: data.usage.prompt_tokens,
+      outputTokens: data.usage.completion_tokens,
     };
   } catch (err) {
-    console.error("Error in OpenAI completion");
+    console.error("Error in OpenAI completion", err);
     throw err;
   }
 };
