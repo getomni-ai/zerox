@@ -1,6 +1,6 @@
 {
   "name": "zerox",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "ocr documents using gpt-4o-mini",
   "main": "dist/index.js",
   "scripts": {
