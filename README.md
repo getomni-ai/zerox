@@ -27,11 +27,25 @@ brew install graphicsmagick
 
 ### Usage
 
+**With file URL**
+
 ```ts
 import { zerox } from "zerox";
 
 const result = await zerox({
-  filePath: "path/to/file",
+  filePath: "https://omni-demo-data.s3.amazonaws.com/test/cs101.pdf",
+  openaiAPIKey: process.env.OPENAI_API_KEY,
+});
+```
+
+**From local path**
+
+```ts
+import path from "path";
+import { zerox } from "zerox";
+
+const result = await zerox({
+  filePath: path.resolve(__dirname, "./cs101.pdf"),
   openaiAPIKey: process.env.OPENAI_API_KEY,
 });
 ```
