@@ -11,8 +11,8 @@
   "author": "tylermaran",
   "license": "MIT",
   "dependencies": {
+    "axios": "^1.7.2",
     "fs-extra": "^11.2.0",
-    "node-fetch": "^3.3.2",
     "os": "^0.1.2",
     "path": "^0.12.7",
     "pdf2pic": "^3.1.1"

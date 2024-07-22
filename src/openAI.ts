@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import axios from "axios";
 import { CompletionArgs, CompletionResponse } from "./types";
 import { encodeImageToBase64 } from "./utils";
 
@@ -39,19 +39,22 @@ export const getCompletion = async ({
   });
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    const response = await axios.post(
+      "https://api.openai.com/v1/chat/completions",
+      {
         messages,
         model: "gpt-4o-mini",
         temperature: 0,
-      }),
-    });
-    const data: any = await response.json();
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const data = response.data;
 
     return {
       content: data.choices[0].message.content,

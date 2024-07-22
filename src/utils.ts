@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
 import { fromPath } from "pdf2pic";
@@ -28,13 +28,17 @@ export const downloadFile = async ({
   const localPdfPath = path.join(tempDir, path.basename(filePath));
   const writer = fs.createWriteStream(localPdfPath);
 
-  const response = await fetch(filePath);
-  if (!response.ok) {
+  const response = await axios({
+    url: filePath,
+    method: "GET",
+    responseType: "stream",
+  });
+
+  if (response.status !== 200) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
-  if (!response.body) throw new Error("Response body is null");
+  await pipeline(response.data, writer);
 
-  await pipeline(response.body, writer);
   return localPdfPath;
 };
 
