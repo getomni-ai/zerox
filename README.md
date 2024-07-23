@@ -15,7 +15,7 @@ Sounds pretty basic! But with the `gpt-4o-mini` this method is price competitive
 
 #### Pricing Comparison
 
-This is how the pricing stacks up to other document processers.
+This is how the pricing stacks up to other document processers. Running 1,000 pages with Zerox uses about 25M input tokens and 0.4M output tokens.
 
 | Service                                                                                                     | Cost                 | Accuracy | Table Quality |
 | ----------------------------------------------------------------------------------------------------------- | -------------------- | -------- | ------------- |
@@ -26,9 +26,7 @@ This is how the pricing stacks up to other document processers.
 | ------------------------                                                                                    | -------------------- | -------- | ------------- |
 | Zerox (gpt-mini)                                                                                            | $ 4.00 / 1,000 pages | High     | High          |
 
-Running 1,000 pages with Zerox uses about 25M input tokens and 0.4M output tokens. Note with OpenAI's batch API this would be $2.00 / 1000 pages.
-
-### Installation
+## Installation
 
 ```sh
 npm install zerox
@@ -36,11 +34,7 @@ npm install zerox
 
 Zerox uses `graphicsmagick` and `ghostscript` for the pdf => image processing step. These should be pulled automatically, but you may need to manually install.
 
-```sh
-brew install graphicsmagick
-```
-
-### Usage
+## Usage
 
 **With file URL**
 
