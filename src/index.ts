@@ -1,9 +1,14 @@
-import os from "os";
-import fs from "fs-extra";
-import path from "path";
+import {
+  convertPdfToImages,
+  downloadFile,
+  formatMarkdown,
+  isString,
+} from "./utils";
 import { getCompletion } from "./openAI";
-import { convertPdfToImages, downloadFile, formatMarkdown } from "./utils";
 import { ZeroxArgs, ZeroxOutput } from "./types";
+import fs from "fs-extra";
+import os from "os";
+import path from "path";
 
 export const zerox = async ({
   cleanup = true,
@@ -22,7 +27,7 @@ export const zerox = async ({
 
   // Validators
   if (!openaiAPIKey || !openaiAPIKey.length) {
-    throw new Error("Missing OpenAI API Key");
+    throw new Error("Missing OpenAI API key");
   }
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
@@ -76,7 +81,7 @@ export const zerox = async ({
     }
   } else {
     // Process in parallel with a limit on concurrent pages
-    const processPage = async (image: string) => {
+    const processPage = async (image: string): Promise<string | null> => {
       const imagePath = path.join(tempDirectory, image);
       try {
         const { content, inputTokens, outputTokens } = await getCompletion({
@@ -102,12 +107,13 @@ export const zerox = async ({
 
     // Function to process pages with concurrency limit
     const processPagesInBatches = async (images: string[], limit: number) => {
-      const results: any[] = [];
-      const executing: any[] = [];
+      const results: (string | null)[] = [];
+      const executing: Promise<void>[] = [];
 
-      for (const image of images) {
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
         const p = processPage(image).then((result) => {
-          results.push(result);
+          results[i] = result;
         });
         executing.push(p);
 
@@ -122,7 +128,8 @@ export const zerox = async ({
     };
 
     const results = await processPagesInBatches(images, concurrency);
-    aggregatedMarkdown.push(...results.filter((result) => result !== null));
+    const filteredResults = results.filter(isString);
+    aggregatedMarkdown.push(...filteredResults);
   }
 
   // Write the aggregated markdown to a file

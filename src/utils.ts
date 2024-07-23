@@ -1,8 +1,8 @@
+import { fromPath } from "pdf2pic";
+import { pipeline } from "stream/promises";
 import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
-import { fromPath } from "pdf2pic";
-import { pipeline } from "stream/promises";
 
 export const encodeImageToBase64 = async (imagePath: string) => {
   const imageBuffer = await fs.readFile(imagePath);
@@ -17,6 +17,20 @@ export const formatMarkdown = (text: string) => {
   return formattedMarkdown;
 };
 
+export const isString = (value: string | null): value is string => {
+  return value !== null;
+};
+
+export const isValidUrl = (string: string): boolean => {
+  let url;
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+  return url.protocol === "http:" || url.protocol === "https:";
+};
+
 // Save file to local tmp directory
 export const downloadFile = async ({
   filePath,
@@ -28,7 +42,7 @@ export const downloadFile = async ({
   const localPdfPath = path.join(tempDir, path.basename(filePath));
 
   // Check if filePath is a URL
-  if (filePath.startsWith("http://") || filePath.startsWith("https://")) {
+  if (isValidUrl(filePath)) {
     const writer = fs.createWriteStream(localPdfPath);
 
     const response = await axios({
