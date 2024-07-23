@@ -11,22 +11,22 @@ The general logic:
 - Pass each image to GPT and ask nicely for Markdown
 - Aggregate the responses and return Markdown
 
-Sounds pretty basic! But with the `gpt-4o-mini` release this method is only slightly more expensive than tools like AWS Textract or Unstructured. And tends to give back better results.
+Sounds pretty basic! But with the `gpt-4o-mini` this method is price competitive with existing products, with meaningfully better results.
 
-### Pricing Comparison
+#### Pricing Comparison
 
 This is how the pricing stacks up to other document processers.
 
-| Service            | Cost                 | Accuracy | Table Quality |
-| ------------------ | -------------------- | -------- | ------------- |
-| AWS Textract       | $1.50 / 1,000 pages  | Low      | Low           |
-| Google Document AI | $1.50 / 1,000 pages  | Low      | Low           |
-| Azure Document AI  | $1.50 / 1,000 pages  | Mid      | Low           |
-| Unstructured (PDF) | $10.00 / 1,000 pages | Mid      | Mid           |
-| ------------------ | -------------------- | -------- | ------------- |
-| Zerox (gpt-mini)   | $ 4.00 / 1,000 pages | High     | High          |
+| Service                                                                                                     | Cost                 | Accuracy | Table Quality |
+| ----------------------------------------------------------------------------------------------------------- | -------------------- | -------- | ------------- |
+| AWS Textract [[1]](https://aws.amazon.com/textract/pricing/#:~:text=Amazon%20Textract%20API%20pricing)      | $1.50 / 1,000 pages  | Low      | Low           |
+| Google Document AI [[2]](https://cloud.google.com/document-ai/pricing)                                      | $1.50 / 1,000 pages  | Low      | Low           |
+| Azure Document AI [[3]](https://azure.microsoft.com/en-us/pricing/details/ai-document-intelligence/)        | $1.50 / 1,000 pages  | Mid      | Low           |
+| Unstructured (PDF) [[4]](https://unstructured.io/api-key-hosted#:~:text=Cost%20and%20Usage%20%0AGuidelines) | $10.00 / 1,000 pages | Mid      | Mid           |
+| ------------------------                                                                                    | -------------------- | -------- | ------------- |
+| Zerox (gpt-mini)                                                                                            | $ 4.00 / 1,000 pages | High     | High          |
 
-Note: with OpenAI's batch API this would be $2.00 / 1000 pages.
+Running 1,000 pages with Zerox uses about 25M input tokens and 0.4M output tokens. Note with OpenAI's batch API this would be $2.00 / 1000 pages.
 
 ### Installation
 
