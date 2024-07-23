@@ -17,16 +17,16 @@ Sounds pretty basic! But with the `gpt-4o-mini` release this method is only slig
 
 This is how the pricing stacks up to other document processers.
 
-| Service            | Cost                 | Accuracy | Table Quality | Speed (ms / page) |
-| ------------------ | -------------------- | -------- | ------------- | ----------------- |
-| AWS Textract       | $1.50 / 1,000 pages  | Low      | Low           | 1                 |
-| Google Document AI | $1.50 / 1,000 pages  | Low      | Low           | 1                 |
-| Azure Document AI  | $1.50 / 1,000 pages  | Mid      | Low           | 1                 |
-| Unstructured (PDF) | $10.00 / 1,000 pages | Mid      | Low           | 1                 |
-| Reducto            | $10.00 / 1,000 pages | High     | High          | 1                 |
-| ------------------ | -------------------- | -------- | ------------- | ----------------- |
-| Zerox (gpt-mini)   | $10.00 / 1,000 pages | High     | Mid           | 1                 |
-| Zerox (gpt-4)      | $10.00 / 1,000 pages | High     | High          | 1                 |
+| Service            | Cost                 | Accuracy | Table Quality |
+| ------------------ | -------------------- | -------- | ------------- |
+| AWS Textract       | $1.50 / 1,000 pages  | Low      | Low           |
+| Google Document AI | $1.50 / 1,000 pages  | Low      | Low           |
+| Azure Document AI  | $1.50 / 1,000 pages  | Mid      | Low           |
+| Unstructured (PDF) | $10.00 / 1,000 pages | Mid      | Mid           |
+| ------------------ | -------------------- | -------- | ------------- |
+| Zerox (gpt-mini)   | $ 4.00 / 1,000 pages | High     | High          |
+
+Note: with OpenAI's batch API this would be $2.00 / 1000 pages.
 
 ### Installation
 
@@ -34,7 +34,7 @@ This is how the pricing stacks up to other document processers.
 npm install zerox
 ```
 
-This uses `graphicsmagick` to turn each page into a png. You may need to run:
+Zerox uses `graphicsmagick` and `ghostscript` for the pdf => image processing step. These should be pulled automatically, but you may need to manually install.
 
 ```sh
 brew install graphicsmagick
