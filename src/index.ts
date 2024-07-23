@@ -9,6 +9,7 @@ import { ZeroxArgs, ZeroxOutput } from "./types";
 import fs from "fs-extra";
 import os from "os";
 import path from "path";
+import pLimit, { Limit } from "p-limit";
 
 export const zerox = async ({
   cleanup = true,
@@ -106,28 +107,23 @@ export const zerox = async ({
     };
 
     // Function to process pages with concurrency limit
-    const processPagesInBatches = async (images: string[], limit: number) => {
+    const processPagesInBatches = async (images: string[], limit: Limit) => {
       const results: (string | null)[] = [];
-      const executing: Promise<void>[] = [];
 
-      for (let i = 0; i < images.length; i++) {
-        const image = images[i];
-        const p = processPage(image).then((result) => {
-          results[i] = result;
-        });
-        executing.push(p);
+      const promises = images.map((image, index) =>
+        limit(() =>
+          processPage(image).then((result) => {
+            results[index] = result;
+          })
+        )
+      );
 
-        if (executing.length >= limit) {
-          await Promise.race(executing);
-          executing.splice(executing.indexOf(p), 1);
-        }
-      }
-
-      await Promise.all(executing);
+      await Promise.all(promises);
       return results;
     };
 
-    const results = await processPagesInBatches(images, concurrency);
+    const limit = pLimit(concurrency);
+    const results = await processPagesInBatches(images, limit);
     const filteredResults = results.filter(isString);
     aggregatedMarkdown.push(...filteredResults);
   }
