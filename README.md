@@ -13,13 +13,28 @@ The general logic:
 
 Sounds pretty basic! But with the `gpt-4o-mini` release this method is only slightly more expensive than tools like AWS Textract or Unstructured. And tends to give back better results.
 
+### Pricing Comparison
+
+This is how the pricing stacks up to other document processers.
+
+| Service            | Cost                 | Accuracy | Table Quality |
+| ------------------ | -------------------- | -------- | ------------- |
+| AWS Textract       | $1.50 / 1,000 pages  | Low      | Low           |
+| Google Document AI | $1.50 / 1,000 pages  | Low      | Low           |
+| Azure Document AI  | $1.50 / 1,000 pages  | Mid      | Low           |
+| Unstructured (PDF) | $10.00 / 1,000 pages | Mid      | Mid           |
+| ------------------ | -------------------- | -------- | ------------- |
+| Zerox (gpt-mini)   | $ 4.00 / 1,000 pages | High     | High          |
+
+Note: with OpenAI's batch API this would be $2.00 / 1000 pages.
+
 ### Installation
 
 ```sh
 npm install zerox
 ```
 
-This uses `graphicsmagick` to turn each page into a png. You may need to run:
+Zerox uses `graphicsmagick` and `ghostscript` for the pdf => image processing step. These should be pulled automatically, but you may need to manually install.
 
 ```sh
 brew install graphicsmagick
