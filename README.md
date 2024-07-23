@@ -13,6 +13,21 @@ The general logic:
 
 Sounds pretty basic! But with the `gpt-4o-mini` release this method is only slightly more expensive than tools like AWS Textract or Unstructured. And tends to give back better results.
 
+### Pricing Comparison
+
+This is how the pricing stacks up to other document processers.
+
+| Service            | Cost                 | Accuracy | Table Quality | Speed (ms / page) |
+| ------------------ | -------------------- | -------- | ------------- | ----------------- |
+| AWS Textract       | $1.50 / 1,000 pages  | Low      | Low           | 1                 |
+| Google Document AI | $1.50 / 1,000 pages  | Low      | Low           | 1                 |
+| Azure Document AI  | $1.50 / 1,000 pages  | Mid      | Low           | 1                 |
+| Unstructured (PDF) | $10.00 / 1,000 pages | Mid      | Low           | 1                 |
+| Reducto            | $10.00 / 1,000 pages | High     | High          | 1                 |
+| ------------------ | -------------------- | -------- | ------------- | ----------------- |
+| Zerox (gpt-mini)   | $10.00 / 1,000 pages | High     | Mid           | 1                 |
+| Zerox (gpt-4)      | $10.00 / 1,000 pages | High     | High          | 1                 |
+
 ### Installation
 
 ```sh
