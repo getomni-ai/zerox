@@ -21,7 +21,7 @@ This is how the pricing stacks up to other document processers. Running 1,000 pa
 | ----------------------------------------------------------------------------------------------------------- | -------------------- | -------- | ------------- |
 | AWS Textract [[1]](https://aws.amazon.com/textract/pricing/#:~:text=Amazon%20Textract%20API%20pricing)      | $1.50 / 1,000 pages  | Low      | Low           |
 | Google Document AI [[2]](https://cloud.google.com/document-ai/pricing)                                      | $1.50 / 1,000 pages  | Low      | Low           |
-| Azure Document AI [[3]](https://azure.microsoft.com/en-us/pricing/details/ai-document-intelligence/)        | $1.50 / 1,000 pages  | Mid      | Low           |
+| Azure Document AI [[3]](https://azure.microsoft.com/en-us/pricing/details/ai-document-intelligence/)        | $1.50 / 1,000 pages  | High     | Mid           |
 | Unstructured (PDF) [[4]](https://unstructured.io/api-key-hosted#:~:text=Cost%20and%20Usage%20%0AGuidelines) | $10.00 / 1,000 pages | Mid      | Mid           |
 | ------------------------                                                                                    | -------------------- | -------- | ------------- |
 | Zerox (gpt-mini)                                                                                            | $ 4.00 / 1,000 pages | High     | High          |
