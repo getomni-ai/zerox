@@ -1,0 +1,5 @@
+src/
+examples/
+*.ts
+!.gitignore
+!dist/**/*.d.ts
