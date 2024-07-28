@@ -2,10 +2,10 @@
   "name": "zerox",
   "version": "1.0.18",
   "description": "ocr documents using gpt-4o-mini",
-  "main": "dist/index.js",
+  "main": "node-zerox/dist/index.js",
   "scripts": {
-    "build": "tsc",
-    "postinstall": "node scripts/install-dependencies.js",
+    "build": "tsc -p node-zerox/tsconfig.json",
+    "postinstall": "node node-zerox/scripts/install-dependencies.js",
     "prepublishOnly": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -35,7 +35,7 @@
     "document",
     "llm"
   ],
-  "types": "./dist/index.d.ts",
+  "types": "node-zerox/dist/index.d.ts",
   "bugs": {
     "url": "https://github.com/getomni-ai/zerox/issues"
   },
