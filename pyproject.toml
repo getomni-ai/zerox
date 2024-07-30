@@ -14,6 +14,9 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
+aiofiles = "^24.1.0"
+aiohttp = "^3.9.5"
+pdf2image = "^1.17.0"
 
 [tool.poetry.scripts]
 pre-install = "py_zerox.scripts.pre_install:check_and_install"
