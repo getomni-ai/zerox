@@ -1,0 +1,29 @@
+repos:
+    # pre-commit hooks for testing the files
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: "v4.6.0"
+      hooks:
+          - id: check-added-large-files
+          - id: no-commit-to-branch
+          - id: check-toml
+          - id: check-yaml
+          - id: check-json
+          - id: check-xml
+          - id: end-of-file-fixer
+            exclude: \.json$
+            files: \.py$
+          - id: trailing-whitespace
+          - id: mixed-line-ending
+    # for formatting
+    - repo: https://github.com/psf/black
+      rev: 24.4.2
+      hooks:
+          - id: black
+            args: ["--line-length=100"]
+            language_version: python3
+    # for linting & style checks
+    - repo: https://github.com/astral-sh/ruff-pre-commit
+      rev: v0.5.5
+      hooks:
+          - id: ruff
+            args: ["--fix"]
