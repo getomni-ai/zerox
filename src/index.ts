@@ -36,7 +36,10 @@ export const zerox = async ({
 
   // Ensure the output directory exists
   if (outputDir) await fs.ensureDir(outputDir);
-  const tempDirectory = path.join(tempDir || os.tmpdir(), "your-app-temp");
+
+  // Ensure temp directory exists + create temp folder
+  const rand = Math.floor(1000 + Math.random() * 9000).toString();
+  const tempDirectory = path.join(tempDir || os.tmpdir(), `zerox-temp-${rand}`);
   await fs.ensureDir(tempDirectory);
 
   // Download the PDF. Get file name.
