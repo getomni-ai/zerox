@@ -1,6 +1,6 @@
 from typing import Dict, Optional
-from src.constants.messages import Messages
-from src.errors.base import CustomException
+from ..constants.messages import Messages
+from .base import CustomException
 
 
 class MissingOpenAIAPIKeyException(CustomException):

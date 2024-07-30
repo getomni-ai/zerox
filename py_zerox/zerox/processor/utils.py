@@ -3,7 +3,7 @@ from typing import Optional
 from urllib.parse import urlparse
 import aiofiles
 import aiohttp
-from src.errors.exceptions import ResourceUnreachableException
+from ..errors.exceptions import ResourceUnreachableException
 
 
 async def download_file(

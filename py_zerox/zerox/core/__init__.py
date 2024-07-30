@@ -1,4 +1,4 @@
-from src.core import zerox
+from .zerox import zerox
 
 __all__ = [
     "zerox",

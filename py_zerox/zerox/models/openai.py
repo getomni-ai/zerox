@@ -1,9 +1,10 @@
 import os
 from typing import List, Dict, Any, Optional
-from src.errors.exceptions import MissingOpenAIAPIKeyException
-from src.models.base import BaseModel, CompletionResponse
-from src.constants.messages import Messages
-from src.processor.image import encode_image_to_base64
+from ..errors.exceptions import MissingOpenAIAPIKeyException
+from .base import BaseModel
+from .types import CompletionResponse
+from ..constants.messages import Messages
+from ..processor.image import encode_image_to_base64
 import aiohttp
 
 

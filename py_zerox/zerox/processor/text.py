@@ -1,6 +1,6 @@
 import re
 
-from src.constants.patterns import Patterns
+from ..constants.patterns import Patterns
 
 
 def format_markdown(text: str) -> str:

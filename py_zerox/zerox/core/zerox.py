@@ -3,15 +3,15 @@ import tempfile
 from typing import List, Optional
 from datetime import datetime
 
-from src.processor import (
+from ..processor import (
     convert_pdf_to_images,
     download_file,
     process_page,
     process_pages_in_batches,
 )
-from src.errors.exceptions import MissingOpenAIAPIKeyException, FileUnavailable
-from src.models.openai import OpenAI
-from src.core.types import Page, ZeroxOutput
+from ..errors.exceptions import MissingOpenAIAPIKeyException, FileUnavailable
+from ..models import OpenAI
+from .types import Page, ZeroxOutput
 import aiofiles
 import aiofiles.os as async_os
 

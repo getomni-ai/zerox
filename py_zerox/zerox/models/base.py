@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Dict, Optional, Type, TypeVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.models.types import CompletionResponse
+    from models.types import CompletionResponse
 
 T = TypeVar("T", bound="BaseModel")
 

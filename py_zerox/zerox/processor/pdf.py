@@ -3,11 +3,10 @@ import os
 import asyncio
 from typing import List, Optional, Tuple
 from pdf2image import convert_from_path
-from src.constants.conversion import PDFConversionDefaultOptions
-from src.constants.messages import Messages
-from src.models.openai import OpenAI
-from src.processor.image import save_image
-from src.processor.text import format_markdown
+from ..constants import PDFConversionDefaultOptions, Messages
+from ..models import OpenAI
+from .image import save_image
+from .text import format_markdown
 
 
 async def convert_pdf_to_images(local_path: str, temp_dir: str):

@@ -1,4 +1,4 @@
-from src.errors.exceptions import (
+from .exceptions import (
     MissingOpenAIAPIKeyException,
     ResourceUnreachableException,
     FileUnavailable,
