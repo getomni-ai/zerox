@@ -90,9 +90,11 @@ export const convertPdfToImages = async ({
         if (!result || !result.buffer) {
           throw new Error("Could not convert page to image buffer");
         }
+        
+        const paddedPageNumber = result.page.toString().padStart(padLength, '0');
         const imagePath = path.join(
           tempDir,
-          `${options.saveFilename}_page_${result.page}.png`
+          `${options.saveFilename}_page_${paddedPageNumber}.png`
         );
         await fs.writeFile(imagePath, result.buffer);
       })
