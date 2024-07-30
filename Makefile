@@ -93,7 +93,7 @@ check: install-dev lint format
 .PHONY: lint
 lint: venv
 	@echo "== Running Linting =="
-	$(VENV_DIR)/bin/ruff lint $(SRC_DIR) $(TEST_DIR)
+	$(VENV_DIR)/bin/ruff check $(SRC_DIR) $(TEST_DIR)
 
 .PHONY: format
 format: venv
