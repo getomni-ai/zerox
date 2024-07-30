@@ -5,7 +5,7 @@ description = "ocr documents using gpt-4o-mini"
 authors = ["wizenheimer"]
 license = "MIT"
 readme = "README.md"
-packages = [{ include = "src", from = "py_zerox" }]
+packages = [{ include = "zerox", from = "py_zerox" }]
 repository = "https://github.com/getomni-ai/zerox.git"
 documentation = "https://github.com/getomni-ai/zerox"
 keywords = ["ocr", "document", "llm"]
