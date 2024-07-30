@@ -1,2 +1,156 @@
+# ==========================
+#       TypeScript
+# ==========================
+
+# Ignore node_modules directory
 node_modules/
+
+# Ignore output directories
 dist/
+lib-cov/
+coverage/
+.nyc_output/
+.grunt/
+bower_components/
+
+
+# ==========================
+#         Python
+# ==========================
+
+# Ignore Python bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore shared object files
+*.so
+
+# Ignore Python virtual environment directories
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+
+# Ignore Python package metadata
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+*.manifest
+*.spec
+
+# Ignore pip logs and temporary files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ignore code coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+
+# Ignore cache directories
+.cache
+
+# Ignore test-related files
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Ignore localization files
+*.mo
+*.pot
+
+# Ignore log files
+*.log
+
+# Ignore Django specific files
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+instance/
+
+# Ignore web assets cache
+.webassets-cache
+
+# Ignore Scrapy specific files
+.scrapy
+
+# Ignore documentation build directory
+docs/_build/
+
+# Ignore PyBuilder specific files
+.pybuilder/
+
+# Ignore build target directory
+target/
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Ignore IPython configuration file
+profile_default/
+ipython_config.py
+
+# Ignore PEP 582 virtual environment directories
+__pypackages__/
+
+# Ignore Celery beat files
+celerybeat-schedule
+celerybeat.pid
+
+# Ignore SageMath files
+*.sage.py
+
+# Ignore virtual environment directories
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Ignore Spyder project files
+.spyderproject
+.spyproject
+
+# Ignore Rope project files
+.ropeproject
+
+# Ignore PyCharm specific files
+/site
+.idea/
+
+# Ignore VSCode specific files
+.vscode/
+
+# Ignore static type checking cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ignore Pyre specific files
+.pyre/
+
+# Ignore Pytype specific files
+.pytype/
+
+# Ignore Cython debug files
+cython_debug/
