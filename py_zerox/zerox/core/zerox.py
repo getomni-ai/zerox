@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 from typing import List, Optional
 from datetime import datetime
@@ -44,7 +45,7 @@ async def zerox(
         await async_os.makedirs(output_dir, exist_ok=True)
 
     # Create a temporary directory to store the PDF and images
-    temp_directory = os.path.join(temp_dir or tempfile.gettempdir(), "your-app-temp")
+    temp_directory = os.path.join(temp_dir or tempfile.gettempdir(), "zerox-temp")
     await async_os.makedirs(temp_directory, exist_ok=True)
 
     # Download the PDF. Get file name.
@@ -59,7 +60,11 @@ async def zerox(
     await convert_pdf_to_images(local_path=local_path, temp_dir=temp_directory)
 
     # Get list of converted images
-    images = [f for f in await async_os.listdir(temp_directory) if f.endswith(".png")]
+    images = [
+        f"{temp_directory}/{f}"
+        for f in await async_os.listdir(temp_directory)
+        if f.endswith(".png")
+    ]
 
     # Create an instance of the OpenAI model
     openai = OpenAI(api_key=openai_api_key)
@@ -77,7 +82,6 @@ async def zerox(
             if result:
                 aggregated_markdown.append(result)
     else:
-
         results = await process_pages_in_batches(
             images,
             concurrency,
@@ -97,8 +101,8 @@ async def zerox(
             await f.write("\n\n".join(aggregated_markdown))
 
     # Cleanup the downloaded PDF file
-    if cleanup:
-        await async_os.rmdir(temp_directory)
+    if cleanup and os.path.exists(temp_directory):
+        shutil.rmtree(temp_directory)
 
     # Format JSON response
     end_time = datetime.now()
