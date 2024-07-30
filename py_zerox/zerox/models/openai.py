@@ -1,11 +1,13 @@
 import os
+import aiohttp
 from typing import List, Dict, Any, Optional
-from ..errors import MissingOpenAIAPIKeyException
+
+# Package Imports
 from .base import BaseModel
 from .types import CompletionResponse
+from ..errors import MissingOpenAIAPIKeyException
 from ..constants.messages import Messages
 from ..processor.image import encode_image_to_base64
-import aiohttp
 
 
 class OpenAI(BaseModel):

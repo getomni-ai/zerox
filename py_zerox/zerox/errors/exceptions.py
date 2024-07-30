@@ -1,9 +1,12 @@
 from typing import Dict, Optional
+
+# Package Imports
 from ..constants import Messages
 from .base import CustomException
 
 
 class MissingOpenAIAPIKeyException(CustomException):
+    """Exception raised when the OpenAI API key is missing."""
 
     def __init__(
         self,
@@ -13,6 +16,7 @@ class MissingOpenAIAPIKeyException(CustomException):
 
 
 class ResourceUnreachableException(CustomException):
+    """Exception raised when a resource is unreachable."""
 
     def __init__(
         self,
@@ -23,6 +27,7 @@ class ResourceUnreachableException(CustomException):
 
 
 class FileUnavailable(CustomException):
+    """Exception raised when a file is unavailable."""
 
     def __init__(
         self,
@@ -33,6 +38,7 @@ class FileUnavailable(CustomException):
 
 
 class FailedToSaveFile(CustomException):
+    """Exception raised when a file fails to save."""
 
     def __init__(
         self,
@@ -43,6 +49,7 @@ class FailedToSaveFile(CustomException):
 
 
 class FailedToProcessFile(CustomException):
+    """Exception raised when a file fails to process."""
 
     def __init__(
         self,

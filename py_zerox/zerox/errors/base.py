@@ -2,6 +2,10 @@ from typing import Optional
 
 
 class CustomException(Exception):
+    """
+    Base class for custom exceptions
+    """
+
     def __init__(
         self,
         message: Optional[str] = None,

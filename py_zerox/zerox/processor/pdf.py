@@ -3,13 +3,16 @@ import os
 import asyncio
 from typing import List, Optional, Tuple
 from pdf2image import convert_from_path
-from ..constants import PDFConversionDefaultOptions, Messages
-from ..models import OpenAI
+
+# Package Imports
 from .image import save_image
 from .text import format_markdown
+from ..constants import PDFConversionDefaultOptions, Messages
+from ..models import OpenAI
 
 
 async def convert_pdf_to_images(local_path: str, temp_dir: str):
+    """Converts a PDF file to a series of images."""
     options = {
         "dpi": PDFConversionDefaultOptions.DPI,
         "fmt": PDFConversionDefaultOptions.FORMAT,
@@ -40,7 +43,9 @@ async def process_page(
     prior_page: str = "",
     semaphore: Optional[asyncio.Semaphore] = None,
 ) -> Tuple[str, int, int, str]:
+    """Process a single page of a PDF"""
 
+    # If semaphore is provided, acquire it before processing the page
     if semaphore:
         async with semaphore:
             return await process_page(
@@ -53,6 +58,8 @@ async def process_page(
             )
 
     image_path = os.path.join(temp_directory, image)
+
+    # Get the completion from the OpenAI model
     try:
         completion = await model.completion(
             image_path=image_path,
@@ -81,7 +88,10 @@ async def process_pages_in_batches(
     output_token_count: int = 0,
     prior_page: str = "",
 ):
+    # Create a semaphore to limit the number of concurrent tasks
     semaphore = asyncio.Semaphore(concurrency)
+
+    # Process each page in parallel
     tasks = [
         process_page(
             image,
@@ -94,4 +104,6 @@ async def process_pages_in_batches(
         )
         for image in images
     ]
+
+    # Wait for all tasks to complete
     return await asyncio.gather(*tasks)

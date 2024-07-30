@@ -3,7 +3,10 @@ import shutil
 import tempfile
 from typing import List, Optional
 from datetime import datetime
+import aiofiles
+import aiofiles.os as async_os
 
+# Package Imports
 from ..processor import (
     convert_pdf_to_images,
     download_file,
@@ -13,8 +16,6 @@ from ..processor import (
 from ..errors import MissingOpenAIAPIKeyException, FileUnavailable
 from ..models import OpenAI
 from .types import Page, ZeroxOutput
-import aiofiles
-import aiofiles.os as async_os
 
 
 async def zerox(
