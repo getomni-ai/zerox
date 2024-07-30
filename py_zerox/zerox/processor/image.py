@@ -1,5 +1,6 @@
 import aiofiles
 import base64
+import io
 
 
 async def encode_image_to_base64(image_path: str) -> str:
@@ -9,5 +10,11 @@ async def encode_image_to_base64(image_path: str) -> str:
 
 
 async def save_image(image, image_path: str):
+    # Convert PIL Image to BytesIO object
+    with io.BytesIO() as buffer:
+        image.save(buffer, format=image.format)  # Save the image to the BytesIO object
+        image_data = buffer.getvalue()  # Get the image data from the BytesIO object
+
+    # Write image data to file asynchronously
     async with aiofiles.open(image_path, "wb") as f:
-        await f.write(image.tobytes())
+        await f.write(image_data)
