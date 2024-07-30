@@ -4,7 +4,7 @@ PACKAGE_DIR := py_zerox
 # Define directory configs
 VENV_DIR := .venv
 DIST_DIR := ${PACKAGE_DIR}/dist
-SRC_DIR := $(PACKAGE_DIR)/src
+SRC_DIR := $(PACKAGE_DIR)/zerox
 TEST_DIR := $(PACKAGE_DIR)/tests
 
 # Define the build configs
@@ -99,3 +99,16 @@ lint: venv
 format: venv
 	@echo "== Running Formatting =="
 	$(VENV_DIR)/bin/black --check $(SRC_DIR) $(TEST_DIR)
+
+.PHONY: fix
+fix: install-dev lint-fix format-fix
+
+.PHONY: lint-fix
+lint-fix: venv
+	@echo "== Running Linting =="
+	$(VENV_DIR)/bin/ruff check --fix $(SRC_DIR) $(TEST_DIR)
+
+.PHONY: format-fix
+format-fix: venv
+	@echo "== Running Formatmting =="
+	$(VENV_DIR)/bin/black $(SRC_DIR) $(TEST_DIR)
