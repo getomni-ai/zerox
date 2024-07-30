@@ -1,4 +1,4 @@
-from logging import log
+import logging
 import os
 import asyncio
 from typing import List, Optional, Tuple
@@ -28,7 +28,7 @@ async def convert_pdf_to_images(local_path: str, temp_dir: str):
         await asyncio.gather(*tasks)
         return images
     except Exception as err:
-        log.error(f"Error converting PDF to images: {err}")
+        logging.error(f"Error converting PDF to images: {err}")
 
 
 async def process_page(
@@ -68,7 +68,7 @@ async def process_page(
         return formatted_markdown, input_token_count, output_token_count, prior_page
 
     except Exception as error:
-        log.error(Messages.FAILED_TO_PROCESS_IMAGE, error)
+        logging.error(f"{Messages.FAILED_TO_PROCESS_IMAGE} Error:{error}")
         return "", input_token_count, output_token_count, ""
 
 
