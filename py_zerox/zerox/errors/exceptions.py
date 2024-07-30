@@ -1,5 +1,5 @@
 from typing import Dict, Optional
-from ..constants.messages import Messages
+from ..constants import Messages
 from .base import CustomException
 
 

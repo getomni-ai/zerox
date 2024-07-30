@@ -9,7 +9,7 @@ from ..processor import (
     process_page,
     process_pages_in_batches,
 )
-from ..errors.exceptions import MissingOpenAIAPIKeyException, FileUnavailable
+from ..errors import MissingOpenAIAPIKeyException, FileUnavailable
 from ..models import OpenAI
 from .types import Page, ZeroxOutput
 import aiofiles

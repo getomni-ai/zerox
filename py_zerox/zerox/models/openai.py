@@ -1,6 +1,6 @@
 import os
 from typing import List, Dict, Any, Optional
-from ..errors.exceptions import MissingOpenAIAPIKeyException
+from ..errors import MissingOpenAIAPIKeyException
 from .base import BaseModel
 from .types import CompletionResponse
 from ..constants.messages import Messages
