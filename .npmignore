@@ -1,0 +1,22 @@
+# Folders
+node-zerox/src/
+py_zerox/
+examples/
+
+# Config files
+.pre-commit-config.yaml
+.editorconfig
+MANIFEST.in
+commitlint.config.js
+poetry.lock
+pyproject.toml
+setup.cfg
+setup.py
+Makefile
+
+# File types
+*.ts
+
+# Keep type declarations
+!.gitignore
+!node-zerox/dist/**/*.d.ts
