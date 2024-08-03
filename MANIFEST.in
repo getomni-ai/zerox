@@ -1,5 +1,5 @@
 include setup.py
 include README.md
 include LICENSE
-recursive-include py_zerox/src *
+recursive-include py_zerox/zerox *
 recursive-include py_zerox/scripts *
