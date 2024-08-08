@@ -76,7 +76,7 @@ const result = await zerox({
 });
 ```
 
-The `maintainFormat` option trys to return the markdown in a consistent format by passing the output of a prior page in as additional context for the next page. This requires the requests to run synchronously, so it's a lot slower. But valueable if your documents have a lot of tabular data, or frequently have tables that cross pages.
+The `maintainFormat` option trys to return the markdown in a consistent format by passing the output of a prior page in as additional context for the next page. This requires the requests to run synchronously, so it's a lot slower. But valuable if your documents have a lot of tabular data, or frequently have tables that cross pages.
 
 ```
 Request #1 => page_1_image
