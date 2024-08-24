@@ -1,5 +1,6 @@
 const { exec } = require("child_process");
 const { promisify } = require("util");
+const fs = require("fs");
 
 const execPromise = promisify(exec);
 
@@ -15,6 +16,18 @@ const installPackage = async (command, packageName) => {
   }
 };
 
+const isDocker = () => {
+  try {
+    // Check for Docker-specific environment variables or cgroup file
+    return (
+      fs.existsSync("/.dockerenv") ||
+      fs.readFileSync("/proc/self/cgroup", "utf8").includes("docker")
+    );
+  } catch (err) {
+    return false;
+  }
+};
+
 const checkAndInstall = async () => {
   try {
     // Check and install Ghostscript
@@ -24,10 +37,10 @@ const checkAndInstall = async () => {
       if (process.platform === "darwin") {
         await installPackage("brew install ghostscript", "Ghostscript");
       } else if (process.platform === "linux") {
-        await installPackage(
-          "sudo apt-get update && sudo apt-get install -y ghostscript",
-          "Ghostscript"
-        );
+        const command = isDocker()
+          ? "apt-get update && apt-get install -y ghostscript"
+          : "sudo apt-get update && sudo apt-get install -y ghostscript";
+        await installPackage(command, "Ghostscript");
       } else {
         throw new Error(
           "Please install Ghostscript manually from https://www.ghostscript.com/download.html"
@@ -42,10 +55,10 @@ const checkAndInstall = async () => {
       if (process.platform === "darwin") {
         await installPackage("brew install graphicsmagick", "GraphicsMagick");
       } else if (process.platform === "linux") {
-        await installPackage(
-          "sudo apt-get update && sudo apt-get install -y graphicsmagick",
-          "GraphicsMagick"
-        );
+        const command = isDocker()
+          ? "apt-get update && apt-get install -y graphicsmagick"
+          : "sudo apt-get update && sudo apt-get install -y graphicsmagick";
+        await installPackage(command, "GraphicsMagick");
       } else {
         throw new Error(
           "Please install GraphicsMagick manually from http://www.graphicsmagick.org/download.html"
