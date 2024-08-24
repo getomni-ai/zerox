@@ -16,20 +16,20 @@ const installPackage = async (command, packageName) => {
   }
 };
 
-const isDocker = () => {
+const isSudoAvailable = async () => {
   try {
-    // Check for Docker-specific environment variables or cgroup file
-    return (
-      fs.existsSync("/.dockerenv") ||
-      fs.readFileSync("/proc/self/cgroup", "utf8").includes("docker")
-    );
-  } catch (err) {
+    // Try running a sudo command
+    await execPromise("sudo -n true");
+    return true;
+  } catch {
     return false;
   }
 };
 
 const checkAndInstall = async () => {
   try {
+    const sudoAvailable = await isSudoAvailable();
+
     // Check and install Ghostscript
     try {
       await execPromise("gs --version");
@@ -37,9 +37,9 @@ const checkAndInstall = async () => {
       if (process.platform === "darwin") {
         await installPackage("brew install ghostscript", "Ghostscript");
       } else if (process.platform === "linux") {
-        const command = isDocker()
-          ? "apt-get update && apt-get install -y ghostscript"
-          : "sudo apt-get update && sudo apt-get install -y ghostscript";
+        const command = sudoAvailable
+          ? "sudo apt-get update && sudo apt-get install -y ghostscript"
+          : "apt-get update && apt-get install -y ghostscript";
         await installPackage(command, "Ghostscript");
       } else {
         throw new Error(
@@ -55,9 +55,9 @@ const checkAndInstall = async () => {
       if (process.platform === "darwin") {
         await installPackage("brew install graphicsmagick", "GraphicsMagick");
       } else if (process.platform === "linux") {
-        const command = isDocker()
-          ? "apt-get update && apt-get install -y graphicsmagick"
-          : "sudo apt-get update && sudo apt-get install -y graphicsmagick";
+        const command = sudoAvailable
+          ? "sudo apt-get update && sudo apt-get install -y graphicsmagick"
+          : "apt-get update && apt-get install -y graphicsmagick";
         await installPackage(command, "GraphicsMagick");
       } else {
         throw new Error(
