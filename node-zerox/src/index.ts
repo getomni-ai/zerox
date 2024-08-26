@@ -44,7 +44,8 @@ export const zerox = async ({
   const localPath = await downloadFile({ filePath, tempDir: tempDirectory });
   if (!localPath) throw "Failed to save file to local drive";
   const endOfPath = localPath.split("/")[localPath.split("/").length - 1];
-  const rawFileName = endOfPath.split(".")[0];
+  const [rawFileNameWithExtension] = endOfPath.split("?");
+  const rawFileName = rawFileNameWithExtension.split(".")[0];
   const fileName = rawFileName
     .replace(/[^\w\s]/g, "")
     .replace(/\s+/g, "_")
