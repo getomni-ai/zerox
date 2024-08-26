@@ -11,9 +11,13 @@ export const encodeImageToBase64 = async (imagePath: string) => {
 
 // Strip out the ```markdown wrapper
 export const formatMarkdown = (text: string) => {
-  const formattedMarkdown = text
-    .replace(/^```[a-z]*\n([\s\S]*?)\n```$/g, "$1")
-    .replace(/^```\n([\s\S]*?)\n```$/g, "$1");
+  let formattedMarkdown = text;
+  const regex = /```(?:\w+)?\n([\s\S]*?)\n```/g;
+
+  while (regex.test(formattedMarkdown)) {
+    formattedMarkdown = formattedMarkdown.replace(regex, "$1");
+  }
+
   return formattedMarkdown;
 };
 
