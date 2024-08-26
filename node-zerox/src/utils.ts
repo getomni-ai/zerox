@@ -1,8 +1,12 @@
 import { fromPath } from "pdf2pic";
+import { convert } from "libreoffice-convert";
+import { promisify } from "util";
 import { pipeline } from "stream/promises";
 import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
+
+const convertAsync = promisify(convert);
 
 export const encodeImageToBase64 = async (imagePath: string) => {
   const imageBuffer = await fs.readFile(imagePath);
@@ -102,5 +106,27 @@ export const convertPdfToImages = async ({
     return convertResults;
   } catch (err) {
     console.error("Error during PDF conversion:", err);
+  }
+};
+
+// Convert each page (from docx) to a png and save that image to tmp
+export const convertDocxToPdf = async ({
+  localPath,
+  tempDir,
+}: {
+  localPath: string;
+  tempDir: string;
+}): Promise<string> => {
+  const inputBuffer = await fs.readFile(localPath);
+  const outputFilename = path.basename(localPath, ".docx") + ".pdf";
+  const outputPath = path.join(tempDir, outputFilename);
+
+  try {
+    const pdfBuffer = await convertAsync(inputBuffer, ".pdf", undefined);
+    await fs.writeFile(outputPath, pdfBuffer);
+    return outputPath;
+  } catch (err) {
+    console.error("Error during DOCX to PDF conversion:", err);
+    throw err;
   }
 };

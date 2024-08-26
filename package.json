@@ -15,6 +15,7 @@
     "axios": "^1.7.2",
     "child_process": "^1.0.2",
     "fs-extra": "^11.2.0",
+    "libreoffice-convert": "^1.6.0",
     "os": "^0.1.2",
     "p-limit": "^3.1.0",
     "path": "^0.12.7",
