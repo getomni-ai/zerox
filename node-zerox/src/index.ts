@@ -5,7 +5,7 @@ import {
   isString,
 } from "./utils";
 import { getCompletion } from "./openAI";
-import { ZeroxArgs, ZeroxOutput } from "./types";
+import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
 import fs from "fs-extra";
 import os from "os";
 import path from "path";
@@ -16,6 +16,7 @@ export const zerox = async ({
   concurrency = 10,
   filePath,
   maintainFormat = false,
+  model = ModelOptions.gpt_4o_mini,
   openaiAPIKey = "",
   outputDir,
   tempDir = os.tmpdir(),
@@ -65,6 +66,7 @@ export const zerox = async ({
           apiKey: openaiAPIKey,
           imagePath,
           maintainFormat,
+          model,
           priorPage,
         });
         const formattedMarkdown = formatMarkdown(content);
@@ -89,6 +91,7 @@ export const zerox = async ({
           apiKey: openaiAPIKey,
           imagePath,
           maintainFormat,
+          model,
           priorPage,
         });
         const formattedMarkdown = formatMarkdown(content);

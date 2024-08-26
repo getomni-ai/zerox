@@ -6,12 +6,13 @@ export const getCompletion = async ({
   apiKey,
   imagePath,
   maintainFormat,
+  model,
   priorPage,
 }: CompletionArgs): Promise<CompletionResponse> => {
   const systemPrompt = `
     Convert the following PDF page to markdown.
-    Return only the markdown with no explanation text.
-    Do not exclude any content from the page.
+    Return only the markdown with no explanation text. Do not include deliminators like '''markdown.
+    You must include all information on the page. Do not exclude headers, footers, or subtext.
   `;
 
   // Default system message.
@@ -43,7 +44,7 @@ export const getCompletion = async ({
       "https://api.openai.com/v1/chat/completions",
       {
         messages,
-        model: "gpt-4o-mini",
+        model,
         temperature: 0,
       },
       {

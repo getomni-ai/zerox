@@ -3,9 +3,15 @@ export interface ZeroxArgs {
   concurrency?: number;
   filePath: string;
   maintainFormat?: boolean;
+  model?: ModelOptions;
   openaiAPIKey?: string;
   outputDir?: string;
   tempDir?: string;
+}
+
+export enum ModelOptions {
+  gpt_4o = "gpt-4o",
+  gpt_4o_mini = "gpt-4o-mini",
 }
 
 export interface Page {
@@ -32,5 +38,6 @@ export interface CompletionArgs {
   apiKey: string;
   imagePath: string;
   maintainFormat: boolean;
+  model: ModelOptions;
   priorPage: string;
 }
