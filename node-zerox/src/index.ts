@@ -1,5 +1,6 @@
 import {
   convertPdfToImages,
+  convertFileToPdf,
   downloadFile,
   formatMarkdown,
   isString,
@@ -43,15 +44,35 @@ export const zerox = async ({
   // Download the PDF. Get file name.
   const localPath = await downloadFile({ filePath, tempDir: tempDirectory });
   if (!localPath) throw "Failed to save file to local drive";
+
+  const fileExtension = path.extname(localPath).toLowerCase();
+  let pdfPath: string;
+
+  if (!fileExtension) {
+    throw new Error("File extension missing");
+  }
+
+  // Convert file to PDF if necessary
+  if (fileExtension !== ".png") {
+    if (fileExtension === ".pdf") {
+      pdfPath = localPath;
+    } else {
+      pdfPath = await convertFileToPdf({
+        localPath,
+        tempDir: tempDirectory,
+        extension: fileExtension,
+      });
+    }
+    // Convert the file to a series of images
+    await convertPdfToImages({ localPath: pdfPath, tempDir: tempDirectory });
+  }
+
   const endOfPath = localPath.split("/")[localPath.split("/").length - 1];
   const rawFileName = endOfPath.split(".")[0];
   const fileName = rawFileName
     .replace(/[^\w\s]/g, "")
     .replace(/\s+/g, "_")
     .toLowerCase();
-
-  // Convert the file to a series of images
-  await convertPdfToImages({ localPath, tempDir: tempDirectory });
 
   // Get list of converted images
   const files = await fs.readdir(tempDirectory);
