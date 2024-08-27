@@ -49,18 +49,20 @@ export const zerox = async ({
   let pdfPath: string;
   const supportedExtensions = [".docx", ".pptx", ".ppt"];
 
+  if (!fileExtension) {
+    throw new Error("File extension missing");
+  }
+
   // Convert file to PDF if necessary
   if (fileExtension !== ".png") {
     if (fileExtension === ".pdf") {
       pdfPath = localPath;
-    } else if (supportedExtensions.includes(fileExtension)) {
+    } else {
       pdfPath = await convertFileToPdf({
         localPath,
         tempDir: tempDirectory,
         extension: fileExtension,
       });
-    } else {
-      throw new Error(`Unsupported file type: ${fileExtension}`);
     }
     // Convert the file to a series of images
     await convertPdfToImages({ localPath: pdfPath, tempDir: tempDirectory });
