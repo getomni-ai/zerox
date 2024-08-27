@@ -1,6 +1,6 @@
 import {
   convertPdfToImages,
-  convertDocxToPdf,
+  convertFileToPdf,
   downloadFile,
   formatMarkdown,
   isString,
@@ -50,16 +50,21 @@ export const zerox = async ({
   const supportedExtensions = [".docx", ".pptx", ".ppt"];
 
   // Convert file to PDF if necessary
-  if (fileExtension === ".pdf") {
-    pdfPath = localPath;
-  } else if (supportedExtensions.includes(fileExtension)) {
-    pdfPath = await convertDocxToPdf({ localPath, tempDir: tempDirectory });
-  } else {
-    throw new Error(`Unsupported file type: ${fileExtension}`);
+  if (fileExtension !== ".png") {
+    if (fileExtension === ".pdf") {
+      pdfPath = localPath;
+    } else if (supportedExtensions.includes(fileExtension)) {
+      pdfPath = await convertFileToPdf({
+        localPath,
+        tempDir: tempDirectory,
+        extension: fileExtension,
+      });
+    } else {
+      throw new Error(`Unsupported file type: ${fileExtension}`);
+    }
+    // Convert the file to a series of images
+    await convertPdfToImages({ localPath: pdfPath, tempDir: tempDirectory });
   }
-
-  // Convert the file to a series of images
-  await convertPdfToImages({ localPath: pdfPath, tempDir: tempDirectory });
 
   const endOfPath = localPath.split("/")[localPath.split("/").length - 1];
   const rawFileName = endOfPath.split(".")[0];
