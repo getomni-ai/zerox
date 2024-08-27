@@ -109,7 +109,7 @@ export const convertPdfToImages = async ({
   }
 };
 
-// Convert each page (from docx) to a png and save that image to tmp
+// Convert each page (from other formats like docx) to a png and save that image to tmp
 export const convertFileToPdf = async ({
   localPath,
   tempDir,
@@ -128,10 +128,7 @@ export const convertFileToPdf = async ({
     await fs.writeFile(outputPath, pdfBuffer);
     return outputPath;
   } catch (err) {
-    console.error(
-      `Error during ${extension.toUpperCase()} to PDF conversion:`,
-      err
-    );
+    console.error(`Error converting .${extension} to .pdf:`, err);
     throw err;
   }
 };
