@@ -47,7 +47,6 @@ export const zerox = async ({
 
   const fileExtension = path.extname(localPath).toLowerCase();
   let pdfPath: string;
-  const supportedExtensions = [".docx", ".pptx", ".ppt"];
 
   if (!fileExtension) {
     throw new Error("File extension missing");
