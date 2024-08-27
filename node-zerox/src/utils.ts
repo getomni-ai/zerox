@@ -15,12 +15,23 @@ export const formatMarkdown = (text: string) => {
   let loopCount = 0;
   const maxLoops = 3;
 
-  while (formattedMarkdown.startsWith("```markdown") && loopCount < maxLoops) {
-    formattedMarkdown = formattedMarkdown
-      .replace(/^```[a-z]*\n([\s\S]*?)\n```$/gm, "$1")
-      .replace(/^```\n([\s\S]*?)\n```$/gm, "$1");
+  const startsWithMarkdown = formattedMarkdown.startsWith("```markdown");
+  while (startsWithMarkdown && loopCount < maxLoops) {
+    const endsWithClosing = formattedMarkdown.endsWith("```");
 
-    loopCount++;
+    if (startsWithMarkdown && endsWithClosing) {
+      const outermostBlockRegex = /^```markdown\n([\s\S]*?)\n```$/;
+      const match = outermostBlockRegex.exec(formattedMarkdown);
+
+      if (match) {
+        formattedMarkdown = match[1].trim();
+        loopCount++;
+      } else {
+        break;
+      }
+    } else {
+      break;
+    }
   }
 
   return formattedMarkdown;
