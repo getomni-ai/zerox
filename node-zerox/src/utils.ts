@@ -110,15 +110,17 @@ export const convertPdfToImages = async ({
 };
 
 // Convert each page (from docx) to a png and save that image to tmp
-export const convertDocxToPdf = async ({
+export const convertFileToPdf = async ({
   localPath,
   tempDir,
+  extension,
 }: {
   localPath: string;
   tempDir: string;
+  extension: string;
 }): Promise<string> => {
   const inputBuffer = await fs.readFile(localPath);
-  const outputFilename = path.basename(localPath, ".docx") + ".pdf";
+  const outputFilename = path.basename(localPath, extension) + ".pdf";
   const outputPath = path.join(tempDir, outputFilename);
 
   try {
@@ -126,7 +128,10 @@ export const convertDocxToPdf = async ({
     await fs.writeFile(outputPath, pdfBuffer);
     return outputPath;
   } catch (err) {
-    console.error("Error during DOCX to PDF conversion:", err);
+    console.error(
+      `Error during ${extension.toUpperCase()} to PDF conversion:`,
+      err
+    );
     throw err;
   }
 };
