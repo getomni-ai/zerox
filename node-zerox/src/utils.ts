@@ -11,7 +11,7 @@ export const encodeImageToBase64 = async (imagePath: string) => {
 
 // Strip out the ```markdown wrapper
 export const formatMarkdown = (text: string) => {
-  let formattedMarkdown = text;
+  let formattedMarkdown = text?.trim();
   let loopCount = 0;
   const maxLoops = 3;
 
