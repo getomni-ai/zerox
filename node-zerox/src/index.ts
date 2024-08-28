@@ -1,6 +1,7 @@
 import {
   convertPdfToImages,
   convertFileToPdf,
+  convertHtmlToPdf,
   downloadFile,
   formatMarkdown,
   isString,
@@ -56,6 +57,11 @@ export const zerox = async ({
   if (fileExtension !== ".png") {
     if (fileExtension === ".pdf") {
       pdfPath = localPath;
+    } else if (fileExtension === ".html") {
+      pdfPath = await convertHtmlToPdf({
+        htmlPath: localPath,
+        tempDir: tempDirectory,
+      });
     } else {
       pdfPath = await convertFileToPdf({
         localPath,

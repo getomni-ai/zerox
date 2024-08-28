@@ -2,6 +2,7 @@ import { fromPath } from "pdf2pic";
 import { convert } from "libreoffice-convert";
 import { promisify } from "util";
 import { pipeline } from "stream/promises";
+import { exec } from "child_process";
 import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
@@ -129,7 +130,7 @@ export const convertPdfToImages = async ({
   }
 };
 
-// Convert each page (from other formats like docx) to a png and save that image to tmp
+// Convert each page (from other formats like docx) to a pdf
 export const convertFileToPdf = async ({
   localPath,
   tempDir,
@@ -144,11 +145,38 @@ export const convertFileToPdf = async ({
   const outputPath = path.join(tempDir, outputFilename);
 
   try {
-    const pdfBuffer = await convertAsync(inputBuffer, ".pdf", undefined);
+    const pdfBuffer = await convertAsync(inputBuffer, "pdf", undefined);
     await fs.writeFile(outputPath, pdfBuffer);
     return outputPath;
   } catch (err) {
-    console.error(`Error converting .${extension} to .pdf:`, err);
+    throw err;
+  }
+};
+
+// Convert each page from an html to a pdf
+export const convertHtmlToPdf = async ({
+  htmlPath,
+  tempDir,
+}: {
+  htmlPath: string;
+  tempDir: string;
+}): Promise<string> => {
+  const execAsync = promisify(exec);
+  const outputFilename = path.basename(htmlPath, ".html") + ".pdf";
+  const outputPath = path.join(tempDir, outputFilename);
+
+  try {
+    await execAsync(
+      `soffice --headless --convert-to pdf --outdir "${tempDir}" "${htmlPath}"`
+    );
+
+    if (await fs.pathExists(outputPath)) {
+      return outputPath;
+    } else {
+      throw new Error("PDF file was not created");
+    }
+  } catch (err) {
+    console.error("Error converting HTML to PDF:", err);
     throw err;
   }
 };
