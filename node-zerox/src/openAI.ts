@@ -13,6 +13,7 @@ export const getCompletion = async ({
     Convert the following PDF page to markdown.
     Return only the markdown with no explanation text. Do not include deliminators like '''markdown.
     You must include all information on the page. Do not exclude headers, footers, or subtext.
+    If the image doesn't contain any text, return an empty string.
   `;
 
   // Default system message.
