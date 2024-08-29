@@ -63,7 +63,9 @@ export const downloadFile = async ({
   filePath: string;
   tempDir: string;
 }): Promise<string | void> => {
-  const localPdfPath = path.join(tempDir, path.basename(filePath));
+  // Shorten the file name by removing URL parameters
+  const baseFileName = path.basename(filePath.split("?")[0]);
+  const localPdfPath = path.join(tempDir, baseFileName);
 
   // Check if filePath is a URL
   if (isValidUrl(filePath)) {
@@ -131,13 +133,13 @@ export const convertPdfToImages = async ({
 
 // Convert each page (from other formats like docx) to a png and save that image to tmp
 export const convertFileToPdf = async ({
+  extension,
   localPath,
   tempDir,
-  extension,
 }: {
+  extension: string;
   localPath: string;
   tempDir: string;
-  extension: string;
 }): Promise<string> => {
   const inputBuffer = await fs.readFile(localPath);
   const outputFilename = path.basename(localPath, extension) + ".pdf";
@@ -148,7 +150,7 @@ export const convertFileToPdf = async ({
     await fs.writeFile(outputPath, pdfBuffer);
     return outputPath;
   } catch (err) {
-    console.error(`Error converting .${extension} to .pdf:`, err);
+    console.error(`Error converting ${extension} to .pdf:`, err);
     throw err;
   }
 };
