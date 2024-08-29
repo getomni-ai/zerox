@@ -68,11 +68,12 @@ const result = await zerox({
   openaiAPIKey: process.env.OPENAI_API_KEY,
 
   // Optional
+  cleanup: true, // Clear images from tmp after run.
   concurrency: 10, // Number of pages to run at a time.
   maintainFormat: false, // Slower but helps maintain consistent formatting.
-  cleanup: true, // Clear images from tmp after run.
-  outputDir: undefined, // Save combined result.md to a file
-  tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory)
+  model: 'gpt-4o-mini' // Model to use (gpt-4o-mini or gpt-4o).
+  outputDir: undefined, // Save combined result.md to a file.
+  tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory).
 });
 ```
 
