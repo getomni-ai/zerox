@@ -1,6 +1,6 @@
 import {
-  convertPdfToImages,
   convertFileToPdf,
+  convertPdfToImages,
   downloadFile,
   formatMarkdown,
   isString,
@@ -46,7 +46,6 @@ export const zerox = async ({
   if (!localPath) throw "Failed to save file to local drive";
 
   const fileExtension = path.extname(localPath).toLowerCase();
-  let pdfPath: string;
 
   if (!fileExtension) {
     throw new Error("File extension missing");
@@ -54,13 +53,14 @@ export const zerox = async ({
 
   // Convert file to PDF if necessary
   if (fileExtension !== ".png") {
+    let pdfPath: string;
     if (fileExtension === ".pdf") {
       pdfPath = localPath;
     } else {
       pdfPath = await convertFileToPdf({
+        extension: fileExtension,
         localPath,
         tempDir: tempDirectory,
-        extension: fileExtension,
       });
     }
     // Convert the file to a series of images
