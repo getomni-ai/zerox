@@ -41,6 +41,7 @@ sdist/
 var/
 wheels/
 share/python-wheels/
+.python-version
 
 # Ignore Python package metadata
 *.egg-info/
