@@ -1,21 +1,24 @@
 class Messages:
     """User-facing messages"""
 
-    NO_OPENAI_KEY = """
-    No OpenAI key found. Please set your OpenAI key as a parameters or place it in the environment variable OPENAI_API_KEY.
-
-    You can get your key from https://platform.openai.com/account/api-keys.
+    NO_API_KEY = """
+    No model API key found for your model in the environment variable. Please set parameters by placing it in the environment variable.
+    Refer litellm model provider documentation and examples for different providers 
     """
 
-    OPENAI_NON_200_RESPONSE = """
-    OpenAI API returned status code {status_code}: {data}
-
-    Please check the OpenAI API documentation for more information. https://platform.openai.com/docs/guides/error-codes.
+    NON_VISION_MODEL = """
+    The provided model: "{model}" is not a vision model. Please provide a vision model.
     """
 
-    OPENAI_COMPLETION_ERROR = """
-    Error in OpenAI Completion Response. Error: {0}
-    Please check OpenAI API status and try again later. https://status.openai.com/
+    NON_200_RESPONSE = """
+    Model API returned status code {status_code}: {data}
+
+    Please check the litellm documentation for more information. https://docs.litellm.ai/docs/exception_mapping.
+    """
+
+    COMPLETION_ERROR = """
+    Error in Completion Response. Error: {0}
+    Please check the status of your model provider API status.
     """
 
     PDF_CONVERSION_FAILED = """

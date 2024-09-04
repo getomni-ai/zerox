@@ -28,6 +28,7 @@ __pycache__/
 
 # Ignore Python virtual environment directories
 .Python
+dev_scripts
 build/
 develop-eggs/
 dist/
