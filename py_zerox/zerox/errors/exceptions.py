@@ -5,15 +5,35 @@ from ..constants import Messages
 from .base import CustomException
 
 
-class MissingOpenAIAPIKeyException(CustomException):
-    """Exception raised when the OpenAI API key is missing."""
+class MissingEnvironmentVariables(CustomException):
+    """Exception raised when the model provider environment variables, API key(s) are missing. Refer: https://docs.litellm.ai/docs/providers"""
 
     def __init__(
         self,
-        message: str = Messages.NO_OPENAI_KEY,
+        message: str = Messages.MISSING_ENVIRONMENT_VARIABLES,
+        extra_info: Optional[Dict] = None,
     ):
-        super().__init__(message)
+        super().__init__(message, extra_info)
 
+class NotAVisionModel(CustomException):
+    """Exception raised when the provided model is not a vision model."""
+
+    def __init__(
+        self,
+        message: str = Messages.NON_VISION_MODEL,
+        extra_info: Optional[Dict] = None,
+    ):
+        super().__init__(message, extra_info)
+
+class ModelAccessIssue(CustomException):
+    """Exception raised when the provided model can't be accessed due to incorrect credentials/keys or incorrect environent variables setup."""
+
+    def __init__(
+        self,
+        message: str = Messages.MODEL_ACCESS_ISSUE,
+        extra_info: Optional[Dict] = None,
+    ):
+        super().__init__(message, extra_info)
 
 class ResourceUnreachableException(CustomException):
     """Exception raised when a resource is unreachable."""

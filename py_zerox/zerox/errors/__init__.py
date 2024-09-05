@@ -1,5 +1,7 @@
 from .exceptions import (
-    MissingOpenAIAPIKeyException,
+    NotAVisionModel,
+    ModelAccessIssue,
+    MissingEnvironmentVariables,
     ResourceUnreachableException,
     FileUnavailable,
     FailedToSaveFile,
@@ -7,7 +9,7 @@ from .exceptions import (
 )
 
 __all__ = [
-    "MissingOpenAIAPIKeyException",
+    "MissingAPIKeyException",
     "ResourceUnreachableException",
     "FileUnavailable",
     "FailedToSaveFile",
