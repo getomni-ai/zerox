@@ -21,6 +21,9 @@ export const zerox = async ({
   openaiAPIKey = "",
   outputDir,
   tempDir = os.tmpdir(),
+  llmParams = {
+    max_tokens: 1000,
+  },
 }: ZeroxArgs): Promise<ZeroxOutput> => {
   let inputTokenCount = 0;
   let outputTokenCount = 0;
@@ -89,6 +92,7 @@ export const zerox = async ({
           maintainFormat,
           model,
           priorPage,
+          llmParams,
         });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
@@ -114,6 +118,7 @@ export const zerox = async ({
           maintainFormat,
           model,
           priorPage,
+          llmParams,
         });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;

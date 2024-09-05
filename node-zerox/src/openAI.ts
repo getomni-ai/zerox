@@ -8,6 +8,7 @@ export const getCompletion = async ({
   maintainFormat,
   model,
   priorPage,
+  llmParams,
 }: CompletionArgs): Promise<CompletionResponse> => {
   const systemPrompt = `
     Convert the following PDF page to markdown.
@@ -46,6 +47,7 @@ export const getCompletion = async ({
         messages,
         model,
         temperature: 0,
+        ...llmParams,
       },
       {
         headers: {
