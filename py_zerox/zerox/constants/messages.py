@@ -1,13 +1,18 @@
 class Messages:
     """User-facing messages"""
 
-    NO_API_KEY = """
-    No model API key found for your model in the environment variable. Please set parameters by placing it in the environment variable.
-    Refer litellm model provider documentation and examples for different providers 
+    MISSING_ENVIRONMENT_VARIABLES = """
+    Required environment variable (keys) from the model are Missing. Please set the required environment variables for the model provider.
+    Refer: https://docs.litellm.ai/docs/providers
+    """
+    
+    NON_VISION_MODEL = """
+    The provided model is not a vision model. Please provide a vision model.
     """
 
-    NON_VISION_MODEL = """
-    The provided model: "{model}" is not a vision model. Please provide a vision model.
+    MODEL_ACCESS_ISSUE = """
+    Your provided model can't be accessed. Please make sure you have access to the model and also required environment variables are setup correctly including valid api key(s).
+    Refer: https://docs.litellm.ai/docs/providers
     """
 
     NON_200_RESPONSE = """
