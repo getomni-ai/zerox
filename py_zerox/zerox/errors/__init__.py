@@ -1,6 +1,6 @@
 from .exceptions import (
     NotAVisionModel,
-    ModelAccessIssue,
+    ModelAccessError,
     MissingEnvironmentVariables,
     ResourceUnreachableException,
     FileUnavailable,
@@ -9,7 +9,9 @@ from .exceptions import (
 )
 
 __all__ = [
-    "MissingAPIKeyException",
+    "NotAVisionModel",
+    "ModelAccessError",
+    "MissingEnvironmentVariables",
     "ResourceUnreachableException",
     "FileUnavailable",
     "FailedToSaveFile",

@@ -10,7 +10,7 @@ class Messages:
     The provided model is not a vision model. Please provide a vision model.
     """
 
-    MODEL_ACCESS_ISSUE = """
+    MODEL_ACCESS_ERROR = """
     Your provided model can't be accessed. Please make sure you have access to the model and also required environment variables are setup correctly including valid api key(s).
     Refer: https://docs.litellm.ai/docs/providers
     """

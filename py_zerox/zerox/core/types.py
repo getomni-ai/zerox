@@ -1,5 +1,5 @@
-from typing import List, Optional
-from dataclasses import dataclass
+from typing import List, Optional, Dict, Any
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -9,13 +9,13 @@ class ZeroxArgs:
     """
 
     file_path: str
-    openai_api_key: Optional[str] = None
     cleanup: bool = True
     concurrency: int = 10
     maintain_format: bool = False
+    model: str = "gpt-4o-mini",
     output_dir: Optional[str] = None
     temp_dir: Optional[str] = None
-
+    kwargs: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class Page:
