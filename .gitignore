@@ -156,3 +156,6 @@ dmypy.json
 
 # Ignore Cython debug files
 cython_debug/
+
+# Ignore custom files
+_test_*.py

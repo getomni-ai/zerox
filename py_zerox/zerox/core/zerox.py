@@ -87,7 +87,7 @@ async def zerox(
         if f.endswith(".png")
     ]
 
-    # Create an instance of the OpenAI model
+    # Create an instance of the litellm model interface
     vision_model = litellmmodel(model=model,**kwargs)
 
     if maintain_format:
