@@ -169,8 +169,8 @@ os.environ['GEMINI_API_KEY'] = "" # your-gemini-api-key
 model="claude-3-opus-20240229"
 os.environ["ANTHROPIC_API_KEY"] = "" # your-anthropic-api-key
 
-###################### Google Vertex ai ######################
-model = "gemini-1.5-flash-001"
+###################### Vertex ai ######################
+model = "vertex_ai/gemini-1.5-flash-001" ## "vertex_ai/<model_name>" -> format <provider>/<model>
 ## GET CREDENTIALS 
 ## RUN ## 
 # !gcloud auth application-default login - run this to add vertex credentials to your env
