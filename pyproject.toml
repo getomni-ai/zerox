@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "zerox"
-version = "0.0.1"
-description = "ocr documents using gpt-4o-mini"
+version = "0.0.2"
+description = "ocr documents using vision models from all popular providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock etc"
 authors = ["wizenheimer"]
 license = "MIT"
 readme = "README.md"
