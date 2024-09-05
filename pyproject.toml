@@ -2,7 +2,7 @@
 name = "zerox"
 version = "0.0.2"
 description = "ocr documents using vision models from all popular providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock etc"
-authors = ["wizenheimer"]
+authors = ["wizenheimer","pradhyumna85"]
 license = "MIT"
 readme = "README.md"
 packages = [{ include = "zerox", from = "py_zerox" }]
