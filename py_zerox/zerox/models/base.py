@@ -7,7 +7,7 @@ if TYPE_CHECKING:
 T = TypeVar("T", bound="BaseModel")
 
 
-class BaseModel(ABC):
+class BaseModel_bck(ABC):
     """
     Base class for all models.
     """
@@ -45,3 +45,41 @@ class BaseModel(ABC):
         api_key: Optional[str] = None,
     ):
         self.api_key = api_key
+
+
+class BaseModel(ABC):
+    """
+    Base class for all models.
+    """
+
+    @abstractmethod
+    async def completion(
+        self,
+    ) -> "CompletionResponse":
+        raise NotImplementedError("Subclasses must implement this method")
+    
+    @abstractmethod
+    def validate_access(
+        self,
+    ) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+    
+    @abstractmethod
+    def validate_model(
+        self,
+    ) -> None:
+        raise NotImplementedError("Subclasses must implement this method")
+
+    def __init__(
+        self,
+        model: Optional[str] = None,
+        **kwargs,
+    ):
+        self.model = model
+        self.kwargs = kwargs
+
+        ## validations
+        # self.validate_model()
+        # self.validate_access()
+
+

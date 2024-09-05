@@ -25,12 +25,12 @@ class NotAVisionModel(CustomException):
     ):
         super().__init__(message, extra_info)
 
-class ModelAccessIssue(CustomException):
+class ModelAccessError(CustomException):
     """Exception raised when the provided model can't be accessed due to incorrect credentials/keys or incorrect environent variables setup."""
 
     def __init__(
         self,
-        message: str = Messages.MODEL_ACCESS_ISSUE,
+        message: str = Messages.MODEL_ACCESS_ERROR,
         extra_info: Optional[Dict] = None,
     ):
         super().__init__(message, extra_info)
