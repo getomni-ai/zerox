@@ -131,8 +131,14 @@ Request #3 => page_2_markdown + page_3_image
 
 ## Usage (Python SDK - supports vision models from different providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock etc)
 
+
+Installation: 
+- Install **poppler-utils** on the system, it should be available in path variable
+- Install py-zerox: `pip install git+https://github.com/getomni-ai/zerox.git`
+
 ```python
-from py_zerox import zerox
+# from py_zerox import zerox ## when not installing and developing inside the repo
+from zerox import zerox
 import os
 import json
 import asyncio
@@ -189,7 +195,7 @@ kwargs = {"vertex_credentials": vertex_credentials}
 async def main():
     file_path = "https://omni-demo-data.s3.amazonaws.com/test/cs101.pdf" ## local filepath and file URL supported
     output_dir = "./output_test"
-    result = await zerox.zerox(file_path=file_path, model=model, output_dir=output_dir, **kwargs)
+    result = await zerox(file_path=file_path, model=model, output_dir=output_dir, **kwargs)
     return result
 
 
