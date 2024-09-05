@@ -82,7 +82,15 @@ class litellmmodel(BaseModel):
 
         try:
             response = await litellm.acompletion(model=self.model, messages=messages, **kwargs)
+
+            ## completion response
+            response = CompletionResponse(
+                    content=response["choices"][0]["message"]["content"],
+                    input_tokens=response["usage"]["prompt_tokens"],
+                    output_tokens=response["usage"]["completion_tokens"],
+                )
             return response
+        
         except Exception as err:
             raise Exception(Messages.COMPLETION_ERROR.format(err))
 
