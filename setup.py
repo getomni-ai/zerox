@@ -15,7 +15,7 @@ class InstallSystemDependencies(install):
 
 
 setup(
-    name="py_zerox",
+    name="py-zerox",
     cmdclass={
         "install": InstallSystemDependencies,
     },
