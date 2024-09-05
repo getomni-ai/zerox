@@ -7,6 +7,7 @@ export interface ZeroxArgs {
   openaiAPIKey?: string;
   outputDir?: string;
   tempDir?: string;
+  llmParams?: LLMParams;
 }
 
 export enum ModelOptions {
@@ -40,4 +41,13 @@ export interface CompletionArgs {
   maintainFormat: boolean;
   model: ModelOptions;
   priorPage: string;
+  llmParams?: LLMParams;
+}
+
+export interface LLMParams {
+  temperature?: number;
+  top_p?: number;
+  frequency_penalty?: number;
+  presence_penalty?: number;
+  max_tokens?: number;
 }
