@@ -139,6 +139,7 @@ import asyncio
 
 ### Model Setup (Use only Vision Models) Refer: https://docs.litellm.ai/docs/providers ###
 
+## placeholder for additional model kwargs which might be required for some models 
 kwargs = {}
 
 ###################### Example for OpenAI ######################
