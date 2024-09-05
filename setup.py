@@ -15,9 +15,12 @@ class InstallSystemDependencies(install):
 
 
 setup(
+    name="py_zerox",
     cmdclass={
         "install": InstallSystemDependencies,
     },
-    packages=find_packages(),
+    version="0.2",
+    packages=find_packages(where="py_zerox"),  # Specify the root folder
+    package_dir={"": "py_zerox"},  # Map root directory
     include_package_data=True,
 )
