@@ -67,8 +67,8 @@ export const zerox = async ({
     // Convert the file to a series of images
     await convertPdfToImages({
       localPath: pdfPath,
-      tempDir: tempDirectory,
       pagesToConvertAsImages,
+      tempDir: tempDirectory,
     });
   }
 
