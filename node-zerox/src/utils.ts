@@ -92,12 +92,12 @@ export const downloadFile = async ({
 // @TODO: pull dimensions from the original document. Also, look into rotated pages
 export const convertPdfToImages = async ({
   localPath,
-  tempDir,
   pagesToConvertAsImages,
+  tempDir,
 }: {
   localPath: string;
-  tempDir: string;
   pagesToConvertAsImages: number | number[];
+  tempDir: string;
 }) => {
   const options = {
     density: 300,
