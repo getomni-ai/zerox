@@ -73,7 +73,7 @@ const result = await zerox({
   maintainFormat: false, // Slower but helps maintain consistent formatting.
   model: 'gpt-4o-mini' // Model to use (gpt-4o-mini or gpt-4o).
   outputDir: undefined, // Save combined result.md to a file.
-  pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1,2,3]`) or a number (e.g. `1`). Set to -1 to convert all pages.
+  pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages.
   tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory).
 });
 ```
