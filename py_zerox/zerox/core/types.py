@@ -15,6 +15,7 @@ class ZeroxArgs:
     model: str = "gpt-4o-mini",
     output_dir: Optional[str] = None
     temp_dir: Optional[str] = None
+    custom_system_prompt: Optional[str] = None
     kwargs: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass

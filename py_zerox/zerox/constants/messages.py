@@ -15,6 +15,10 @@ class Messages:
     Refer: https://docs.litellm.ai/docs/providers
     """
 
+    CUSTOM_SYSTEM_PROMPT_WARNING = """
+    Custom system prompt was provided which overrides the default system prompt. We assume that you know what you are doing.  
+    """
+
     NON_200_RESPONSE = """
     Model API returned status code {status_code}: {data}
 

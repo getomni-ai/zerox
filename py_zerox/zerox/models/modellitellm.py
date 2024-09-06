@@ -1,5 +1,6 @@
 import os
 import aiohttp
+import warnings
 import litellm
 from typing import List, Dict, Any, Optional
 
@@ -8,15 +9,15 @@ from .base import BaseModel
 from .types import CompletionResponse
 from ..errors import ModelAccessError, NotAVisionModel, MissingEnvironmentVariables
 from ..constants.messages import Messages
+from ..constants.prompts import Prompts
 from ..processor.image import encode_image_to_base64
+
+DEFAULT_SYSTEM_PROMPT = Prompts.DEFAULT_SYSTEM_PROMPT
 
 
 class litellmmodel(BaseModel):
-    _system_prompt = """
-    Convert the following PDF page to markdown.
-    Return only the markdown with no explanation text.
-    Do not exclude any content from the page.
-    """
+    ## setting the default system prompt
+    _system_prompt = DEFAULT_SYSTEM_PROMPT
 
     def __init__(
         self,
@@ -36,6 +37,20 @@ class litellmmodel(BaseModel):
         self.validate_environment()
         self.validate_model()
         self.validate_access()
+
+    @property
+    def system_prompt(self) -> str:
+        '''Returns the system prompt for the model.'''
+        return self._system_prompt
+    
+    @system_prompt.setter
+    def system_prompt(self, prompt: str) -> None:
+        '''
+        Sets/overrides the system prompt for the model.
+        Will raise a friendly warning to notify the user. 
+        '''
+        warnings.warn(f"{Messages.CUSTOM_SYSTEM_PROMPT_WARNING}. Default prompt for zerox is:\n {DEFAULT_SYSTEM_PROMPT}")
+        self._system_prompt = prompt
 
     ## custom method on top of BaseModel
     def validate_environment(self) -> None:
