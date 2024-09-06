@@ -137,8 +137,8 @@ Installation:
 - Install py-zerox: `pip install git+https://github.com/getomni-ai/zerox.git`
 
 ```python
-# from py_zerox import zerox ## when not installing and developing inside the repo
-from zerox import zerox
+# from py_zerox.zerox import zerox ## when not installing and developing inside the repo
+from zerox import zerox ## if installed
 import os
 import json
 import asyncio
