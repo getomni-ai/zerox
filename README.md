@@ -131,8 +131,8 @@ Request #3 => page_2_markdown + page_3_image
 
 ## Usage (Python SDK - supports vision models from different providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock etc)
 
+Installation:
 
-Installation: 
 - Install **poppler-utils** on the system, it should be available in path variable
 - Install py-zerox: `pip install git+https://github.com/getomni-ai/zerox.git`
 
@@ -147,6 +147,12 @@ import asyncio
 
 ## placeholder for additional model kwargs which might be required for some models 
 kwargs = {}
+
+## system prompt to use for the vision model
+custom_system_prompt = None
+
+# to override
+# custom_system_prompt = "For the below pdf page, do something..somthing..." ## example
 
 ###################### Example for OpenAI ######################
 model = "gpt-4o-mini" ## openai model
@@ -195,7 +201,7 @@ kwargs = {"vertex_credentials": vertex_credentials}
 async def main():
     file_path = "https://omni-demo-data.s3.amazonaws.com/test/cs101.pdf" ## local filepath and file URL supported
     output_dir = "./output_test"
-    result = await zerox(file_path=file_path, model=model, output_dir=output_dir, **kwargs)
+    result = await zerox(file_path=file_path, model=model, output_dir=output_dir,custom_system_prompt=custom_system_prompt, **kwargs)
     return result
 
 
@@ -231,6 +237,7 @@ async def zerox(
     model: str = "gpt-4o-mini",
     output_dir: Optional[str] = None,
     temp_dir: str = tempfile.gettempdir(),
+    custom_system_prompt: Optional[str] = None,
     **kwargs
 ) -> ZeroxOutput:
   ...
@@ -238,22 +245,25 @@ async def zerox(
 
 Parameters
 
-- cleanup (bool, optional):
+- **cleanup** (bool, optional):
   Whether to clean up temporary files after processing. Defaults to True.
-- concurrency (int, optional):
+- **concurrency** (int, optional):
   The number of concurrent processes to run. Defaults to 10.
-- file_path (Optional[str], optional):
+- **file_path** (Optional[str], optional):
   The path to the PDF file to process. Defaults to an empty string.
-- maintain_format (bool, optional):
+- **maintain_format** (bool, optional):
   Whether to maintain the format from the previous page. Defaults to False.
-- model (str, optional):
+- **model** (str, optional):
   The model to use for generating completions. Defaults to "gpt-4o-mini".
   Refer to LiteLLM Providers for the correct model name, as it may differ depending on the provider.
-- output_dir (Optional[str], optional):
+- **output_dir** (Optional[str], optional):
   The directory to save the markdown output. Defaults to None.
-- temp_dir (str, optional):
+- **temp_dir** (str, optional):
   The directory to store temporary files. Defaults to the system's temporary directory (tempfile.gettempdir()).
-- kwargs (dict, optional):
+- **custom_system_prompt** (str, optional):
+  The system prompt to use for the model, this overrides the default system prompt of zerox. Defaults to None.
+  Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning.
+- **kwargs** (dict, optional):
   Additional keyword arguments to pass to the litellm.completion method.
   Refer to the LiteLLM Documentation and Completion Input for details.
 
