@@ -93,9 +93,11 @@ export const downloadFile = async ({
 export const convertPdfToImages = async ({
   localPath,
   tempDir,
+  pagesToConvertAsImages,
 }: {
   localPath: string;
   tempDir: string;
+  pagesToConvertAsImages: number | number[];
 }) => {
   const options = {
     density: 300,
@@ -108,7 +110,7 @@ export const convertPdfToImages = async ({
   const storeAsImage = fromPath(localPath, options);
 
   try {
-    const convertResults = await storeAsImage.bulk(-1, {
+    const convertResults = await storeAsImage.bulk(pagesToConvertAsImages, {
       responseType: "buffer",
     });
     await Promise.all(
