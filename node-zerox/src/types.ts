@@ -46,8 +46,8 @@ export interface CompletionArgs {
 
 export interface LLMParams {
   temperature?: number;
-  top_p?: number;
-  frequency_penalty?: number;
-  presence_penalty?: number;
-  max_tokens?: number;
+  topP?: number;
+  frequencyPenalty?: number;
+  presencePenalty?: number;
+  maxTokens?: number;
 }
