@@ -1,6 +1,6 @@
 import axios from "axios";
 import { CompletionArgs, CompletionResponse } from "./types";
-import { encodeImageToBase64 } from "./utils";
+import { encodeImageToBase64, transformKeys } from "./utils";
 
 export const getCompletion = async ({
   apiKey,
@@ -46,8 +46,7 @@ export const getCompletion = async ({
       {
         messages,
         model,
-        temperature: 0,
-        ...llmParams,
+        ...transformKeys(llmParams ?? null),
       },
       {
         headers: {

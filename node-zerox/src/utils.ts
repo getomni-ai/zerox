@@ -154,3 +154,25 @@ export const convertFileToPdf = async ({
     throw err;
   }
 };
+
+const camelToSnakeCase = (str: string) =>
+  str.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`);
+
+export function transformKeys(
+  obj: Record<string, any> | null
+): Record<string, any> {
+  if (typeof obj !== "object" || obj === null) {
+    return obj ?? {};
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map(transformKeys);
+  }
+
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [
+      camelToSnakeCase(key),
+      transformKeys(value),
+    ])
+  );
+}
