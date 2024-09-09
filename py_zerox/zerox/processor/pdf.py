@@ -9,6 +9,7 @@ from .image import save_image
 from .text import format_markdown
 from ..constants import PDFConversionDefaultOptions, Messages
 from ..models import OpenAI
+from ..models.types import LLMParams
 
 
 async def convert_pdf_to_images(local_path: str, temp_dir: str):
@@ -42,6 +43,7 @@ async def process_page(
     output_token_count: int = 0,
     prior_page: str = "",
     semaphore: Optional[asyncio.Semaphore] = None,
+    llm_params: LLMParams = None,
 ) -> Tuple[str, int, int, str]:
     """Process a single page of a PDF"""
 
@@ -65,6 +67,7 @@ async def process_page(
             image_path=image_path,
             maintain_format=True,
             prior_page=prior_page,
+            llm_params=llm_params,
         )
 
         formatted_markdown = format_markdown(completion.content)
@@ -87,6 +90,7 @@ async def process_pages_in_batches(
     input_token_count: int = 0,
     output_token_count: int = 0,
     prior_page: str = "",
+    llm_params: LLMParams = None,
 ):
     # Create a semaphore to limit the number of concurrent tasks
     semaphore = asyncio.Semaphore(concurrency)
@@ -101,6 +105,7 @@ async def process_pages_in_batches(
             output_token_count,
             prior_page,
             semaphore,
+            llm_params=llm_params,
         )
         for image in images
     ]

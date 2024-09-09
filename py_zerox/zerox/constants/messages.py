@@ -34,3 +34,7 @@ class Messages:
     FAILED_TO_SAVE_FILE = """Failed to save file to local drive"""
 
     FAILED_TO_PROCESS_IMAGE = """Failed to process image"""
+
+    INVALID_LLM_PARAMS = """
+    Invalid LLM parameters provided. Please check the documentation for the valid parameters.
+    """
