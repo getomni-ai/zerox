@@ -23,10 +23,12 @@ async def convert_pdf_to_images(local_path: str, temp_dir: str):
     file_name = os.path.splitext(os.path.basename(local_path))[0]
 
     try:
-        images = convert_from_path(local_path, **options)
+        images = await asyncio.to_thread(
+            convert_from_path, local_path, **options
+        )
         tasks = []
         for i, image in enumerate(images, start=1):
-            image_path = os.path.join(temp_dir, f"{file_name}_page_{i}.png")
+            image_path = os.path.join(temp_dir, f"{file_name}_page_{i:06d}.png")
             tasks.append(save_image(image, image_path))
         await asyncio.gather(*tasks)
         return images

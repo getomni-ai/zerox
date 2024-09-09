@@ -130,6 +130,24 @@ Request #3 => page_2_markdown + page_3_image
 }
 ```
 
+### Python Setup
+Installation
+```bash
+pip install -e .
+```
+
+Usage
+```python
+from py_zerox import zerox
+import asyncio
+import os
+
+file_path_or_link = "../path/or/link/to.pdf"
+output_dir = "examples/output"
+openai_api_key = os.environ.get("OPENAI_API_KEY")
+result = asyncio.run(zerox.zerox(file_path=file_path_or_link, openai_api_key=openai_api_key, output_dir=output_dir))
+```
+
 ### License
 
 This project is licensed under the MIT License.
