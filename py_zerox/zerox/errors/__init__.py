@@ -4,6 +4,7 @@ from .exceptions import (
     FileUnavailable,
     FailedToSaveFile,
     FailedToProcessFile,
+    InvalidLLMParamsException,
 )
 
 __all__ = [
@@ -12,4 +13,5 @@ __all__ = [
     "FileUnavailable",
     "FailedToSaveFile",
     "FailedToProcessFile",
+    "InvalidLLMParamsException",
 ]

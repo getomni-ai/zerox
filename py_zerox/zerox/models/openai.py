@@ -4,10 +4,11 @@ from typing import List, Dict, Any, Optional
 
 # Package Imports
 from .base import BaseModel
-from .types import CompletionResponse
-from ..errors import MissingOpenAIAPIKeyException
+from .types import CompletionResponse, LLMParams
+from ..errors import MissingOpenAIAPIKeyException, InvalidLLMParamsException
 from ..constants.messages import Messages
 from ..processor.image import encode_image_to_base64
+import ssl
 
 
 class OpenAI(BaseModel):
@@ -17,6 +18,14 @@ class OpenAI(BaseModel):
     Return only the markdown with no explanation text.
     Do not exclude any content from the page.
     """
+
+    DEFAULT_LLM_PARAMS: LLMParams = {
+        "max_tokens": 1000,
+        "temperature": 0,
+        "top_p": 1,
+        "frequency_penalty": 0,
+        "presence_penalty": 0,
+    }
 
     def __init__(
         self,
@@ -39,12 +48,24 @@ class OpenAI(BaseModel):
             raise MissingOpenAIAPIKeyException()
         return api_key
 
+    @staticmethod
+    def validate_llm_params(params: Dict[str, Any]) -> LLMParams:
+        """Validates and merges the provided LLM parameters with the default ones."""
+        valid_keys = set(OpenAI.DEFAULT_LLM_PARAMS.keys())
+        invalid_keys = set(params.keys()) - valid_keys
+        if invalid_keys:
+            raise InvalidLLMParamsException(
+                f"Invalid LLM parameters: {', '.join(invalid_keys)}")
+
+        return {**OpenAI.DEFAULT_LLM_PARAMS, **params}
+
     async def completion(
         self,
         image_path: str,
         maintain_format: bool,
         prior_page: str,
         model: str = "gpt-4o-mini",
+        llm_params: Optional[Dict[str, Any]] = None,
     ) -> CompletionResponse:
         """OpenAI completion for image to markdown conversion.
 
@@ -64,7 +85,10 @@ class OpenAI(BaseModel):
             prior_page=prior_page,
         )
 
+        validated_llm_params = self.validate_llm_params(llm_params or {})
+
         try:
+            # response = await self._make_request(messages, model, validated_llm_params)
             response = await self._make_request(messages, model)
             return response
         except Exception as err:
@@ -74,7 +98,7 @@ class OpenAI(BaseModel):
         self,
         messages: List[Dict[str, Any]],
         model: str,
-        temperature: float = 0,
+        # llm_params: LLMParams,
     ) -> CompletionResponse:
         """Makes a request to the OpenAI API for chat completions.
 
@@ -87,13 +111,14 @@ class OpenAI(BaseModel):
         :raises Exception: If the response status code is not 200.
         :return: The response from the OpenAI API containing the completion content, input tokens, and output tokens.
         """
+
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 "https://api.openai.com/v1/chat/completions",
                 json={
                     "messages": messages,
                     "model": model,
-                    "temperature": temperature,
+                    # **llm_params,
                 },
                 headers={
                     "Authorization": f"Bearer {self.api_key}",

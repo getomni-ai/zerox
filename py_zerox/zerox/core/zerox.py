@@ -1,7 +1,7 @@
 import os
 import shutil
 import tempfile
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from datetime import datetime
 import aiofiles
 import aiofiles.os as async_os
@@ -16,6 +16,7 @@ from ..processor import (
 from ..errors import MissingOpenAIAPIKeyException, FileUnavailable
 from ..models import OpenAI
 from .types import Page, ZeroxOutput
+from ..models.types import LLMParams
 
 
 async def zerox(
@@ -26,6 +27,7 @@ async def zerox(
     openai_api_key: Optional[str] = None,
     output_dir: Optional[str] = None,
     temp_dir: str = tempfile.gettempdir(),
+    llm_params: LLMParams = None,
 ) -> ZeroxOutput:
     input_token_count = 0
     output_token_count = 0
@@ -46,7 +48,8 @@ async def zerox(
         await async_os.makedirs(output_dir, exist_ok=True)
 
     # Create a temporary directory to store the PDF and images
-    temp_directory = os.path.join(temp_dir or tempfile.gettempdir(), "zerox-temp")
+    temp_directory = os.path.join(
+        temp_dir or tempfile.gettempdir(), "zerox-temp")
     await async_os.makedirs(temp_directory, exist_ok=True)
 
     # Download the PDF. Get file name.
@@ -55,7 +58,8 @@ async def zerox(
         raise FileUnavailable()
 
     raw_file_name = os.path.splitext(os.path.basename(local_path))[0]
-    file_name = "".join(c.lower() if c.isalnum() else "_" for c in raw_file_name)
+    file_name = "".join(c.lower() if c.isalnum()
+                        else "_" for c in raw_file_name)
 
     # Convert the file to a series of images
     await convert_pdf_to_images(local_path=local_path, temp_dir=temp_directory)
@@ -70,6 +74,8 @@ async def zerox(
     # Create an instance of the OpenAI model
     openai = OpenAI(api_key=openai_api_key)
 
+    validated_llm_params = openai.validate_llm_params(llm_params or {})
+
     if maintain_format:
         for image in images:
             result, input_token_count, output_token_count, prior_page = await process_page(
@@ -79,6 +85,7 @@ async def zerox(
                 input_token_count,
                 output_token_count,
                 prior_page,
+                llm_params=validated_llm_params,
             )
             if result:
                 aggregated_markdown.append(result)
@@ -91,9 +98,11 @@ async def zerox(
             input_token_count,
             output_token_count,
             prior_page,
+            llm_params=validated_llm_params,
         )
 
-        aggregated_markdown = [result[0] for result in results if isinstance(result[0], str)]
+        aggregated_markdown = [result[0]
+                               for result in results if isinstance(result[0], str)]
 
     # Write the aggregated markdown to a file
     if output_dir:
