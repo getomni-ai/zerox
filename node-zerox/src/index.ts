@@ -52,6 +52,12 @@ export const zerox = async ({
     throw new Error("File extension missing");
   }
 
+  // Sort the `pagesToConvertAsImages` array to make sure we use the right index
+  // for `formattedPages` as `pdf2pic` always returns images in order
+  if (Array.isArray(pagesToConvertAsImages)) {
+    pagesToConvertAsImages.sort((a, b) => a - b);
+  }
+
   // Convert file to PDF if necessary
   if (fileExtension !== ".png") {
     let pdfPath: string;
@@ -170,7 +176,21 @@ export const zerox = async ({
   const endTime = new Date();
   const completionTime = endTime.getTime() - startTime.getTime();
   const formattedPages = aggregatedMarkdown.map((el, i) => {
-    return { content: el, page: i + 1, contentLength: el.length };
+    let pageNumber;
+    // If we convert all pages, just use the array index
+    if (pagesToConvertAsImages === -1) {
+      pageNumber = i + 1;
+    }
+    // Else if we convert specific pages, use the page number from the parameter
+    else if (Array.isArray(pagesToConvertAsImages)) {
+      pageNumber = pagesToConvertAsImages[i];
+    }
+    // Else, the parameter is a number and use it for the page number
+    else {
+      pageNumber = pagesToConvertAsImages;
+    }
+
+    return { content: el, page: pageNumber, contentLength: el.length };
   });
 
   return {
