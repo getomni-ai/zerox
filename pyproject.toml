@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "zerox"
+name = "py_zerox"
 version = "0.0.1"
 description = "ocr documents using gpt-4o-mini"
 authors = ["wizenheimer"]
