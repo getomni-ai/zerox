@@ -5,8 +5,30 @@ import { pipeline } from "stream/promises";
 import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
+import { LLMParams } from "./types";
 
 const convertAsync = promisify(convert);
+
+const defaultLLMParams: LLMParams = {
+  maxTokens: 1000,
+  temperature: 0,
+  topP: 1, // OpenAI defaults to 1
+  frequencyPenalty: 0, // OpenAI defaults to 0
+  presencePenalty: 0, // OpenAI defaults to 0
+};
+
+export const validateLLMParams = (params: Partial<LLMParams>): LLMParams => {
+  const validKeys = Object.keys(defaultLLMParams);
+  const invalidKeys = Object.keys(params).filter(
+    (key) => !validKeys.includes(key)
+  );
+
+  if (invalidKeys.length > 0) {
+    throw new Error(`Invalid LLM parameters: ${invalidKeys.join(", ")}`);
+  }
+
+  return { ...defaultLLMParams, ...params };
+};
 
 export const encodeImageToBase64 = async (imagePath: string) => {
   const imageBuffer = await fs.readFile(imagePath);
@@ -158,9 +180,9 @@ export const convertFileToPdf = async ({
 const camelToSnakeCase = (str: string) =>
   str.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`);
 
-export function transformKeys(
+export const transformKeys = (
   obj: Record<string, any> | null
-): Record<string, any> {
+): Record<string, any> => {
   if (typeof obj !== "object" || obj === null) {
     return obj ?? {};
   }
@@ -175,4 +197,4 @@ export function transformKeys(
       transformKeys(value),
     ])
   );
-}
+};
