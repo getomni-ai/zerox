@@ -1,0 +1,33 @@
+name: py_zerox
+
+on:
+    push:
+        tags:
+            - "v*"
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Check out the code
+              uses: actions/checkout@v3
+
+            - name: Set up Python
+              uses: actions/setup-python@v4
+              with:
+                  python-version: "3.x"
+
+            - name: Install build tools
+              run: |
+                  python -m pip install --upgrade pip
+                  pip install build twine
+
+            - name: Build the package
+              run: python -m build
+
+            - name: Publish to PyPI
+              env:
+                  TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+                  TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+              run: twine upload dist/*
