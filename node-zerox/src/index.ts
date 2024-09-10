@@ -6,44 +6,23 @@ import {
   isString,
 } from "./utils";
 import { getCompletion } from "./openAI";
-import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
+import { ModelOptions, ZeroxArgs, ZeroxOutput, LLMParams } from "./types";
+import { validateLLMParams } from "./utils";
 import fs from "fs-extra";
 import os from "os";
 import path from "path";
 import pLimit, { Limit } from "p-limit";
-import { LLMParams } from "./types";
-
-const defaultLLMParams: LLMParams = {
-  maxTokens: 1000,
-  temperature: 0,
-  topP: 1, // OpenAI defualts to 1
-  frequencyPenalty: 0, // OpenAI default to 0
-  presencePenalty: 0, // OpenAI default to 0
-};
-
-const validateLLMParams = (params: Partial<LLMParams>): LLMParams => {
-  const validKeys = Object.keys(defaultLLMParams);
-  const invalidKeys = Object.keys(params).filter(
-    (key) => !validKeys.includes(key)
-  );
-
-  if (invalidKeys.length > 0) {
-    throw new Error(`Invalid LLM parameters: ${invalidKeys.join(", ")}`);
-  }
-
-  return { ...defaultLLMParams, ...params };
-};
 
 export const zerox = async ({
   cleanup = true,
   concurrency = 10,
   filePath,
+  llmParams = {},
   maintainFormat = false,
   model = ModelOptions.gpt_4o_mini,
   openaiAPIKey = "",
   outputDir,
   tempDir = os.tmpdir(),
-  llmParams = {},
 }: ZeroxArgs): Promise<ZeroxOutput> => {
   let inputTokenCount = 0;
   let outputTokenCount = 0;
