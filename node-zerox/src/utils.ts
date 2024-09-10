@@ -187,10 +187,6 @@ export const transformKeys = (
     return obj ?? {};
   }
 
-  if (Array.isArray(obj)) {
-    return obj.map(transformKeys);
-  }
-
   return Object.fromEntries(
     Object.entries(obj).map(([key, value]) => [
       camelToSnakeCase(key),
