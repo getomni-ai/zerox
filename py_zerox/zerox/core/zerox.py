@@ -23,11 +23,11 @@ async def zerox(
     cleanup: bool = True,
     concurrency: int = 10,
     file_path: Optional[str] = "",
+    llm_params: LLMParams = None,
     maintain_format: bool = False,
     openai_api_key: Optional[str] = None,
     output_dir: Optional[str] = None,
     temp_dir: str = tempfile.gettempdir(),
-    llm_params: LLMParams = None,
 ) -> ZeroxOutput:
     input_token_count = 0
     output_token_count = 0
