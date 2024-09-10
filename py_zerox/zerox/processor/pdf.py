@@ -42,8 +42,8 @@ async def process_page(
     input_token_count: int = 0,
     output_token_count: int = 0,
     prior_page: str = "",
-    semaphore: Optional[asyncio.Semaphore] = None,
     llm_params: LLMParams = None,
+    semaphore: Optional[asyncio.Semaphore] = None,
 ) -> Tuple[str, int, int, str]:
     """Process a single page of a PDF"""
 
@@ -57,6 +57,7 @@ async def process_page(
                 input_token_count,
                 output_token_count,
                 prior_page,
+                llm_params,
             )
 
     image_path = os.path.join(temp_directory, image)
@@ -104,8 +105,8 @@ async def process_pages_in_batches(
             input_token_count,
             output_token_count,
             prior_page,
+            llm_params,
             semaphore,
-            llm_params=llm_params,
         )
         for image in images
     ]

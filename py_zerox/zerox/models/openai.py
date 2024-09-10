@@ -8,7 +8,6 @@ from .types import CompletionResponse, LLMParams
 from ..errors import MissingOpenAIAPIKeyException, InvalidLLMParamsException
 from ..constants.messages import Messages
 from ..processor.image import encode_image_to_base64
-import ssl
 
 
 class OpenAI(BaseModel):
@@ -65,7 +64,7 @@ class OpenAI(BaseModel):
         maintain_format: bool,
         prior_page: str,
         model: str = "gpt-4o-mini",
-        llm_params: Optional[Dict[str, Any]] = None,
+        llm_params: LLMParams = None,
     ) -> CompletionResponse:
         """OpenAI completion for image to markdown conversion.
 
@@ -88,8 +87,7 @@ class OpenAI(BaseModel):
         validated_llm_params = self.validate_llm_params(llm_params or {})
 
         try:
-            # response = await self._make_request(messages, model, validated_llm_params)
-            response = await self._make_request(messages, model)
+            response = await self._make_request(messages, model, validated_llm_params)
             return response
         except Exception as err:
             raise Exception(Messages.OPENAI_COMPLETION_ERROR.format(err))
@@ -98,7 +96,7 @@ class OpenAI(BaseModel):
         self,
         messages: List[Dict[str, Any]],
         model: str,
-        # llm_params: LLMParams,
+        llm_params: LLMParams,
     ) -> CompletionResponse:
         """Makes a request to the OpenAI API for chat completions.
 
@@ -112,13 +110,15 @@ class OpenAI(BaseModel):
         :return: The response from the OpenAI API containing the completion content, input tokens, and output tokens.
         """
 
+        # ssl_context = ssl.create_default_context(cafile=certifi.where())
+        # async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=ssl_context)) as session:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 "https://api.openai.com/v1/chat/completions",
                 json={
                     "messages": messages,
                     "model": model,
-                    # **llm_params,
+                    **llm_params,
                 },
                 headers={
                     "Authorization": f"Bearer {self.api_key}",
