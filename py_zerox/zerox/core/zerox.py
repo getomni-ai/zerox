@@ -12,6 +12,7 @@ from ..processor import (
     download_file,
     process_page,
     process_pages_in_batches,
+    sorted_nicely,
 )
 from ..errors import FileUnavailable
 from ..models import litellmmodel
@@ -25,7 +26,7 @@ async def zerox(
     maintain_format: bool = False,
     model: str = "gpt-4o-mini",
     output_dir: Optional[str] = None,
-    temp_dir: str = tempfile.gettempdir(),
+    temp_dir: str = None,
     custom_system_prompt: Optional[str] = None,
     **kwargs
 ) -> ZeroxOutput:
@@ -45,7 +46,7 @@ async def zerox(
     :type model: str, optional
     :param output_dir: The directory to save the markdown output, defaults to None
     :type output_dir: str, optional
-    :param temp_dir: The directory to store temporary files, defaults to tempfile.gettempdir()
+    :param temp_dir: The directory to store temporary files, defaults to some named folder in system's temp directory. If already exists, the contents will be deleted for zerox uses it.
     :type temp_dir: str, optional
     :param custom_system_prompt: The system prompt to use for the model, this overrides the default system prompt of zerox. Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning, defaults to None
     :type custom_system_prompt: str, optional
@@ -69,86 +70,100 @@ async def zerox(
     if output_dir:
         await async_os.makedirs(output_dir, exist_ok=True)
 
+    ## delete tmp_dir if exists and then recreate it
+    if temp_dir:
+        if os.path.exists(temp_dir):
+            shutil.rmtree(temp_dir)
+        await async_os.makedirs(temp_dir, exist_ok=True)
+
+
     # Create a temporary directory to store the PDF and images
-    temp_directory = os.path.join(temp_dir or tempfile.gettempdir(), "zerox-temp")
-    await async_os.makedirs(temp_directory, exist_ok=True)
+    with tempfile.TemporaryDirectory() as temp_dir_:
 
-    # Download the PDF. Get file name.
-    local_path = await download_file(file_path=file_path, temp_dir=temp_directory)
-    if not local_path:
-        raise FileUnavailable()
+        if temp_dir:
+            ## use the user provided temp directory
+            temp_directory = temp_dir
+        else:
+            ## use the system temp directory
+            temp_directory = temp_dir_
 
-    raw_file_name = os.path.splitext(os.path.basename(local_path))[0]
-    file_name = "".join(c.lower() if c.isalnum() else "_" for c in raw_file_name)
+        # Download the PDF. Get file name.
+        local_path = await download_file(file_path=file_path, temp_dir=temp_directory)
+        if not local_path:
+            raise FileUnavailable()
 
-    # Convert the file to a series of images
-    await convert_pdf_to_images(local_path=local_path, temp_dir=temp_directory)
+        raw_file_name = os.path.splitext(os.path.basename(local_path))[0]
+        file_name = "".join(c.lower() if c.isalnum() else "_" for c in raw_file_name)
 
-    # Get list of converted images
-    images = [
-        f"{temp_directory}/{f}"
-        for f in await async_os.listdir(temp_directory)
-        if f.endswith(".png")
-    ]
+        # Convert the file to a series of images
+        await convert_pdf_to_images(local_path=local_path, temp_dir=temp_directory)
 
-    # Create an instance of the litellm model interface
-    vision_model = litellmmodel(model=model,**kwargs)
+        # Get a list of sorted converted images
+        images = list(sorted_nicely([
+            f"{temp_directory}/{f}"
+            for f in await async_os.listdir(temp_directory)
+            if f.endswith(".png")
+        ]))
 
-    # override the system prompt if a custom prompt is provided
-    if custom_system_prompt:
-        vision_model.system_prompt = custom_system_prompt
+        # Create an instance of the litellm model interface
+        vision_model = litellmmodel(model=model,**kwargs)
 
-    if maintain_format:
-        for image in images:
-            result, input_token_count, output_token_count, prior_page = await process_page(
-                image,
+        # override the system prompt if a custom prompt is provided
+        if custom_system_prompt:
+            vision_model.system_prompt = custom_system_prompt
+
+        if maintain_format:
+            for image in images:
+                result, input_token_count, output_token_count, prior_page = await process_page(
+                    image,
+                    vision_model,
+                    temp_directory,
+                    input_token_count,
+                    output_token_count,
+                    prior_page,
+                )
+                if result:
+                    aggregated_markdown.append(result)
+        else:
+            results = await process_pages_in_batches(
+                images,
+                concurrency,
                 vision_model,
                 temp_directory,
                 input_token_count,
                 output_token_count,
                 prior_page,
             )
-            if result:
-                aggregated_markdown.append(result)
-    else:
-        results = await process_pages_in_batches(
-            images,
-            concurrency,
-            vision_model,
-            temp_directory,
-            input_token_count,
-            output_token_count,
-            prior_page,
+
+            aggregated_markdown = [result[0] for result in results if isinstance(result[0], str)]
+
+            ## add token usage
+            input_token_count += sum([result[1] for result in results])
+            output_token_count += sum([result[2] for result in results])
+
+
+        # Write the aggregated markdown to a file
+        if output_dir:
+            result_file_path = os.path.join(output_dir, f"{file_name}.md")
+            async with aiofiles.open(result_file_path, "w") as f:
+                await f.write("\n\n".join(aggregated_markdown))
+
+        # Cleanup the downloaded PDF file
+        if cleanup and os.path.exists(temp_directory):
+            shutil.rmtree(temp_directory)
+
+        # Format JSON response
+        end_time = datetime.now()
+        completion_time = (end_time - start_time).total_seconds() * 1000
+        formatted_pages = [
+            Page(content=content, page=i + 1, content_length=len(content))
+            for i, content in enumerate(aggregated_markdown)
+        ]
+
+        return ZeroxOutput(
+            completion_time=completion_time,
+            file_name=file_name,
+            input_tokens=input_token_count,
+            output_tokens=output_token_count,
+            pages=formatted_pages,
         )
-
-        aggregated_markdown = [result[0] for result in results if isinstance(result[0], str)]
-
-        ## add token usage
-        input_token_count += sum([result[1] for result in results])
-        output_token_count += sum([result[2] for result in results])
-
-    # Write the aggregated markdown to a file
-    if output_dir:
-        result_file_path = os.path.join(output_dir, f"{file_name}.md")
-        async with aiofiles.open(result_file_path, "w") as f:
-            await f.write("\n\n".join(aggregated_markdown))
-
-    # Cleanup the downloaded PDF file
-    if cleanup and os.path.exists(temp_directory):
-        shutil.rmtree(temp_directory)
-
-    # Format JSON response
-    end_time = datetime.now()
-    completion_time = (end_time - start_time).total_seconds() * 1000
-    formatted_pages = [
-        Page(content=content, page=i + 1, content_length=len(content))
-        for i, content in enumerate(aggregated_markdown)
-    ]
-
-    return ZeroxOutput(
-        completion_time=completion_time,
-        file_name=file_name,
-        input_tokens=input_token_count,
-        output_tokens=output_token_count,
-        pages=formatted_pages,
-    )
