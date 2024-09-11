@@ -114,7 +114,7 @@ class litellmmodel(BaseModel):
         maintain_format: bool,
         prior_page: str,
     ) -> List[Dict[str, Any]]:
-        """Prepares the messages to send to the OpenAI API.
+        """Prepares the messages to send to the LiteLLM Completion API.
 
         :param image_path: Path to the image file.
         :type image_path: str
