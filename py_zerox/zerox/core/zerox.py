@@ -146,7 +146,6 @@ async def zerox(
             input_token_count += sum([result[1] for result in results])
             output_token_count += sum([result[2] for result in results])
 
-
         # Write the aggregated markdown to a file
         if output_dir:
             result_file_path = os.path.join(output_dir, f"{file_name}.md")
