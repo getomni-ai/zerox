@@ -76,9 +76,8 @@ class litellmmodel(BaseModel):
         image_path: str,
         maintain_format: bool,
         prior_page: str,
-        **kwargs,
     ) -> CompletionResponse:
-        """OpenAI completion for image to markdown conversion.
+        """LitellM completion for image to markdown conversion.
 
         :param image_path: Path to the image file.
         :type image_path: str
@@ -96,7 +95,7 @@ class litellmmodel(BaseModel):
         )
 
         try:
-            response = await litellm.acompletion(model=self.model, messages=messages, **kwargs)
+            response = await litellm.acompletion(model=self.model, messages=messages, **self.kwargs)
 
             ## completion response
             response = CompletionResponse(
