@@ -65,27 +65,27 @@ const checkAndInstall = async () => {
         );
       }
     }
+
+    // Check and install LibreOffice
+    try {
+      await execPromise("soffice --version");
+    } catch {
+      if (process.platform === "darwin") {
+        await installPackage("brew install --cask libreoffice", "LibreOffice");
+      } else if (process.platform === "linux") {
+        const command = sudoAvailable
+          ? "sudo apt-get update && sudo apt-get install -y libreoffice"
+          : "apt-get update && apt-get install -y libreoffice";
+        await installPackage(command, "LibreOffice");
+      } else {
+        throw new Error(
+          "Please install LibreOffice manually from https://www.libreoffice.org/download/download/"
+        );
+      }
+    }
   } catch (err) {
     console.error(`Error during installation: ${err.message}`);
     process.exit(1);
-  }
-
-  // Check and install LibreOffice
-  try {
-    await execPromise("soffice --version");
-  } catch {
-    if (process.platform === "darwin") {
-      await installPackage("brew install --cask libreoffice", "LibreOffice");
-    } else if (process.platform === "linux") {
-      const command = sudoAvailable
-        ? "sudo apt-get update && sudo apt-get install -y libreoffice"
-        : "apt-get update && apt-get install -y libreoffice";
-      await installPackage(command, "LibreOffice");
-    } else {
-      throw new Error(
-        "Please install LibreOffice manually from https://www.libreoffice.org/download/download/"
-      );
-    }
   }
 };
 
