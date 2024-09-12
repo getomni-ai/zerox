@@ -110,8 +110,6 @@ class OpenAI(BaseModel):
         :return: The response from the OpenAI API containing the completion content, input tokens, and output tokens.
         """
 
-        # ssl_context = ssl.create_default_context(cafile=certifi.where())
-        # async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=ssl_context)) as session:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 "https://api.openai.com/v1/chat/completions",
