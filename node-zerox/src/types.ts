@@ -2,6 +2,7 @@ export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
   filePath: string;
+  llmParams?: LLMParams;
   maintainFormat?: boolean;
   model?: ModelOptions;
   openaiAPIKey?: string;
@@ -38,7 +39,16 @@ export interface CompletionResponse {
 export interface CompletionArgs {
   apiKey: string;
   imagePath: string;
+  llmParams?: LLMParams;
   maintainFormat: boolean;
   model: ModelOptions;
   priorPage: string;
+}
+
+export interface LLMParams {
+  frequencyPenalty?: number;
+  maxTokens?: number;
+  presencePenalty?: number;
+  temperature?: number;
+  topP?: number;
 }
