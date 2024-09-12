@@ -17,14 +17,14 @@ Sounds pretty basic! But with the `gpt-4o-mini` this method is price competitive
 
 This is how the pricing stacks up to other document processers. Running 1,000 pages with Zerox uses about 25M input tokens and 0.4M output tokens.
 
-| Service                                                                                                    | Cost                 | Accuracy | Table Quality |
-| ---------------------------------------------------------------------------------------------------------- | -------------------- | -------- | ------------- |
+| Service                                                                                                 | Cost                 | Accuracy | Table Quality |
+| ------------------------------------------------------------------------------------------------------- | -------------------- | -------- | ------------- |
 | AWS Textract[[1]](https://aws.amazon.com/textract/pricing/#:~:text=Amazon%20Textract%20API%20pricing)      | $1.50 / 1,000 pages  | Low      | Low           |
 | Google Document AI[[2]](https://cloud.google.com/document-ai/pricing)                                      | $1.50 / 1,000 pages  | Low      | Low           |
 | Azure Document AI[[3]](https://azure.microsoft.com/en-us/pricing/details/ai-document-intelligence/)        | $1.50 / 1,000 pages  | High     | Mid           |
 | Unstructured (PDF)[[4]](https://unstructured.io/api-key-hosted#:~:text=Cost%20and%20Usage%20%0AGuidelines) | $10.00 / 1,000 pages | Mid      | Mid           |
-| ------------------------                                                                                   | -------------------- | -------- | ------------- |
-| Zerox (gpt-mini)                                                                                           | $ 4.00 / 1,000 pages | High     | High          |
+| ------------------------                                                                                | -------------------- | -------- | ------------- |
+| Zerox (gpt-mini)                                                                                        | $ 4.00 / 1,000 pages | High     | High          |
 
 ## Getting Started
 
@@ -153,7 +153,7 @@ Refer to the [LiteLLM Documentation](https://docs.litellm.ai/docs/providers) for
 ### Usage
 
 ```python
-from py_zerox import zerox
+from pyzerox import zerox
 import os
 import json
 import asyncio
@@ -237,7 +237,7 @@ async def zerox(
     maintain_format: bool = False,
     model: str = "gpt-4o-mini",
     output_dir: Optional[str] = None,
-    temp_dir: str = tempfile.gettempdir(),
+    temp_dir: Optional[str] = None,
     custom_system_prompt: Optional[str] = None,
     **kwargs
 ) -> ZeroxOutput:
@@ -260,7 +260,7 @@ Parameters
 - **output_dir** (Optional[str], optional):
   The directory to save the markdown output. Defaults to None.
 - **temp_dir** (str, optional):
-  The directory to store temporary files. Defaults to the system's temporary directory (tempfile.gettempdir()).
+  The directory to store temporary files, defaults to some named folder in system's temp directory. If already exists, the contents will be deleted for zerox uses it.
 - **custom_system_prompt** (str, optional):
   The system prompt to use for the model, this overrides the default system prompt of zerox. Defaults to None.
   Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning.
@@ -275,13 +275,62 @@ Returns
 
 ### Example Output (Output from "azure/gpt-4o-mini"):
 
-````console
-ZeroxOutput(completion_time=21192.572, file_name='cs101', input_tokens=0, output_tokens=0, pages=[Page(content='# 26.3. Variables\n\n| Type    | Description                                 | Wrapper Class |\n|---------|---------------------------------------------|---------------|\n| byte    | 8-bit signed 2s complement integer         | Byte          |\n| short   | 16-bit signed 2s complement integer        | Short         |\n| int     | 32-bit signed 2s complement integer        | Integer       |\n| long    | 64-bit signed 2s complement integer        | Long          |\n| float   | 32-bit IEEE 754 floating point number      | Float         |\n| double  | 64-bit floating point number                | Double        |\n| boolean | may be set to true or false                 | Boolean       |\n| char    | 16-bit Unicode (UTF-16) character          | Character     |\n\n**Table 26.2:** Primitive types in Java\n\n## 26.3.1. Declaration & Assignment\n\nJava is a statically typed language meaning that all variables must be declared before you can use them or refer to them. In addition, when declaring a variable, you must specify both its type and its identifier. For example:\n\n```java\nint numUnits;\ndouble costPerUnit;\nchar firstInitial;\nboolean isStudent;\n```\n\nEach declaration specifies the variable’s type followed by the identifier and ending with a semicolon. The identifier rules are fairly standard: a name can consist of lowercase and uppercase alphabetic characters, numbers, and underscores but may not begin with a numeric character. We adopt the modern camelCasing naming convention for variables in our code. In general, variables must be assigned a value before you can use them in an expression. You do not have to immediately assign a value when you declare them (though it is good practice), but some value must be assigned before they can be used or the compiler will issue an error. \n\nThe assignment operator is a single equal sign, `=` and is a right-to-left assignment. That is, the variable that we wish to assign the value to appears on the left-hand-side while the value (literal, variable or expression) is on the right-hand-size. Using our variables from before, we can assign them values:\n\n> Instance variables, that is variables declared as part of an object do have default values. For objects, the default is `null`, for all numeric types, zero is the default value. For the boolean type, `false` is the default, and the default `char` value is `\\0`, the null-terminating character (zero in the ASCII table).', content_length=2420, page=1)])
+`Note: The output is mannually wrapped for this documentation for better readability.`
+
+````Python
+ZeroxOutput(
+    completion_time=9432.975,
+    file_name='cs101',
+    input_tokens=36877,
+    output_tokens=515,
+    pages=[
+        Page(
+            content='| Type    | Description                          | Wrapper Class |\n' +
+                    '|---------|--------------------------------------|---------------|\n' +
+                    '| byte    | 8-bit signed 2s complement integer   | Byte          |\n' +
+                    '| short   | 16-bit signed 2s complement integer  | Short         |\n' +
+                    '| int     | 32-bit signed 2s complement integer  | Integer       |\n' +
+                    '| long    | 64-bit signed 2s complement integer  | Long          |\n' +
+                    '| float   | 32-bit IEEE 754 floating point number| Float         |\n' +
+                    '| double  | 64-bit floating point number         | Double        |\n' +
+                    '| boolean | may be set to true or false          | Boolean       |\n' +
+                    '| char    | 16-bit Unicode (UTF-16) character    | Character     |\n\n' +
+                    'Table 26.2.: Primitive types in Java\n\n' +
+                    '### 26.3.1. Declaration & Assignment\n\n' +
+                    'Java is a statically typed language meaning that all variables must be declared before you can use ' +
+                    'them or refer to them. In addition, when declaring a variable, you must specify both its type and ' +
+                    'its identifier. For example:\n\n' +
+                    '```java\n' +
+                    'int numUnits;\n' +
+                    'double costPerUnit;\n' +
+                    'char firstInitial;\n' +
+                    'boolean isStudent;\n' +
+                    '```\n\n' +
+                    'Each declaration specifies the variable’s type followed by the identifier and ending with a ' +
+                    'semicolon. The identifier rules are fairly standard: a name can consist of lowercase and ' +
+                    'uppercase alphabetic characters, numbers, and underscores but may not begin with a numeric ' +
+                    'character. We adopt the modern camelCasing naming convention for variables in our code. In ' +
+                    'general, variables must be assigned a value before you can use them in an expression. You do not ' +
+                    'have to immediately assign a value when you declare them (though it is good practice), but some ' +
+                    'value must be assigned before they can be used or the compiler will issue an error.\n\n' +
+                    'The assignment operator is a single equal sign, `=` and is a right-to-left assignment. That is, ' +
+                    'the variable that we wish to assign the value to appears on the left-hand-side while the value ' +
+                    '(literal, variable or expression) is on the right-hand-side. Using our variables from before, ' +
+                    'we can assign them values:\n\n' +
+                    '> 2 Instance variables, that is variables declared as part of an object do have default values. ' +
+                    'For objects, the default is `null`, for all numeric types, zero is the default value. For the ' +
+                    'boolean type, `false` is the default, and the default char value is `\\0`, the null-terminating ' +
+                    'character (zero in the ASCII table).',
+            content_length=2333,
+            page=1
+        )
+    ]
+)
 ````
 
 ## Credits
 
-- [Litellm](https://github.com/BerriAI/litellm): https://github.com/BerriAI/litellm | This powers our python sdk to support all popular vision models different providers.
+- [Litellm](https://github.com/BerriAI/litellm): https://github.com/BerriAI/litellm | This powers our python sdk to support all popular vision models from different providers.
 
 ### License
 
