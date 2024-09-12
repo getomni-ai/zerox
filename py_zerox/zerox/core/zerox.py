@@ -26,7 +26,7 @@ async def zerox(
     maintain_format: bool = False,
     model: str = "gpt-4o-mini",
     output_dir: Optional[str] = None,
-    temp_dir: str = None,
+    temp_dir: Optional[str] = None,
     custom_system_prompt: Optional[str] = None,
     **kwargs
 ) -> ZeroxOutput:
@@ -98,7 +98,7 @@ async def zerox(
         # Convert the file to a series of images
         await convert_pdf_to_images(local_path=local_path, temp_dir=temp_directory)
 
-        # Get a list of sorted converted images
+        # Get a list of sorted converted images (alphanumeric human sorting)
         images = list(sorted_nicely([
             f"{temp_directory}/{f}"
             for f in await async_os.listdir(temp_directory)
