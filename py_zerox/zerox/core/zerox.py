@@ -114,7 +114,7 @@ async def zerox(
 
         if maintain_format:
             for image in images:
-                result, input_token_count_, output_token_count_, prior_page = await process_page(
+                result, input_token_count, input_token_count, prior_page = await process_page(
                     image,
                     vision_model,
                     temp_directory,
@@ -122,10 +122,6 @@ async def zerox(
                     output_token_count,
                     prior_page,
                 )
-
-                ## add token usage
-                input_token_count += input_token_count_
-                output_token_count += output_token_count_
 
                 if result:
                     aggregated_markdown.append(result)
