@@ -1,14 +1,14 @@
-import axios from "axios";
 import { CompletionArgs, CompletionResponse } from "./types";
-import { encodeImageToBase64, transformKeys } from "./utils";
+import { convertKeysToSnakeCase, encodeImageToBase64 } from "./utils";
+import axios from "axios";
 
 export const getCompletion = async ({
   apiKey,
   imagePath,
+  llmParams,
   maintainFormat,
   model,
   priorPage,
-  llmParams,
 }: CompletionArgs): Promise<CompletionResponse> => {
   const systemPrompt = `
     Convert the following PDF page to markdown.
@@ -46,7 +46,7 @@ export const getCompletion = async ({
       {
         messages,
         model,
-        ...transformKeys(llmParams ?? null),
+        ...convertKeysToSnakeCase(llmParams ?? null),
       },
       {
         headers: {

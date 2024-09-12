@@ -1,30 +1,32 @@
-import { fromPath } from "pdf2pic";
 import { convert } from "libreoffice-convert";
-import { promisify } from "util";
+import { fromPath } from "pdf2pic";
+import { LLMParams } from "./types";
 import { pipeline } from "stream/promises";
+import { promisify } from "util";
 import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
-import { LLMParams } from "./types";
 
 const convertAsync = promisify(convert);
 
 const defaultLLMParams: LLMParams = {
+  frequencyPenalty: 0, // OpenAI defaults to 0
   maxTokens: 1000,
+  presencePenalty: 0, // OpenAI defaults to 0
   temperature: 0,
   topP: 1, // OpenAI defaults to 1
-  frequencyPenalty: 0, // OpenAI defaults to 0
-  presencePenalty: 0, // OpenAI defaults to 0
 };
 
 export const validateLLMParams = (params: Partial<LLMParams>): LLMParams => {
   const validKeys = Object.keys(defaultLLMParams);
-  const invalidKeys = Object.keys(params).filter(
-    (key) => !validKeys.includes(key)
-  );
 
-  if (invalidKeys.length > 0) {
-    throw new Error(`Invalid LLM parameters: ${invalidKeys.join(", ")}`);
+  for (const [key, value] of Object.entries(params)) {
+    if (!validKeys.includes(key)) {
+      throw new Error(`Invalid LLM parameter: ${key}`);
+    }
+    if (typeof value !== "number") {
+      throw new Error(`Value for '${key}' must be a number`);
+    }
   }
 
   return { ...defaultLLMParams, ...params };
@@ -180,7 +182,7 @@ export const convertFileToPdf = async ({
 const camelToSnakeCase = (str: string) =>
   str.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`);
 
-export const transformKeys = (
+export const convertKeysToSnakeCase = (
   obj: Record<string, any> | null
 ): Record<string, any> => {
   if (typeof obj !== "object" || obj === null) {
@@ -188,9 +190,6 @@ export const transformKeys = (
   }
 
   return Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [
-      camelToSnakeCase(key),
-      transformKeys(value),
-    ])
+    Object.entries(obj).map(([key, value]) => [camelToSnakeCase(key), value])
   );
 };

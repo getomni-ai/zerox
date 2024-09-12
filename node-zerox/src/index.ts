@@ -6,7 +6,7 @@ import {
   isString,
 } from "./utils";
 import { getCompletion } from "./openAI";
-import { ModelOptions, ZeroxArgs, ZeroxOutput, LLMParams } from "./types";
+import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
 import { validateLLMParams } from "./utils";
 import fs from "fs-extra";
 import os from "os";
@@ -90,10 +90,10 @@ export const zerox = async ({
         const { content, inputTokens, outputTokens } = await getCompletion({
           apiKey: openaiAPIKey,
           imagePath,
+          llmParams,
           maintainFormat,
           model,
           priorPage,
-          llmParams,
         });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
@@ -116,10 +116,10 @@ export const zerox = async ({
         const { content, inputTokens, outputTokens } = await getCompletion({
           apiKey: openaiAPIKey,
           imagePath,
+          llmParams,
           maintainFormat,
           model,
           priorPage,
-          llmParams,
         });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
