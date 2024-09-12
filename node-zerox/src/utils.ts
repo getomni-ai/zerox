@@ -116,9 +116,11 @@ export const downloadFile = async ({
 // @TODO: pull dimensions from the original document. Also, look into rotated pages
 export const convertPdfToImages = async ({
   localPath,
+  pagesToConvertAsImages,
   tempDir,
 }: {
   localPath: string;
+  pagesToConvertAsImages: number | number[];
   tempDir: string;
 }) => {
   const options = {
@@ -132,7 +134,7 @@ export const convertPdfToImages = async ({
   const storeAsImage = fromPath(localPath, options);
 
   try {
-    const convertResults = await storeAsImage.bulk(-1, {
+    const convertResults = await storeAsImage.bulk(pagesToConvertAsImages, {
       responseType: "buffer",
     });
     await Promise.all(

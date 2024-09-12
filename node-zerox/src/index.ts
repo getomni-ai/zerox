@@ -22,6 +22,7 @@ export const zerox = async ({
   model = ModelOptions.gpt_4o_mini,
   openaiAPIKey = "",
   outputDir,
+  pagesToConvertAsImages = -1,
   tempDir = os.tmpdir(),
 }: ZeroxArgs): Promise<ZeroxOutput> => {
   let inputTokenCount = 0;
@@ -68,7 +69,11 @@ export const zerox = async ({
       });
     }
     // Convert the file to a series of images
-    await convertPdfToImages({ localPath: pdfPath, tempDir: tempDirectory });
+    await convertPdfToImages({
+      localPath: pdfPath,
+      pagesToConvertAsImages,
+      tempDir: tempDirectory,
+    });
   }
 
   const endOfPath = localPath.split("/")[localPath.split("/").length - 1];

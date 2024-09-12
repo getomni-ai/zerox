@@ -7,6 +7,7 @@ export interface ZeroxArgs {
   model?: ModelOptions;
   openaiAPIKey?: string;
   outputDir?: string;
+  pagesToConvertAsImages?: number | number[];
   tempDir?: string;
 }
 
