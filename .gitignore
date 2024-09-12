@@ -28,6 +28,7 @@ __pycache__/
 
 # Ignore Python virtual environment directories
 .Python
+dev_scripts
 build/
 develop-eggs/
 dist/
@@ -41,6 +42,7 @@ sdist/
 var/
 wheels/
 share/python-wheels/
+.python-version
 
 # Ignore Python package metadata
 *.egg-info/
@@ -154,3 +156,6 @@ dmypy.json
 
 # Ignore Cython debug files
 cython_debug/
+
+# Ignore custom files
+_test_*.py
