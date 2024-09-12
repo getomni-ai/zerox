@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "zerox"
+name = "py-zerox"
 version = "0.0.4"
 description = "ocr documents using vision models from all popular providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock etc"
 authors = ["wizenheimer","pradhyumna85"]
 license = "MIT"
 readme = "README.md"
-packages = [{ include = "zerox", from = "py_zerox" }]
+packages = [{ include = "pyzerox", from = "py_zerox" }]
 repository = "https://github.com/getomni-ai/zerox.git"
 documentation = "https://github.com/getomni-ai/zerox"
 keywords = ["ocr", "document", "llm"]
