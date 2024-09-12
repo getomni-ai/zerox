@@ -114,7 +114,7 @@ async def zerox(
 
         if maintain_format:
             for image in images:
-                result, input_token_count, input_token_count, prior_page = await process_page(
+                result, input_token_count, output_token_count, prior_page = await process_page(
                     image,
                     vision_model,
                     temp_directory,
