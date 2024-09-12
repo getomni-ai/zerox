@@ -1,21 +1,33 @@
 class Messages:
     """User-facing messages"""
 
-    NO_OPENAI_KEY = """
-    No OpenAI key found. Please set your OpenAI key as a parameters or place it in the environment variable OPENAI_API_KEY.
-
-    You can get your key from https://platform.openai.com/account/api-keys.
+    MISSING_ENVIRONMENT_VARIABLES = """
+    Required environment variable (keys) from the model are Missing. Please set the required environment variables for the model provider.
+    Refer: https://docs.litellm.ai/docs/providers
+    """
+    
+    NON_VISION_MODEL = """
+    The provided model is not a vision model. Please provide a vision model.
     """
 
-    OPENAI_NON_200_RESPONSE = """
-    OpenAI API returned status code {status_code}: {data}
-
-    Please check the OpenAI API documentation for more information. https://platform.openai.com/docs/guides/error-codes.
+    MODEL_ACCESS_ERROR = """
+    Your provided model can't be accessed. Please make sure you have access to the model and also required environment variables are setup correctly including valid api key(s).
+    Refer: https://docs.litellm.ai/docs/providers
     """
 
-    OPENAI_COMPLETION_ERROR = """
-    Error in OpenAI Completion Response. Error: {0}
-    Please check OpenAI API status and try again later. https://status.openai.com/
+    CUSTOM_SYSTEM_PROMPT_WARNING = """
+    Custom system prompt was provided which overrides the default system prompt. We assume that you know what you are doing.  
+    """
+
+    NON_200_RESPONSE = """
+    Model API returned status code {status_code}: {data}
+
+    Please check the litellm documentation for more information. https://docs.litellm.ai/docs/exception_mapping.
+    """
+
+    COMPLETION_ERROR = """
+    Error in Completion Response. Error: {0}
+    Please check the status of your model provider API status.
     """
 
     PDF_CONVERSION_FAILED = """
