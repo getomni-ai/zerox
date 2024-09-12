@@ -2,12 +2,12 @@ export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
   filePath: string;
+  llmParams?: LLMParams;
   maintainFormat?: boolean;
   model?: ModelOptions;
   openaiAPIKey?: string;
   outputDir?: string;
   tempDir?: string;
-  llmParams?: LLMParams;
 }
 
 export enum ModelOptions {
@@ -38,16 +38,16 @@ export interface CompletionResponse {
 export interface CompletionArgs {
   apiKey: string;
   imagePath: string;
+  llmParams?: LLMParams;
   maintainFormat: boolean;
   model: ModelOptions;
   priorPage: string;
-  llmParams?: LLMParams;
 }
 
 export interface LLMParams {
+  frequencyPenalty?: number;
+  maxTokens?: number;
+  presencePenalty?: number;
   temperature?: number;
   topP?: number;
-  frequencyPenalty?: number;
-  presencePenalty?: number;
-  maxTokens?: number;
 }
