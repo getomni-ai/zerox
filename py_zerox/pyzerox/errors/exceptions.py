@@ -77,14 +77,3 @@ class FailedToProcessFile(CustomException):
         extra_info: Optional[Dict] = None,
     ):
         super().__init__(message, extra_info)
-
-
-class InvalidLLMParamsException(CustomException):
-    """Exception raised when invalid LLM parameters are provided."""
-
-    def __init__(
-        self,
-        message: str = Messages.INVALID_LLM_PARAMS,
-        extra_info: Optional[Dict] = None,
-    ):
-        super().__init__(message, extra_info)

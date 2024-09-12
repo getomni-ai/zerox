@@ -43,7 +43,6 @@ async def process_page(
     input_token_count: int = 0,
     output_token_count: int = 0,
     prior_page: str = "",
-    llm_params: LLMParams = None,
     semaphore: Optional[asyncio.Semaphore] = None,
 ) -> Tuple[str, int, int, str]:
     """Process a single page of a PDF"""
@@ -58,18 +57,16 @@ async def process_page(
                 input_token_count,
                 output_token_count,
                 prior_page,
-                llm_params,
             )
 
     image_path = os.path.join(temp_directory, image)
 
-    # Get the completion from the OpenAI model
+    # Get the completion from the LiteLLM model
     try:
         completion = await model.completion(
             image_path=image_path,
             maintain_format=True,
             prior_page=prior_page,
-            llm_params=llm_params,
         )
 
         formatted_markdown = format_markdown(completion.content)
@@ -92,7 +89,6 @@ async def process_pages_in_batches(
     input_token_count: int = 0,
     output_token_count: int = 0,
     prior_page: str = "",
-    llm_params: LLMParams = None,
 ):
     # Create a semaphore to limit the number of concurrent tasks
     semaphore = asyncio.Semaphore(concurrency)
@@ -106,7 +102,6 @@ async def process_pages_in_batches(
             input_token_count,
             output_token_count,
             prior_page,
-            llm_params,
             semaphore,
         )
         for image in images
