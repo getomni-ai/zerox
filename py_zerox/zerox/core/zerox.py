@@ -60,7 +60,7 @@ async def zerox(
     prior_page = ""
     aggregated_markdown: List[str] = []
     start_time = datetime.now()
-    
+
     # File Path Validators
     if not file_path:
         raise FileUnavailable()
@@ -85,11 +85,11 @@ async def zerox(
     await convert_pdf_to_images(local_path=local_path, temp_dir=temp_directory)
 
     # Get list of converted images
-    images = [
+    images = list(sorted([
         f"{temp_directory}/{f}"
         for f in await async_os.listdir(temp_directory)
         if f.endswith(".png")
-    ]
+    ]))
 
     # Create an instance of the litellm model interface
     vision_model = litellmmodel(model=model,**kwargs)
