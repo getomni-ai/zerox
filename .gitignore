@@ -28,6 +28,7 @@ __pycache__/
 
 # Ignore Python virtual environment directories
 .Python
+dev_scripts
 build/
 develop-eggs/
 dist/
@@ -156,6 +157,7 @@ dmypy.json
 # Ignore Cython debug files
 cython_debug/
 
-# test files
-_test*
+
+# Ignore dev files and folders
+_test_*.py
 dev_scripts

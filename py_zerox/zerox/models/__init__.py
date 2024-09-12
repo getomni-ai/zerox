@@ -1,7 +1,7 @@
-from .openai import OpenAI
+from .modellitellm import litellmmodel
 from .types import CompletionResponse
 
 __all__ = [
-    "OpenAI",
+    "litellmmodel",
     "CompletionResponse",
 ]
