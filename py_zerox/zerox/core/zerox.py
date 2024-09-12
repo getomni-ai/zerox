@@ -1,5 +1,5 @@
 import os
-import shutil
+import aioshutil as async_shutil
 import tempfile
 from typing import List, Optional
 from datetime import datetime
@@ -73,7 +73,7 @@ async def zerox(
     ## delete tmp_dir if exists and then recreate it
     if temp_dir:
         if os.path.exists(temp_dir):
-            shutil.rmtree(temp_dir)
+            await async_shutil.rmtree(temp_dir)
         await async_os.makedirs(temp_dir, exist_ok=True)
 
 
@@ -150,7 +150,7 @@ async def zerox(
 
         # Cleanup the downloaded PDF file
         if cleanup and os.path.exists(temp_directory):
-            shutil.rmtree(temp_directory)
+            await async_shutil.rmtree(temp_directory)
 
         # Format JSON response
         end_time = datetime.now()
