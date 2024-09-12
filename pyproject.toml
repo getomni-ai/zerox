@@ -1,11 +1,11 @@
 [tool.poetry]
-name = "zerox"
-version = "0.0.1"
-description = "ocr documents using gpt-4o-mini"
-authors = ["wizenheimer"]
+name = "py-zerox"
+version = "0.0.4"
+description = "ocr documents using vision models from all popular providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock etc"
+authors = ["wizenheimer","pradhyumna85"]
 license = "MIT"
 readme = "README.md"
-packages = [{ include = "zerox", from = "py_zerox" }]
+packages = [{ include = "pyzerox", from = "py_zerox" }]
 repository = "https://github.com/getomni-ai/zerox.git"
 documentation = "https://github.com/getomni-ai/zerox"
 keywords = ["ocr", "document", "llm"]
@@ -14,9 +14,11 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
-aiofiles = "^24.1.0"
+aiofiles = "^23.0"
 aiohttp = "^3.9.5"
 pdf2image = "^1.17.0"
+litellm = "^1.44.15"
+aioshutil = "^1.5"
 
 [tool.poetry.scripts]
 pre-install = "py_zerox.scripts.pre_install:check_and_install"

@@ -1,4 +1,5 @@
 import os
+import re
 from typing import Optional
 from urllib.parse import urlparse
 import aiofiles
@@ -41,3 +42,9 @@ def is_valid_url(string: str) -> bool:
         ]
     except ValueError:
         return False
+
+def sorted_nicely( l ): 
+    """ Sort the given iterable in the way that humans expect -> alphanumerically""" 
+    convert = lambda text: int(text) if text.isdigit() else text 
+    alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ] 
+    return sorted(l, key = alphanum_key)
