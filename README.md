@@ -153,7 +153,7 @@ Refer to the [LiteLLM Documentation](https://docs.litellm.ai/docs/providers) for
 ### Usage
 
 ```python
-from py_zerox import zerox
+from zerox import zerox
 import os
 import json
 import asyncio
