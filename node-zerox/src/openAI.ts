@@ -1,10 +1,11 @@
-import axios from "axios";
 import { CompletionArgs, CompletionResponse } from "./types";
-import { encodeImageToBase64 } from "./utils";
+import { convertKeysToSnakeCase, encodeImageToBase64 } from "./utils";
+import axios from "axios";
 
 export const getCompletion = async ({
   apiKey,
   imagePath,
+  llmParams,
   maintainFormat,
   model,
   priorPage,
@@ -45,7 +46,7 @@ export const getCompletion = async ({
       {
         messages,
         model,
-        temperature: 0,
+        ...convertKeysToSnakeCase(llmParams ?? null),
       },
       {
         headers: {

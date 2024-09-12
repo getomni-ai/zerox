@@ -61,7 +61,7 @@ async def process_page(
 
     image_path = os.path.join(temp_directory, image)
 
-    # Get the completion from the OpenAI model
+    # Get the completion from LiteLLM
     try:
         completion = await model.completion(
             image_path=image_path,

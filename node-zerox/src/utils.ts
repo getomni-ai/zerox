@@ -1,12 +1,36 @@
-import { fromPath } from "pdf2pic";
 import { convert } from "libreoffice-convert";
-import { promisify } from "util";
+import { fromPath } from "pdf2pic";
+import { LLMParams } from "./types";
 import { pipeline } from "stream/promises";
+import { promisify } from "util";
 import axios from "axios";
 import fs from "fs-extra";
 import path from "path";
 
 const convertAsync = promisify(convert);
+
+const defaultLLMParams: LLMParams = {
+  frequencyPenalty: 0, // OpenAI defaults to 0
+  maxTokens: 1000,
+  presencePenalty: 0, // OpenAI defaults to 0
+  temperature: 0,
+  topP: 1, // OpenAI defaults to 1
+};
+
+export const validateLLMParams = (params: Partial<LLMParams>): LLMParams => {
+  const validKeys = Object.keys(defaultLLMParams);
+
+  for (const [key, value] of Object.entries(params)) {
+    if (!validKeys.includes(key)) {
+      throw new Error(`Invalid LLM parameter: ${key}`);
+    }
+    if (typeof value !== "number") {
+      throw new Error(`Value for '${key}' must be a number`);
+    }
+  }
+
+  return { ...defaultLLMParams, ...params };
+};
 
 export const encodeImageToBase64 = async (imagePath: string) => {
   const imageBuffer = await fs.readFile(imagePath);
@@ -155,4 +179,19 @@ export const convertFileToPdf = async ({
     console.error(`Error converting ${extension} to .pdf:`, err);
     throw err;
   }
+};
+
+const camelToSnakeCase = (str: string) =>
+  str.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`);
+
+export const convertKeysToSnakeCase = (
+  obj: Record<string, any> | null
+): Record<string, any> => {
+  if (typeof obj !== "object" || obj === null) {
+    return obj ?? {};
+  }
+
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [camelToSnakeCase(key), value])
+  );
 };

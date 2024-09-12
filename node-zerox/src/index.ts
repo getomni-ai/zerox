@@ -7,6 +7,7 @@ import {
 } from "./utils";
 import { getCompletion } from "./openAI";
 import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
+import { validateLLMParams } from "./utils";
 import fs from "fs-extra";
 import os from "os";
 import path from "path";
@@ -16,6 +17,7 @@ export const zerox = async ({
   cleanup = true,
   concurrency = 10,
   filePath,
+  llmParams = {},
   maintainFormat = false,
   model = ModelOptions.gpt_4o_mini,
   openaiAPIKey = "",
@@ -28,6 +30,8 @@ export const zerox = async ({
   let priorPage = "";
   const aggregatedMarkdown: string[] = [];
   const startTime = new Date();
+
+  llmParams = validateLLMParams(llmParams);
 
   // Validators
   if (!openaiAPIKey || !openaiAPIKey.length) {
@@ -91,6 +95,7 @@ export const zerox = async ({
         const { content, inputTokens, outputTokens } = await getCompletion({
           apiKey: openaiAPIKey,
           imagePath,
+          llmParams,
           maintainFormat,
           model,
           priorPage,
@@ -116,6 +121,7 @@ export const zerox = async ({
         const { content, inputTokens, outputTokens } = await getCompletion({
           apiKey: openaiAPIKey,
           imagePath,
+          llmParams,
           maintainFormat,
           model,
           priorPage,
