@@ -30,8 +30,8 @@ This is how the pricing stacks up to other document processers. Running 1,000 pa
 
 Zerox is available as both a Node and Python package.
 
-- [Node Readme](##Node-Zerox) - [npm package](https://www.npmjs.com/package/zerox)
-- [Python Readme](##Python-Zerox) - [pip package](https://pypi.org/project/py-zerox/)
+- [Node Readme](#node-zerox) - [npm package](https://www.npmjs.com/package/zerox)
+- [Python Readme](#python-zerox) - [pip package](https://pypi.org/project/py-zerox/)
 
 ## Node Zerox
 
