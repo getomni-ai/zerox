@@ -144,9 +144,12 @@ Request #3 => page_2_markdown + page_3_image
 ### Installation:
 
 - Install **poppler-utils** on the system, it should be available in path variable
-- Install py-zerox: `pip install py-zerox`
+- Install py-zerox:
+```sh
+pip install py-zerox
+```
 
-The `zerox` function is an asynchronous API that performs OCR (Optical Character Recognition) to markdown using vision models. It processes PDF files and converts them into markdown format. Make sure to set up the environment variables for the model and the model provider before using this API.
+The `pyzerox.zerox` function is an asynchronous API that performs OCR (Optical Character Recognition) to markdown using vision models. It processes PDF files and converts them into markdown format. Make sure to set up the environment variables for the model and the model provider before using this API.
 
 Refer to the [LiteLLM Documentation](https://docs.litellm.ai/docs/providers) for setting up the environment and passing the correct model name.
 
