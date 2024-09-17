@@ -5,7 +5,7 @@ from .pdf import (
     process_pages_in_batches,
 )
 from .text import format_markdown
-from .utils import download_file, sorted_nicely
+from .utils import download_file, create_selected_pages_pdf
 
 __all__ = [
     "save_image",
@@ -15,5 +15,5 @@ __all__ = [
     "download_file",
     "process_page",
     "process_pages_in_batches",
-    "sorted_nicely",
+    "create_selected_pages_pdf",
 ]
