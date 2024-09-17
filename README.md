@@ -144,9 +144,12 @@ Request #3 => page_2_markdown + page_3_image
 ### Installation:
 
 - Install **poppler-utils** on the system, it should be available in path variable
-- Install py-zerox: `pip install py-zerox`
+- Install py-zerox:
+```sh
+pip install py-zerox
+```
 
-The `zerox` function is an asynchronous API that performs OCR (Optical Character Recognition) to markdown using vision models. It processes PDF files and converts them into markdown format. Make sure to set up the environment variables for the model and the model provider before using this API.
+The `pyzerox.zerox` function is an asynchronous API that performs OCR (Optical Character Recognition) to markdown using vision models. It processes PDF files and converts them into markdown format. Make sure to set up the environment variables for the model and the model provider before using this API.
 
 Refer to the [LiteLLM Documentation](https://docs.litellm.ai/docs/providers) for setting up the environment and passing the correct model name.
 
@@ -215,8 +218,13 @@ kwargs = {"vertex_credentials": vertex_credentials}
 # Define main async entrypoint
 async def main():
     file_path = "https://omni-demo-data.s3.amazonaws.com/test/cs101.pdf" ## local filepath and file URL supported
-    output_dir = "./output_test"
-    result = await zerox(file_path=file_path, model=model, output_dir=output_dir,custom_system_prompt=custom_system_prompt, **kwargs)
+
+    ## process only some pages or all
+    select_pages = None ## None for all, but could be int or list(int) page numbers (1 indexed)
+
+    output_dir = "./output_test" ## directory to save the consolidated markdown file
+    result = await zerox(file_path=file_path, model=model, output_dir=output_dir,
+                        custom_system_prompt=custom_system_prompt,select_pages=select_pages, **kwargs)
     return result
 
 
@@ -239,6 +247,7 @@ async def zerox(
     output_dir: Optional[str] = None,
     temp_dir: Optional[str] = None,
     custom_system_prompt: Optional[str] = None,
+    select_pages: Optional[Union[int, Iterable[int]]] = None,
     **kwargs
 ) -> ZeroxOutput:
   ...
@@ -262,8 +271,9 @@ Parameters
 - **temp_dir** (str, optional):
   The directory to store temporary files, defaults to some named folder in system's temp directory. If already exists, the contents will be deleted before zerox uses it.
 - **custom_system_prompt** (str, optional):
-  The system prompt to use for the model, this overrides the default system prompt of zerox. Defaults to None.
-  Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning.
+  The system prompt to use for the model, this overrides the default system prompt of zerox.Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning. Defaults to None.
+- **select_pages** (Optional[Union[int, Iterable[int]]], optional):
+  Pages to process, can be a single page number or an iterable of page numbers, Defaults to None
 - **kwargs** (dict, optional):
   Additional keyword arguments to pass to the litellm.completion method.
   Refer to the LiteLLM Documentation and Completion Input for details.

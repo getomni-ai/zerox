@@ -35,6 +35,16 @@ class ModelAccessError(CustomException):
     ):
         super().__init__(message, extra_info)
 
+class PageNumberOutOfBoundError(CustomException):
+    """Exception invalid page number(s) provided."""
+
+    def __init__(
+        self,
+        message: str = Messages.PAGE_NUMBER_OUT_OF_BOUND_ERROR,
+        extra_info: Optional[Dict] = None,
+    ):
+        super().__init__(message, extra_info)
+
 class ResourceUnreachableException(CustomException):
     """Exception raised when a resource is unreachable."""
 
