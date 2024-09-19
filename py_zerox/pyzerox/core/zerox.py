@@ -91,11 +91,12 @@ async def zerox(
         warnings.warn(Messages.MAINTAIN_FORMAT_SELECTED_PAGES_WARNING)
 
     # If select_pages is a single integer, convert it to a list for consistency
-    if isinstance(select_pages, int):
-        select_pages = [select_pages]
-    
-    # Sort the pages to maintain consistency
-    select_pages = sorted(select_pages)
+    if select_pages:
+        if isinstance(select_pages, int):
+            select_pages = [select_pages]
+        else:
+            # Sort the pages to maintain consistency
+            select_pages = sorted(list(select_pages))
 
     # Ensure the directory for output_file_path exists
     output_dir = os.path.dirname(output_file_path) if output_file_path else None
