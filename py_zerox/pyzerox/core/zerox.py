@@ -55,7 +55,7 @@ async def zerox(
     :type output_file_path: str, optional
     :param temp_dir: The directory to store temporary files, defaults to some named folder in system's temp directory. If already exists, the contents will be deleted for zerox uses it.
     :type temp_dir: str, optional
-    :param page_separator: The separator to use between pages (at the end of each page) when writing the output to "output_file_path", can include a {page_no} placeholder to insert the page number. Uses "\\n<=== Page {page_no} ===>\\n" by default. defaults to None
+    :param page_separator: The separator to use between pages (at the end of each page) when writing the output to "output_file_path", can include a {page_no} placeholder to insert the page number. Uses "\\n\\n<=== Page {page_no} ===>\\n\\n" by default. defaults to None
     :type page_separator: str, None
     :param custom_system_prompt: The system prompt to use for the model, this overrides the default system prompt of zerox. Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning, defaults to None
     :type custom_system_prompt: str, optional
@@ -173,7 +173,7 @@ async def zerox(
         # Write the aggregated output to a file
         if output_file_path:
             if not page_separator:
-                page_separator = "\n<=== Page {page_no} ===>\n"
+                page_separator = "\n\n<=== Page {page_no} ===>\n\n"
 
             async with aiofiles.open(output_file_path, "w") as f:
                 for i, page_content in enumerate(aggregated_output):
