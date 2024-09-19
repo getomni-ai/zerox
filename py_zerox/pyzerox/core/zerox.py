@@ -172,7 +172,7 @@ async def zerox(
 
         # Write the aggregated output to a file
         if output_file_path:
-            if not page_separator:
+            if not page_separator and not isinstance(page_separator, str):
                 page_separator = "\n\n<=== Page {page_no} ===>\n\n"
 
             async with aiofiles.open(output_file_path, "w") as f:
