@@ -15,7 +15,7 @@ class ZeroxArgs:
     maintain_format: bool = False
     model: str = "gpt-4o-mini"
     output_file_path: Optional[str] = None
-    page_separator: str = "\n\n"
+    page_separator: Optional[str] = None
     temp_dir: Optional[str] = None
     custom_system_prompt: Optional[str] = None
     select_pages: Optional[Union[int, Iterable[int]]] = None

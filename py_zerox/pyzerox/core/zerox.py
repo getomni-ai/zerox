@@ -30,7 +30,7 @@ async def zerox(
     maintain_format: bool = False,
     model: str = "gpt-4o-mini",
     output_file_path: Optional[str] = None,
-    page_separator: str = "\n\n",
+    page_separator: Optional[str] = None,
     temp_dir: Optional[str] = None,
     custom_system_prompt: Optional[str] = None,
     select_pages: Optional[Union[int, Iterable[int]]] = None,
@@ -55,8 +55,8 @@ async def zerox(
     :type output_file_path: str, optional
     :param temp_dir: The directory to store temporary files, defaults to some named folder in system's temp directory. If already exists, the contents will be deleted for zerox uses it.
     :type temp_dir: str, optional
-    :param page_separator: The separator to use between pages when writing the output to "output_file_path", defaults to "\n\n"
-    :type page_separator: str
+    :param page_separator: The separator to use between pages (at the end of each page) when writing the output to "output_file_path", can include a {page_no} placeholder to insert the page number. Uses "\\n<=== Page {page_no} ===>\\n" by default. defaults to None
+    :type page_separator: str, None
     :param custom_system_prompt: The system prompt to use for the model, this overrides the default system prompt of zerox. Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning, defaults to None
     :type custom_system_prompt: str, optional
     :param select_pages: Pages to process, can be a single page number or an iterable of page numbers, defaults to None
@@ -171,8 +171,19 @@ async def zerox(
 
         # Write the aggregated output to a file
         if output_file_path:
+            if not page_separator:
+                page_separator = "\n<=== Page {page_no} ===>\n"
+
             async with aiofiles.open(output_file_path, "w") as f:
-                await f.write(page_separator.join(aggregated_output))
+                for i, page_content in enumerate(aggregated_output):
+                    await f.write(page_content)
+
+                    # Replace {page_no} with the actual page number in page_separator
+                    if "{page_no}" in page_separator:
+                        page_no_text = page_separator.format(page_no=(select_pages[i] if select_pages else i + 1))
+                        await f.write(f"{page_no_text}")
+                    else:
+                        await f.write(page_separator)
 
         # Cleanup the downloaded PDF file
         if cleanup and os.path.exists(temp_directory):
