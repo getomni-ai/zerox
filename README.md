@@ -143,7 +143,7 @@ Request #3 => page_2_markdown + page_3_image
 
 ### Installation:
 
-- Install **poppler-utils** on the system, it should be available in path variable
+- Install **poppler-utils** and **tesseract** on the system, these should be available in path variable
 - Install py-zerox:
 ```sh
 pip install py-zerox
