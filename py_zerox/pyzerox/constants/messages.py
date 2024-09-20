@@ -54,3 +54,11 @@ class Messages:
     FAILED_TO_SAVE_FILE = """Failed to save file to local drive"""
 
     FAILED_TO_PROCESS_IMAGE = """Failed to process image"""
+
+    FAILED_TO_PERFORM_OCR = """
+    Failed to perform OCR on image: {0}
+    """
+
+    FAILED_TO_FIND_BOUNDING_BOX = """
+    Failed to find bounding box for the section: {0}
+    """
