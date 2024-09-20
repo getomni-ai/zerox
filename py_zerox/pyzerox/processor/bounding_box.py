@@ -127,6 +127,34 @@ async def calculate_bounding_box(
     return leftmost_string_x, topmost_string_y, max_width, max_height
 
 
+async def normalize_bounding_box(
+    left: float,
+    top: float,
+    width: float,
+    height: float,
+    image_dimensions: Tuple[float, float],
+) -> Tuple[float, float, float, float]:
+    """
+    Normalize the bounding box coordinates and dimensions based on the image dimensions.
+
+    Args:
+        left (float): The x-coordinate of the top-left corner of the bounding box.
+        top (float): The y-coordinate of the top-left corner of the bounding box.
+        width (float): The width of the bounding box.
+        height (float): The height of the bounding box.
+        image_dimensions (Tuple[float, float]): A tuple containing the width and height of the image.
+
+    Returns:
+        Tuple[float, float, float, float]: A tuple containing the normalized left, top, width, and height of the bounding box.
+    """
+    normalized_left = left / image_dimensions[0]
+    normalized_top = top / image_dimensions[1]
+    normalized_width = width / image_dimensions[0]
+    normalized_height = height / image_dimensions[1]
+
+    return normalized_left, normalized_top, normalized_width, normalized_height
+
+
 async def find_bounding_box(
     ocr_data: Dict[str, list], string_to_compare: str
 ) -> Tuple[float, float, float, float]:
@@ -160,9 +188,13 @@ async def find_bounding_box(
             first_string_index=first_string_index,
             last_string_index=last_string_index,
         )
+        left, top, width, height = await normalize_bounding_box(
+            left=left,
+            top=top,
+            width=width,
+            height=height,
+            image_dimensions=ocr_data["dimensions"],
+        )
         return left, top, width, height
     except Exception as err:
         raise Exception(Messages.FAILED_TO_FIND_BOUNDING_BOX.format(err))
-
-
-# TODO Normalize the coords
