@@ -76,6 +76,7 @@ async def perform_image_ocr(image_path: str) -> Dict[str, list]:
         image = enhance_image_for_ocr(image=image)
         data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
         cleaned_data = await _clean_ocr_text(data=data)
+        cleaned_data["dimensions"] = image.size
         return cleaned_data
     except Exception as err:
         raise Exception(Messages.FAILED_TO_PERFORM_OCR.format(err))
