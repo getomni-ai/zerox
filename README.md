@@ -243,6 +243,7 @@ async def zerox(
     concurrency: int = 10,
     file_path: Optional[str] = "",
     maintain_format: bool = False,
+    bounding_box: bool = False,
     model: str = "gpt-4o-mini",
     output_dir: Optional[str] = None,
     temp_dir: Optional[str] = None,
