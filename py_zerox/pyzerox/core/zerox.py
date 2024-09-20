@@ -88,7 +88,8 @@ async def zerox(
         select_pages = [select_pages]
     
     # Sort the pages to maintain consistency
-    select_pages = sorted(select_pages)
+    if select_pages is not None:
+        select_pages = sorted(select_pages)
 
     # Ensure the output directory exists
     if output_dir:
