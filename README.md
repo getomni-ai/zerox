@@ -263,6 +263,8 @@ Parameters
   The path to the PDF file to process. Defaults to an empty string.
 - **maintain_format** (bool, optional):
   Whether to maintain the format from the previous page. Defaults to False.
+- **bounding_box** (bool, optional):
+  Whether to return the bounding box of the identified sections in the page.
 - **model** (str, optional):
   The model to use for generating completions. Defaults to "gpt-4o-mini".
   Refer to LiteLLM Providers for the correct model name, as it may differ depending on the provider.
@@ -332,6 +334,32 @@ ZeroxOutput(
                     'boolean type, `false` is the default, and the default char value is `\\0`, the null-terminating ' +
                     'character (zero in the ASCII table).',
             content_length=2333,
+            sections=[
+              Section(
+                content='| Type    | Description                             | Wrapper Class |\n|---------|-----------------------------------------|---------------|\n| byte    | 8-bit signed 2s complement integer      | Byte          |\n| short   | 16-bit signed 2s complement integer     | Short         |\n| int     | 32-bit signed 2s complement integer     | Integer       |\n| long    | 64-bit signed 2s complement integer     | Long          |\n| float   | 32-bit IEEE 754 floating point number   | Float         |\n| double  | 64-bit floating po16-bit Unicode (UTF-16) character      | Character     |\n\nTable 26.2.: Primitive types in Java  ',
+                bounding_box=[121, 82, 438, 207]
+              ),
+              Section(
+                content='\n\n## 26.3.1. Declaration & Assignment  ',
+                bounding_box=[63, 320, 282, 13]
+              ),
+              Section(
+                content="\n\nJava is a statically typed language meaning that all variables must be declared before you can use them or refer to them. In addition, when declaring a variable, you must specify both its type and its identifier. For example:\n\n```java\nint numUnits;  \ndouble costPerUnit;  \nchar firstInitial;  \nboolean isStudent;  \n```\n\nEach declaration specifies the variable's type followed by the identifier and ending with a semicolon. The identifier rules are fairly standard: a name can consist of lowercase and uppercase alphabetic characters, numbers, and underscores but may not begin with a numeric character. We adopt the modern camelCasing naming convention for variables in our code. In general, variables **must** be assigned a value before you can use them in an expression. You do not have to immediately assign a value when you declare them (though it is good practice), but some value must be assigned before they can be used or the compiler will issue an error.  ",
+                bounding_box=[62, 364, 561, 383]
+              ),
+              Section(
+                content='\n\nThe assignment operator is a single equal sign, `=` and is a right-to-left assignment. That is, the variable that we wish to assign the value to appears on the left-hand-side while the value (literal, variable or expression) is on the right-hand-side. Using our variables from before, we can assign them values:  ', 
+                bounding_box=[62, 690, 559, 114]
+              ),
+              Section(
+                content='\n\n2Instance variables, that is variables declared as part of an object do have default values. For objects, the default is `null`, for all numeric types, zero is the default value. For the `boolean` type, `false` is the default, and the default `char` value is `\\0`, the null-terminating character (zero in the ASCII table).  ',
+                bounding_box=[62, 739, 560, 146]
+              ),
+              Section(
+                content='',
+                bounding_box=[527, 51, 26, 10]
+              )
+            ],
             page=1
         )
     ]
