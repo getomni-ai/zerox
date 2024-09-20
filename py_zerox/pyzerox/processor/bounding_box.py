@@ -166,8 +166,7 @@ async def find_bounding_box(
         string_to_compare (str): The string for which the bounding box needs to be found.
 
     Returns:
-        List[float]: A list containing the bounding box coordinates in the
-            format [left, top, width, height].
+        Tuple[float, float, float, float]: A tuple containing the bounding box coordinates in the format (left, top, width, height).
     """
     try:
         text_content = " ".join(ocr_data["text_list"])
