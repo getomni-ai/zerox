@@ -60,3 +60,22 @@ async def _clean_ocr_text(data: Dict[str, list]) -> Dict[str, list]:
 
     return data_lists
 
+
+async def perform_image_ocr(image_path: str) -> Dict[str, list]:
+    """
+    Perform OCR on the specified image.
+
+    Args:
+        image_path (str): The file path to the image.
+
+    Returns:
+        A dictionary containing the cleaned OCR text data and attributes.
+    """
+    try:
+        image = Image.open(image_path)
+        image = enhance_image_for_ocr(image=image)
+        data = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT)
+        cleaned_data = await _clean_ocr_text(data=data)
+        return cleaned_data
+    except Exception as err:
+        raise Exception(Messages.FAILED_TO_PERFORM_OCR.format(err))
