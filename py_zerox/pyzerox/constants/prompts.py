@@ -7,7 +7,7 @@ class Prompts:
     Do not exclude any content from the page.
     """
 
-    BOUNDING_BOX_SYSTEM_PROMPT = """
+    SEGMENT_MARKDOWN_SYSTEM_PROMPT = """
     For each section (eg: headings, tables, footers, etc.), add a comment "section" at the end of that section in markdown.
     Ensure as much content as possible is formatted using markdown where applicable.
     """
