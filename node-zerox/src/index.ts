@@ -12,6 +12,7 @@ import fs from "fs-extra";
 import os from "os";
 import path from "path";
 import pLimit, { Limit } from "p-limit";
+import { fileTypeFromFile } from "file-type";
 
 export const zerox = async ({
   cleanup = true,
@@ -51,9 +52,19 @@ export const zerox = async ({
   if (!localPath) throw "Failed to save file to local drive";
 
   const fileExtension = path.extname(localPath).toLowerCase();
+  let mimeType: string | null = null;
 
   if (!fileExtension) {
-    throw new Error("File extension missing");
+    try {
+      const fileType = await fileTypeFromFile(localPath);
+      mimeType = fileType ? fileType.mime : null;
+    } catch (error) {
+      console.error("Error getting MIME type:", error);
+    }
+
+    if (!mimeType) {
+      throw new Error("Unable to determine file type");
+    }
   }
 
   // Sort the `pagesToConvertAsImages` array to make sure we use the right index
@@ -63,9 +74,9 @@ export const zerox = async ({
   }
 
   // Convert file to PDF if necessary
-  if (fileExtension !== ".png") {
+  if (fileExtension !== ".png" && mimeType !== "image/png") {
     let pdfPath: string;
-    if (fileExtension === ".pdf") {
+    if (fileExtension === ".pdf" || mimeType === "application/pdf") {
       pdfPath = localPath;
     } else {
       pdfPath = await convertFileToPdf({
