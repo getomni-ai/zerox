@@ -48,15 +48,25 @@ export const zerox = async ({
   await fs.ensureDir(tempDirectory);
 
   // Download the PDF. Get file name.
-  const localPath = await downloadFile({ filePath, tempDir: tempDirectory });
+  const { localPath, response } = await downloadFile({
+    filePath,
+    tempDir: tempDirectory,
+  });
   if (!localPath) throw "Failed to save file to local drive";
 
-  const mimeType = mime.lookup(localPath) || "";
+  let mimetype = response?.headers?.["content-type"];
+  if (!mimetype) {
+    mimetype = mime.lookup(localPath);
+  }
 
-  const fileExtension = mime.extension(mimeType) || "";
+  if (!mimetype) {
+    throw new Error("MIME type not found");
+  }
+
+  const fileExtension = mime.extension(mimetype) || "";
 
   if (!fileExtension) {
-    if (!mimeType) {
+    if (!mimetype) {
       throw new Error("Unable to determine file type");
     }
   }
