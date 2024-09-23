@@ -86,16 +86,17 @@ export const downloadFile = async ({
 }: {
   filePath: string;
   tempDir: string;
-}): Promise<string | void> => {
+}): Promise<{ localPath: string; response?: any }> => {
   // Shorten the file name by removing URL parameters
   const baseFileName = path.basename(filePath.split("?")[0]);
-  const localPdfPath = path.join(tempDir, baseFileName);
+  const localPath = path.join(tempDir, baseFileName);
+  let response;
 
   // Check if filePath is a URL
   if (isValidUrl(filePath)) {
-    const writer = fs.createWriteStream(localPdfPath);
+    const writer = fs.createWriteStream(localPath);
 
-    const response = await axios({
+    response = await axios({
       url: filePath,
       method: "GET",
       responseType: "stream",
@@ -107,11 +108,10 @@ export const downloadFile = async ({
     await pipeline(response.data, writer);
   } else {
     // If filePath is a local file, copy it to the temp directory
-    await fs.copyFile(filePath, localPdfPath);
+    await fs.copyFile(filePath, localPath);
   }
-  return localPdfPath;
+  return { localPath, response };
 };
-
 // Convert each page to a png and save that image to tmp
 // @TODO: pull dimensions from the original document. Also, look into rotated pages
 export const convertPdfToImages = async ({
