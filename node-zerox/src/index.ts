@@ -12,7 +12,7 @@ import fs from "fs-extra";
 import os from "os";
 import path from "path";
 import pLimit, { Limit } from "p-limit";
-import { fileTypeFromFile } from "file-type";
+import mime from "mime-types";
 
 export const zerox = async ({
   cleanup = true,
@@ -55,12 +55,7 @@ export const zerox = async ({
   let mimeType: string | null = null;
 
   if (!fileExtension) {
-    try {
-      const fileType = await fileTypeFromFile(localPath);
-      mimeType = fileType ? fileType.mime : null;
-    } catch (error) {
-      console.error("Error getting MIME type:", error);
-    }
+    mimeType = mime.lookup(localPath) || null;
 
     if (!mimeType) {
       throw new Error("Unable to determine file type");
