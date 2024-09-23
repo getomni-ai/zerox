@@ -12,7 +12,6 @@ import fs from "fs-extra";
 import os from "os";
 import path from "path";
 import pLimit, { Limit } from "p-limit";
-import mime from "mime-types";
 
 export const zerox = async ({
   cleanup = true,
@@ -48,28 +47,11 @@ export const zerox = async ({
   await fs.ensureDir(tempDirectory);
 
   // Download the PDF. Get file name.
-  const { localPath, response } = await downloadFile({
+  const { localPath, fileExtension } = await downloadFile({
     filePath,
     tempDir: tempDirectory,
   });
   if (!localPath) throw "Failed to save file to local drive";
-
-  let mimetype = response?.headers?.["content-type"];
-  if (!mimetype) {
-    mimetype = mime.lookup(localPath);
-  }
-
-  if (!mimetype) {
-    throw new Error("MIME type not found");
-  }
-
-  const fileExtension = mime.extension(mimetype) || "";
-
-  if (!fileExtension) {
-    if (!mimetype) {
-      throw new Error("Unable to determine file type");
-    }
-  }
 
   // Sort the `pagesToConvertAsImages` array to make sure we use the right index
   // for `formattedPages` as `pdf2pic` always returns images in order
@@ -84,7 +66,6 @@ export const zerox = async ({
       pdfPath = localPath;
     } else {
       pdfPath = await convertFileToPdf({
-        extension: fileExtension,
         localPath,
         tempDir: tempDirectory,
       });
