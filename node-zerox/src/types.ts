@@ -8,12 +8,20 @@ export interface ZeroxArgs {
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
+  provider: ProviderOptions;
   tempDir?: string;
 }
 
 export enum ModelOptions {
   gpt_4o = "gpt-4o",
   gpt_4o_mini = "gpt-4o-mini",
+}
+
+export enum ProviderOptions {
+  openai = "openai",
+  azure = "azure",
+  anthropic = "anthropic",
+  bedrock = "bedrock",
 }
 
 export interface Page {
@@ -43,6 +51,7 @@ export interface CompletionArgs {
   maintainFormat: boolean;
   model: ModelOptions;
   priorPage: string;
+  provider: ProviderOptions;
 }
 
 export interface LLMParams {

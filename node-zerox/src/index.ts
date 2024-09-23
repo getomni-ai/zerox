@@ -6,7 +6,7 @@ import {
   isString,
 } from "./utils";
 import { getCompletion } from "./openAI";
-import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
+import { ModelOptions, ProviderOptions, ZeroxArgs, ZeroxOutput } from "./types";
 import { validateLLMParams } from "./utils";
 import fs from "fs-extra";
 import os from "os";
@@ -23,6 +23,7 @@ export const zerox = async ({
   openaiAPIKey = "",
   outputDir,
   pagesToConvertAsImages = -1,
+  provider = ProviderOptions.openai,
   tempDir = os.tmpdir(),
 }: ZeroxArgs): Promise<ZeroxOutput> => {
   let inputTokenCount = 0;
@@ -105,6 +106,7 @@ export const zerox = async ({
           maintainFormat,
           model,
           priorPage,
+          provider,
         });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
@@ -131,6 +133,7 @@ export const zerox = async ({
           maintainFormat,
           model,
           priorPage,
+          provider,
         });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;

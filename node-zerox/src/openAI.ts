@@ -1,4 +1,4 @@
-import { CompletionArgs, CompletionResponse } from "./types";
+import { CompletionArgs, CompletionResponse, ProviderOptions } from "./types";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "./utils";
 import axios from "axios";
 
@@ -9,6 +9,7 @@ export const getCompletion = async ({
   maintainFormat,
   model,
   priorPage,
+  provider = ProviderOptions.openai,
 }: CompletionArgs): Promise<CompletionResponse> => {
   const systemPrompt = `
     Convert the following PDF page to markdown.
