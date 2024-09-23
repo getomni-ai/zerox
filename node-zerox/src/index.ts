@@ -51,12 +51,11 @@ export const zerox = async ({
   const localPath = await downloadFile({ filePath, tempDir: tempDirectory });
   if (!localPath) throw "Failed to save file to local drive";
 
-  const fileExtension = path.extname(localPath).toLowerCase();
-  let mimeType: string | null = null;
+  const mimeType = mime.lookup(localPath) || "";
+
+  const fileExtension = mime.extension(mimeType) || "";
 
   if (!fileExtension) {
-    mimeType = mime.lookup(localPath) || null;
-
     if (!mimeType) {
       throw new Error("Unable to determine file type");
     }
@@ -69,9 +68,9 @@ export const zerox = async ({
   }
 
   // Convert file to PDF if necessary
-  if (fileExtension !== ".png" && mimeType !== "image/png") {
+  if (fileExtension !== ".png") {
     let pdfPath: string;
-    if (fileExtension === ".pdf" || mimeType === "application/pdf") {
+    if (fileExtension === ".pdf") {
       pdfPath = localPath;
     } else {
       pdfPath = await convertFileToPdf({
