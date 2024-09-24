@@ -47,7 +47,7 @@ async def process_page(
     output_token_count: int = 0,
     prior_page: str = "",
     semaphore: Optional[asyncio.Semaphore] = None,
-) -> Tuple[str, int, int, str]:
+) -> Tuple[str, int, int, str, Optional[List[Section]]]:
     """Process a single page of a PDF"""
 
     markdown_sections: List[str] = []
