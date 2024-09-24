@@ -16,6 +16,7 @@
     "child_process": "^1.0.2",
     "fs-extra": "^11.2.0",
     "libreoffice-convert": "^1.6.0",
+    "mime-types": "^2.1.35",
     "os": "^0.1.2",
     "p-limit": "^3.1.0",
     "path": "^0.12.7",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
+    "@types/mime-types": "^2.1.4",
     "@types/node": "^20.14.11",
     "typescript": "^5.5.3"
   },

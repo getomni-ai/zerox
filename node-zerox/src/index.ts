@@ -47,14 +47,11 @@ export const zerox = async ({
   await fs.ensureDir(tempDirectory);
 
   // Download the PDF. Get file name.
-  const localPath = await downloadFile({ filePath, tempDir: tempDirectory });
+  const { extension, localPath } = await downloadFile({
+    filePath,
+    tempDir: tempDirectory,
+  });
   if (!localPath) throw "Failed to save file to local drive";
-
-  const fileExtension = path.extname(localPath).toLowerCase();
-
-  if (!fileExtension) {
-    throw new Error("File extension missing");
-  }
 
   // Sort the `pagesToConvertAsImages` array to make sure we use the right index
   // for `formattedPages` as `pdf2pic` always returns images in order
@@ -63,13 +60,13 @@ export const zerox = async ({
   }
 
   // Convert file to PDF if necessary
-  if (fileExtension !== ".png") {
+  if (extension !== ".png") {
     let pdfPath: string;
-    if (fileExtension === ".pdf") {
+    if (extension === ".pdf") {
       pdfPath = localPath;
     } else {
       pdfPath = await convertFileToPdf({
-        extension: fileExtension,
+        extension,
         localPath,
         tempDir: tempDirectory,
       });
