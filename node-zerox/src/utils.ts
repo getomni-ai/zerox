@@ -132,6 +132,7 @@ export const downloadFile = async ({
 
   return { extension, localPath };
 };
+
 // Convert each page to a png and save that image to tmp
 // @TODO: pull dimensions from the original document. Also, look into rotated pages
 export const convertPdfToImages = async ({
