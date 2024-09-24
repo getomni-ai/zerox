@@ -5,8 +5,8 @@ import { pipeline } from "stream/promises";
 import { promisify } from "util";
 import axios from "axios";
 import fs from "fs-extra";
-import path from "path";
 import mime from "mime-types";
+import path from "path";
 
 const convertAsync = promisify(convert);
 
@@ -87,50 +87,50 @@ export const downloadFile = async ({
 }: {
   filePath: string;
   tempDir: string;
-}): Promise<{ localPath: string; fileExtension: string }> => {
+}): Promise<{ extension: string; localPath: string }> => {
   // Shorten the file name by removing URL parameters
   const baseFileName = path.basename(filePath.split("?")[0]);
   const localPath = path.join(tempDir, baseFileName);
-  let response;
-  let fileExtension = "";
+  let mimetype;
 
   // Check if filePath is a URL
   if (isValidUrl(filePath)) {
     const writer = fs.createWriteStream(localPath);
 
-    response = await axios({
+    const response = await axios({
       url: filePath,
       method: "GET",
       responseType: "stream",
     });
 
-    let mimetype = response?.headers?.["content-type"];
-    if (!mimetype) {
-      mimetype = mime.lookup(localPath);
-    }
-    fileExtension = mime.extension(mimetype) || "";
-
-    if (!fileExtension) {
-      if (mimetype === "binary/octet-stream") {
-        fileExtension = ".bin";
-      } else {
-        throw new Error("File extension missing");
-      }
-    }
-
-    if (!fileExtension.startsWith(".")) {
-      fileExtension = `.${fileExtension}`;
-    }
-
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    mimetype = response.headers?.["content-type"];
     await pipeline(response.data, writer);
   } else {
     // If filePath is a local file, copy it to the temp directory
     await fs.copyFile(filePath, localPath);
   }
-  return { localPath, fileExtension };
+
+  if (!mimetype) {
+    mimetype = mime.lookup(localPath);
+  }
+
+  let extension = mime.extension(mimetype) || "";
+  if (!extension) {
+    if (mimetype === "binary/octet-stream") {
+      extension = ".bin";
+    } else {
+      throw new Error("File extension missing");
+    }
+  }
+
+  if (!extension.startsWith(".")) {
+    extension = `.${extension}`;
+  }
+
+  return { extension, localPath };
 };
 // Convert each page to a png and save that image to tmp
 // @TODO: pull dimensions from the original document. Also, look into rotated pages
@@ -179,14 +179,16 @@ export const convertPdfToImages = async ({
 
 // Convert each page (from other formats like docx) to a png and save that image to tmp
 export const convertFileToPdf = async ({
+  extension,
   localPath,
   tempDir,
 }: {
+  extension: string;
   localPath: string;
   tempDir: string;
 }): Promise<string> => {
   const inputBuffer = await fs.readFile(localPath);
-  const outputFilename = path.basename(localPath) + ".pdf";
+  const outputFilename = path.basename(localPath, extension) + ".pdf";
   const outputPath = path.join(tempDir, outputFilename);
 
   try {
@@ -194,7 +196,7 @@ export const convertFileToPdf = async ({
     await fs.writeFile(outputPath, pdfBuffer);
     return outputPath;
   } catch (err) {
-    console.error(`Error converting ${outputPath} to .pdf:`, err);
+    console.error(`Error converting ${extension} to .pdf:`, err);
     throw err;
   }
 };
