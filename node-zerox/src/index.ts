@@ -47,7 +47,7 @@ export const zerox = async ({
   await fs.ensureDir(tempDirectory);
 
   // Download the PDF. Get file name.
-  const { localPath, fileExtension } = await downloadFile({
+  const { extension, localPath } = await downloadFile({
     filePath,
     tempDir: tempDirectory,
   });
@@ -60,12 +60,13 @@ export const zerox = async ({
   }
 
   // Convert file to PDF if necessary
-  if (fileExtension !== ".png") {
+  if (extension !== ".png") {
     let pdfPath: string;
-    if (fileExtension === ".pdf") {
+    if (extension === ".pdf") {
       pdfPath = localPath;
     } else {
       pdfPath = await convertFileToPdf({
+        extension,
         localPath,
         tempDir: tempDirectory,
       });
