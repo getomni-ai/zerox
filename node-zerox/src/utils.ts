@@ -5,6 +5,7 @@ import { pipeline } from "stream/promises";
 import { promisify } from "util";
 import axios from "axios";
 import fs from "fs-extra";
+import mime from "mime-types";
 import path from "path";
 
 const convertAsync = promisify(convert);
@@ -86,14 +87,15 @@ export const downloadFile = async ({
 }: {
   filePath: string;
   tempDir: string;
-}): Promise<string | void> => {
+}): Promise<{ extension: string; localPath: string }> => {
   // Shorten the file name by removing URL parameters
   const baseFileName = path.basename(filePath.split("?")[0]);
-  const localPdfPath = path.join(tempDir, baseFileName);
+  const localPath = path.join(tempDir, baseFileName);
+  let mimetype;
 
   // Check if filePath is a URL
   if (isValidUrl(filePath)) {
-    const writer = fs.createWriteStream(localPdfPath);
+    const writer = fs.createWriteStream(localPath);
 
     const response = await axios({
       url: filePath,
@@ -104,12 +106,31 @@ export const downloadFile = async ({
     if (response.status !== 200) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
+    mimetype = response.headers?.["content-type"];
     await pipeline(response.data, writer);
   } else {
     // If filePath is a local file, copy it to the temp directory
-    await fs.copyFile(filePath, localPdfPath);
+    await fs.copyFile(filePath, localPath);
   }
-  return localPdfPath;
+
+  if (!mimetype) {
+    mimetype = mime.lookup(localPath);
+  }
+
+  let extension = mime.extension(mimetype) || "";
+  if (!extension) {
+    if (mimetype === "binary/octet-stream") {
+      extension = ".bin";
+    } else {
+      throw new Error("File extension missing");
+    }
+  }
+
+  if (!extension.startsWith(".")) {
+    extension = `.${extension}`;
+  }
+
+  return { extension, localPath };
 };
 
 // Convert each page to a png and save that image to tmp
