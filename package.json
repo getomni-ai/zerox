@@ -12,6 +12,8 @@
   "author": "tylermaran",
   "license": "MIT",
   "dependencies": {
+    "@ai-sdk/openai": "^0.0.62",
+    "ai": "^3.4.3",
     "axios": "^1.7.2",
     "child_process": "^1.0.2",
     "fs-extra": "^11.2.0",
