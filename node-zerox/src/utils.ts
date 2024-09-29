@@ -175,6 +175,7 @@ export const convertPdfToImages = async ({
     return convertResults;
   } catch (err) {
     console.error("Error during PDF conversion:", err);
+    throw err;
   }
 };
 
