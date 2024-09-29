@@ -11,27 +11,24 @@ from ..constants import PDFConversionDefaultOptions, Messages
 from ..models import litellmmodel
 
 
-async def convert_pdf_to_images(local_path: str, temp_dir: str):
-    """Converts a PDF file to a series of images."""
+async def convert_pdf_to_images(local_path: str, temp_dir: str) -> List[str]:
+    """Converts a PDF file to a series of images in the temp_dir. Returns a list of image paths in page order."""
     options = {
+        "pdf_path": local_path,
+        "output_folder": temp_dir,
         "dpi": PDFConversionDefaultOptions.DPI,
         "fmt": PDFConversionDefaultOptions.FORMAT,
         "size": PDFConversionDefaultOptions.SIZE,
         "thread_count": PDFConversionDefaultOptions.THREAD_COUNT,
         "use_pdftocairo": PDFConversionDefaultOptions.USE_PDFTOCAIRO,
+        "paths_only": True,
     }
-    file_name = os.path.splitext(os.path.basename(local_path))[0]
 
     try:
-        images = await asyncio.to_thread(
-            convert_from_path, local_path, **options
+        image_paths = await asyncio.to_thread(
+            convert_from_path, **options
         )
-        tasks = []
-        for i, image in enumerate(images, start=1):
-            image_path = os.path.join(temp_dir, f"{file_name}_page_{i}.png")
-            tasks.append(save_image(image, image_path))
-        await asyncio.gather(*tasks)
-        return images
+        return image_paths
     except Exception as err:
         logging.error(f"Error converting PDF to images: {err}")
 

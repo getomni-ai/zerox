@@ -19,6 +19,14 @@ class Messages:
     Custom system prompt was provided which overrides the default system prompt. We assume that you know what you are doing.  
     """
 
+    MAINTAIN_FORMAT_SELECTED_PAGES_WARNING = """
+    The maintain_format flag is set to True in conjunction with select_pages input given. This may result in unexpected behavior.
+    """
+
+    PAGE_NUMBER_OUT_OF_BOUND_ERROR = """
+    The page number(s) provided is out of bound. Please provide a valid page number(s).
+    """
+
     NON_200_RESPONSE = """
     Model API returned status code {status_code}: {data}
 
