@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Union, Iterable
 from dataclasses import dataclass, field
 
 
@@ -16,6 +16,7 @@ class ZeroxArgs:
     output_dir: Optional[str] = None
     temp_dir: Optional[str] = None
     custom_system_prompt: Optional[str] = None
+    select_pages: Optional[Union[int, Iterable[int]]] = None
     kwargs: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
