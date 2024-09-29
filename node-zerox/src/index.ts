@@ -114,6 +114,7 @@ export const zerox = async ({
         aggregatedMarkdown.push(formattedMarkdown);
       } catch (error) {
         console.error(`Failed to process image ${image}:`, error);
+        throw error;
       }
     }
   } else {
@@ -140,7 +141,7 @@ export const zerox = async ({
         return formattedMarkdown;
       } catch (error) {
         console.error(`Failed to process image ${image}:`, error);
-        return null;
+        throw error;
       }
     };
 
