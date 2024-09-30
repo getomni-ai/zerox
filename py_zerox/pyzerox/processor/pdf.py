@@ -4,9 +4,14 @@ import asyncio
 from typing import List, Optional, Tuple
 from pdf2image import convert_from_path
 
+from py_zerox.pyzerox.constants.patterns import MarkdownConstants
+from py_zerox.pyzerox.core.types import Section
+from py_zerox.pyzerox.processor.bounding_box import find_bounding_box
+from py_zerox.pyzerox.processor.ocr import perform_image_ocr
+
 # Package Imports
 from .image import save_image
-from .text import format_markdown
+from .text import format_markdown, remove_markdown
 from ..constants import PDFConversionDefaultOptions, Messages
 from ..models import litellmmodel
 
@@ -37,12 +42,16 @@ async def process_page(
     image: str,
     model: litellmmodel,
     temp_directory: str = "",
+    bounding_box: bool = False,
     input_token_count: int = 0,
     output_token_count: int = 0,
     prior_page: str = "",
     semaphore: Optional[asyncio.Semaphore] = None,
-) -> Tuple[str, int, int, str]:
+) -> Tuple[str, int, int, str, Optional[List[Section]]]:
     """Process a single page of a PDF"""
+
+    markdown_sections: List[str] = []
+    sections: Optional[List[Section]] = None
 
     # If semaphore is provided, acquire it before processing the page
     if semaphore:
@@ -51,6 +60,7 @@ async def process_page(
                 image,
                 model,
                 temp_directory,
+                bounding_box,
                 input_token_count,
                 output_token_count,
                 prior_page,
@@ -63,15 +73,42 @@ async def process_page(
         completion = await model.completion(
             image_path=image_path,
             maintain_format=True,
+            bounding_box=bounding_box,
             prior_page=prior_page,
         )
 
         formatted_markdown = format_markdown(completion.content)
+
+        if bounding_box:
+            sections = []
+            ocr_data = await perform_image_ocr(image_path=image_path)
+
+            markdown_sections = formatted_markdown.split(
+                MarkdownConstants.SECTION_DELIMITER
+            )
+            for markdown_section in markdown_sections:
+                text_section = remove_markdown(markdown_section)
+                bounding_box_coords = await find_bounding_box(
+                    ocr_data=ocr_data, string_to_compare=text_section
+                )
+                section = Section(
+                    content=markdown_section, bounding_box=bounding_box_coords
+                )
+                sections.append(section)
+
+            formatted_markdown = "".join(markdown_sections)
+
         input_token_count += completion.input_tokens
         output_token_count += completion.output_tokens
         prior_page = formatted_markdown
 
-        return formatted_markdown, input_token_count, output_token_count, prior_page
+        return (
+            formatted_markdown,
+            input_token_count,
+            output_token_count,
+            prior_page,
+            sections,
+        )
 
     except Exception as error:
         logging.error(f"{Messages.FAILED_TO_PROCESS_IMAGE} Error:{error}")
@@ -83,6 +120,7 @@ async def process_pages_in_batches(
     concurrency: int,
     model: litellmmodel,
     temp_directory: str = "",
+    bounding_box: bool = False,
     input_token_count: int = 0,
     output_token_count: int = 0,
     prior_page: str = "",
@@ -96,6 +134,7 @@ async def process_pages_in_batches(
             image,
             model,
             temp_directory,
+            bounding_box,
             input_token_count,
             output_token_count,
             prior_page,

@@ -13,6 +13,7 @@ from ..constants.prompts import Prompts
 from ..processor.image import encode_image_to_base64
 
 DEFAULT_SYSTEM_PROMPT = Prompts.DEFAULT_SYSTEM_PROMPT
+SEGMENT_MARKDOWN_SYSTEM_PROMPT = Prompts.SEGMENT_MARKDOWN_SYSTEM_PROMPT
 
 
 class litellmmodel(BaseModel):
@@ -69,12 +70,12 @@ class litellmmodel(BaseModel):
         """Validates access to the model -> if environment variables are set correctly with correct values."""
         if not litellm.check_valid_key(model=self.model,api_key=None):
             raise ModelAccessError(extra_info={"model": self.model})
-        
 
     async def completion(
         self,
         image_path: str,
         maintain_format: bool,
+        bounding_box: bool,
         prior_page: str,
     ) -> CompletionResponse:
         """LitellM completion for image to markdown conversion.
@@ -91,6 +92,7 @@ class litellmmodel(BaseModel):
         messages = await self._prepare_messages(
             image_path=image_path,
             maintain_format=maintain_format,
+            bounding_box=bounding_box,
             prior_page=prior_page,
         )
 
@@ -112,6 +114,7 @@ class litellmmodel(BaseModel):
         self,
         image_path: str,
         maintain_format: bool,
+        bounding_box: bool,
         prior_page: str,
     ) -> List[Dict[str, Any]]:
         """Prepares the messages to send to the LiteLLM Completion API.
@@ -130,6 +133,14 @@ class litellmmodel(BaseModel):
                 "content": self._system_prompt,
             },
         ]
+
+        if bounding_box:
+            messages.append(
+                {
+                    "role": "system",
+                    "content": SEGMENT_MARKDOWN_SYSTEM_PROMPT
+                }
+            )
 
         # If content has already been generated, add it to context.
         # This helps maintain the same format across pages.

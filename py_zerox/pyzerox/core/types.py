@@ -1,4 +1,4 @@
-from typing import List, Optional, Dict, Any, Union, Iterable
+from typing import List, Optional, Dict, Any, Tuple, Union, Iterable
 from dataclasses import dataclass, field
 
 
@@ -12,12 +12,24 @@ class ZeroxArgs:
     cleanup: bool = True
     concurrency: int = 10
     maintain_format: bool = False
+    bounding_box: bool = False
     model: str = "gpt-4o-mini",
     output_dir: Optional[str] = None
     temp_dir: Optional[str] = None
     custom_system_prompt: Optional[str] = None
     select_pages: Optional[Union[int, Iterable[int]]] = None
     kwargs: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class Section:
+    """
+    Dataclass to represent a section of content within a page.
+    """
+
+    content: str
+    bounding_box: Tuple[float, float, float, float]
+
 
 @dataclass
 class Page:
@@ -27,6 +39,7 @@ class Page:
 
     content: str
     content_length: int
+    sections: List[Section]
     page: int
 
 
