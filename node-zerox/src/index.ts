@@ -5,7 +5,7 @@ import {
   formatMarkdown,
   isString,
 } from "./utils";
-import { getCompletion } from "./openAI";
+import { getCompletion } from "./processor";
 import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
 import { validateLLMParams } from "./utils";
 import fs from "fs-extra";
@@ -14,13 +14,13 @@ import path from "path";
 import pLimit, { Limit } from "p-limit";
 
 export const zerox = async ({
+  apiKey = "",
   cleanup = true,
   concurrency = 10,
   filePath,
   llmParams = {},
   maintainFormat = false,
   model = ModelOptions.gpt_4o_mini,
-  openaiAPIKey = "",
   outputDir,
   pagesToConvertAsImages = -1,
   tempDir = os.tmpdir(),
@@ -34,9 +34,6 @@ export const zerox = async ({
   llmParams = validateLLMParams(llmParams);
 
   // Validators
-  if (!openaiAPIKey || !openaiAPIKey.length) {
-    throw new Error("Missing OpenAI API key");
-  }
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
   }
@@ -96,7 +93,7 @@ export const zerox = async ({
       const imagePath = path.join(tempDirectory, image);
       try {
         const { content, inputTokens, outputTokens } = await getCompletion({
-          apiKey: openaiAPIKey,
+          apiKey,
           imagePath,
           llmParams,
           maintainFormat,
@@ -122,7 +119,7 @@ export const zerox = async ({
       const imagePath = path.join(tempDirectory, image);
       try {
         const { content, inputTokens, outputTokens } = await getCompletion({
-          apiKey: openaiAPIKey,
+          apiKey,
           imagePath,
           llmParams,
           maintainFormat,

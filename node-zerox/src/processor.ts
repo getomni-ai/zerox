@@ -1,6 +1,6 @@
 import { CompletionArgs, CompletionResponse } from "./types";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "./utils";
-import { createOpenAI } from "@ai-sdk/openai";
+import { createProviderInstance } from "./models";
 import { generateText } from "ai";
 
 export const getCompletion = async ({
@@ -42,9 +42,9 @@ export const getCompletion = async ({
   });
 
   try {
-    const openai = createOpenAI({ apiKey });
+    const providerInstance = createProviderInstance(model, apiKey);
     const { text, usage } = await generateText({
-      model: openai(model),
+      model: providerInstance(model),
       messages,
       ...convertKeysToSnakeCase(llmParams ?? null),
     });
