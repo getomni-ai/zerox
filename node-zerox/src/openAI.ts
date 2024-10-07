@@ -13,7 +13,11 @@ export const getCompletion = async ({
   const systemPrompt = `
     Convert the following PDF page to markdown.
     Return only the markdown with no explanation text. Do not include deliminators like '''markdown.
-    You must include all information on the page. Do not exclude headers, footers, or subtext.
+
+    RULES:
+    - You must include all information on the page. Do not exclude headers, footers, or subtext.
+    - Charts & infographics must be interpreted to a markdown format
+    - Non text based images must be replaced with [Description of image](image.png)
   `;
 
   // Default system message.
