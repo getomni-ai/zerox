@@ -3,10 +3,12 @@ import { fromPath } from "pdf2pic";
 import { LLMParams } from "./types";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
+import * as Tesseract from "tesseract.js";
 import axios from "axios";
 import fs from "fs-extra";
 import mime from "mime-types";
 import path from "path";
+import sharp from "sharp";
 
 const convertAsync = promisify(convert);
 
@@ -133,8 +135,61 @@ export const downloadFile = async ({
   return { extension, localPath };
 };
 
-// Convert each page to a png and save that image to tmp
-// @TODO: pull dimensions from the original document. Also, look into rotated pages
+// Function to get text from image buffer using Tesseract
+export const getTextFromImage = async (
+  buffer: Buffer
+): Promise<{ text: string; confidence: number }> => {
+  try {
+    const {
+      data: { text, confidence },
+    } = await Tesseract.recognize(buffer, "eng", {
+      logger: (m: any) => console.log(m),
+    });
+    return { text, confidence };
+  } catch (error) {
+    console.error("Error during OCR:", error);
+    return { text: "", confidence: 0 };
+  }
+};
+
+// Correct image orientation based on OCR confidence
+// Run tesseract on 4 different orientations of the image and compare the output
+// Kinda brute force, but does a decent job.
+const correctImageOrientation = async (buffer: Buffer): Promise<Buffer> => {
+  const image = sharp(buffer);
+  const rotations = [0, 90, 180, 270];
+
+  const results = await Promise.all(
+    rotations.map(async (rotation) => {
+      const rotatedImageBuffer = await image
+        .clone()
+        .rotate(rotation)
+        .toBuffer();
+      const { confidence } = await getTextFromImage(rotatedImageBuffer);
+      return { rotation, confidence };
+    })
+  );
+
+  // Find the rotation with the best confidence score
+  const bestResult = results.reduce((best, current) =>
+    current.confidence > best.confidence ? current : best
+  );
+
+  if (bestResult.rotation !== 0) {
+    console.log(
+      `Reorienting image ${bestResult.rotation} degrees (Confidence: ${bestResult.confidence}%).`
+    );
+  }
+
+  // Rotate the image to the best orientation
+  const correctedImageBuffer = await image
+    .rotate(bestResult.rotation)
+    .toBuffer();
+
+  return correctedImageBuffer;
+};
+
+// Convert each page to a png, correct orientation, and save that image to tmp
 export const convertPdfToImages = async ({
   localPath,
   pagesToConvertAsImages,
@@ -165,11 +220,15 @@ export const convertPdfToImages = async ({
         }
         if (!result.page) throw new Error("Could not identify page data");
         const paddedPageNumber = result.page.toString().padStart(5, "0");
+
+        // Correct the image orientation
+        const correctedBuffer = await correctImageOrientation(result.buffer);
+
         const imagePath = path.join(
           tempDir,
           `${options.saveFilename}_page_${paddedPageNumber}.png`
         );
-        await fs.writeFile(imagePath, result.buffer);
+        await fs.writeFile(imagePath, correctedBuffer);
       })
     );
     return convertResults;
