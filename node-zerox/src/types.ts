@@ -1,11 +1,11 @@
 export interface ZeroxArgs {
+  apiKey?: string;
   cleanup?: boolean;
   concurrency?: number;
   filePath: string;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
   model?: ModelOptions;
-  openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
   tempDir?: string;
