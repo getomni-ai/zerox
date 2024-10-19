@@ -17,7 +17,6 @@ The general logic:
 
 Try out the hosted version here: https://getomni.ai/ocr-demo
 
-
 ## Getting Started
 
 Zerox is available as both a Node and Python package.
@@ -137,6 +136,7 @@ Request #3 => page_2_markdown + page_3_image
 
 - Install **poppler-utils** on the system, it should be available in path variable
 - Install py-zerox:
+
 ```sh
 pip install py-zerox
 ```
@@ -329,6 +329,36 @@ ZeroxOutput(
     ]
 )
 ````
+
+## Supported File Types:
+
+We use a combination of `libreoffice` and `graphicsmagick` to do document => image conversion. For non-image / non-pdf files, we use libreoffice to convert that file to a pdf, and then to an image.
+
+```
+[
+  "doc",        // Microsoft Word 97-2003
+  "docx",       // Microsoft Word 2007-2019
+  "odt",        // OpenDocument Text
+  "ott",        // OpenDocument Text Template
+  "rtf",        // Rich Text Format
+  "txt",        // Plain Text
+  "html",       // HTML Document
+  "htm",        // HTML Document (alternative extension)
+  "xml",        // XML Document
+  "wps",        // Microsoft Works Word Processor
+  "wpd",        // WordPerfect Document
+  "xls",        // Microsoft Excel 97-2003
+  "xlsx",       // Microsoft Excel 2007-2019
+  "ods",        // OpenDocument Spreadsheet
+  "ots",        // OpenDocument Spreadsheet Template
+  "csv",        // Comma-Separated Values
+  "tsv",        // Tab-Separated Values
+  "ppt",        // Microsoft PowerPoint 97-2003
+  "pptx",       // Microsoft PowerPoint 2007-2019
+  "odp",        // OpenDocument Presentation
+  "otp",        // OpenDocument Presentation Template
+]
+```
 
 ## Credits
 
