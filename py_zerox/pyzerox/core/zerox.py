@@ -86,9 +86,10 @@ async def zerox(
     # If select_pages is a single integer, convert it to a list for consistency
     if isinstance(select_pages, int):
         select_pages = [select_pages]
-    
+
     # Sort the pages to maintain consistency
-    select_pages = sorted(select_pages)
+    if select_pages is not None:
+        select_pages = sorted(select_pages)
 
     # Ensure the output directory exists
     if output_dir:
