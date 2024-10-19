@@ -334,30 +334,30 @@ ZeroxOutput(
 
 We use a combination of `libreoffice` and `graphicsmagick` to do document => image conversion. For non-image / non-pdf files, we use libreoffice to convert that file to a pdf, and then to an image.
 
-```
+```js
 [
-  "doc",        // Microsoft Word 97-2003
-  "docx",       // Microsoft Word 2007-2019
-  "odt",        // OpenDocument Text
-  "ott",        // OpenDocument Text Template
-  "rtf",        // Rich Text Format
-  "txt",        // Plain Text
-  "html",       // HTML Document
-  "htm",        // HTML Document (alternative extension)
-  "xml",        // XML Document
-  "wps",        // Microsoft Works Word Processor
-  "wpd",        // WordPerfect Document
-  "xls",        // Microsoft Excel 97-2003
-  "xlsx",       // Microsoft Excel 2007-2019
-  "ods",        // OpenDocument Spreadsheet
-  "ots",        // OpenDocument Spreadsheet Template
-  "csv",        // Comma-Separated Values
-  "tsv",        // Tab-Separated Values
-  "ppt",        // Microsoft PowerPoint 97-2003
-  "pptx",       // Microsoft PowerPoint 2007-2019
-  "odp",        // OpenDocument Presentation
-  "otp",        // OpenDocument Presentation Template
-]
+  "doc", // Microsoft Word 97-2003
+  "docx", // Microsoft Word 2007-2019
+  "odt", // OpenDocument Text
+  "ott", // OpenDocument Text Template
+  "rtf", // Rich Text Format
+  "txt", // Plain Text
+  "html", // HTML Document
+  "htm", // HTML Document (alternative extension)
+  "xml", // XML Document
+  "wps", // Microsoft Works Word Processor
+  "wpd", // WordPerfect Document
+  "xls", // Microsoft Excel 97-2003
+  "xlsx", // Microsoft Excel 2007-2019
+  "ods", // OpenDocument Spreadsheet
+  "ots", // OpenDocument Spreadsheet Template
+  "csv", // Comma-Separated Values
+  "tsv", // Tab-Separated Values
+  "ppt", // Microsoft PowerPoint 97-2003
+  "pptx", // Microsoft PowerPoint 2007-2019
+  "odp", // OpenDocument Presentation
+  "otp", // OpenDocument Presentation Template
+];
 ```
 
 ## Credits
