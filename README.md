@@ -10,25 +10,13 @@ A dead simple way of OCR-ing a document for AI ingestion. Documents are meant to
 
 The general logic:
 
-- Pass in a PDF (URL or file buffer)
-- Turn the PDF into a series of images
+- Pass in a file (pdf, docx, image, etc.)
+- Convert that file into a series of images
 - Pass each image to GPT and ask nicely for Markdown
 - Aggregate the responses and return Markdown
 
-Sounds pretty basic! But with the `gpt-4o-mini` this method is price competitive with existing products, with meaningfully better results.
+Try out the hosted version here: https://getomni.ai/ocr-demo
 
-#### Pricing Comparison
-
-This is how the pricing stacks up to other document processers. Running 1,000 pages with Zerox uses about 25M input tokens and 0.4M output tokens.
-
-| Service                                                                                                 | Cost                 | Accuracy | Table Quality |
-| ------------------------------------------------------------------------------------------------------- | -------------------- | -------- | ------------- |
-| AWS Textract[[1]](https://aws.amazon.com/textract/pricing/#:~:text=Amazon%20Textract%20API%20pricing)      | $1.50 / 1,000 pages  | Low      | Low           |
-| Google Document AI[[2]](https://cloud.google.com/document-ai/pricing)                                      | $1.50 / 1,000 pages  | Low      | Low           |
-| Azure Document AI[[3]](https://azure.microsoft.com/en-us/pricing/details/ai-document-intelligence/)        | $1.50 / 1,000 pages  | High     | Mid           |
-| Unstructured (PDF)[[4]](https://unstructured.io/api-key-hosted#:~:text=Cost%20and%20Usage%20%0AGuidelines) | $10.00 / 1,000 pages | Mid      | Mid           |
-| ------------------------                                                                                | -------------------- | -------- | ------------- |
-| Zerox (gpt-mini)                                                                                        | $ 4.00 / 1,000 pages | High     | High          |
 
 ## Getting Started
 
