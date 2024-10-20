@@ -32,6 +32,12 @@ npm install zerox
 
 Zerox uses `graphicsmagick` and `ghostscript` for the pdf => image processing step. These should be pulled automatically, but you may need to manually install.
 
+On linux use: 
+```
+sudo apt-get update
+sudo apt-get install -y graphicsmagick
+```
+
 ## Usage
 
 **With file URL**
