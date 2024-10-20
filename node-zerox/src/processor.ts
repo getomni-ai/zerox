@@ -1,6 +1,7 @@
 import { CompletionArgs, CompletionResponse } from "./types";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "./utils";
-import axios from "axios";
+import { createProviderInstance } from "./models";
+import { generateText } from "ai";
 
 export const getCompletion = async ({
   apiKey,
@@ -41,27 +42,16 @@ export const getCompletion = async ({
   });
 
   try {
-    const response = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        messages,
-        model,
-        ...convertKeysToSnakeCase(llmParams ?? null),
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const data = response.data;
-
+    const providerInstance = createProviderInstance(model, apiKey);
+    const { text, usage } = await generateText({
+      model: providerInstance(model),
+      messages,
+      ...convertKeysToSnakeCase(llmParams ?? null),
+    });
     return {
-      content: data.choices[0].message.content,
-      inputTokens: data.usage.prompt_tokens,
-      outputTokens: data.usage.completion_tokens,
+      content: text,
+      inputTokens: usage.promptTokens,
+      outputTokens: usage.completionTokens,
     };
   } catch (err) {
     console.error("Error in OpenAI completion", err);
