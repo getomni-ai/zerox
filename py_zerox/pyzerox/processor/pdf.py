@@ -1,7 +1,7 @@
 import logging
 import os
 import asyncio
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Callable
 from pdf2image import convert_from_path
 
 # Package Imports
@@ -40,6 +40,7 @@ async def process_page(
     input_token_count: int = 0,
     output_token_count: int = 0,
     prior_page: str = "",
+    post_process_function: Optional[Callable[[str], str]] = format_markdown,
     semaphore: Optional[asyncio.Semaphore] = None,
 ) -> Tuple[str, int, int, str]:
     """Process a single page of a PDF"""
@@ -54,6 +55,7 @@ async def process_page(
                 input_token_count,
                 output_token_count,
                 prior_page,
+                post_process_function,
             )
 
     image_path = os.path.join(temp_directory, image)
@@ -66,12 +68,18 @@ async def process_page(
             prior_page=prior_page,
         )
 
-        formatted_markdown = format_markdown(completion.content)
+        ## post process the completion
+        if post_process_function:
+            output_text = post_process_function(completion.content)
+        else:
+            ## skip post processing
+            output_text = completion.content
+
         input_token_count += completion.input_tokens
         output_token_count += completion.output_tokens
-        prior_page = formatted_markdown
+        prior_page = output_text
 
-        return formatted_markdown, input_token_count, output_token_count, prior_page
+        return output_text, input_token_count, output_token_count, prior_page
 
     except Exception as error:
         logging.error(f"{Messages.FAILED_TO_PROCESS_IMAGE} Error:{error}")
@@ -86,6 +94,7 @@ async def process_pages_in_batches(
     input_token_count: int = 0,
     output_token_count: int = 0,
     prior_page: str = "",
+    post_process_function: Optional[Callable[[str], str]] = format_markdown,
 ):
     # Create a semaphore to limit the number of concurrent tasks
     semaphore = asyncio.Semaphore(concurrency)
@@ -99,6 +108,7 @@ async def process_pages_in_batches(
             input_token_count,
             output_token_count,
             prior_page,
+            post_process_function,
             semaphore,
         )
         for image in images
