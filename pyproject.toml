@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "py-zerox"
-version = "0.0.6"
+version = "0.0.7"
 description = "ocr documents using vision models from all popular providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock etc"
 authors = ["wizenheimer","pradhyumna85"]
 license = "MIT"
