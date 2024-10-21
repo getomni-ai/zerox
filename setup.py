@@ -7,7 +7,8 @@ import sys
 class InstallSystemDependencies(install):
     def run(self):
         try:
-            subprocess.check_call([sys.executable, "-m", "py_zerox.scripts.pre_install"])
+            subprocess.check_call(
+                [sys.executable, "-m", "py_zerox.scripts.pre_install"])
         except subprocess.CalledProcessError as e:
             print(f"Pre-install script failed: {e}", file=sys.stderr)
             sys.exit(1)

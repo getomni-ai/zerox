@@ -2,29 +2,20 @@
 
 ## Zerox OCR
 
+<a href="https://discord.gg/smg2QfwtJ6">
+  <img src="https://github.com/user-attachments/assets/cccc0e9a-e3b2-425e-9b54-e5024681b129" alt="Join us on Discord" width="200px">
+</a>
+
 A dead simple way of OCR-ing a document for AI ingestion. Documents are meant to be a visual representation after all. With weird layouts, tables, charts, etc. The vision models just make sense!
 
 The general logic:
 
-- Pass in a PDF (URL or file buffer)
-- Turn the PDF into a series of images
+- Pass in a file (pdf, docx, image, etc.)
+- Convert that file into a series of images
 - Pass each image to GPT and ask nicely for Markdown
 - Aggregate the responses and return Markdown
 
-Sounds pretty basic! But with the `gpt-4o-mini` this method is price competitive with existing products, with meaningfully better results.
-
-#### Pricing Comparison
-
-This is how the pricing stacks up to other document processers. Running 1,000 pages with Zerox uses about 25M input tokens and 0.4M output tokens.
-
-| Service                                                                                                 | Cost                 | Accuracy | Table Quality |
-| ------------------------------------------------------------------------------------------------------- | -------------------- | -------- | ------------- |
-| AWS Textract[[1]](https://aws.amazon.com/textract/pricing/#:~:text=Amazon%20Textract%20API%20pricing)      | $1.50 / 1,000 pages  | Low      | Low           |
-| Google Document AI[[2]](https://cloud.google.com/document-ai/pricing)                                      | $1.50 / 1,000 pages  | Low      | Low           |
-| Azure Document AI[[3]](https://azure.microsoft.com/en-us/pricing/details/ai-document-intelligence/)        | $1.50 / 1,000 pages  | High     | Mid           |
-| Unstructured (PDF)[[4]](https://unstructured.io/api-key-hosted#:~:text=Cost%20and%20Usage%20%0AGuidelines) | $10.00 / 1,000 pages | Mid      | Mid           |
-| ------------------------                                                                                | -------------------- | -------- | ------------- |
-| Zerox (gpt-mini)                                                                                        | $ 4.00 / 1,000 pages | High     | High          |
+Try out the hosted version here: https://getomni.ai/ocr-demo
 
 ## Getting Started
 
@@ -145,6 +136,7 @@ Request #3 => page_2_markdown + page_3_image
 
 - Install **poppler-utils** on the system, it should be available in path variable
 - Install py-zerox:
+
 ```sh
 pip install py-zerox
 ```
@@ -351,6 +343,37 @@ ZeroxOutput(
     ]
 )
 ````
+
+## Supported File Types:
+
+We use a combination of `libreoffice` and `graphicsmagick` to do document => image conversion. For non-image / non-pdf files, we use libreoffice to convert that file to a pdf, and then to an image.
+
+```js
+[
+  "pdf", // Portable Document Format
+  "doc", // Microsoft Word 97-2003
+  "docx", // Microsoft Word 2007-2019
+  "odt", // OpenDocument Text
+  "ott", // OpenDocument Text Template
+  "rtf", // Rich Text Format
+  "txt", // Plain Text
+  "html", // HTML Document
+  "htm", // HTML Document (alternative extension)
+  "xml", // XML Document
+  "wps", // Microsoft Works Word Processor
+  "wpd", // WordPerfect Document
+  "xls", // Microsoft Excel 97-2003
+  "xlsx", // Microsoft Excel 2007-2019
+  "ods", // OpenDocument Spreadsheet
+  "ots", // OpenDocument Spreadsheet Template
+  "csv", // Comma-Separated Values
+  "tsv", // Tab-Separated Values
+  "ppt", // Microsoft PowerPoint 97-2003
+  "pptx", // Microsoft PowerPoint 2007-2019
+  "odp", // OpenDocument Presentation
+  "otp", // OpenDocument Presentation Template
+];
+```
 
 ## Credits
 
