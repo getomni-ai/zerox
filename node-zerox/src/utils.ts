@@ -3,16 +3,18 @@ import { fromPath } from "pdf2pic";
 import { LLMParams } from "./types";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
+import * as Tesseract from "tesseract.js";
 import axios from "axios";
 import fs from "fs-extra";
 import mime from "mime-types";
 import path from "path";
+import sharp from "sharp";
 
 const convertAsync = promisify(convert);
 
 const defaultLLMParams: LLMParams = {
   frequencyPenalty: 0, // OpenAI defaults to 0
-  maxTokens: 1000,
+  maxTokens: 2000,
   presencePenalty: 0, // OpenAI defaults to 0
   temperature: 0,
   topP: 1, // OpenAI defaults to 1
@@ -133,8 +135,77 @@ export const downloadFile = async ({
   return { extension, localPath };
 };
 
-// Convert each page to a png and save that image to tmp
-// @TODO: pull dimensions from the original document. Also, look into rotated pages
+// Extract text confidence from image buffer using Tesseract
+export const getTextFromImage = async (
+  buffer: Buffer
+): Promise<{ confidence: number }> => {
+  try {
+    // Get image and metadata
+    const image = sharp(buffer);
+    const metadata = await image.metadata();
+
+    // Crop to a 150px wide column in the center of the document.
+    // This section produced the highest confidence/speed tradeoffs.
+    const cropWidth = 150;
+    const cropHeight = metadata.height || 0;
+    const left = Math.max(0, Math.floor((metadata.width! - cropWidth) / 2));
+    const top = 0;
+
+    // Extract the cropped image
+    const croppedBuffer = await image
+      .extract({ left, top, width: cropWidth, height: cropHeight })
+      .toBuffer();
+
+    // Pass the croppedBuffer to Tesseract.recognize
+    // @TODO: How can we generalize this to non eng languages?
+    const {
+      data: { confidence },
+    } = await Tesseract.recognize(croppedBuffer, "eng");
+
+    return { confidence };
+  } catch (error) {
+    console.error("Error during OCR:", error);
+    return { confidence: 0 };
+  }
+};
+
+// Correct image orientation based on OCR confidence
+// Run Tesseract on 4 different orientations of the image and compare the output
+const correctImageOrientation = async (buffer: Buffer): Promise<Buffer> => {
+  const image = sharp(buffer);
+  const rotations = [0, 90, 180, 270];
+
+  const results = await Promise.all(
+    rotations.map(async (rotation) => {
+      const rotatedImageBuffer = await image
+        .clone()
+        .rotate(rotation)
+        .toBuffer();
+      const { confidence } = await getTextFromImage(rotatedImageBuffer);
+      return { rotation, confidence };
+    })
+  );
+
+  // Find the rotation with the best confidence score
+  const bestResult = results.reduce((best, current) =>
+    current.confidence > best.confidence ? current : best
+  );
+
+  if (bestResult.rotation !== 0) {
+    console.log(
+      `Reorienting image ${bestResult.rotation} degrees (Confidence: ${bestResult.confidence}%).`
+    );
+  }
+
+  // Rotate the image to the best orientation
+  const correctedImageBuffer = await image
+    .rotate(bestResult.rotation)
+    .toBuffer();
+
+  return correctedImageBuffer;
+};
+
+// Convert each page to a png, correct orientation, and save that image to tmp
 export const convertPdfToImages = async ({
   localPath,
   pagesToConvertAsImages,
@@ -165,11 +236,15 @@ export const convertPdfToImages = async ({
         }
         if (!result.page) throw new Error("Could not identify page data");
         const paddedPageNumber = result.page.toString().padStart(5, "0");
+
+        // Correct the image orientation
+        const correctedBuffer = await correctImageOrientation(result.buffer);
+
         const imagePath = path.join(
           tempDir,
           `${options.saveFilename}_page_${paddedPageNumber}.png`
         );
-        await fs.writeFile(imagePath, result.buffer);
+        await fs.writeFile(imagePath, correctedBuffer);
       })
     );
     return convertResults;

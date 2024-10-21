@@ -336,6 +336,7 @@ We use a combination of `libreoffice` and `graphicsmagick` to do document => ima
 
 ```js
 [
+  "pdf", // Portable Document Format
   "doc", // Microsoft Word 97-2003
   "docx", // Microsoft Word 2007-2019
   "odt", // OpenDocument Text
