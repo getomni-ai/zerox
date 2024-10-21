@@ -119,7 +119,9 @@ async def zerox(
         
         raw_file_name = os.path.splitext(os.path.basename(local_path))[0]
         file_name = "".join(c.lower() if c.isalnum() else "_" for c in raw_file_name)
-        
+        # Truncate file name to 255 characters to prevent ENAMETOOLONG errors
+        file_name = file_name[:255]
+
         # create a subset pdf in temp dir with only the requested pages if select_pages is provided
         if select_pages is not None:
             subset_pdf_create_kwargs = {"original_pdf_path":local_path, "select_pages":select_pages, 
