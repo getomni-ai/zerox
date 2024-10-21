@@ -84,7 +84,8 @@ export const zerox = async ({
   const fileName = rawFileName
     .replace(/[^\w\s]/g, "")
     .replace(/\s+/g, "_")
-    .toLowerCase();
+    .toLowerCase()
+    .substring(0, 255); // Truncate file name to 255 characters to prevent ENAMETOOLONG errors
 
   // Get list of converted images
   const files = await fs.readdir(tempDirectory);
