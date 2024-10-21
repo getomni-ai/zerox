@@ -138,7 +138,7 @@ export const downloadFile = async ({
 // Extract text confidence from image buffer using Tesseract
 export const getTextFromImage = async (
   buffer: Buffer
-): Promise<{ text: string; confidence: number }> => {
+): Promise<{ confidence: number }> => {
   try {
     // Get image and metadata
     const image = sharp(buffer);
@@ -161,10 +161,10 @@ export const getTextFromImage = async (
       data: { text, confidence },
     } = await Tesseract.recognize(croppedBuffer, "eng");
 
-    return { text, confidence };
+    return { confidence };
   } catch (error) {
     console.error("Error during OCR:", error);
-    return { text: "", confidence: 0 };
+    return { confidence: 0 };
   }
 };
 
