@@ -14,7 +14,7 @@ const convertAsync = promisify(convert);
 
 const defaultLLMParams: LLMParams = {
   frequencyPenalty: 0, // OpenAI defaults to 0
-  maxTokens: 1000,
+  maxTokens: 2000,
   presencePenalty: 0, // OpenAI defaults to 0
   temperature: 0,
   topP: 1, // OpenAI defaults to 1
@@ -135,16 +135,32 @@ export const downloadFile = async ({
   return { extension, localPath };
 };
 
-// Function to get text from image buffer using Tesseract
+// Extract text confidence from image buffer using Tesseract
 export const getTextFromImage = async (
   buffer: Buffer
 ): Promise<{ text: string; confidence: number }> => {
   try {
+    // Get image and metadata
+    const image = sharp(buffer);
+    const metadata = await image.metadata();
+
+    // Crop to a 150px wide column in the center of the document.
+    // This section produced the highest confidence/speed tradeoffs.
+    const cropWidth = 150;
+    const cropHeight = metadata.height || 0;
+    const left = Math.max(0, Math.floor((metadata.width! - cropWidth) / 2));
+    const top = 0;
+
+    // Extract the cropped image
+    const croppedBuffer = await image
+      .extract({ left, top, width: cropWidth, height: cropHeight })
+      .toBuffer();
+
+    // Pass the croppedBuffer to Tesseract.recognize
     const {
       data: { text, confidence },
-    } = await Tesseract.recognize(buffer, "eng", {
-      logger: (m: any) => console.log(m),
-    });
+    } = await Tesseract.recognize(croppedBuffer, "eng");
+
     return { text, confidence };
   } catch (error) {
     console.error("Error during OCR:", error);
@@ -153,8 +169,7 @@ export const getTextFromImage = async (
 };
 
 // Correct image orientation based on OCR confidence
-// Run tesseract on 4 different orientations of the image and compare the output
-// Kinda brute force, but does a decent job.
+// Run Tesseract on 4 different orientations of the image and compare the output
 const correctImageOrientation = async (buffer: Buffer): Promise<Buffer> => {
   const image = sharp(buffer);
   const rotations = [0, 90, 180, 270];
