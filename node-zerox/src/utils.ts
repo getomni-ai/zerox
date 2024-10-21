@@ -157,8 +157,9 @@ export const getTextFromImage = async (
       .toBuffer();
 
     // Pass the croppedBuffer to Tesseract.recognize
+    // @TODO: How can we generalize this to non eng languages?
     const {
-      data: { text, confidence },
+      data: { confidence },
     } = await Tesseract.recognize(croppedBuffer, "eng");
 
     return { confidence };
