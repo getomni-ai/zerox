@@ -168,7 +168,7 @@ kwargs = {}
 custom_system_prompt = None
 
 # to override
-# custom_system_prompt = "For the below pdf page, do something..somthing..." ## example
+# custom_system_prompt = "For the below pdf page, do something..something..." ## example
 
 ###################### Example for OpenAI ######################
 model = "gpt-4o-mini" ## openai model
