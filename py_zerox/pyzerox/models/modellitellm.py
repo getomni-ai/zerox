@@ -14,7 +14,6 @@ from ..processor.image import encode_image_to_base64
 
 DEFAULT_SYSTEM_PROMPT = Prompts.DEFAULT_SYSTEM_PROMPT
 
-
 class litellmmodel(BaseModel):
     ## setting the default system prompt
     _system_prompt = DEFAULT_SYSTEM_PROMPT
@@ -30,12 +29,24 @@ class litellmmodel(BaseModel):
         :type model: str, optional
         
         :param kwargs: Additional keyword arguments to pass to self.completion -> litellm.completion. Refer: https://docs.litellm.ai/docs/providers and https://docs.litellm.ai/docs/completion/input
+        
+        Note: kwargs params starting with "__zxmetaconfig" are treated as meta config params and are not passed to litellm backend.
         """
         super().__init__(model=model, **kwargs)
 
+        ## create another dict having the keys starting with "__zxmetaconfig"
+        self.meta_config = {k: v for k, v in self.kwargs.items() if k.startswith("__zxmetaconfig")}
+
+        ## remove the meta config keys from kwargs
+        self.kwargs = {k: v for k, v in self.kwargs.items() if not k.startswith("__zxmetaconfig")}
+
         ## calling custom methods to validate the environment and model
         self.validate_environment()
-        self.validate_model()
+
+        ## way to override vision validation
+        if self.meta_config.get("__zxmetaconfig_validate_vision_capability", True):
+            self.validate_model()
+
         self.validate_access()
 
     @property
