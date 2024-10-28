@@ -9,6 +9,7 @@ export interface ZeroxArgs {
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
   tempDir?: string;
+  trimEdges?: boolean;
 }
 
 export enum ModelOptions {

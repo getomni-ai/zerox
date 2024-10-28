@@ -79,6 +79,7 @@ const result = await zerox({
   outputDir: undefined, // Save combined result.md to a file.
   pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages.
   tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory).
+  trimEdges: false, // True by default, trims pixels from all edges that contain values similar to the given background colour, which defaults to that of the top-left pixel.
 });
 ```
 

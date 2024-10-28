@@ -171,7 +171,10 @@ export const getTextFromImage = async (
 
 // Correct image orientation based on OCR confidence
 // Run Tesseract on 4 different orientations of the image and compare the output
-const correctImageOrientation = async (buffer: Buffer): Promise<Buffer> => {
+const correctImageOrientation = async (
+  buffer: Buffer,
+  trimEdges: boolean
+): Promise<Buffer> => {
   const image = sharp(buffer);
   const rotations = [0, 90, 180, 270];
 
@@ -198,11 +201,11 @@ const correctImageOrientation = async (buffer: Buffer): Promise<Buffer> => {
   }
 
   // Rotate the image to the best orientation
-  const correctedImageBuffer = await image
-    .rotate(bestResult.rotation)
-    .toBuffer();
+  let correctedImage = image.rotate(bestResult.rotation);
 
-  return correctedImageBuffer;
+  if (trimEdges) correctedImage = correctedImage.trim();
+
+  return await correctedImage.toBuffer();
 };
 
 // Convert each page to a png, correct orientation, and save that image to tmp
@@ -210,15 +213,17 @@ export const convertPdfToImages = async ({
   localPath,
   pagesToConvertAsImages,
   tempDir,
+  trimEdges,
 }: {
   localPath: string;
   pagesToConvertAsImages: number | number[];
   tempDir: string;
+  trimEdges: boolean;
 }) => {
   const options = {
     density: 300,
     format: "png",
-    height: 1056,
+    height: 2048,
     preserveAspectRatio: true,
     saveFilename: path.basename(localPath, path.extname(localPath)),
     savePath: tempDir,
@@ -238,7 +243,10 @@ export const convertPdfToImages = async ({
         const paddedPageNumber = result.page.toString().padStart(5, "0");
 
         // Correct the image orientation
-        const correctedBuffer = await correctImageOrientation(result.buffer);
+        const correctedBuffer = await correctImageOrientation(
+          result.buffer,
+          trimEdges
+        );
 
         const imagePath = path.join(
           tempDir,
