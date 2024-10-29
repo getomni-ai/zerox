@@ -12,6 +12,9 @@ import sharp from "sharp";
 
 const convertAsync = promisify(convert);
 
+const Y_WHITESPACE_THRESHOLD = 50; // Max whitespace pixels in the page's Y axis (top and bottom).
+const TESSERACT_CONFIDENCE_THRESHOLD = 60;
+
 const defaultLLMParams: LLMParams = {
   frequencyPenalty: 0, // OpenAI defaults to 0
   maxTokens: 2000,
@@ -169,13 +172,8 @@ export const getTextFromImage = async (
   }
 };
 
-// Correct image orientation based on OCR confidence
 // Run Tesseract on 4 different orientations of the image and compare the output
-const correctImageOrientation = async (
-  buffer: Buffer,
-  trimEdges: boolean
-): Promise<Buffer> => {
-  const image = sharp(buffer);
+const suggestRotation = async (image: sharp.Sharp, pageNum: number) => {
   const rotations = [0, 90, 180, 270];
 
   const results = await Promise.all(
@@ -194,27 +192,41 @@ const correctImageOrientation = async (
     current.confidence > best.confidence ? current : best
   );
 
-  if (bestResult.rotation !== 0) {
+  if (
+    bestResult.rotation !== 0 &&
+    bestResult.confidence < TESSERACT_CONFIDENCE_THRESHOLD
+  ) {
     console.log(
-      `Reorienting image ${bestResult.rotation} degrees (Confidence: ${bestResult.confidence}%).`
+      `Not enough confidence (${bestResult.confidence}) to rotate page ${pageNum} ${bestResult.rotation} degrees`
     );
+    return;
   }
+  return bestResult;
+};
 
-  // Rotate the image to the best orientation
-  let correctedImage = image.rotate(bestResult.rotation);
+/**
+ * Calculates the suggested page height, that after trimming whitespace, we get close to 2048px height
+ * 
+ * @param originalHeight 
+ * @param newHeight 
+ * @returns `suggestedHeight`
+ */
+const calculateNewHeight = (originalHeight: number, newHeight: number) => {
+  const whitespaceInPixels = originalHeight - newHeight;
+  const growthRatio = originalHeight / newHeight;
 
-  if (trimEdges) correctedImage = correctedImage.trim();
-
-  return await correctedImage.toBuffer();
+  return Math.floor(originalHeight + whitespaceInPixels * growthRatio);
 };
 
 // Convert each page to a png, correct orientation, and save that image to tmp
 export const convertPdfToImages = async ({
+  correctOrientation,
   localPath,
   pagesToConvertAsImages,
   tempDir,
   trimEdges,
 }: {
+  correctOrientation: boolean;
   localPath: string;
   pagesToConvertAsImages: number | number[];
   tempDir: string;
@@ -235,18 +247,65 @@ export const convertPdfToImages = async ({
       responseType: "buffer",
     });
     await Promise.all(
-      convertResults.map(async (result) => {
+      convertResults.map(async (result, idx) => {
         if (!result || !result.buffer) {
           throw new Error("Could not convert page to image buffer");
         }
         if (!result.page) throw new Error("Could not identify page data");
         const paddedPageNumber = result.page.toString().padStart(5, "0");
 
-        // Correct the image orientation
-        const correctedBuffer = await correctImageOrientation(
-          result.buffer,
-          trimEdges
-        );
+        const image = sharp(result.buffer);
+
+        if (correctOrientation) {
+          const suggestion = await suggestRotation(image, idx + 1);
+
+          if (suggestion) {
+            console.log(`Rotating page ${idx + 1} ${suggestion.rotation} degrees`)
+            image.rotate(suggestion.rotation);
+          }
+        }
+
+        if (trimEdges) {
+          image.trim();
+        }
+
+        let { data: correctedBuffer, info } = await image.toBuffer({
+          resolveWithObject: true,
+        });
+
+        if (
+          !correctOrientation &&
+          Math.abs(info.trimOffsetTop || 0) > Y_WHITESPACE_THRESHOLD
+        ) {
+          try {
+            // Increase the image size and try again.
+            // We want to maximize the content
+            const newOptions = {
+              ...options,
+              height: calculateNewHeight(options.height, info.height),
+            };
+
+            const convert = fromPath(localPath, newOptions);
+
+            const result = await convert(idx + 1, {
+              responseType: "buffer",
+            });
+
+            const newTrimmedImage = sharp(result.buffer).trim();
+
+            // Uncomment to see how the image looks
+            // await newTrimmedImage.toFile(`output-${idx}.png`)
+
+            const { data: d, info: i } = await newTrimmedImage.toBuffer({
+              resolveWithObject: true,
+            });
+
+            correctedBuffer = d;
+          } catch (e) {
+            console.log("ERROR:");
+            console.error(e, idx + 1);
+          }
+        }
 
         const imagePath = path.join(
           tempDir,

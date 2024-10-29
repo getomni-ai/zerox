@@ -74,6 +74,7 @@ const result = await zerox({
   // Optional
   cleanup: true, // Clear images from tmp after run.
   concurrency: 10, // Number of pages to run at a time.
+  correctOrientation: true, // True by default, attempts to identify and correct page orientation.
   maintainFormat: false, // Slower but helps maintain consistent formatting.
   model: 'gpt-4o-mini' // Model to use (gpt-4o-mini or gpt-4o).
   outputDir: undefined, // Save combined result.md to a file.

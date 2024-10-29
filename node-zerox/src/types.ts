@@ -1,6 +1,7 @@
 export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
+  correctOrientation?: boolean;
   filePath: string;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
