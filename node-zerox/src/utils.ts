@@ -206,9 +206,9 @@ const suggestRotation = async (image: sharp.Sharp, pageNum: number) => {
 
 /**
  * Calculates the suggested page height, that after trimming whitespace, we get close to 2048px height
- * 
- * @param originalHeight 
- * @param newHeight 
+ *
+ * @param originalHeight
+ * @param newHeight
  * @returns `suggestedHeight`
  */
 const calculateNewHeight = (originalHeight: number, newHeight: number) => {
@@ -220,14 +220,18 @@ const calculateNewHeight = (originalHeight: number, newHeight: number) => {
 
 // Convert each page to a png, correct orientation, and save that image to tmp
 export const convertPdfToImages = async ({
+  cleanup,
   correctOrientation,
   localPath,
+  outputDir,
   pagesToConvertAsImages,
   tempDir,
   trimEdges,
 }: {
+  cleanup: boolean;
   correctOrientation: boolean;
   localPath: string;
+  outputDir: string;
   pagesToConvertAsImages: number | number[];
   tempDir: string;
   trimEdges: boolean;
@@ -260,7 +264,9 @@ export const convertPdfToImages = async ({
           const suggestion = await suggestRotation(image, idx + 1);
 
           if (suggestion) {
-            console.log(`Rotating page ${idx + 1} ${suggestion.rotation} degrees`)
+            console.log(
+              `Rotating page ${idx + 1} ${suggestion.rotation} degrees`
+            );
             image.rotate(suggestion.rotation);
           }
         }
@@ -268,6 +274,9 @@ export const convertPdfToImages = async ({
         if (trimEdges) {
           image.trim();
         }
+
+        if (!cleanup)
+          await image.toFile(path.join(outputDir, `output-${idx}.png`));
 
         let { data: correctedBuffer, info } = await image.toBuffer({
           resolveWithObject: true,
@@ -293,8 +302,10 @@ export const convertPdfToImages = async ({
 
             const newTrimmedImage = sharp(result.buffer).trim();
 
-            // Uncomment to see how the image looks
-            // await newTrimmedImage.toFile(`output-${idx}.png`)
+            if (!cleanup)
+              await newTrimmedImage.toFile(
+                path.join(outputDir, `output-${idx}.png`)
+              );
 
             const { data: d, info: i } = await newTrimmedImage.toBuffer({
               resolveWithObject: true,
