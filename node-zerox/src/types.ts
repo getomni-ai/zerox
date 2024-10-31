@@ -4,7 +4,7 @@ export interface ZeroxArgs {
   filePath: string;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
-  model?: ModelOptions;
+  model?: ModelOptions | string;
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
@@ -41,7 +41,7 @@ export interface CompletionArgs {
   imagePath: string;
   llmParams?: LLMParams;
   maintainFormat: boolean;
-  model: ModelOptions;
+  model: ModelOptions | string;
   priorPage: string;
 }
 
