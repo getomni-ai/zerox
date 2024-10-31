@@ -40,9 +40,6 @@ export const zerox = async ({
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
   }
-  if (!Object.values(ModelOptions)?.includes(model as ModelOptions)) {
-    console.log(`Using fine tuned model: ${model}`);
-  }
 
   // Ensure temp directory exists + create temp folder
   const rand = Math.floor(1000 + Math.random() * 9000).toString();
