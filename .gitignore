@@ -12,6 +12,8 @@ coverage/
 .nyc_output/
 .grunt/
 bower_components/
+node-zerox/tests/results
+eng.traineddata
 
 # Ignore output files generated from tests
 /tests/results/*
