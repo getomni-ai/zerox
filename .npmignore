@@ -15,6 +15,7 @@ pyproject.toml
 setup.cfg
 setup.py
 Makefile
+eng.traineddata
 
 # File types
 *.ts
