@@ -7,7 +7,7 @@
     "build": "tsc -p node-zerox/tsconfig.json",
     "postinstall": "node node-zerox/scripts/install-dependencies.js",
     "prepublishOnly": "npm run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "ts-node node-zerox/tests/index.ts"
   },
   "author": "tylermaran",
   "license": "MIT",
@@ -29,6 +29,10 @@
     "@types/fs-extra": "^11.0.4",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.14.11",
+    "@types/prompts": "^2.4.9",
+    "dotenv": "^16.4.5",
+    "prompts": "^2.4.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
   "repository": {
