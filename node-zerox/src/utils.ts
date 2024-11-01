@@ -218,7 +218,7 @@ export const convertPdfToImages = async ({
   const options = {
     density: 300,
     format: "png",
-    height: 1056,
+    height: 2048,
     preserveAspectRatio: true,
     saveFilename: path.basename(localPath, path.extname(localPath)),
     savePath: tempDir,
