@@ -5,7 +5,7 @@ root = true
 
 [*]
 indent_style = space
-indent_size = 2
+indent_size = 4
 end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
@@ -22,5 +22,5 @@ indent_style = tab
 [*.py]
 indent_size = 4
 
-[{*.js,*.ts,*.md}]
+[{*.js,*.ts,*.md,*.json}]
 indent_size = 2
