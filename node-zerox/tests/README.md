@@ -21,11 +21,11 @@ OPENAI_API_KEY=your_api_key_here
 
 ## Contributing new tests
 
-1. **Add Your Document**:
+1. Add Your Document:
 
    - Place the file in `shared/inputs` (e.g., `0005.pdf`).
 
-2. **Update `test.json`**:
+2. Update `test.json`:
 
    - Add an entry:
 
@@ -39,6 +39,6 @@ OPENAI_API_KEY=your_api_key_here
      }
      ```
 
-3. **Run the Test**:
+3. Run the Test:
 
    - Execute the script to include the new file.
