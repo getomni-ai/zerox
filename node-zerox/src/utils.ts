@@ -12,6 +12,8 @@ import sharp from "sharp";
 
 const convertAsync = promisify(convert);
 
+const MIN_ROTATION_CONFIDENCE = 55;
+
 const defaultLLMParams: LLMParams = {
   frequencyPenalty: 0, // OpenAI defaults to 0
   maxTokens: 2000,
@@ -169,10 +171,11 @@ export const getTextFromImage = async (
   }
 };
 
-// Correct image orientation based on OCR confidence
-// Run Tesseract on 4 different orientations of the image and compare the output
-const correctImageOrientation = async (buffer: Buffer): Promise<Buffer> => {
-  const image = sharp(buffer);
+// Determine the optimal image orientation based on OCR confidence
+// Run Tesseract on 4 image orientations and compare the outputs
+const determineOptimalRotation = async (
+  image: sharp.Sharp
+): Promise<number> => {
   const rotations = [0, 90, 180, 270];
 
   const results = await Promise.all(
@@ -191,29 +194,31 @@ const correctImageOrientation = async (buffer: Buffer): Promise<Buffer> => {
     current.confidence > best.confidence ? current : best
   );
 
-  if (bestResult.rotation !== 0) {
+  if (
+    bestResult.confidence >= MIN_ROTATION_CONFIDENCE &&
+    bestResult.rotation !== 0
+  ) {
     console.log(
-      `Reorienting image ${bestResult.rotation} degrees (Confidence: ${bestResult.confidence}%).`
+      `Reorienting image ${bestResult.rotation} degrees (confidence: ${bestResult.confidence}%)`
     );
+    return bestResult.rotation;
   }
-
-  // Rotate the image to the best orientation
-  const correctedImageBuffer = await image
-    .rotate(bestResult.rotation)
-    .toBuffer();
-
-  return correctedImageBuffer;
+  return 0;
 };
 
 // Convert each page to a png, correct orientation, and save that image to tmp
 export const convertPdfToImages = async ({
+  correctOrientation,
   localPath,
   pagesToConvertAsImages,
   tempDir,
+  trimEdges,
 }: {
+  correctOrientation: boolean;
   localPath: string;
   pagesToConvertAsImages: number | number[];
   tempDir: string;
+  trimEdges: boolean;
 }) => {
   const options = {
     density: 300,
@@ -237,8 +242,22 @@ export const convertPdfToImages = async ({
         if (!result.page) throw new Error("Could not identify page data");
         const paddedPageNumber = result.page.toString().padStart(5, "0");
 
+        const image = sharp(result.buffer);
+
+        if (trimEdges) {
+          image.trim();
+        }
+
+        if (correctOrientation) {
+          const optimalRotation = await determineOptimalRotation(image);
+
+          if (optimalRotation) {
+            image.rotate(optimalRotation);
+          }
+        }
+
         // Correct the image orientation
-        const correctedBuffer = await correctImageOrientation(result.buffer);
+        const correctedBuffer = await image.toBuffer();
 
         const imagePath = path.join(
           tempDir,

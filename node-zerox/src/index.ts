@@ -16,6 +16,7 @@ import pLimit, { Limit } from "p-limit";
 export const zerox = async ({
   cleanup = true,
   concurrency = 10,
+  correctOrientation = true,
   filePath,
   llmParams = {},
   maintainFormat = false,
@@ -24,6 +25,7 @@ export const zerox = async ({
   outputDir,
   pagesToConvertAsImages = -1,
   tempDir = os.tmpdir(),
+  trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
   let inputTokenCount = 0;
   let outputTokenCount = 0;
@@ -73,9 +75,11 @@ export const zerox = async ({
     }
     // Convert the file to a series of images
     await convertPdfToImages({
+      correctOrientation,
       localPath: pdfPath,
       pagesToConvertAsImages,
       tempDir: tempDirectory,
+      trimEdges,
     });
   }
 
