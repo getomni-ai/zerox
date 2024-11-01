@@ -22,5 +22,5 @@ indent_style = tab
 [*.py]
 indent_size = 4
 
-[{*.js,*.ts,*.md}]
+[{*.js,*.ts,*.md,*.json}]
 indent_size = 2
