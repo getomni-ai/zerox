@@ -95,14 +95,14 @@ async function main() {
     };
   });
 
-  // Write the results to output.json
+  // Write the test results to output.json
   fs.writeFileSync(
     path.join(OUTPUT_DIR, "output.json"),
     JSON.stringify(filteredResults, null, 2)
   );
 
   const T2 = new Date();
-  const completionTime = ((T2.getTime() - T1.getTime()) / 1000).toFixed(2); // in seconds
+  const completionTime = ((T2.getTime() - T1.getTime()) / 1000).toFixed(2);
 
   // Calculate overall accuracy and total pages tested
   const totalKeywordsFound = filteredResults.reduce(
