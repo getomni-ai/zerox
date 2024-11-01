@@ -1,14 +1,16 @@
 export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
+  correctOrientation?: boolean;
   filePath: string;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
-  model?: ModelOptions;
+  model?: ModelOptions | string;
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
   tempDir?: string;
+  trimEdges?: boolean;
 }
 
 export enum ModelOptions {
@@ -41,7 +43,7 @@ export interface CompletionArgs {
   imagePath: string;
   llmParams?: LLMParams;
   maintainFormat: boolean;
-  model: ModelOptions;
+  model: ModelOptions | string;
   priorPage: string;
 }
 
