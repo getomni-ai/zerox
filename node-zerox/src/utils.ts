@@ -12,7 +12,7 @@ import sharp from "sharp";
 
 const convertAsync = promisify(convert);
 
-const MIN_ROTATION_CONFIDENCE = 55;
+const MIN_ROTATION_CONFIDENCE = 60;
 
 const defaultLLMParams: LLMParams = {
   frequencyPenalty: 0, // OpenAI defaults to 0
