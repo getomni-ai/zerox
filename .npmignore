@@ -1,7 +1,9 @@
 # Folders
 node-zerox/src/
+node-zerox/tests/
 py_zerox/
 examples/
+shared/
 
 # Config files
 .pre-commit-config.yaml
