@@ -12,6 +12,7 @@
   "author": "tylermaran",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-textract": "^3.682.0",
     "axios": "^1.7.2",
     "child_process": "^1.0.2",
     "fs-extra": "^11.2.0",

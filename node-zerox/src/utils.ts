@@ -1,6 +1,10 @@
+import {
+  AnalyzeDocumentCommand,
+  TextractClient,
+} from "@aws-sdk/client-textract";
 import { convert } from "libreoffice-convert";
 import { fromPath } from "pdf2pic";
-import { LLMParams } from "./types";
+import { LayoutElement, LLMParams, TextractConfig } from "./types";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
 import * as Tesseract from "tesseract.js";
@@ -212,13 +216,17 @@ export const convertPdfToImages = async ({
   localPath,
   pagesToConvertAsImages,
   tempDir,
+  textractConfig,
   trimEdges,
+  useBoundingBoxes,
 }: {
   correctOrientation: boolean;
   localPath: string;
   pagesToConvertAsImages: number | number[];
   tempDir: string;
+  textractConfig?: TextractConfig;
   trimEdges: boolean;
+  useBoundingBoxes?: boolean;
 }) => {
   const options = {
     density: 300,
@@ -242,28 +250,67 @@ export const convertPdfToImages = async ({
         if (!result.page) throw new Error("Could not identify page data");
         const paddedPageNumber = result.page.toString().padStart(5, "0");
 
-        const image = sharp(result.buffer);
+        let image = sharp(result.buffer);
 
         if (trimEdges) {
-          image.trim();
+          const trimmedBuffer = await image.trim().toBuffer();
+          image = sharp(trimmedBuffer);
         }
 
         if (correctOrientation) {
           const optimalRotation = await determineOptimalRotation(image);
 
           if (optimalRotation) {
-            image.rotate(optimalRotation);
+            const rotatedBuffer = await image
+              .rotate(optimalRotation)
+              .toBuffer();
+            image = sharp(rotatedBuffer);
           }
         }
 
-        // Correct the image orientation
-        const correctedBuffer = await image.toBuffer();
+        if (useBoundingBoxes) {
+          const boundingBoxes = await analyzeBoundingBoxes(
+            image,
+            textractConfig
+          );
+          const { width: imageWidth, height: imageHeight } =
+            await image.metadata();
 
-        const imagePath = path.join(
-          tempDir,
-          `${options.saveFilename}_page_${paddedPageNumber}.png`
-        );
-        await fs.writeFile(imagePath, correctedBuffer);
+          if (!imageWidth || !imageHeight) {
+            throw new Error("Could not determine image dimensions");
+          }
+
+          await Promise.all(
+            boundingBoxes.map(async (element, index) => {
+              const { boundingBox } = element;
+
+              const elementImage = image.clone().extract({
+                height: Math.round(boundingBox.height * imageHeight),
+                left: Math.round(boundingBox.left * imageWidth),
+                top: Math.round(boundingBox.top * imageHeight),
+                width: Math.round(boundingBox.width * imageWidth),
+              });
+
+              const elementImagePath = path.join(
+                tempDir,
+                `${options.saveFilename}_page_${paddedPageNumber}_element_${
+                  index + 1
+                }.png`
+              );
+
+              const buffer = await elementImage.toBuffer();
+              await fs.writeFile(elementImagePath, buffer);
+            })
+          );
+        } else {
+          const imagePath = path.join(
+            tempDir,
+            `${options.saveFilename}_page_${paddedPageNumber}.png`
+          );
+
+          const buffer = await image.toBuffer();
+          await fs.writeFile(imagePath, buffer);
+        }
       })
     );
     return convertResults;
@@ -310,4 +357,32 @@ export const convertKeysToSnakeCase = (
   return Object.fromEntries(
     Object.entries(obj).map(([key, value]) => [camelToSnakeCase(key), value])
   );
+};
+
+const analyzeBoundingBoxes = async (
+  image: sharp.Sharp,
+  config?: TextractConfig
+): Promise<LayoutElement[]> => {
+  const textractClient = new TextractClient({
+    credentials: config?.credentials,
+    region: config?.region || "us-east-1",
+  });
+
+  const { Blocks = [] } = await textractClient.send(
+    new AnalyzeDocumentCommand({
+      Document: { Bytes: await image.toBuffer() },
+      FeatureTypes: ["LAYOUT"],
+    })
+  );
+  return Blocks.filter((block) =>
+    (block.BlockType || "").startsWith("LAYOUT_")
+  ).map((block) => ({
+    boundingBox: {
+      left: block.Geometry?.BoundingBox?.Left || 0,
+      top: block.Geometry?.BoundingBox?.Top || 0,
+      width: block.Geometry?.BoundingBox?.Width || 0,
+      height: block.Geometry?.BoundingBox?.Height || 0,
+    },
+    type: block.BlockType,
+  }));
 };

@@ -25,7 +25,9 @@ export const zerox = async ({
   outputDir,
   pagesToConvertAsImages = -1,
   tempDir = os.tmpdir(),
+  textractConfig,
   trimEdges = true,
+  useBoundingBoxes = false,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
   let inputTokenCount = 0;
   let outputTokenCount = 0;
@@ -79,7 +81,9 @@ export const zerox = async ({
       localPath: pdfPath,
       pagesToConvertAsImages,
       tempDir: tempDirectory,
+      textractConfig,
       trimEdges,
+      useBoundingBoxes,
     });
   }
 
@@ -153,17 +157,50 @@ export const zerox = async ({
     // Function to process pages with concurrency limit
     const processPagesInBatches = async (images: string[], limit: Limit) => {
       const results: (string | null)[] = [];
+      const pageContents: Record<number, { index: number; content: string }[]> =
+        {};
 
-      const promises = images.map((image, index) =>
+      const promises = images.map((image) =>
         limit(() =>
           processPage(image).then((result) => {
-            results[index] = result;
+            if (result) {
+              // Extract page number and element number from image path
+              const match = image.match(/_page_(\d+)(?:_element_(\d+))?/);
+              if (match) {
+                const pageNum = parseInt(match[1]);
+                // If element number exists use it, otherwise default to 1
+                const elementNum = match[2] ? parseInt(match[2]) : 1;
+
+                // Initialize array for this page if it doesn't exist
+                if (!pageContents[pageNum]) {
+                  pageContents[pageNum] = [];
+                }
+
+                // Store content with its element index
+                pageContents[pageNum].push({
+                  index: elementNum,
+                  content: result,
+                });
+              }
+            }
           })
         )
       );
 
       await Promise.all(promises);
-      return results;
+
+      // Combine contents for each page in order
+      Object.entries(pageContents).forEach(([pageNum, contents]) => {
+        // Sort by element number before joining
+        const orderedContent = contents
+          .sort((a, b) => a.index - b.index)
+          .map((item) => item.content)
+          .join("\n\n");
+
+        results[parseInt(pageNum) - 1] = orderedContent;
+      });
+
+      return results.filter(Boolean);
     };
 
     const limit = pLimit(concurrency);

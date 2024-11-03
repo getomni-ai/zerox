@@ -1,3 +1,5 @@
+import { AwsCredentialIdentity } from "@aws-sdk/types";
+
 export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
@@ -10,7 +12,9 @@ export interface ZeroxArgs {
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
   tempDir?: string;
+  textractConfig?: TextractConfig;
   trimEdges?: boolean;
+  useBoundingBoxes?: boolean;
 }
 
 export enum ModelOptions {
@@ -47,10 +51,25 @@ export interface CompletionArgs {
   priorPage: string;
 }
 
+export type LayoutElement = {
+  boundingBox: {
+    height: number;
+    left: number;
+    top: number;
+    width: number;
+  };
+  type: any;
+};
+
 export interface LLMParams {
   frequencyPenalty?: number;
   maxTokens?: number;
   presencePenalty?: number;
   temperature?: number;
   topP?: number;
+}
+
+export interface TextractConfig {
+  credentials?: AwsCredentialIdentity;
+  region?: string;
 }
