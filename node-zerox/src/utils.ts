@@ -4,7 +4,7 @@ import {
 } from "@aws-sdk/client-textract";
 import { convert } from "libreoffice-convert";
 import { fromPath } from "pdf2pic";
-import { LayoutElement, LLMParams, TextractConfig } from "./types";
+import { BoundingBox, LLMParams, TextractConfig } from "./types";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
 import * as Tesseract from "tesseract.js";
@@ -231,7 +231,7 @@ export const convertPdfToImages = async ({
   const options = {
     density: 300,
     format: "png",
-    height: 2048,
+    height: 4096,
     preserveAspectRatio: true,
     saveFilename: path.basename(localPath, path.extname(localPath)),
     savePath: tempDir,
@@ -281,14 +281,20 @@ export const convertPdfToImages = async ({
           }
 
           await Promise.all(
-            boundingBoxes.map(async (element, index) => {
-              const { boundingBox } = element;
-
+            boundingBoxes.map(async (boundingBox, index) => {
               const elementImage = image.clone().extract({
                 height: Math.round(boundingBox.height * imageHeight),
                 left: Math.round(boundingBox.left * imageWidth),
                 top: Math.round(boundingBox.top * imageHeight),
                 width: Math.round(boundingBox.width * imageWidth),
+              });
+
+              const paddedImage = elementImage.extend({
+                top: 10,
+                bottom: 10,
+                left: 10,
+                right: 10,
+                background: { r: 255, g: 255, b: 255, alpha: 1 },
               });
 
               const elementImagePath = path.join(
@@ -298,7 +304,7 @@ export const convertPdfToImages = async ({
                 }.png`
               );
 
-              const buffer = await elementImage.toBuffer();
+              const buffer = await paddedImage.toBuffer();
               await fs.writeFile(elementImagePath, buffer);
             })
           );
@@ -362,7 +368,7 @@ export const convertKeysToSnakeCase = (
 const analyzeBoundingBoxes = async (
   image: sharp.Sharp,
   config?: TextractConfig
-): Promise<LayoutElement[]> => {
+): Promise<BoundingBox[]> => {
   const textractClient = new TextractClient({
     credentials: config?.credentials,
     region: config?.region || "us-east-1",
@@ -377,12 +383,9 @@ const analyzeBoundingBoxes = async (
   return Blocks.filter((block) =>
     (block.BlockType || "").startsWith("LAYOUT_")
   ).map((block) => ({
-    boundingBox: {
-      left: block.Geometry?.BoundingBox?.Left || 0,
-      top: block.Geometry?.BoundingBox?.Top || 0,
-      width: block.Geometry?.BoundingBox?.Width || 0,
-      height: block.Geometry?.BoundingBox?.Height || 0,
-    },
-    type: block.BlockType,
+    left: block.Geometry?.BoundingBox?.Left || 0,
+    top: block.Geometry?.BoundingBox?.Top || 0,
+    width: block.Geometry?.BoundingBox?.Width || 0,
+    height: block.Geometry?.BoundingBox?.Height || 0,
   }));
 };

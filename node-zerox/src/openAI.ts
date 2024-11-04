@@ -11,9 +11,17 @@ export const getCompletion = async ({
   priorPage,
 }: CompletionArgs): Promise<CompletionResponse> => {
   const systemPrompt = `
-    Convert the following PDF page to markdown.
-    Return only the markdown with no explanation text. Do not include deliminators like '''markdown.
-    You must include all information on the page. Do not exclude headers, footers, or subtext.
+    Convert the following image to markdown exactly as it appears visually.
+    Rules:
+    - Must include all information on the page. Do not exclude headers, footers, or subtext.
+    - Charts and infographics must be interpreted to a markdown format. Prefer table format when applicable.
+    - Images without text must be replaced with [description of image](image.png)
+    - For tables with double headers, prefer adding a new column.
+    - Logos should be wrapped in square brackets. Ex: [Coca-Cola]
+    - Prefer using ☐ and ☑ for check boxes.
+    
+    Return only the markdown with no explanation or delimiters.
+    Do not paraphrase, summarize or exclude any visual elements.
   `;
 
   // Default system message.

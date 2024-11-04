@@ -1,5 +1,12 @@
 import { AwsCredentialIdentity } from "@aws-sdk/types";
 
+export interface BoundingBox {
+  height: number;
+  left: number;
+  top: number;
+  width: number;
+}
+
 export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
@@ -50,16 +57,6 @@ export interface CompletionArgs {
   model: ModelOptions | string;
   priorPage: string;
 }
-
-export type LayoutElement = {
-  boundingBox: {
-    height: number;
-    left: number;
-    top: number;
-    width: number;
-  };
-  type: any;
-};
 
 export interface LLMParams {
   frequencyPenalty?: number;
