@@ -1,5 +1,9 @@
 import { CompletionArgs, CompletionResponse } from "./types";
-import { convertKeysToSnakeCase, encodeImageToBase64, markdownToJson } from "./utils";
+import {
+  convertKeysToSnakeCase,
+  encodeImageToBase64,
+  markdownToJson,
+} from "./utils";
 import axios from "axios";
 
 export const getCompletion = async ({
@@ -8,6 +12,7 @@ export const getCompletion = async ({
   llmParams,
   maintainFormat,
   model,
+  pageNumber,
   priorPage,
 }: CompletionArgs): Promise<CompletionResponse> => {
   const systemPrompt = `
@@ -58,13 +63,21 @@ export const getCompletion = async ({
 
     const data = response.data;
 
-    const jsonOutput = await markdownToJson(data.choices[0].message.content);
-    console.log("====>>>>", JSON.stringify(jsonOutput));
+    const jsonOutput = await markdownToJson(
+      data.choices[0].message.content,
+      pageNumber
+    );
+
+    // TODO: remove this
+    // Only for development
+    console.log('======')
+    console.log(JSON.stringify(jsonOutput));
 
     return {
       content: data.choices[0].message.content,
       inputTokens: data.usage.prompt_tokens,
       outputTokens: data.usage.completion_tokens,
+      structuredContent: jsonOutput,
     };
   } catch (err) {
     console.error("Error in OpenAI completion", err);

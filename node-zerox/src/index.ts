@@ -97,7 +97,7 @@ export const zerox = async ({
 
   if (maintainFormat) {
     // Use synchronous processing
-    for (const image of images) {
+    for (const [idx, image] of images.entries()) {
       const imagePath = path.join(tempDirectory, image);
       try {
         const { content, inputTokens, outputTokens } = await getCompletion({
@@ -106,6 +106,7 @@ export const zerox = async ({
           llmParams,
           maintainFormat,
           model,
+          pageNumber: idx + 1,
           priorPage,
         });
         const formattedMarkdown = formatMarkdown(content);
@@ -124,7 +125,10 @@ export const zerox = async ({
     }
   } else {
     // Process in parallel with a limit on concurrent pages
-    const processPage = async (image: string): Promise<string | null> => {
+    const processPage = async (
+      image: string,
+      pageNumber: number
+    ): Promise<string | null> => {
       const imagePath = path.join(tempDirectory, image);
       try {
         const { content, inputTokens, outputTokens } = await getCompletion({
@@ -133,6 +137,7 @@ export const zerox = async ({
           llmParams,
           maintainFormat,
           model,
+          pageNumber,
           priorPage,
         });
         const formattedMarkdown = formatMarkdown(content);
@@ -156,7 +161,7 @@ export const zerox = async ({
 
       const promises = images.map((image, index) =>
         limit(() =>
-          processPage(image).then((result) => {
+          processPage(image, index + 1).then((result) => {
             results[index] = result;
           })
         )

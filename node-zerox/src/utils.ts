@@ -1,6 +1,12 @@
 import { convert } from "libreoffice-convert";
 import { fromPath } from "pdf2pic";
-import { LLMParams } from "./types";
+import {
+  ConvertedNodeType,
+  LLMParams,
+  MdNodeType,
+  ParentId,
+  ProcessedNode,
+} from "./types";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
 import * as Tesseract from "tesseract.js";
@@ -313,18 +319,13 @@ export const convertKeysToSnakeCase = (
   );
 };
 
-interface ProcessedNode {
-  id: string;
-  parentId: string | undefined;
-  type: string;
-  value: any;
-}
-interface parentId {
-  id: string;
-  depth: number;
-}
-
-export const markdownToJson = async (markdownString: string) => {
+/**
+ *
+ * @param markdownString String - Markdown text
+ * @param page Number - Page number
+ * @returns ProcessedNode[] - Array of processed nodes
+ */
+export const markdownToJson = async (markdownString: string, page: number) => {
   /**
    * Bypassing typescript transpiler using eval to use dynamic imports
    *
@@ -341,57 +342,64 @@ export const markdownToJson = async (markdownString: string) => {
 
   console.log(JSON.stringify(parsedMd));
 
-  const parentIdManager: parentId[] = [];
+  const parentIdManager: ParentId[] = [];
 
-  const jsonObj: ProcessedNode[] = [];
-  parsedMd.children.forEach((node: any) => {
-    const isHeading = node.type === "heading";
+  const processedNodes: ProcessedNode[] = [];
+  parsedMd.children.forEach((sourceNode: any) => {
+    const isHeading = sourceNode.type === MdNodeType.heading;
 
-    if (isHeading && node.depth <= (parentIdManager.at(-1)?.depth || 0)) {
+    if (isHeading && sourceNode.depth <= (parentIdManager.at(-1)?.depth || 0)) {
       for (let i = parentIdManager.length; i > 0; i--) {
         parentIdManager.pop();
-        if (node.depth > (parentIdManager.at(-1)?.depth || 0)) {
+        if (sourceNode.depth > (parentIdManager.at(-1)?.depth || 0)) {
           break;
         }
       }
     }
-    const processedNode = processNode(node, parentIdManager.at(-1)?.id);
+    const processedNode = processNode(
+      sourceNode,
+      page,
+      parentIdManager.at(-1)?.id
+    );
 
     if (isHeading) {
-      parentIdManager.push({ id: processedNode[0].id, depth: node.depth });
+      parentIdManager.push({
+        id: processedNode[0].id,
+        depth: sourceNode.depth,
+      });
     }
 
-    jsonObj.push(...processedNode);
+    processedNodes.push(...processedNode);
   });
 
-  return jsonObj;
+  return processedNodes;
 };
 
-const type: Record<string, string> = {
-  heading: "heading",
-  text: "text",
-  list: "list",
-};
-
-const processNode = (node: any, parentId?: string): ProcessedNode[] => {
+const processNode = (
+  node: any,
+  page: number,
+  parentId?: string
+): ProcessedNode[] => {
   let value: any;
   let siblingNodes: ProcessedNode[] = [];
 
-  if (node.type === "heading") {
+  if (
+    node.type === MdNodeType.heading ||
+    node.type === MdNodeType.paragraph ||
+    node.type === MdNodeType.strong
+  ) {
     value = node.children
       .map((childNode: any) => processText(childNode))
       .join(" ");
-  } else if (node.type === "paragraph") {
-    value = node.children
-      .map((childNode: any) => processText(childNode))
-      .join(" ");
-  } else if (node.type === "list") {
+  } else if (node.type === MdNodeType.list) {
     const processedNodes = node.children.map((childNode: any) =>
-      processListItem(childNode)
+      processListItem(childNode, page)
     );
     value = [];
     processedNodes.forEach((pn: any) => {
       value.push(...pn.node);
+
+      // Store nested list nodes
       siblingNodes.push(...pn.siblings);
     });
   }
@@ -399,25 +407,34 @@ const processNode = (node: any, parentId?: string): ProcessedNode[] => {
   return [
     {
       id: nanoid(),
+      page,
       parentId,
-      type: type[node.type as string] || type.text,
+      type:
+        ConvertedNodeType[node.type as ConvertedNodeType] ||
+        ConvertedNodeType.text,
       value,
     },
     ...(siblingNodes || []),
   ];
 };
 
+const ignoreNodeTypes = new Set([MdNodeType.break, MdNodeType.thematicBreak]);
+
 const processText = (node: any) => {
-  return node.value;
+  if (ignoreNodeTypes.has(node.type)) return "";
+
+  return node.type === MdNodeType.text
+    ? node.value
+    : node.children.map((child: any) => processText(child)).join(" ");
 };
 
-const processListItem = (node: any) => {
+const processListItem = (node: any, page: number) => {
   let newNode: ProcessedNode[] = [];
   let siblings: ProcessedNode[] = [];
 
   node.children.forEach((childNode: any) => {
-    if (childNode.type !== "list") {
-      const processedNode = processNode(childNode);
+    if (childNode.type !== MdNodeType.list) {
+      const processedNode = processNode(childNode, page);
       if (newNode.length > 0) {
         newNode[0].value += processedNode.map(({ value }) => value).join(", ");
       } else {
@@ -429,13 +446,13 @@ const processListItem = (node: any) => {
         newNode = [
           {
             id: nanoid(),
-            type: "text",
+            type: ConvertedNodeType.text,
             value: "",
             parentId: undefined,
           },
         ];
       }
-      const processedNode = processNode(childNode, newNode[0].id);
+      const processedNode = processNode(childNode, page, newNode[0].id);
       siblings.push(...processedNode);
     }
   });

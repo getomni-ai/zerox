@@ -36,6 +36,7 @@ export interface CompletionResponse {
   content: string;
   inputTokens: number;
   outputTokens: number;
+  structuredContent: ProcessedNode[];
 }
 
 export interface CompletionArgs {
@@ -44,6 +45,7 @@ export interface CompletionArgs {
   llmParams?: LLMParams;
   maintainFormat: boolean;
   model: ModelOptions | string;
+  pageNumber: number;
   priorPage: string;
 }
 
@@ -53,4 +55,53 @@ export interface LLMParams {
   presencePenalty?: number;
   temperature?: number;
   topP?: number;
+}
+
+export enum MdNodeType {
+  break = "break",
+  heading = "heading",
+  list = "list",
+  paragraph = "paragraph",
+  strong = "strong",
+  table = "table",
+  text = "text",
+  thematicBreak = "thematicBreak",
+}
+
+export enum ConvertedNodeType {
+  heading = "heading",
+  list = "list",
+  text = "text",
+}
+export interface BaseNode {
+  id: string;
+  page?: number;
+  parentId?: string;
+}
+
+export interface TextNode extends BaseNode {
+  type: ConvertedNodeType.text;
+  value: string;
+}
+
+export interface HeadingNode extends BaseNode {
+  type: ConvertedNodeType.heading;
+  value: string;
+}
+
+export interface ListNode extends BaseNode {
+  type: ConvertedNodeType.list;
+  value: ListItem[];
+}
+
+export interface ListItem {
+  id: string;
+  value: string;
+}
+
+export type ProcessedNode = TextNode | HeadingNode | ListNode;
+
+export interface ParentId {
+  depth: number;
+  id: string;
 }
