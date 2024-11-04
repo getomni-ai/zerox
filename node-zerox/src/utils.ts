@@ -9,6 +9,7 @@ import fs from "fs-extra";
 import mime from "mime-types";
 import path from "path";
 import sharp from "sharp";
+import { nanoid } from "nanoid";
 
 const convertAsync = promisify(convert);
 
@@ -310,4 +311,134 @@ export const convertKeysToSnakeCase = (
   return Object.fromEntries(
     Object.entries(obj).map(([key, value]) => [camelToSnakeCase(key), value])
   );
+};
+
+interface ProcessedNode {
+  id: string;
+  parentId: string | undefined;
+  type: string;
+  value: any;
+}
+interface parentId {
+  id: string;
+  depth: number;
+}
+
+export const markdownToJson = async (markdownString: string) => {
+  /**
+   * Bypassing typescript transpiler using eval to use dynamic imports
+   *
+   * Source: https://stackoverflow.com/a/70546326
+   */
+  const { unified } = await eval(`import('unified')`);
+  const { default: remarkParse } = await eval(`import('remark-parse')`);
+  const { remarkGfm } = await eval(`import('remark-gfm')`);
+
+  const parsedMd = unified()
+    .use(remarkParse) // Parse Markdown to AST
+    .use(remarkGfm)
+    .parse(markdownString);
+
+  console.log(JSON.stringify(parsedMd));
+
+  const parentIdManager: parentId[] = [];
+
+  const jsonObj: ProcessedNode[] = [];
+  parsedMd.children.forEach((node: any) => {
+    const isHeading = node.type === "heading";
+
+    if (isHeading && node.depth <= (parentIdManager.at(-1)?.depth || 0)) {
+      for (let i = parentIdManager.length; i > 0; i--) {
+        parentIdManager.pop();
+        if (node.depth > (parentIdManager.at(-1)?.depth || 0)) {
+          break;
+        }
+      }
+    }
+    const processedNode = processNode(node, parentIdManager.at(-1)?.id);
+
+    if (isHeading) {
+      parentIdManager.push({ id: processedNode[0].id, depth: node.depth });
+    }
+
+    jsonObj.push(...processedNode);
+  });
+
+  return jsonObj;
+};
+
+const type: Record<string, string> = {
+  heading: "heading",
+  text: "text",
+  list: "list",
+};
+
+const processNode = (node: any, parentId?: string): ProcessedNode[] => {
+  let value: any;
+  let siblingNodes: ProcessedNode[] = [];
+
+  if (node.type === "heading") {
+    value = node.children
+      .map((childNode: any) => processText(childNode))
+      .join(" ");
+  } else if (node.type === "paragraph") {
+    value = node.children
+      .map((childNode: any) => processText(childNode))
+      .join(" ");
+  } else if (node.type === "list") {
+    const processedNodes = node.children.map((childNode: any) =>
+      processListItem(childNode)
+    );
+    value = [];
+    processedNodes.forEach((pn: any) => {
+      value.push(...pn.node);
+      siblingNodes.push(...pn.siblings);
+    });
+  }
+
+  return [
+    {
+      id: nanoid(),
+      parentId,
+      type: type[node.type as string] || type.text,
+      value,
+    },
+    ...(siblingNodes || []),
+  ];
+};
+
+const processText = (node: any) => {
+  return node.value;
+};
+
+const processListItem = (node: any) => {
+  let newNode: ProcessedNode[] = [];
+  let siblings: ProcessedNode[] = [];
+
+  node.children.forEach((childNode: any) => {
+    if (childNode.type !== "list") {
+      const processedNode = processNode(childNode);
+      if (newNode.length > 0) {
+        newNode[0].value += processedNode.map(({ value }) => value).join(", ");
+      } else {
+        newNode[0] = processedNode[0];
+      }
+      siblings.push(...processedNode.slice(1));
+    } else {
+      if (newNode.length == 0) {
+        newNode = [
+          {
+            id: nanoid(),
+            type: "text",
+            value: "",
+            parentId: undefined,
+          },
+        ];
+      }
+      const processedNode = processNode(childNode, newNode[0].id);
+      siblings.push(...processedNode);
+    }
+  });
+
+  return { node: newNode, siblings };
 };

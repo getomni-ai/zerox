@@ -1,76 +1,6 @@
 import { CompletionArgs, CompletionResponse } from "./types";
-import { convertKeysToSnakeCase, encodeImageToBase64 } from "./utils";
+import { convertKeysToSnakeCase, encodeImageToBase64, markdownToJson } from "./utils";
 import axios from "axios";
-import { nanoid } from "nanoid";
-
-const markdownToJson = async (markdownString: string) => {
-  /**
-   * Bypassing typescript transpiler using eval to use dynamic imports
-   * 
-   * Source: https://stackoverflow.com/a/70546326
-   */
-  const { unified } = await eval(`import('unified')`);
-  const { default: remarkParse } = await eval(`import('remark-parse')`);
-  const { remarkGfm } = await eval(`import('remark-gfm')`);
-
-  const parsedMd = unified()
-    .use(remarkParse) // Parse Markdown to AST
-    .use(remarkGfm)
-    .parse(markdownString);
-
-  const parentIdManager: string[] = [];
-
-  let depths = [0];
-
-  const jsonObj = parsedMd.children.map((node: any) => {
-    const isHeading = node.type === "heading";
-    if (isHeading && node.depth <= (depths.at(-1) || 0)) {
-      parentIdManager.pop();
-      // TODO: keep removing depth number till it reaches the one less than node.depth
-      depths.pop();
-    }
-    const processedNode = processNode(node, parentIdManager.at(-1));
-
-    if (isHeading) {
-      parentIdManager.push(processedNode.id);
-      if (depths.at(-1) !== node.depth) depths.push(node.depth);
-    }
-
-    return processedNode;
-  });
-
-  return jsonObj;
-};
-
-const type: Record<string, string> = {
-  heading: "heading",
-  text: "text",
-};
-
-const processNode = (node: any, parentId?: string) => {
-  let value: any;
-
-  if (node.type === "heading") {
-    value = node.children
-      .map((childNode: any) => processText(childNode))
-      .join(" ");
-  } else if (node.type === "paragraph") {
-    value = node.children
-      .map((childNode: any) => processText(childNode))
-      .join(" ");
-  }
-
-  return {
-    id: nanoid(),
-    parentId,
-    type: type[node.type as string] || type.text,
-    value,
-  };
-};
-
-const processText = (node: any) => {
-  return node.value;
-};
 
 export const getCompletion = async ({
   apiKey,
@@ -128,8 +58,8 @@ export const getCompletion = async ({
 
     const data = response.data;
 
-    // const jsonOutput = await markdownToJson(data.choices[0].message.content);
-    // console.log("====>>>>", JSON.stringify(jsonOutput, null, 2));
+    const jsonOutput = await markdownToJson(data.choices[0].message.content);
+    console.log("====>>>>", JSON.stringify(jsonOutput));
 
     return {
       content: data.choices[0].message.content,
