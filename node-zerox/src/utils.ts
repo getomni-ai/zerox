@@ -2,6 +2,7 @@ import { convert } from "libreoffice-convert";
 import { fromPath } from "pdf2pic";
 import {
   ConvertedNodeType,
+  ListItem,
   LLMParams,
   MdNodeType,
   ParentId,
@@ -356,7 +357,7 @@ export const markdownToJson = async (markdownString: string, page: number) => {
         }
       }
     }
-    const processedNode = processNode(
+    const processedNode = processRootNode(
       sourceNode,
       page,
       parentIdManager.at(-1)?.id
@@ -375,85 +376,145 @@ export const markdownToJson = async (markdownString: string, page: number) => {
   return processedNodes;
 };
 
-const processNode = (
+// MD (mdast) type source: https://github.com/syntax-tree/mdast?tab=readme-ov-file
+
+// All of the parent nodes are composed of these literals.
+const literals = new Set([
+  MdNodeType.code,
+  MdNodeType.html,
+  MdNodeType.inlineCode,
+  MdNodeType.text,
+]);
+
+// No data will be pulled from these nodes.
+const ignoreNodeTypes = new Set([
+  MdNodeType.break,
+  MdNodeType.definition,
+  MdNodeType.image,
+  MdNodeType.imageReference,
+  MdNodeType.thematicBreak,
+]);
+
+const gatherValue = (result: any) =>
+  result.filter((r: any) => Boolean(r)).map((r: any) => r.mainNode.value);
+const gatherSiblings = (result: any) =>
+  result.reduce(
+    (acc: any[], r: any) => (Boolean(r) ? acc.concat(r.siblings) : acc),
+    []
+  );
+
+const nodeProcessors = {
+  // Default processor for "literal" nodes
+  literal: (node: any) => ({ value: node.value, siblings: [] }),
+  [MdNodeType.list]: (node: any, page: number) => {
+    const result = node.children.map((childNode: any) =>
+      processNode(childNode, page)
+    );
+
+    return {
+      value: gatherValue(result),
+      siblings: gatherSiblings(result),
+    };
+  },
+  [MdNodeType.listItem]: (node: any, page: number) => {
+    const result = processListItem(node, page);
+    return {
+      value: result.node,
+      siblings: result.siblings,
+    };
+  },
+  // Default processor for "parent" nodes
+  parent: (node: any, page: number) => {
+    const result: string[] = node.children.map((childNode: any) =>
+      processNode(childNode, page)
+    );
+
+    return {
+      value: gatherValue(result).join(" "),
+      siblings: gatherSiblings(result),
+    };
+  },
+};
+
+const processRootNode = (
   node: any,
   page: number,
   parentId?: string
 ): ProcessedNode[] => {
-  let value: any;
+  const nodes = processNode(node, page, parentId);
+
+  if (!nodes) return [];
+
+  return [nodes.mainNode, ...nodes.siblings];
+};
+
+const processNode = (
+  node: any,
+  page: number,
+  parentId?: string
+): { mainNode: ProcessedNode; siblings: ProcessedNode[] } | undefined => {
+  let value: string | ListItem[];
   let siblingNodes: ProcessedNode[] = [];
+  let result;
 
-  if (
-    node.type === MdNodeType.heading ||
-    node.type === MdNodeType.paragraph ||
-    node.type === MdNodeType.strong
-  ) {
-    value = node.children
-      .map((childNode: any) => processText(childNode))
-      .join(" ");
-  } else if (node.type === MdNodeType.list) {
-    const processedNodes = node.children.map((childNode: any) =>
-      processListItem(childNode, page)
+  if (literals.has(node.type)) {
+    result = nodeProcessors["literal"](node);
+  } else if (node.type in nodeProcessors) {
+    result = nodeProcessors[node.type as keyof typeof nodeProcessors](
+      node,
+      page
     );
-    value = [];
-    processedNodes.forEach((pn: any) => {
-      value.push(...pn.node);
-
-      // Store nested list nodes
-      siblingNodes.push(...pn.siblings);
-    });
+  } else if (!ignoreNodeTypes.has(node.type)) {
+    result = nodeProcessors["parent"](node, page);
+  } else {
+    return;
   }
 
-  return [
-    {
+  value = result.value;
+  siblingNodes = result.siblings;
+
+  return {
+    mainNode: {
       id: nanoid(),
       page,
       parentId,
       type:
         ConvertedNodeType[node.type as ConvertedNodeType] ||
         ConvertedNodeType.text,
-      value,
+      value: value as any,
     },
-    ...(siblingNodes || []),
-  ];
-};
-
-const ignoreNodeTypes = new Set([MdNodeType.break, MdNodeType.thematicBreak]);
-
-const processText = (node: any) => {
-  if (ignoreNodeTypes.has(node.type)) return "";
-
-  return node.type === MdNodeType.text
-    ? node.value
-    : node.children.map((child: any) => processText(child)).join(" ");
+    siblings: siblingNodes,
+  };
 };
 
 const processListItem = (node: any, page: number) => {
-  let newNode: ProcessedNode[] = [];
+  let newNode: ProcessedNode | undefined;
   let siblings: ProcessedNode[] = [];
 
   node.children.forEach((childNode: any) => {
     if (childNode.type !== MdNodeType.list) {
       const processedNode = processNode(childNode, page);
-      if (newNode.length > 0) {
-        newNode[0].value += processedNode.map(({ value }) => value).join(", ");
+      if (!processedNode) return;
+
+      if (newNode) {
+        newNode.value += processedNode.mainNode.value as string;
       } else {
-        newNode[0] = processedNode[0];
+        newNode = processedNode.mainNode;
       }
-      siblings.push(...processedNode.slice(1));
+      siblings.push(...processedNode.siblings);
     } else {
-      if (newNode.length == 0) {
-        newNode = [
-          {
-            id: nanoid(),
-            type: ConvertedNodeType.text,
-            value: "",
-            parentId: undefined,
-          },
-        ];
+      if (!newNode) {
+        newNode = {
+          id: nanoid(),
+          parentId: undefined,
+          type: ConvertedNodeType.text,
+          value: "",
+        };
       }
-      const processedNode = processNode(childNode, page, newNode[0].id);
-      siblings.push(...processedNode);
+
+      const processedNode = processNode(childNode, page, newNode?.id);
+      if (processedNode)
+        siblings.push(processedNode.mainNode, ...processedNode.siblings);
     }
   });
 

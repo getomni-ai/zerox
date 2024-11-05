@@ -57,15 +57,28 @@ export interface LLMParams {
   topP?: number;
 }
 
+// Source: https://github.com/syntax-tree/mdast?tab=readme-ov-file
 export enum MdNodeType {
-  break = "break",
+  blockquote = "blockquote",
+  break = "break", // ignored
+  code = "code",
+  definition = "definition", // ignored
+  emphasis = "emphasis",
   heading = "heading",
+  html = "html",
+  image = "image", // ignored
+  imageReference = "imageReference", // ignored
+  inlineCode = "inlineCode",
+  link = "link",
+  linkReference = "linkReference", // ignored
   list = "list",
+  listItem = "listItem",
   paragraph = "paragraph",
+  root = "root",
   strong = "strong",
   table = "table",
   text = "text",
-  thematicBreak = "thematicBreak",
+  thematicBreak = "thematicBreak", // ignored
 }
 
 export enum ConvertedNodeType {
