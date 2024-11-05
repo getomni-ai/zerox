@@ -68,11 +68,6 @@ export const getCompletion = async ({
       pageNumber
     );
 
-    // TODO: remove this
-    // Only for development
-    console.log('======')
-    console.log(JSON.stringify(jsonOutput));
-
     return {
       content: data.choices[0].message.content,
       inputTokens: data.usage.prompt_tokens,

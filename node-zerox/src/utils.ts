@@ -341,8 +341,6 @@ export const markdownToJson = async (markdownString: string, page: number) => {
     .use(remarkGfm)
     .parse(markdownString);
 
-  console.log(JSON.stringify(parsedMd));
-
   const parentIdManager: ParentId[] = [];
 
   const processedNodes: ProcessedNode[] = [];
