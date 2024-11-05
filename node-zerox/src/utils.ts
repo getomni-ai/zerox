@@ -334,7 +334,7 @@ export const markdownToJson = async (markdownString: string, page: number) => {
    */
   const { unified } = await eval(`import('unified')`);
   const { default: remarkParse } = await eval(`import('remark-parse')`);
-  const { remarkGfm } = await eval(`import('remark-gfm')`);
+  const { default: remarkGfm } = await eval(`import('remark-gfm')`);
 
   const parsedMd = unified()
     .use(remarkParse) // Parse Markdown to AST
@@ -421,6 +421,38 @@ const nodeProcessors = {
     return {
       value: result.node,
       siblings: result.siblings,
+    };
+  },
+  [MdNodeType.table]: (node: any, page: number) => {
+    const [headerNodes, ...rowNodes] = node.children;
+
+    const headers = headerNodes.children.map((child: any) => {
+      const pn = processNode(child, page)?.mainNode;
+      return pn ? { value: pn.value, id: pn.id } : {};
+    });
+
+    const rows = rowNodes.map((rowNode: any) => {
+      return Object.fromEntries(
+        rowNode.children.map((cellNode: any, idx: number) => {
+          const headerId = headers[idx].id;
+          if (!headerId) return;
+
+          return [
+            headerId,
+            cellNode.children
+              .map((child: any) => processNode(child, page)?.mainNode.value)
+              .join(" "),
+          ];
+        })
+      );
+    });
+
+    return {
+      value: {
+        headers,
+        rows,
+      },
+      siblings: [],
     };
   },
   // Default processor for "parent" nodes

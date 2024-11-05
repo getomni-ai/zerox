@@ -77,6 +77,8 @@ export enum MdNodeType {
   root = "root",
   strong = "strong",
   table = "table",
+  tableCell = "tableCell",
+  tableRow = "tableRow",
   text = "text",
   thematicBreak = "thematicBreak", // ignored
 }
@@ -84,6 +86,7 @@ export enum MdNodeType {
 export enum ConvertedNodeType {
   heading = "heading",
   list = "list",
+  table = "table",
   text = "text",
 }
 export interface BaseNode {
@@ -112,7 +115,15 @@ export interface ListItem {
   value: string;
 }
 
-export type ProcessedNode = TextNode | HeadingNode | ListNode;
+export interface TableNode extends BaseNode {
+  type: ConvertedNodeType.table;
+  value: {
+    header: string[];
+    rows: Record<string, string>[];
+  };
+}
+
+export type ProcessedNode = HeadingNode | ListNode | TableNode | TextNode;
 
 export interface ParentId {
   depth: number;
