@@ -270,7 +270,6 @@
   },
   {
     "file": "0005.pdf",
-
     "expectedKeywords": [
       [
         "Quest",
@@ -302,6 +301,31 @@
         "Nuchal",
         "Ultrasonographer",
         "QD20330K"
+      ]
+    ]
+  },
+  {
+    "file": "0006.pdf",
+    "expectedKeywords": [
+      [
+        "T-Mobile",
+        "Monthly",
+        "100469352",
+        "Recurring",
+        "****9541",
+        "MasterCard",
+        "Equipment",
+        "Installment",
+        "Plan",
+        "(XXX)-49X-5XXX",
+        "$00.00",
+        "KickBack",
+        "2GB",
+        "AutoPay",
+        "my.t-mobile.com",
+        "t-mobile.com/pay",
+        "*PAY (*XXX)",
+        "1004693520967854630205189400463125091"
       ]
     ]
   }
