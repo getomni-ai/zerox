@@ -328,5 +328,117 @@
         "1004693520967854630205189400463125091"
       ]
     ]
+  },
+  {
+    "file": "0007.pdf",
+    "expectedKeywords": [
+      [
+        "LABCORP",
+        "3106932528",
+        "Farzam",
+        "044-494-4741-0",
+        "(310) 849-7991",
+        "GENESEE",
+        "1619295474",
+        "Fasting",
+        "rflx",
+        "25-Hydroxy",
+        "x10E3/uL",
+        "Neutrophils",
+        "Lymphs (Absolute)",
+        "Baso (Absolute)",
+        "Not Estab.",
+        "Creatinine",
+        "Africn",
+        "mL/min/1.73",
+        "02/16/19 1809 ET",
+        "800-859-6046"
+      ]
+    ]
+  },
+  {
+    "file": "0008.pdf",
+    "expectedKeywords": [
+      [
+        "LABCORP LCLS BULK",
+        "3106932528",
+        "2 of 4",
+        "Farzam",
+        "Potassium",
+        "mmol/L",
+        "A/G Ratio",
+        "AST (SGOT)",
+        "High",
+        "Abnormal",
+        "UA/M w/rflx",
+        "IU/L",
+        "1.005 - 1.030",
+        "Negative/Trace",
+        "Semi-Qn",
+        "None seen/Few",
+        "Result 1",
+        "02/16/19 1809 ET",
+        "FINAL REPORT",
+        "800-859-6046",
+        "© 1995-2019"
+      ]
+    ]
+  },
+  {
+    "file": "0009.pdf",
+    "expectedKeywords": [
+      [
+        "3106932528",
+        "Page 3 of 4",
+        "LabCorp",
+        "04/11/1992",
+        "044-494-4741-0",
+        "02/13/2019 1000 Local",
+        "50,000-100,000",
+        "Triglycerides",
+        "Hemoglobin A1c",
+        "4.8 - 5.6",
+        "Glycemic",
+        "uIU/mL",
+        "25-Hydroxy",
+        "Low",
+        "Institute",
+        "25-OH",
+        "Bischoff-Ferrari",
+        ":1911-30",
+        "Please Note:",
+        "Therapeutic",
+        "02/16/19 1809 ET",
+        "confidential",
+        "800-859-6046",
+        "© 1995-2019"
+      ]
+    ]
+  },
+  {
+    "file": "0010.pdf",
+    "expectedKeywords": [
+      [
+        "02/16/2019 6:09:27 PM",
+        "3106932528",
+        "Farzam",
+        "WEISER, CHERYL",
+        "60070006294",
+        "REFERENCE INTERVAL",
+        "Ferritin, Serum",
+        "ng/mL",
+        "15 - 150",
+        "13112 Evening Creek",
+        "92128-4108",
+        "Dir: Jenny Galloway",
+        "800-859-6046",
+        "858-668-3700",
+        "02/16/19 1809 ET",
+        "4 of 4",
+        "confidential",
+        "800-859-6046",
+        "America® Holdings"
+      ]
+    ]
   }
 ]
