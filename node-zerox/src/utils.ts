@@ -432,8 +432,8 @@ const nodeProcessors = {
     const rows = rowNodes.map((rowNode: any) => {
       return Object.fromEntries(
         rowNode.children.map((cellNode: any, idx: number) => {
-          const headerId = headers[idx].id;
-          if (!headerId) return;
+          const headerId = headers[idx]?.id;
+          if (!headerId) return [];
 
           return [
             headerId,

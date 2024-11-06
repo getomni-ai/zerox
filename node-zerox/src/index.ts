@@ -6,7 +6,13 @@ import {
   isString,
 } from "./utils";
 import { getCompletion } from "./openAI";
-import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
+import {
+  ModelOptions,
+  ProcessedNode,
+  ProcessPageResponseBody,
+  ZeroxArgs,
+  ZeroxOutput,
+} from "./types";
 import { validateLLMParams } from "./utils";
 import fs from "fs-extra";
 import os from "os";
@@ -14,6 +20,7 @@ import path from "path";
 import pLimit, { Limit } from "p-limit";
 
 export const zerox = async ({
+  chunk = false,
   cleanup = true,
   concurrency = 10,
   correctOrientation = true,
@@ -94,21 +101,24 @@ export const zerox = async ({
   // Get list of converted images
   const files = await fs.readdir(tempDirectory);
   const images = files.filter((file) => file.endsWith(".png"));
+  const chunks: ProcessedNode[] = [];
 
   if (maintainFormat) {
     // Use synchronous processing
     for (const [idx, image] of images.entries()) {
       const imagePath = path.join(tempDirectory, image);
       try {
-        const { content, inputTokens, outputTokens } = await getCompletion({
-          apiKey: openaiAPIKey,
-          imagePath,
-          llmParams,
-          maintainFormat,
-          model,
-          pageNumber: idx + 1,
-          priorPage,
-        });
+        const { chunks: pageChunks, content, inputTokens, outputTokens } =
+          await getCompletion({
+            apiKey: openaiAPIKey,
+            chunk,
+            imagePath,
+            llmParams,
+            maintainFormat,
+            model,
+            pageNumber: idx + 1,
+            priorPage,
+          });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
         outputTokenCount += outputTokens;
@@ -118,6 +128,8 @@ export const zerox = async ({
 
         // Add all markdown results to array
         aggregatedMarkdown.push(formattedMarkdown);
+
+        chunks.push(...pageChunks);
       } catch (error) {
         console.error(`Failed to process image ${image}:`, error);
         throw error;
@@ -128,18 +140,20 @@ export const zerox = async ({
     const processPage = async (
       image: string,
       pageNumber: number
-    ): Promise<string | null> => {
+    ): Promise<ProcessPageResponseBody> => {
       const imagePath = path.join(tempDirectory, image);
       try {
-        const { content, inputTokens, outputTokens } = await getCompletion({
-          apiKey: openaiAPIKey,
-          imagePath,
-          llmParams,
-          maintainFormat,
-          model,
-          pageNumber,
-          priorPage,
-        });
+        const { chunks, content, inputTokens, outputTokens } =
+          await getCompletion({
+            chunk,
+            apiKey: openaiAPIKey,
+            imagePath,
+            llmParams,
+            maintainFormat,
+            model,
+            pageNumber,
+            priorPage,
+          });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
         outputTokenCount += outputTokens;
@@ -148,7 +162,7 @@ export const zerox = async ({
         priorPage = formattedMarkdown;
 
         // Add all markdown results to array
-        return formattedMarkdown;
+        return { formattedMarkdown, chunks };
       } catch (error) {
         console.error(`Failed to process image ${image}:`, error);
         throw error;
@@ -157,7 +171,7 @@ export const zerox = async ({
 
     // Function to process pages with concurrency limit
     const processPagesInBatches = async (images: string[], limit: Limit) => {
-      const results: (string | null)[] = [];
+      const results: ProcessPageResponseBody[] = [];
 
       const promises = images.map((image, index) =>
         limit(() =>
@@ -173,8 +187,18 @@ export const zerox = async ({
 
     const limit = pLimit(concurrency);
     const results = await processPagesInBatches(images, limit);
-    const filteredResults = results.filter(isString);
-    aggregatedMarkdown.push(...filteredResults);
+    const filteredResults = results.filter(
+      (r) => r && isString(r.formattedMarkdown)
+    );
+    aggregatedMarkdown.push(
+      ...filteredResults.map((r) => r!.formattedMarkdown)
+    );
+    chunks.push(
+      ...filteredResults.reduce((acc: ProcessedNode[], r) => {
+        acc.push(...r!.chunks);
+        return acc;
+      }, [])
+    );
   }
 
   // Write the aggregated markdown to a file
@@ -208,6 +232,7 @@ export const zerox = async ({
   });
 
   return {
+    chunks,
     completionTime,
     fileName,
     inputTokens: inputTokenCount,

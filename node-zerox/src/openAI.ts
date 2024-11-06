@@ -1,4 +1,4 @@
-import { CompletionArgs, CompletionResponse } from "./types";
+import { CompletionArgs, CompletionResponse, ProcessedNode } from "./types";
 import {
   convertKeysToSnakeCase,
   encodeImageToBase64,
@@ -8,6 +8,7 @@ import axios from "axios";
 
 export const getCompletion = async ({
   apiKey,
+  chunk,
   imagePath,
   llmParams,
   maintainFormat,
@@ -62,17 +63,20 @@ export const getCompletion = async ({
     );
 
     const data = response.data;
+    let chunks: ProcessedNode[] = [];
 
-    const jsonOutput = await markdownToJson(
-      data.choices[0].message.content,
-      pageNumber
-    );
+    if (chunk) {
+      chunks = await markdownToJson(
+        data.choices[0].message.content,
+        pageNumber
+      );
+    }
 
     return {
+      chunks,
       content: data.choices[0].message.content,
       inputTokens: data.usage.prompt_tokens,
       outputTokens: data.usage.completion_tokens,
-      structuredContent: jsonOutput,
     };
   } catch (err) {
     console.error("Error in OpenAI completion", err);

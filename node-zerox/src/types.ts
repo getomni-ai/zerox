@@ -1,4 +1,5 @@
 export interface ZeroxArgs {
+  chunk?: boolean;
   cleanup?: boolean;
   concurrency?: number;
   correctOrientation?: boolean;
@@ -30,17 +31,19 @@ export interface ZeroxOutput {
   inputTokens: number;
   outputTokens: number;
   pages: Page[];
+  chunks: ProcessedNode[];
 }
 
 export interface CompletionResponse {
   content: string;
   inputTokens: number;
   outputTokens: number;
-  structuredContent: ProcessedNode[];
+  chunks: ProcessedNode[];
 }
 
 export interface CompletionArgs {
   apiKey: string;
+  chunk: boolean;
   imagePath: string;
   llmParams?: LLMParams;
   maintainFormat: boolean;
@@ -56,6 +59,11 @@ export interface LLMParams {
   temperature?: number;
   topP?: number;
 }
+
+export type ProcessPageResponseBody = {
+  formattedMarkdown: string;
+  chunks: ProcessedNode[];
+} | null
 
 // Source: https://github.com/syntax-tree/mdast?tab=readme-ov-file
 export enum MdNodeType {
