@@ -267,5 +267,487 @@
         "Eleventh"
       ]
     ]
+  },
+  {
+    "file": "1_png.rf.a663bbe8e0baf14d27916684fa0e9ec0.pdf",
+    "expectedKeywords": [
+      ["④採算", "惡化", "11%", "100%", "建設業", "廿一ㄡ業", "59%"]
+    ]
+  },
+  {
+    "file": "9_png.rf.e576586aa93948569209eb7e75d6bf1e.pdf",
+    "expectedKeywords": [
+      ["①売上", "增加", "78%", "製造業", "14%", "86%", "卸·小売業", "0%", "28%"]
+    ]
+  },
+  {
+    "file": "19_png.rf.bd7e873f577f8fd97f2be5fa7580a232.pdf",
+    "expectedKeywords": [
+      [
+        "Comparisons",
+        "Rate of Gaze Behaviors",
+        "Rate of Support Behaviors",
+        "Interpretation",
+        "Partners",
+        "Partner Human vs. Partner Emys",
+        "0.99",
+        "<.001",
+        "7.04",
+        "Opponents",
+        "22.03",
+        "Glin"
+      ]
+    ]
+  },
+  {
+    "file": "41_png.rf.83a5641ef2e5cffa366f14d32d2950ee.pdf",
+    "expectedKeywords": [
+      [
+        "Contributi per previdenza complementare",
+        "E27",
+        "DEDUCIBILITA ORDINARIA",
+        "Dedotti dal sostituto",
+        "Non dedotti dal sostituto",
+        "LAVORATORI DI PRIMA OCCUPAZIONE",
+        "FONDI IN SQUILIBRIO FINANZIARIO",
+        "FAMILIARI A CARICO",
+        "E28",
+        "E29",
+        "E30",
+        ",00"
+      ]
+    ]
+  },
+  {
+    "file": "93_png.rf.c0f4baad00e3b51e3868a0976756e4a5.pdf",
+    "expectedKeywords": [
+      [
+        "Pos",
+        "Atleta",
+        "Anno",
+        "Società",
+        "Tempo",
+        "Pti",
+        "Bugli Cosimo",
+        "Virtus Buonconvento ASD",
+        "01'06\"45",
+        "627",
+        "Lucchesi Tommaso",
+        "ITA",
+        "1997",
+        "Vannelli Giulio",
+        "Leonetti Eugenio",
+        "Amatori Nuoto Follonica SSD",
+        "444",
+        "01'14\"10",
+        "01'12\"43"
+      ]
+    ]
+  },
+  {
+    "file": "94_png.rf.d1c5617e570ed7cc347e5d7803b47756.pdf",
+    "expectedKeywords": [
+      [
+        "100 Stile Libero ASSOLUTI Femmine",
+        "Pos",
+        "Atleta",
+        "Anno",
+        "Società",
+        "Tempo",
+        "Pti",
+        "Origlia Gioelemaria",
+        "Futura Club I Cavalieri Prato",
+        "00'56\"25",
+        "Biagioli Paola",
+        "1997",
+        "Team Nuoto Toscana Empoli",
+        "695",
+        "00'58\"36",
+        "Borelli Vittoria",
+        "Frontera Ambra",
+        "01'00\"82",
+        "Chiodo Giulia",
+        "Branda Virginia Evelina",
+        "484",
+        "Memokondaj Bukuri",
+        "Squalificato"
+      ]
+    ]
+  },
+  {
+    "file": "95_png.rf.078ec6b979f6ef3502d431e03bc58b2e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "102_png.rf.ea958fa20403ff0f3c4408f5437445a8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "130_png.rf.a1b1483da39bcc0c2c77909ef40e528c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "169_png.rf.dfe478e748c6a5a79ad66fda9e1bfb88.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "171_png.rf.1d4490297f0d39433d4b5a38530e38a2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "243_png.rf.bc32e9165619b5f4143c64b64ade52b6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "262_png.rf.bdba0e0fb1d1348270b05bf4968de088.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "290_png.rf.f21f0ae937668c8795f177893497b204.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "313_png.rf.f1cd239960cffb0fe77ebc4f682f67c6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "399_png.rf.5d63443c9aafc319b05c65004b760100.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "438_png.rf.332522c738fd3e754ede01212f23d27a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "441_png.rf.fc0c2f3597222533276c22ee1c39cf68.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "493_png.rf.d0177eeed4291205c3ea50bbe3176267.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "513_png.rf.a8cf1a917d1f0e77736caa6d90738069.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "536_png.rf.2bfdfab276806838ec9d8e469f6a8294.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "568_png.rf.0d411275d5046ee9b56cdf429b830946.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "594_png.rf.6005a38bc02d3b813ff6aae980e25508.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "624_png.rf.a877b339f7968c9348bc06df48697439.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "643_png.rf.019b56f3c8ab4761bea9c41f34a1a026.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "711_png.rf.ea3ea5f0b97cdbcee658c5b52840c932.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "800_png.rf.126a3c219647c442a931d76c73a20d2f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "801_png.rf.e6a60e1ee4defef99e9b05f28731bf98.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "804_png.rf.0950afaf28ac4a8c7c12e146ffaf9a16.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "817_png.rf.d543d284b9e2a272ca38aa64a3adc94f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "829_png.rf.9d8a85349d93b264f7f78b346a97d30a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "847_png.rf.5eb9fb475fffe86a7a262ff988743990.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "855_png.rf.191886cc397bb5884715b61f8552cd65.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "856_png.rf.f651654efe2b7fec3595f6991212a0d3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "884_png.rf.a01d32a1d05bb6ced3c0fa27e4e999f2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "892_png.rf.4f429fb910f57cb24bf62cd772a81a8d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "933_png.rf.ffac672aaa5cb14c7a7dc5802c66176b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "934_png.rf.b04a23a7a66d1f4238f7dd0fe853770a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "937_png.rf.5be42699192062c1927e4d4ad7b5b835.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "959_png.rf.9a1f5b444e2c488f3f22e6e0c5581f08.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "991_png.rf.fff53042ce709c0088acbd8e5e747106.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "999_png.rf.db81a5df0db1f0c4854e58778b06debd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1020_png.rf.791459fc9d754704c18d8bc43d9a7c23.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1022_png.rf.408bd446aaeac918301615a8c7e96d73.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1059_png.rf.c5a9d8d8b7e151639a860a0e03daa414.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1087_png.rf.2559975149bed879e8cae27257829788.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1102_png.rf.31ef0b87c7bba4f705ce5d53680332b9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1122_png.rf.3fe8f142fc81d8adfef1c7602c5662da.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1123_png.rf.a5c5a5f91a97729eb21d19b71afd786e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1174_png.rf.6f823c357bfdd1b13ae2635d65f257a1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1217_png.rf.d773a56417940fb708cc1d79bbdcb77e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1242_png.rf.a496d56332917b7d41c4d6b00cfbc6bb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1279_png.rf.fae1b1d507647a25eec145577cd4bb82.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1292_png.rf.7f643583353497665d4f239d013c6f5f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1316_png.rf.7e1032ab62dd734b34216682f2730831.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1419_png.rf.dc0437f09bbc5b5cb408ac3afbef2efe.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1460_png.rf.568b357d993fc0f79b8207e9bbf1213d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1623_png.rf.6c980ed03ea6470e6766e0f9ea49c6d7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1629_png.rf.32b303ccf4004c1d8f8e7b8416f8af2c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1640_png.rf.ce38b06761c7220bff23c6f5efadd63a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1674_png.rf.665444a8ce24c5032f548ae661f1bb98.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1704_png.rf.c5f2b7f62d5218691e1d8096cb526946.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1717_png.rf.259f7676d444ce3af14c96ac281c0699.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1721_png.rf.2a853563209eb312f5264cda20da45bf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1731_png.rf.48916c3ab3327d73265fafa70cbf50dd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1817_png.rf.c39b8732c925583061392c74ee222ba3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1859_png.rf.7d13e6e0af497034a4b9c330e3668743.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1903_png.rf.a95889591b1db00902d06fbaa0d97c21.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1905_png.rf.5a23c3349dd09b331a33a5432b2b8bfe.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1906_png.rf.7e0650f0820cd772bea37f87cec447d7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1907_png.rf.b65c56b6013416d03302e634206852fd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1931_png.rf.7f9c532924b264fd57eae78b95a5b621.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1934_png.rf.8b3cc14322d8920f2193818512444850.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1956_png.rf.d7ed5e4c7b0b995537897b652fd648fe.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2032_png.rf.bb2a007127e54e9b73e4ecd71291365e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2053_png.rf.7bfb5a3544b8700dd81162d5ee9791ed.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2079_png.rf.151bd9b6ca23a56ac3142c3113161367.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2104_png.rf.f86513b6512fb82be16a1fef7bc02f4b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2107_png.rf.4fa141f0507e5c721434639607d096f1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2151_png.rf.2741083e6ea85884b49ef7f54c838a77.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2158_png.rf.76dc35b5f3f26c53ef3ef6cd616b36c2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2176_png.rf.3d212953676a8972032d667f73c4a083.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2221_png.rf.4dbf29fbb1592cbb865e8c5ce776f6bf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2322_png.rf.783fdfa3d66cd392ddf15905bda990bc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2323_png.rf.d20d4e132bec883142e09b8250f0d074.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2324_png.rf.54a04fb6348979eb09fb9ddd9eecc495.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2327_png.rf.b1b148c36897866136e424765ee22da4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2363_png.rf.de9d3ebac39860ddab5c8345b078f09b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2407_png.rf.0ee209b7c8423d3ccdb5f100ff846684.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2422_png.rf.7b7f0c2c5c615533862fb03a05054382.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2436_png.rf.46d34cbd1f9cbf69e66d954c49ed7f33.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2437_png.rf.c85a1889dcd26afc79510a0416db80ba.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2449_png.rf.b7210b69d269013514f76fbd94d08bd3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2471_png.rf.ce0f087a428597575cf9a0643174d9e3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2480_png.rf.23baf1f9d872c6c70deee7f0d49e7aa0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2511_png.rf.33a5af4f27b07cbf4949b943801ee4fb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2671_png.rf.69e4457e1c685c95627e08386df0779e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2683_png.rf.203e897db9c76d5b0ec49c34a2190fde.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2684_png.rf.be15bc5459af3f0f17485e0837d3a9b4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2691_png.rf.c84af058e2a70feecbdb418883e09517.pdf",
+    "expectedKeywords": [[]]
   }
 ]
