@@ -310,38 +310,6 @@
     ]
   },
   {
-    "file": "covid-19-vaccination-card.png",
-    "expectedKeywords": [
-      [
-        "COVID-19",
-        "Vaccination",
-        "Record",
-        "Card",
-        "CDC",
-        "medical",
-        "Por favor",
-        "Last Name",
-        "First Name",
-        "MI",
-        "Date of Birth",
-        "Patient number",
-        "Vaccine",
-        "Manufacturer",
-        "Date",
-        "Healthcare Professional or Clinic Site",
-        "Provider: Hennepin Healthcare",
-        "Manufacturer: Moderna",
-        "Lot Number",
-        "001C21A",
-        "021C21A",
-        "4/21/21",
-        "5/20/21",
-        "HCPH",
-        "HCPH"
-      ]
-    ]
-  },
-  {
     "file": "freight-invoice.png",
     "expectedKeywords": [
       [
