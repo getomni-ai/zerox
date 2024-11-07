@@ -442,7 +442,7 @@
     ]
   },
   {
-    "file": "bill-of-landing-freight.png",
+    "file": "0011.png",
     "expectedKeywords": [
       [
         "Bill of Lading",
@@ -483,7 +483,7 @@
     ]
   },
   {
-    "file": "freight-invoice.png",
+    "file": "0012.png",
     "expectedKeywords": [
       [
         "UniformSoftware",
@@ -523,7 +523,7 @@
     ]
   },
   {
-    "file": "investment-portfolio-analysis-report.pdf",
+    "file": "0013.pdf",
     "expectedKeywords": [
       [
         "MSFT",
@@ -602,7 +602,7 @@
     ]
   },
   {
-    "file": "investment-portfolio-dashboard.png",
+    "file": "0014.png",
     "expectedKeywords": [
       [
         "Last quote update:",
@@ -644,7 +644,7 @@
     ]
   },
   {
-    "file": "invoice-chinese.png",
+    "file": "0015.png",
     "expectedKeywords": [
       [
         "通行费",
@@ -684,7 +684,7 @@
     ]
   },
   {
-    "file": "peanut-butter-label.pdf",
+    "file": "0016.pdf",
     "expectedKeywords": [
       [
         "Valori Nutrizionali",
@@ -711,7 +711,7 @@
     ]
   },
   {
-    "file": "product-quotes-japanese.pdf",
+    "file": "0017.pdf",
     "expectedKeywords": [
       [
         "御 見 積 書",
@@ -747,7 +747,7 @@
     ]
   },
   {
-    "file": "tesla-10-Q.pdf",
+    "file": "0018.pdf",
     "expectedKeywords": [
       [
         "Tesla Inc.",
@@ -822,7 +822,7 @@
     ]
   },
   {
-    "file": "walmart-receipt.png",
+    "file": "0019.png",
     "expectedKeywords": [
       "Walmart",
       "win $1000",
@@ -859,6 +859,45 @@
       "04/27/19",
       "12:59:46",
       "Scan with Walmart app to save receipt"
+    ]
+  },
+  {
+    "file": "0020.png",
+    "expectedKeywords": [
+      [
+        "ZESTADO EXPRESS",
+        "ABN",
+        "16 112 221 123",
+        "Bill To",
+        "Custom Board Makeers",
+        "Administration Centre",
+        "12 Salvage Road",
+        "Acaacia Ridge BC QLD 4110",
+        "Australia",
+        "Issue Date",
+        "8th December 2021",
+        "Account No.",
+        "101234",
+        "Invoice Amount",
+        "$5,270.00 AUD",
+        "Pay By",
+        "15th December 2021",
+        "Waybill No.",
+        "012345A",
+        "GC12345",
+        "sales.gc@customboards.com",
+        "Surfboards",
+        "1,010 kg",
+        "Kahului Maui Hawaii Port",
+        "Maui Surf Shop",
+        "13' x 18\" x 3\"",
+        "Eco High Performance Mini Mals",
+        "$1,980.00",
+        "4321-A1 XL Custom Supreme Light Stand Up",
+        "13' x 18\" x 3\"",
+        "$1,035.00",
+        "$1,210.00"
+      ]
     ]
   }
 ]
