@@ -24,6 +24,8 @@ export const zerox = async ({
   openaiAPIKey = "",
   outputDir,
   pagesToConvertAsImages = -1,
+  postprocessingCallback,
+  preprocessingCallback,
   tempDir = os.tmpdir(),
   trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
@@ -127,6 +129,10 @@ export const zerox = async ({
     const processPage = async (image: string): Promise<string | null> => {
       const imagePath = path.join(tempDirectory, image);
       try {
+        if (preprocessingCallback) {
+          await preprocessingCallback(imagePath);
+        }
+
         const { content, inputTokens, outputTokens } = await getCompletion({
           apiKey: openaiAPIKey,
           imagePath,
@@ -141,6 +147,10 @@ export const zerox = async ({
 
         // Update prior page to result from last processing step
         priorPage = formattedMarkdown;
+
+        if (postprocessingCallback) {
+          await postprocessingCallback(content);
+        }
 
         // Add all markdown results to array
         return formattedMarkdown;

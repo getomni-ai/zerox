@@ -9,6 +9,8 @@ export interface ZeroxArgs {
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
+  postprocessingCallback?: (content: string) => Promise<void>;
+  preprocessingCallback?: (imagePath: string | Buffer) => Promise<void>;
   tempDir?: string;
   trimEdges?: boolean;
 }
