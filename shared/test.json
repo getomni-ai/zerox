@@ -269,7 +269,7 @@
     ]
   },
   {
-    "file": "0005.pdf",
+    "file": "0005.png",
     "expectedKeywords": [
       [
         "Quest",
@@ -305,7 +305,7 @@
     ]
   },
   {
-    "file": "0006.pdf",
+    "file": "0006.png",
     "expectedKeywords": [
       [
         "T-Mobile",
@@ -330,7 +330,7 @@
     ]
   },
   {
-    "file": "0007.pdf",
+    "file": "0007.png",
     "expectedKeywords": [
       [
         "LABCORP",
@@ -357,7 +357,7 @@
     ]
   },
   {
-    "file": "0008.pdf",
+    "file": "0008.png",
     "expectedKeywords": [
       [
         "LABCORP LCLS BULK",
@@ -385,7 +385,7 @@
     ]
   },
   {
-    "file": "0009.pdf",
+    "file": "0009.png",
     "expectedKeywords": [
       [
         "3106932528",
@@ -416,7 +416,7 @@
     ]
   },
   {
-    "file": "0010.pdf",
+    "file": "0010.png",
     "expectedKeywords": [
       [
         "02/16/2019 6:09:27 PM",
@@ -1046,97 +1046,105 @@
   {
     "file": "0027.png",
     "expectedKeywords": [
-      "Pennsylvania",
-      "IDENTIFICATION",
-      "visitPA.com",
-      "99 999 999",
-      "DUPS",
-      "01/07/1973",
-      "ANDREW JASON",
-      "123 MAIN STREET",
-      "HARRISBURG",
-      "17101-0000",
-      "01/31/2026",
-      "01/07/2022",
-      "HGT",
-      "1234567890123",
-      "456789012345",
-      "Andrew",
-      "Sample"
+      [
+        "Pennsylvania",
+        "IDENTIFICATION",
+        "visitPA.com",
+        "99 999 999",
+        "DUPS",
+        "01/07/1973",
+        "ANDREW JASON",
+        "123 MAIN STREET",
+        "HARRISBURG",
+        "17101-0000",
+        "01/31/2026",
+        "01/07/2022",
+        "HGT",
+        "1234567890123",
+        "456789012345",
+        "Andrew",
+        "Sample"
+      ]
     ]
   },
   {
     "file": "0028.png",
     "expectedKeywords": [
-      "CALIFORNIA",
-      "1970",
-      "Ronald J. Thomas",
-      "ADMINISTRATOR",
-      "David Franklin Thomas",
-      "5798 Olive St",
-      "Calif",
-      "95969",
-      "W106438",
-      "Gry",
-      "COLOR EYES",
-      "Blu",
-      "DATE OF BIRTH",
-      "Aug 20, 1892",
-      "Corrective",
-      "D. F. Thomas",
-      "6,000 LBS",
-      "Paradise",
-      "8-4-65"
+      [
+        "CALIFORNIA",
+        "1970",
+        "Ronald J. Thomas",
+        "ADMINISTRATOR",
+        "David Franklin Thomas",
+        "5798 Olive St",
+        "Calif",
+        "95969",
+        "W106438",
+        "Gry",
+        "COLOR EYES",
+        "Blu",
+        "DATE OF BIRTH",
+        "Aug 20, 1892",
+        "Corrective",
+        "D. F. Thomas",
+        "6,000 LBS",
+        "Paradise",
+        "8-4-65"
+      ]
     ]
   },
   {
     "file": "0029.png",
     "expectedKeywords": [
-      "CALIFORNIA",
-      "OPERATING",
-      "1984",
-      "W0209369",
-      "James Scott Garner",
-      "35 Oakmont Dr",
-      "90049",
-      "Blk",
-      "Brn",
-      "6-3",
-      "PRE LIC EXP",
-      "4-7-23",
-      "CORRECTIVE",
-      "CONDITIONS",
-      "CLASS 3",
-      "SECTION 12804",
-      "James S. Garner",
-      "3-25-80",
-      "Gln rc",
-      "LAMINATE"
+      [
+        "CALIFORNIA",
+        "OPERATING",
+        "1984",
+        "W0209369",
+        "James Scott Garner",
+        "35 Oakmont Dr",
+        "90049",
+        "Blk",
+        "Brn",
+        "6-3",
+        "PRE LIC EXP",
+        "4-7-23",
+        "CORRECTIVE",
+        "CONDITIONS",
+        "CLASS 3",
+        "SECTION 12804",
+        "James S. Garner",
+        "3-25-80",
+        "Gln rc",
+        "LAMINATE"
+      ]
     ]
   },
   {
     "file": "0030.png",
     "expectedKeywords": [
-      "CALIFORNIA",
-      "DRIVER",
-      "RENEWAL",
-      "BIRTHDAY",
-      "N2287802",
-      "Shanaberger",
-      "1541 Beloit Ave",
-      "#208",
-      "90025",
-      "Brn",
-      "HEIGHT",
-      "5-6",
-      "130",
-      "CORRECTIVE",
-      "CONDITIONS",
-      "CLASS 3",
-      "SECTION 12804",
-      "08-21-80",
-      "Tor mw",
-      "LAMINATE"
+      [
+        "CALIFORNIA",
+        "DRIVER",
+        "RENEWAL",
+        "BIRTHDAY",
+        "N2287802",
+        "Shanaberger",
+        "1541 Beloit Ave",
+        "#208",
+        "90025",
+        "Brn",
+        "HEIGHT",
+        "5-6",
+        "130",
+        "CORRECTIVE",
+        "CONDITIONS",
+        "CLASS 3",
+        "SECTION 12804",
+        "08-21-80",
+        "Tor mw",
+        "LAMINATE"
+      ]
     ]
   }
 ]
