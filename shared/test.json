@@ -1146,5 +1146,236 @@
         "LAMINATE"
       ]
     ]
+  },
+  {
+    "file": "0031.png",
+    "expectedKeywords": [
+      [
+        "SIGNATURE",
+        "TITULAIRE",
+        "FIRMA DEL TITULAR",
+        "PASAPORTE",
+        "UNITED STATES OF AMERICA",
+        "Codigo",
+        "546844936",
+        "Apellidos",
+        "ABRENICA",
+        "Date de naissance",
+        "Lugar de nacimiento",
+        "NEW YORK",
+        "06 Jun 2016",
+        "Autoridad",
+        "SEE PAGE 27",
+        "<USAAABRENICA<<JARED<MICHAEL",
+        "5468449363USA0102100M2106054275193173<681306"
+      ]
+    ]
+  },
+  {
+    "file": "0032.png",
+    "expectedKeywords": [
+      [
+        "ENDORSEMENTS AND LIMITATIONS",
+        "OBSERVATIONS BEGINNING",
+        "MENTIONS ET RESTRICTIONS",
+        "l'intention",
+        "GK141569",
+        "CANADA",
+        "Pays émetteur",
+        "passeport",
+        "MANN",
+        "Prénoms",
+        "JASKARAN SINGH",
+        "CANADIENNE",
+        "naissance",
+        "JNAOIA",
+        "délivrance",
+        "TORONTO",
+        "CANMANN<<JASKARAN<<SINGH",
+        "GK141569<8CAN8607294M2707202",
+        "ED197265"
+      ]
+    ]
+  },
+  {
+    "file": "0033.png",
+    "expectedKeywords": [
+      [
+        "Assinatura",
+        "Ce passeport",
+        "caso de incapacidad",
+        "AA000000",
+        "REPÚBLICA FEDERATIVA DO BRASIL",
+        "PAÍS EMISSOR",
+        "SOBRENOME",
+        "FARIAS DOS SANTOS",
+        "NOME",
+        "RODRIGO",
+        "BRASILEIRO(A)",
+        "16 MAR/MAR 2004",
+        "BRASÍLIA/DF",
+        "AMANDA FARIAS DOS SANTOS",
+        "Res. CNJ 131/11, Art. 13.",
+        "P<BRAFARIAS<DOS<SANTOS<<RODRIGO",
+        "AA000000<0BRA0403162M2507053"
+      ]
+    ]
+  },
+  {
+    "file": "0034.png",
+    "expectedKeywords": [
+      [
+        "ENDORSEMENTS AND LIMITATIONS",
+        "PAGE 5 (IF APPLICABLE)",
+        "MENTIONS ET RESTRICTIONS",
+        "HK444152",
+        "CANADA",
+        "Issuing Country",
+        "WITTMACK",
+        "Prénoms",
+        "BRIAN FREDRICK",
+        "Date de naissance",
+        "01 NOV 47",
+        "CONSORT CAN",
+        "Date d'expiration",
+        "MISSISSAUGA",
+        "P<CANWITTMACK<<BRIAN<FREDRICK",
+        "HK444152<5CAN4711018M2606130",
+        "EGD69494"
+      ]
+    ]
+  },
+  {
+    "file": "0035.png",
+    "expectedKeywords": [
+      [
+        "OBSERVATIONS OFFICIELLES (11)",
+        "UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND",
+        "518242591",
+        "Surname/Nom (1)",
+        "BRITISH CITIZEN",
+        "CROYDON",
+        "Date of expiry",
+        "24 APR / AVR 24",
+        "Holder's signature",
+        "P<GBRWEBB<<JAMES<ROBERT",
+        "5182425917GBR7702174M2404244"
+      ]
+    ]
+  },
+  {
+    "file": "0036.png",
+    "expectedKeywords": [
+      [
+        "RESIDENZA",
+        "TORINO (TO)",
+        "COLORE DEGLI OCCHI",
+        "MARRONI",
+        "REPUBBLICA ITALIANA",
+        "Tipo. Type. Type.",
+        "Codice Paese.",
+        "YA8116396",
+        "TREVISAN",
+        "Nome. Given Names. Prénoms. (2)",
+        "FELTRE (BL)",
+        "MINISTRO AFFARI ESTERI",
+        "E COOPERAZIONE INTERNAZIONALE",
+        "Firma del titolare",
+        "P<ITATREVISAN<<MARCO",
+        "YA81163966ITA6602129M2507097"
+      ]
+    ]
+  },
+  {
+    "file": "0037.png",
+    "expectedKeywords": [
+      [
+        "We the People",
+        "insure domestic Tranquility",
+        "Constitution for the United States of America",
+        "SIGNATURE OF BEARER",
+        "UNITED STATES OF AMERICA",
+        "Código",
+        "910239248",
+        "Apellidos",
+        "OBAMA",
+        "Date de naissance",
+        "17 Jan 1964",
+        "ILLINOIS, U.S.A.",
+        "Authority / Autorité / Autoridad",
+        "SEE PAGE 51",
+        "P<USABOBAMA<<MICHELLE",
+        "9102392482USA6401171F1812051900781200<129676"
+      ]
+    ]
+  },
+  {
+    "file": "0038.png",
+    "expectedKeywords": [
+      [
+        "Of the United States",
+        "PASSPORT",
+        "PASSEPORT",
+        "PASAPORTE",
+        "Code / Code / Código",
+        "488839667",
+        "VOLD",
+        "STEPHEN HANSL",
+        "Nationality / Nationalité / Nacionalidad",
+        "WASHINGTON, U.S.A.",
+        "21 May 2012",
+        "United States Department of State",
+        "Mentions Spéciale",
+        "SEE PAGE 51",
+        "P<USAVOLD<<STEPHEN<HANSL",
+        "4888396671USA6008156M220520112117147143<509936"
+      ]
+    ]
+  },
+  {
+    "file": "0039.png",
+    "expectedKeywords": [
+      [
+        "insure domestic Tranquility",
+        "Constitution for the United States of America.",
+        "PASSPORT",
+        "PASSEPORT",
+        "PASAPORTE",
+        "USA",
+        "Type / Type / Tipo",
+        "963545637",
+        "JOHN",
+        "15 Mar 1996",
+        "Fecha de expedición",
+        "United States Department of State",
+        "Endorsements",
+        "Mentions Spéciales",
+        "Anotaciones",
+        "SEE PAGE 17",
+        "P<USAJOHN<<DOE",
+        "9635456374USA9603150M27041402O2113962<804330"
+      ]
+    ]
+  },
+  {
+    "file": "0040.png",
+    "expectedKeywords": [
+      [
+        "OBSERVATIONS OFFICIELLES (11)",
+        "UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND",
+        "Code/Code",
+        "925600253",
+        "UK SPECIMEN",
+        "Prénoms (2)",
+        "ANGELA ZOE",
+        "Nationality",
+        "Nationalité",
+        "CROYDON",
+        "16 JUL / JUIL 10",
+        "Holder's signature",
+        "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<",
+        "9256002538GBR8809117F2007162"
+      ]
+    ]
   }
 ]
