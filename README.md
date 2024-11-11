@@ -73,6 +73,7 @@ const result = await zerox({
   openaiAPIKey: process.env.OPENAI_API_KEY,
 
   // Optional
+  chunk: false, // Return JSON array of elements on each page
   cleanup: true, // Clear images from tmp after run.
   concurrency: 10, // Number of pages to run at a time.
   correctOrientation: true, // True by default, attempts to identify and correct page orientation.
@@ -97,6 +98,7 @@ Request #3 => page_2_markdown + page_3_image
 
 ```js
 {
+  chunks: [],
   completionTime: 10038,
   fileName: 'invoice_36258',
   inputTokens: 25543,
