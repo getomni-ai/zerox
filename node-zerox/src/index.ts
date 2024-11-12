@@ -21,11 +21,11 @@ export const zerox = async ({
   llmParams = {},
   maintainFormat = false,
   model = ModelOptions.gpt_4o_mini,
+  onPostProcess,
+  onPreProcess,
   openaiAPIKey = "",
   outputDir,
   pagesToConvertAsImages = -1,
-  postprocessingCallback,
-  preprocessingCallback,
   tempDir = os.tmpdir(),
   trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
@@ -129,8 +129,8 @@ export const zerox = async ({
     const processPage = async (image: string): Promise<string | null> => {
       const imagePath = path.join(tempDirectory, image);
       try {
-        if (preprocessingCallback) {
-          await preprocessingCallback(imagePath);
+        if (onPreProcess) {
+          await onPreProcess({ imagePath });
         }
 
         const { content, inputTokens, outputTokens } = await getCompletion({
@@ -148,8 +148,8 @@ export const zerox = async ({
         // Update prior page to result from last processing step
         priorPage = formattedMarkdown;
 
-        if (postprocessingCallback) {
-          await postprocessingCallback(content);
+        if (onPostProcess) {
+          await onPostProcess({ content });
         }
 
         // Add all markdown results to array
