@@ -1,5 +1,9 @@
 import { CompletionArgs, CompletionResponse } from "./types";
-import { convertKeysToSnakeCase, encodeImageToBase64 } from "./utils";
+import {
+  convertKeysToSnakeCase,
+  encodeImageToBase64,
+  markdownToJson,
+} from "./utils";
 import axios from "axios";
 
 export const getCompletion = async ({
@@ -8,7 +12,9 @@ export const getCompletion = async ({
   llmParams,
   maintainFormat,
   model,
+  pageNumber,
   priorPage,
+  debugData,
 }: CompletionArgs): Promise<CompletionResponse> => {
   const systemPrompt = `
     Convert the following PDF page to markdown.
@@ -58,10 +64,20 @@ export const getCompletion = async ({
 
     const data = response.data;
 
+    const [jsonOutput, html] = await markdownToJson(
+      data.choices[0].message.content,
+      pageNumber,
+      debugData
+    );
+
+    // console.log(JSON.stringify(jsonOutput, null, 2))
+
     return {
       content: data.choices[0].message.content,
       inputTokens: data.usage.prompt_tokens,
       outputTokens: data.usage.completion_tokens,
+      structuredContent: jsonOutput,
+      html
     };
   } catch (err) {
     console.error("Error in OpenAI completion", err);

@@ -1,6 +1,13 @@
 import { convert } from "libreoffice-convert";
 import { fromPath } from "pdf2pic";
-import { LLMParams } from "./types";
+import {
+  ConvertedNodeType,
+  ListItem,
+  LLMParams,
+  MdNodeType,
+  ParentId,
+  ProcessedNode,
+} from "./types";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
 import * as Tesseract from "tesseract.js";
@@ -9,6 +16,7 @@ import fs from "fs-extra";
 import mime from "mime-types";
 import path from "path";
 import sharp from "sharp";
+import { nanoid } from "nanoid";
 
 const convertAsync = promisify(convert);
 
@@ -310,4 +318,257 @@ export const convertKeysToSnakeCase = (
   return Object.fromEntries(
     Object.entries(obj).map(([key, value]) => [camelToSnakeCase(key), value])
   );
+};
+
+/**
+ *
+ * @param markdownString String - Markdown text
+ * @param page Number - Page number
+ * @returns ProcessedNode[] - Array of processed nodes
+ */
+export const markdownToJson = async (markdownString: string, page: number, debugData: any) => {
+  /**
+   * Bypassing typescript transpiler using eval to use dynamic imports
+   *
+   * Source: https://stackoverflow.com/a/70546326
+   */
+  const { unified } = await eval(`import('unified')`);
+  const { default: remarkParse } = await eval(`import('remark-parse')`);
+  const { default: remarkGfm } = await eval(`import('remark-gfm')`);
+  const { default: remarkRehype } = await eval(`import('remark-rehype')`);
+  const { default: rehypeStringify } = await eval(`import('rehype-stringify')`);
+
+  const parsedMd = unified()
+    .use(remarkParse) // Parse Markdown to AST
+    .use(remarkGfm)
+    .parse(markdownString);
+
+    // console.log('===', JSON.stringify(parsedMd))
+  const html = await unified()
+    .use(remarkParse) // Parse Markdown to AST
+    .use(remarkGfm)
+    .use(remarkRehype)
+    .use(rehypeStringify)
+    .process(markdownString);
+
+  // console.log("html =>", html);
+  const parentIdManager: ParentId[] = [];
+
+  const processedNodes: ProcessedNode[] = [];
+  parsedMd.children.forEach((sourceNode: any) => {
+    const isHeading = sourceNode.type === MdNodeType.heading;
+
+    if (isHeading && sourceNode.depth <= (parentIdManager.at(-1)?.depth || 0)) {
+      for (let i = parentIdManager.length; i > 0; i--) {
+        parentIdManager.pop();
+        if (sourceNode.depth > (parentIdManager.at(-1)?.depth || 0)) {
+          break;
+        }
+      }
+    }
+    const processedNode = processRootNode(
+      sourceNode,
+      page,
+      parentIdManager.at(-1)?.id,
+      debugData
+    );
+
+    if (isHeading) {
+      parentIdManager.push({
+        id: processedNode[0].id,
+        depth: sourceNode.depth,
+      });
+    }
+
+    processedNodes.push(...processedNode);
+  });
+
+  return [processedNodes, html];
+};
+
+// MD (mdast) type source: https://github.com/syntax-tree/mdast?tab=readme-ov-file
+
+// All of the parent nodes are composed of these literals.
+const literals = new Set([
+  MdNodeType.code,
+  MdNodeType.html,
+  MdNodeType.inlineCode,
+  MdNodeType.text,
+]);
+
+// No data will be pulled from these nodes.
+const ignoreNodeTypes = new Set([
+  MdNodeType.break,
+  MdNodeType.definition,
+  MdNodeType.image,
+  MdNodeType.imageReference,
+  MdNodeType.thematicBreak,
+]);
+
+const gatherValue = (result: any) =>
+  result.filter((r: any) => Boolean(r)).map((r: any) => r.mainNode.value);
+const gatherSiblings = (result: any) =>
+  result.reduce(
+    (acc: any[], r: any) => (Boolean(r) ? acc.concat(r.siblings) : acc),
+    []
+  );
+
+const nodeProcessors = {
+  // Default processor for "literal" nodes
+  literal: (node: any) => ({ value: node.value, siblings: [] }),
+  [MdNodeType.list]: (node: any, page: number) => {
+    const result = node.children.map((childNode: any) =>
+      processNode(childNode, page)
+    );
+
+    return {
+      value: gatherValue(result),
+      siblings: gatherSiblings(result),
+    };
+  },
+  [MdNodeType.listItem]: (node: any, page: number) => {
+    const result = processListItem(node, page);
+    return {
+      value: result.node,
+      siblings: result.siblings,
+    };
+  },
+  [MdNodeType.table]: (node: any, page: number, debugData?: any) => {
+    const [headerNodes, ...rowNodes] = node.children;
+
+    const headers = headerNodes.children.map((child: any) => {
+      const pn = processNode(child, page)?.mainNode;
+      return pn ? { value: pn.value, id: pn.id } : {};
+    });
+
+    let logDebug = false
+    const rows = rowNodes.map((rowNode: any) => {
+      return Object.fromEntries(
+        rowNode.children.map((cellNode: any, idx: number) => {
+          if (idx >= headers.length) {
+            logDebug = true;
+          }
+
+          const headerId = headers[idx]?.id;
+          if (!headerId) return [];
+
+          return [
+            headerId,
+            cellNode.children
+              .map((child: any) => processNode(child, page)?.mainNode.value)
+              .join(" "),
+          ];
+        })
+      );
+    });
+
+    if (logDebug) console.log('Header length and row cell length mismatch: ', JSON.stringify(headers), JSON.stringify(debugData))
+
+    return {
+      value: {
+        headers,
+        rows,
+      },
+      siblings: [],
+    };
+  },
+  // Default processor for "parent" nodes
+  parent: (node: any, page: number) => {
+    const result: string[] = node.children.map((childNode: any) =>
+      processNode(childNode, page)
+    );
+
+    return {
+      value: gatherValue(result).join(" "),
+      siblings: gatherSiblings(result),
+    };
+  },
+};
+
+const processRootNode = (
+  node: any,
+  page: number,
+  parentId?: string,
+  debugData?: any
+): ProcessedNode[] => {
+  const nodes = processNode(node, page, parentId, debugData);
+
+  if (!nodes) return [];
+
+  return [nodes.mainNode, ...nodes.siblings];
+};
+
+const processNode = (
+  node: any,
+  page: number,
+  parentId?: string,
+  debugData?: any
+): { mainNode: ProcessedNode; siblings: ProcessedNode[] } | undefined => {
+  let value: string | ListItem[];
+  let siblingNodes: ProcessedNode[] = [];
+  let result;
+
+  if (literals.has(node.type)) {
+    result = nodeProcessors["literal"](node);
+  } else if (node.type in nodeProcessors) {
+    result = nodeProcessors[node.type as keyof typeof nodeProcessors](
+      node,
+      page,
+      debugData
+    );
+  } else if (!ignoreNodeTypes.has(node.type)) {
+    result = nodeProcessors["parent"](node, page);
+  } else {
+    return;
+  }
+
+  value = result.value;
+  siblingNodes = result.siblings;
+
+  return {
+    mainNode: {
+      id: nanoid(),
+      page,
+      parentId,
+      type:
+        ConvertedNodeType[node.type as ConvertedNodeType] ||
+        ConvertedNodeType.text,
+      value: value as any,
+    },
+    siblings: siblingNodes,
+  };
+};
+
+const processListItem = (node: any, page: number) => {
+  let newNode: ProcessedNode | undefined;
+  let siblings: ProcessedNode[] = [];
+
+  node.children.forEach((childNode: any) => {
+    if (childNode.type !== MdNodeType.list) {
+      const processedNode = processNode(childNode, page);
+      if (!processedNode) return;
+
+      if (newNode) {
+        newNode.value += processedNode.mainNode.value as string;
+      } else {
+        newNode = processedNode.mainNode;
+      }
+      siblings.push(...processedNode.siblings);
+    } else {
+      if (!newNode) {
+        newNode = {
+          id: nanoid(),
+          parentId: undefined,
+          type: ConvertedNodeType.text,
+          value: "",
+        };
+      }
+
+      const processedNode = processNode(childNode, page, newNode?.id);
+      if (processedNode)
+        siblings.push(processedNode.mainNode, ...processedNode.siblings);
+    }
+  });
+
+  return { node: newNode, siblings };
 };

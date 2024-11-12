@@ -1,271 +1,4002 @@
 [
   {
-    "file": "0001.png",
-    "expectedKeywords": [
-      [
-        "Department of the Treasury",
-        "Internal Revenue Service",
-        "U.S. Individual Income Tax Return",
-        "2023",
-        "OMB No. 1545-0074",
-        "IRS Use Only",
-        "Do not write or staple in this space.",
-        "For the year",
-        "Jan. 1",
-        "Dec. 31, 2023",
-        "other tax year beginning",
-        "See separate instructions",
-        "Your first name and middle initial",
-        "JOSEPH R",
-        "Last name",
-        "BIDEN JR",
-        "Your social security number",
-        "If joint return, spouse's first name and middle initial",
-        "JILL T",
-        "Spouse's social security number",
-        "Home address (number and street)",
-        "If you have a P.O. box, see instructions",
-        "Apt. no.",
-        "City, town, or post office",
-        "If you have a foreign address, also complete spaces below",
-        "Foreign country name",
-        "Foreign province/state/county",
-        "Foreign postal code",
-        "Presidential Election Campaign",
-        "Check here if you, or your spouse if filing jointly, want $3 to go to this fund",
-        "Checking a box below will not change your tax or refund",
-        "Check only one box",
-        "Single",
-        "Married filing jointly (even if only one had income)",
-        "Married filing separately (MFS)",
-        "Head of Household (HoH)",
-        "Qualifying surviving spouse (QSS)",
-        "If you checked the MFS box, enter the name of your spouse",
-        "If you checked the HOH or QSS box, enter the child's name if the qualifying person is a child but not your dependent",
-        "Digital Assets",
-        "At any time during 2023",
-        "receive (as a reward, award, or payment for property or services)",
-        "sell, exchange, or otherwise dispose of a digital asset",
-        "or a financial interest in a digital asset",
-        "See instructions",
-        "Standard Deduction",
-        "Someone can claim",
-        "You as a dependent",
-        "Your spouse as a dependent",
-        "Spouse itemizes on a separate return or you were a dual-status alien",
-        "Age/Blindness",
-        "Were born before January 2, 1959",
-        "Are blind",
-        "Is blind",
-        "If more than four dependents",
-        "If more than four dependents, see Instr. and check here",
-        "First name Last name",
-        "Social security number",
-        "Relationship to you",
-        "Check the box if qualifies for (see instr.)",
-        "Child tax credit",
-        "Credit for other dependents",
-        "Total amount from Form(s) W-2, box 1 (see instructions)",
-        "STMT 1",
-        "485,985"
-      ]
-    ]
+    "file": "10035_png.rf.07e8e5bf2e9ad4e77a84fd38d1f53f38.pdf",
+    "expectedKeywords": [[]]
   },
   {
-    "file": "0002.pdf",
-    "expectedKeywords": [
-      [
-        "Deloitte",
-        "Quality System Audit for BioTech Innovations (Pty) Ltd",
-        "02 October 2024",
-        "67 River Rd",
-        "Kensington",
-        "Johannesburg",
-        "Gauteng",
-        "2094",
-        "South Africa",
-        "06h30",
-        "Contact Person",
-        "Kathy Margaret",
-        "+14 22 045 4952",
-        "Opening Meeting Agenda",
-        "Introductions",
-        "Review of audit agenda",
-        "Confirmation of availability for required persons",
-        "Anna Pojawis",
-        "Tyler Maran",
-        "Kathy Margaret",
-        "Mark Ding",
-        "CTO",
-        "CEO",
-        "Associate",
-        "Eng",
-        "anna@getomni.ai",
-        "tyler@getomni.ai",
-        "kmargaret@qaconsultants.com",
-        "mark@getomni.ai",
-        "QAC Auditor",
-        "David Thompson",
-        "Lead Quality Auditor",
-        "NTA Services on behalf of BioTech Innovations",
-        "Biopharmaceuticals",
-        "Page 1 of 7",
-        "DELOITTE QUALITY ASSURANCE CONSULTANTS, LLC",
-        "450 Oceanview Drive",
-        "Suite 200",
-        "Santa Monica",
-        "CA 90405",
-        "(800) 555-1234",
-        "(310) 555-7890",
-        "(310) 555-4567",
-        "www.qaconsultants.com",
-        "contact@qaconsultants.com"
-      ]
-    ]
+    "file": "10091_png.rf.a90765e31cc48705fb7241b99bef4472.pdf",
+    "expectedKeywords": [[]]
   },
   {
-    "file": "0003.pdf",
-    "expectedKeywords": [
-      [
-        "Short Time Overload",
-        "Insulation Resistance",
-        "Endurance",
-        "Damp Heat with Load",
-        "Solderability",
-        "Dielectric Withstanding Voltage",
-        "Temperature Coefficient",
-        "Pulse Overload",
-        "Resistance To Solvent",
-        "Terminal Strength",
-        "Carbon Film Leader Resistor",
-        "Environmental Characteristics",
-        "Rated Continuous Working Voltage",
-        "Storage Temperature",
-        "JIS-C-5201-1 5.5",
-        "JIS-C-5201-1 5.6",
-        "JIS-C-5201-1 7.10",
-        "JIS-C-5201-1 7.9",
-        "JIS-C-5201-1 6.5",
-        "JIS-C-5201-1 5.7",
-        "Resistance value at room temperature",
-        "Temperature+100°C",
-        "JIS-C-5201-1 5.8",
-        "JIS-C-5201-1 6.9",
-        "Direct Load for 10 seconds",
-        "In the direction off the terminal leads",
-        "working voltage for 1000",
-        "overload voltage for 5 seconds",
-        "10000 cycles with 1 second",
-        "and 25 seconds",
-        "Trichroethane",
-        "70±2°C",
-        "100V",
-        "DC",
-        "40±2°C",
-        "245±5°C",
-        "RCWV*2.5",
-        "4 times RCWV for 10000 cycles",
-        ">1000MΩ",
-        "100KΩ±3%",
-        "100KΩ±5%",
-        "90% min. Coverage",
-        "350ppm",
-        "500ppm",
-        "100KΩ",
-        "700ppm",
-        "1500ppm",
-        "No deterioration of coatings and markings",
-        "Tensile: 2.5 kg"
-      ]
-    ]
+    "file": "10157_png.rf.ff51bb01a4829affdb4cefe45089184a.pdf",
+    "expectedKeywords": [[]]
   },
   {
-    "file": "0004.pdf",
-    "expectedKeywords": [
-      [
-        "Improving",
-        "throught",
-        "Han",
-        "Abstract",
-        "Howard",
-        "community",
-        "530%",
-        "language",
-        "Wang",
-        "environments",
-        "confronted",
-        "technique",
-        "same",
-        "accurate",
-        "Methodology",
-        "dilution",
-        "illustrated",
-        "continually",
-        "stems"
-      ],
-      [
-        "Gemma",
-        "repeated",
-        "pronounced",
-        "designer",
-        "Llama",
-        "7.68±2.41s",
-        "significant",
-        "reiteration",
-        "22.50±11.19s",
-        "generate",
-        "reasoning",
-        "question",
-        "larger",
-        "2.0%",
-        "context",
-        "deviation",
-        "3.8B",
-        "ratio",
-        "unnecessary",
-        "Repetition",
-        "Experimentation",
-        "Conclusion",
-        "Transformers",
-        "PyTorch",
-        "24GB",
-        "Abdin",
-        "530%",
-        "Xu",
-        "github"
-      ],
-      [
-        "References",
-        "Jacobs",
-        "Nguyen",
-        "2404.14219",
-        "Abhimanyu",
-        "Ahmad",
-        "Yang",
-        "herd",
-        "Team",
-        "Riviere",
-        "Mesnard",
-        "Bobak",
-        "practical",
-        "Lei",
-        "186345",
-        "Frontiers",
-        "Jingsen",
-        "Jiakai",
-        "autonomous",
-        "compromising",
-        "quality",
-        "ICLR",
-        "Saizheng",
-        "HotpotQA",
-        "explainable",
-        "Natural",
-        "Representations",
-        "2023",
-        "Narasimhan",
-        "Eleventh"
-      ]
-    ]
+    "file": "10161_png.rf.13ce7d1eff7e864a9fff55c3327301af.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10163_png.rf.fc33d1d1087f08d8c9fe0ae56fb42b52.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10174_png.rf.524bbc04d95b46c14d903102045dc4ae.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10184_png.rf.394234e5055f28b0d774ce3e89f7ac31.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10190_png.rf.9f6b7af3f0606a8ec3539ea05100d8f7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10204_png.rf.a761b94d3da025306a0ed84bcf977725.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1020_png.rf.791459fc9d754704c18d8bc43d9a7c23.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10226_png.rf.35231c14b4c5c222d46e5dbda3a12b1e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1022_png.rf.408bd446aaeac918301615a8c7e96d73.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10230_png.rf.e7175c5ef8ba34223acebf1e0662c02d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10250_png.rf.cfd047fea9c412c6b70300f25b5531fa.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10274_png.rf.048601573c8a27b8bf97f6cc807d891d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "102_png.rf.ea958fa20403ff0f3c4408f5437445a8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10317_png.rf.7ea516056885f682e53bf4082506bc82.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10334_png.rf.c201975cb8f7eda582bcbb891540503d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10346_png.rf.5c5db7b47ab5b07e7fbaeced695a0d72.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10395_png.rf.5e157507a3c7533c25318bfa86319532.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10452_png.rf.35a38216b5ba1cbb013ae1175c601967.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10477_png.rf.0720fc9b0829d8616f5426fb98ec3450.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10493_png.rf.e0e724f0c23cd9a50319809f3fcbd43e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10521_png.rf.d668a20adafedba29c9d49a81b1cf8ea.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10537_png.rf.9e9e073d30e5161a6a1f1aca88729537.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10580_png.rf.256f138d50b8bb25c9f4838f1e739c8e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1059_png.rf.c5a9d8d8b7e151639a860a0e03daa414.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10683_png.rf.14782e25676fbfd5ee9b3bb59a85367f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10708_png.rf.c8880c45773c4abbfda7e8b2432ff058.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10711_png.rf.e197171a441592bf1066f87bb942ee95.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10737_png.rf.1c48af464db6dab30834db173f64f739.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10740_png.rf.05091f0d1908862c4b7107c4468f6844.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10751_png.rf.469971b42c78233132d249dac09e9981.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10754_png.rf.153d89a396cc3b44154e643e4e5aef57.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10816_png.rf.efff1a7e885379e43f714df920a26c75.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10827_png.rf.ed1851b0c828523a6bf4245da7cbbe02.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10858_png.rf.fc7c826a331ac35c8cedece41aa9c832.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10875_png.rf.ee30fbf83c731ed906dc499765c13aa9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10876_png.rf.eedad58b5a846f6a2836fe89ca93e0bf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1087_png.rf.2559975149bed879e8cae27257829788.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10903_png.rf.126631e0a330c6ced97ffee4cb151d6b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "10905_png.rf.56ae45dc4a291911b82f799de83f3276.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1102_png.rf.31ef0b87c7bba4f705ce5d53680332b9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11168_png.rf.acbbc142ff060735fd4fbbfee8b02a7b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1122_png.rf.3fe8f142fc81d8adfef1c7602c5662da.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1123_png.rf.a5c5a5f91a97729eb21d19b71afd786e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11261_png.rf.6e0002e75c09435d1708cbd1f2cfe632.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11300_png.rf.5077bb51c4dd0eda138a4c3d5905aeca.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11304_png.rf.309a58985772a28651db13e6dc53a0b1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11307_png.rf.5beb886d31505a0606fbc71ef35c11ab.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11348_png.rf.60abe40bdade45dd2dacd18b9e5699cc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11366_png.rf.94a09e854172606a6c21a5d5752a086f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11367_png.rf.57b92c4dca8489f67207093ebac038f9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11379_png.rf.64202b3ccf6d59e2c2731cd29af5ded9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11419_png.rf.c25c26d49ec5acd28b569bdd2bea3ea4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11483_png.rf.3824b704ffc8d1d3b2dac7adf4c07963.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11549_png.rf.b732d7a355697e78507bce9e264a515c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11556_png.rf.8383d200e9e213a8de1b961b5e1be136.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11565_png.rf.7a5d212ee9c6398cd76ba68bedbedebd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11572_png.rf.8f02456fdf9ed84f73d590d6eaf8ecb2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11599_png.rf.53505bf4d269f3948b886af6da8cb0c4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11620_png.rf.bdbde90c046d8597f24b31865f31c182.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11622_png.rf.633d63b32f836c5e90950c84da8353a7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11623_png.rf.4f34d1717718c0b21d21381143d195f5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11624_png.rf.f7357fb6b62bfd2128f43a1a5f5b2db3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11625_png.rf.6161f71cf181b89fc0f3001e3a422469.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11626_png.rf.b7aa313d8bced11c508b9718fa4dda94.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11628_png.rf.88d017eda38bf2920e79fb65362c3749.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11644_png.rf.d29243c3d831ff7a981b4df2a9c16076.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1174_png.rf.6f823c357bfdd1b13ae2635d65f257a1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11900_png.rf.113aec8d0964d76074addaff9c9226d6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11906_png.rf.12ce0ddb44b4ffa0cddd06f176a860c1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11930_png.rf.1f15ea7fe942c5b52933ea9a02822a8c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "11995_png.rf.26bf49c56d0745e600a2d8a2fe5a6bd0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12017_png.rf.9baf00b2b11403d69ab8e48b84261c39.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12030_png.rf.17eb8c2f12b5c18d2c171556d262d728.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12047_png.rf.e26380c26ede71e8d258e3101b6bb916.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12059_png.rf.327e2677d785823e9ee42064eb693347.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12078_png.rf.ec6823ee02a857f2ce74cec417a5f4f8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12097_png.rf.64bdb38f726a71b9dbedf09d68d14384.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12106_png.rf.7146f67894ed4aef7482fc9bbc2a8723.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1217_png.rf.d773a56417940fb708cc1d79bbdcb77e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12201_png.rf.be4308252079e4da3c764c88b01d51e5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12251_png.rf.edcaba9c81fc72a1a40eb95913431e03.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12298_png.rf.4f39d4a54cf59a466341c74818204262.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12353_png.rf.a349fd2f9ff6b34915a077a5510f9790.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1242_png.rf.a496d56332917b7d41c4d6b00cfbc6bb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12479_png.rf.f2556f814a8733d41e9c699d4dd4e53d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12540_png.rf.17f011daedc2b4c7dc3579dcb0809d01.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12583_png.rf.669a07a65595f511bdd3fd6a361d28a4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12601_png.rf.43afdeed0b0fb5141fe00f86a4110efa.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12742_png.rf.073c62b7c8ac92c1fb99650d0580699d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12766_png.rf.48554c8d039fab0a2c007afe9d04f943.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1279_png.rf.fae1b1d507647a25eec145577cd4bb82.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12898_png.rf.363c1c2b9958233b3036c4a9991821be.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1292_png.rf.7f643583353497665d4f239d013c6f5f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12953_png.rf.a1fce545a5805bc318abbf89999d15a5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "12998_png.rf.8d5356e22f3f9e835a36da415f641b18.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13012_png.rf.502a660cd6fab48d5a9a6ea2f007c735.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13038_png.rf.34b105030ff1bb4563a16956a75a1ce6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13059_png.rf.179b8662768387a5d8e52bc0f92453df.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13086_png.rf.c75b6ca4db82df242fd653c67cc55db4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13092_png.rf.6554854e15beb01a7d2e67e49fe9e711.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "130_png.rf.a1b1483da39bcc0c2c77909ef40e528c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13104_png.rf.7f31711836e0fdd0cd2e7f82a560b97f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13154_png.rf.c4ba774330989494af3deeb53607a145.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1316_png.rf.7e1032ab62dd734b34216682f2730831.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13170_png.rf.e5aaba7017246e569347736d7a4498cd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13191_png.rf.18ec3db34347367fa68a9a8c40c2c076.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13248_png.rf.20572cf128947dce732ee91bccf3cf12.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13260_png.rf.b0fd4d72c6b2893f7c7d2981c85fa96c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13262_png.rf.63e4261034c94ab09528cf1252f8e7e4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13309_png.rf.3ef2cd914174e261e29cd496a0527497.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13467_png.rf.b331d18673ad67285dc99b911f466dc5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13478_png.rf.248d23fd7d85988cbeeb43bafbe6fecf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13490_png.rf.5a454ea23907d5294e3b887e6c658eed.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13499_png.rf.34bf06e583993b7dd6913713e7e9fa29.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13502_png.rf.1c98699afa56b0e9434308569e07f504.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13508_png.rf.e679be0dcb0c012c3294c2e29a8a1b71.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13556_png.rf.c9a8ff9852a1eeb61b6f315273b2c190.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13560_png.rf.fde8c9e92d253165e111fc5b8d670e89.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13592_png.rf.9e7958fecb8fa3d564379196bd21fafa.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13607_png.rf.b9b624c47bb3c4901b74225648053c71.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13777_png.rf.e72df9fa03b16211dc6a98f2fca6ce70.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13820_png.rf.eed665c6f8837ea63bd28a7b7a15f759.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13835_png.rf.573ad902b5e350454115ec587228ef48.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13858_png.rf.e1f07899c680c2dc2c093f2a04d4d561.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13860_png.rf.ad131ce8107fd6ee231bbd35e8c98326.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13869_png.rf.7b80ac86eba834432b6fb00811a7ed65.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13890_png.rf.0a30631cfb2c9c9e6d440fb44f6de38b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13925_png.rf.5827441d838da2efb72245e91db3a0f4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "13962_png.rf.ad75bb54066d56f67f5f20604832d9f0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14013_png.rf.6013a1925e8f418c4c2f442af15c889f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14104_png.rf.acee741bcb66594e484f4e8910a5c7cd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14118_png.rf.b8159300a8ebc19a1db52316d12416c5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14141_png.rf.68bfc65527748e46d362f8eb3b54f2f4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14192_png.rf.08912b2d4f4bb8e6c4af97c1559bd40d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14197_png.rf.e64fbff667222bf69aa63cbb0b26ea3c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14198_png.rf.60042d380692e9e917905fdfab0a2d4d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1419_png.rf.dc0437f09bbc5b5cb408ac3afbef2efe.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14208_png.rf.0e0ef9bf6e94d406bd4f6a5552f7f3a7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14210_png.rf.b19fdba668dcd3185718250036e8b6e6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14225_png.rf.0828f6ed5ee40f1b58bee73c51288503.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14230_png.rf.0d425c9251a61b563bdef474bfc027d5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14232_png.rf.5983cded919f908b4db716f1b9e9dd58.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14243_png.rf.a22f0c942014fe5652bca01b5f0da2da.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14266_png.rf.2990e2cfa7f6ef29df6ea6cbf6a98f5c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14317_png.rf.7859e465bee29a14dafc5f640c79fb01.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14337_png.rf.ab36a6468510606c3df050c7682894b3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14360_png.rf.f869f1e65ad14b3495c2c32977b70ba5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14362_png.rf.2bb01ec418e7c78fe2a51e277487af9d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14366_png.rf.07c8d004b790f91c911a3ea9a0cc088b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14378_png.rf.1ff4d31a4424251159fc9d4ed8c4aeae.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14383_png.rf.920e5a240701f08d3edbb1719e0afc6e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14481_png.rf.7ac5d3433fa8cc3f2134f94c99c70aa4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14482_png.rf.19442681bde51a4bb716082c2e12c050.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14490_png.rf.a15ad7c00ccc2d06198fe4d0062073cd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14587_png.rf.8ac51dfae9c3323be54341df80559ffc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1460_png.rf.568b357d993fc0f79b8207e9bbf1213d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14678_png.rf.8d4c992360ee7daf41bedc9af2fdd452.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14743_png.rf.e73d03c85dd4f44fc2f51799b8fbe7ef.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14745_png.rf.cdba333d07957d21a6b7bcb139d25532.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14754_png.rf.4d6d6888a19dbba26d5fdc31028cfdb3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14778_png.rf.c92f7f7c407e43a0f1ac1aaf6b127702.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14836_png.rf.511c0a6f5d56088824d903fbc41a5ebc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14923_png.rf.26fe95d3f0f5573dd440d9966f8f2959.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14934_png.rf.c3c31f7f2c787bbcdcef215b4cbeddd2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14954_png.rf.8f739dcc1cca9db3d7249cf92d9f425a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14967_png.rf.28e7f6cbb7f02160f34dde7c1515dffd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14969_png.rf.047b6a57164c048daef72d1ee3889eb7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "14981_png.rf.84b438e1abd75f68e74a84f56f6a354e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15013_png.rf.f73c5f7383a3be42f4c6c88b015171ce.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15060_png.rf.c21ee251bd59b50561d36a636a286995.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15138_png.rf.14b9856f048bc74c8f1dbbd15de8f10c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15196_png.rf.adad5eb1aa14c1c58c4a71e8674296dd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15197_png.rf.1d7614dbd1d14aa27d59d93f0c3dc096.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15203_png.rf.658d0c5e90bcc44b45907818b2ce384c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15227_png.rf.5928706cfdef016f65e10ace4d20f079.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15249_png.rf.e32abe24d4377664c5b4a12d9d023a2e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15252_png.rf.4bb58b20d7eb779724cfab1edf361ecc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15255_png.rf.71bbd043ed996c29053d2b653be63422.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15287_png.rf.cfe17e2a5fbbbf7d243717fb8a5198cf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15312_png.rf.16534964d739ef70455b6e03b9ee827c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15313_png.rf.698509b4898979d7a5536cf6e406554a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15338_png.rf.06e98cc8f28df2971992bec0064e57ed.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15483_png.rf.c0c767d7c4f4b18470bb41c9190424e6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15501_png.rf.6314d940e6b315d232397ca4d0c7ea05.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15532_png.rf.60fcfc157c23cba7395115d45379f23a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15587_png.rf.3913046f6bac414cec28f47e944338ef.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15651_png.rf.e754aeffa114bb27fd39e94f7f47eced.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15662_png.rf.52fa231f9546963de6347a2780c9101b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15676_png.rf.931188bc1260b12abd7285bd58cead8f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15704_png.rf.d79accddbb3b38886e7e10cd503de982.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15738_png.rf.4495c3134baea30bf417edbb8e8dd900.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15756_png.rf.8063e64807a53162afdc7d02ae1c7a81.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15797_png.rf.75b625b0bdcc16917df0f80cbd395f79.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15803_png.rf.509f9df4136cf06f6f1ab390d31c96df.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15829_png.rf.fe6de3359ea25194c4a146f21ade69c7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15902_png.rf.89fc89c12548dc62e17cf5915e91b09d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "15954_png.rf.91c91f3e9d41ac84576e8993ef92e0e4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16013_png.rf.dd7c625547650213f5173aabc0a793ae.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16023_png.rf.1c5fd0e1b674714d9e68e8499ec00f99.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16069_png.rf.7cc8abc5a4c26d7e61aac8f4a441e3a5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16071_png.rf.15b74fbe74f033f7e6b46e94ca678705.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16083_png.rf.34fe1b561474295ee472948993a91694.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16108_png.rf.2dd529c6053393f4dc187b60d9b8e01c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16130_png.rf.b66472a9e6a9af060891d45bc4b15093.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16135_png.rf.b768a61c63338f25df2ef52b95b9baf0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16137_png.rf.2ca69eb9564d7f8f7c0c6121b939bc9a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16153_png.rf.9171c0a6b30f89bfc7d34744d549e3de.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16157_png.rf.2b676c8979e97b645754593acfa990d6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16239_png.rf.99bc6d1de5a11f0632246d14c9c837f9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1623_png.rf.6c980ed03ea6470e6766e0f9ea49c6d7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16277_png.rf.c9ef424924872649d9ce6b4b06aeb63a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16281_png.rf.d6d7579c5f67e53d7c502a4f4735594a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16282_png.rf.f2828fbbcb9201e733e212540bc512b3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1629_png.rf.32b303ccf4004c1d8f8e7b8416f8af2c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16311_png.rf.b9fd9bc6727bf346209fc24de8c0daf9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16334_png.rf.ffee278b2a3fa753c92e7cdf6771f8ed.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1640_png.rf.ce38b06761c7220bff23c6f5efadd63a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16453_png.rf.10366a8f4561d4882ebe98fd76217178.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16549_png.rf.ca9f5e0d0d916605edfd4db0dfa8f138.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16556_png.rf.48aef20e11847a301e332bfd1e7547c4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16584_png.rf.022f6af71da30754f18c45510664b3e2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16633_png.rf.67e41300a59a8176ef9bcf623b3131d5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16637_png.rf.f3637e5cf7c4590155db08a982b612cb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16671_png.rf.0f7fc660866167319dad409f29fe9ab7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16673_png.rf.beab0f0a285d32acdcace8974854436a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16721_png.rf.02dc948c5c233474d903cee75d96638b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16723_png.rf.562b32ce6ffd0d2a51e0b96f78aa47ae.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1674_png.rf.665444a8ce24c5032f548ae661f1bb98.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16777_png.rf.aea729aab4ac4d1fc77b2f5be9ee3f4a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16811_png.rf.156884548bc0ced2a886fc5aa76d44b3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16820_png.rf.a37575f2abdfd7aae11a3a2a880907af.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16863_png.rf.7d66b147a0b366440f2f9c57eb916d5e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16866_png.rf.c7fb010419d7894e7efe950ef0717051.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16911_png.rf.848bcc2a4a6a5fa7302e4e2dc313422f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16917_png.rf.c9358f775769781ca9952a154deb3bc9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16966_png.rf.38050130107ce7fb4f75d3b443817fca.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16981_png.rf.0c5aec7c83d5315d104a94d2fdc9e758.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "16983_png.rf.ed5224591f15cb3d4ba7379d5986e992.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "169_png.rf.dfe478e748c6a5a79ad66fda9e1bfb88.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17044_png.rf.d4975b05ae5c4c6d0141bdaa5f6dcdb8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1704_png.rf.c5f2b7f62d5218691e1d8096cb526946.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17054_png.rf.216cb8a39212a38bef8ca733aa567a44.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17082_png.rf.cef1afbb2c2e9866b9d2fa550f3bbb8e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17097_png.rf.9c5361fbdaec04d1d2f510aa2deb108a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17149_png.rf.0a832b13d747afb60a87b5c5ec19f4cd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17155_png.rf.71317b092f291bf6251de050c0bee582.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17161_png.rf.e94a7dd836608a00c16b70be2ea3e56d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1717_png.rf.259f7676d444ce3af14c96ac281c0699.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "171_png.rf.1d4490297f0d39433d4b5a38530e38a2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1721_png.rf.2a853563209eb312f5264cda20da45bf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17296_png.rf.007d530d54b407af6d4e94d2d59be3b8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1731_png.rf.48916c3ab3327d73265fafa70cbf50dd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17385_png.rf.bc5ec4ba6a9a84d77a6a342f55994f14.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17397_png.rf.faa27b322aabaa071a5486210df2d8fe.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17493_png.rf.9db2c03254dcdcbe416df3e07f653c17.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17499_png.rf.f4c26dc9d8998fc4eda1728553748cbf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17584_png.rf.453d3050986bdf7b1c53d00aa6c91e78.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17595_png.rf.6d8b16fe16e7f12705ca26fbc2af0042.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17623_png.rf.005cb116f117e8863ec53dbeb75b948c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17643_png.rf.d453c794329170892ef621d34632c9a4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17663_png.rf.eb5970d50aadad5c9ede866e68cc7aff.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17678_png.rf.1337f8b281ec55d3491b4e743e4d6a68.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17764_png.rf.574061cf25eb78ad1998be1c505fc2cd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17773_png.rf.9441b8d05584db14e432295120648bf7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17859_png.rf.7335d53a220899f49eb8fffd33d84356.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17863_png.rf.d39635c3047fd5c7f4ad83f2cb4f4a42.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17938_png.rf.7b46e5244c4f123212bff24974d8aa5a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17948_png.rf.87e1153b0939f2f9c9d42bf0f388552e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "17962_png.rf.8c5dc0db83de895c71d4ac010f1de216.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18051_png.rf.ac658b3cd76acea65cb021bcc05f0dcb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18066_png.rf.f2eaa86130bbc17c03b7a8d4a73ce77c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18074_png.rf.0455031ea54d1d849a72148005545990.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18123_png.rf.58a2f47dd05e8bb7ad38de4ac5199f2a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1817_png.rf.c39b8732c925583061392c74ee222ba3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18217_png.rf.845f53c4eb004f485b9516ef0cd84053.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18258_png.rf.ae78b6fc0601a8d9e30bb3f3be3c74df.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18269_png.rf.54acdc391615838f52e721989fed5885.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18288_png.rf.05a1c5ff614adddc955f7b10d003ce81.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18358_png.rf.dcba49223adbff327972d06b9d033b45.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18373_png.rf.4f8c81e45e06b09519e3224199a5cb72.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18510_png.rf.091cdb53685a7c5d9d2c285ef430eb74.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18525_png.rf.1fa99c441d12eb2ea91740604a43d70a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18531_png.rf.ab1206fcc13a1f90c919a27fcbb047ae.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18577_png.rf.a4e1a2893cee1f0cdfb2ed77b83d2545.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18586_png.rf.a5c2ef54f0d438c3fcf343e8c3819eed.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1859_png.rf.7d13e6e0af497034a4b9c330e3668743.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18609_png.rf.7208bd3b387485798f7e3d193578d83a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18625_png.rf.fbd36b03e91457c756bed41e0907821f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18653_png.rf.85ce339624e28f8e00f28a8c0650769a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18655_png.rf.82ad47397bdd962b53645cb46d6acc13.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18688_png.rf.e5fa4ab1ac34015e4260f1db29baf125.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18737_png.rf.fefd9cd3d5bde04910a7eb84460cd2b3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18810_png.rf.63f580e8d85cf0134348cb7770549834.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18846_png.rf.39012558c9d735ca543a0b922a9fe7cf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18858_png.rf.0e4a7f053493c697b74926a5f20c325f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18887_png.rf.edcb5857a4f8cd5e4bfa91a6cd3dfb7e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "18998_png.rf.44d47a3fdc988570dd75467cc42faf79.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19014_png.rf.dcb14548b30569e3a2a1acd3f689cb23.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1903_png.rf.a95889591b1db00902d06fbaa0d97c21.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1905_png.rf.5a23c3349dd09b331a33a5432b2b8bfe.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1906_png.rf.7e0650f0820cd772bea37f87cec447d7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1907_png.rf.b65c56b6013416d03302e634206852fd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19081_png.rf.d8954fe6a439653d6fdd2be7871f1966.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19099_png.rf.5168ded02a5cfb7b6d7a90ffe3d405c3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19116_png.rf.fc6a82b04c03d3da3166ec6354986f77.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19120_png.rf.5d8bd98ccd153ae3127a0323b140e433.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19121_png.rf.2bd21d264b977f48f2ce1441559093ff.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19128_png.rf.cce6f493f709aebf22491ff0de08579f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19207_png.rf.2c4b3e2edd53b7afa6a5ce358a434a83.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19221_png.rf.ac095a6bdfefffe120bc60cd38e27199.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19249_png.rf.f088a27d4783d615d4d1e1c0f1d5ddb8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19254_png.rf.cfa84b472bd9cb9894a5d5b13f1b1639.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19302_png.rf.fb129333c03a4e438237c917713f3a0a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1931_png.rf.7f9c532924b264fd57eae78b95a5b621.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19343_png.rf.89675cc14fc65bc0754da01b373f1fe4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1934_png.rf.8b3cc14322d8920f2193818512444850.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19378_png.rf.80d7bc4213d481f34d9f5359821a4342.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19420_png.rf.23aec625e5fbe115c13f91b463689371.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19435_png.rf.8bbd08e2dda4602577597ec858b42617.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19482_png.rf.982083f01431ec50ada09931fa0021bf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19516_png.rf.2f699bd67c386f4b7c91e9e90ac37be9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19539_png.rf.185bb3190c511bcd4cd4d1712ddcb408.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19565_png.rf.20c03fd8f0807446572d6cb915b1a1aa.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1956_png.rf.d7ed5e4c7b0b995537897b652fd648fe.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19570_png.rf.9aaa5c5dfb43f0e79383b80b893987c8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19571_png.rf.256d5d42dc89632ed7aa3669a5317f12.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19575_png.rf.cd7b2adf58e9f31c51613355cb18bbc7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19579_png.rf.441976c77d4f7581ca7f38a4d1e8ed10.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19583_png.rf.970a3d70b46cc3e43f7fd97d20a32279.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19602_png.rf.0eac79d9487945410f17c0b4dee4936d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19618_png.rf.7b90939ba4cc67741e64023de7ea681d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19668_png.rf.c23b707511919408105a6c1b8fa18537.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19745_png.rf.95384455483ad287f18ff40a075e752c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19748_png.rf.c62f0a5ca684b2ff879f25f592457b30.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19749_png.rf.23783bdf77919678b9bf5017cd517a14.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19756_png.rf.a9d2d42e1c54d5433b2c97e3d55f9027.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19758_png.rf.9d276ff33af30a93b87425589cbbced2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19760_png.rf.595dd40b33c5b03b50ea45c83634efc0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19769_png.rf.1e2209053cfa03715ed9cab64dc6bcf2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19814_png.rf.d70da8acec9aea0fc811f6896daf0d53.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19825_png.rf.d55b2abc96939bd257b1ebbebc855ebf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19860_png.rf.707ed75faa7c6a1d77163c9e0462d671.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19866_png.rf.72dc2c0d9ad0633ffa94c6a86bb3fe4c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19919_png.rf.582a5568c72b0096bee19b4f6996d137.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19931_png.rf.dd56d0d10b1a63bb4bcd20259382dd89.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "19_png.rf.bd7e873f577f8fd97f2be5fa7580a232.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "1_png.rf.a663bbe8e0baf14d27916684fa0e9ec0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20008_png.rf.11bd3ea6ad0610c46fd069dcc5ce65cc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20009_png.rf.7c92ace1eaf325f0e6451d1dcf621d96.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20044_png.rf.a7393daef74b2d5724d821037808aed5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20061_png.rf.491f943712a9f1755ab3db39f0e7b861.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20062_png.rf.1637fc349d99ad1d9efdb8ab412e717d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20114_png.rf.e4c08c8f4e2f91951e56158f37cbeb65.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20178_png.rf.3e2721accbb865fef79ff58955afa381.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20184_png.rf.6b960ee9c4282fe6944238b820f5a96d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20201_png.rf.3606917691198a033a29930d3491d609.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20218_png.rf.78e7bc72798c3c08d42d88a572a42867.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20273_png.rf.4e28568babcaecc98e263b0cc11ffdf1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2032_png.rf.bb2a007127e54e9b73e4ecd71291365e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20429_png.rf.5c4285b46c68ec27f0648ff17b2ae06d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20522_png.rf.0a3d6d9e6059d02e33a077681b754540.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2053_png.rf.7bfb5a3544b8700dd81162d5ee9791ed.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20547_png.rf.937e36879f1e6e8181b2bcd2db4d58a1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20549_png.rf.2e588f35ea32a917daadecab9cfafe93.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20598_png.rf.ccc01afc6bf4bd23674a95b44640e391.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20619_png.rf.b213f0094a7b0cb3da8ebb0abe85522a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20736_png.rf.e23853b3311e655266213512453f486f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20774_png.rf.b4ce55a3a063e82bf200c5724090d75c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2079_png.rf.151bd9b6ca23a56ac3142c3113161367.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20804_png.rf.79ad57089b11e41d8bf32d3f582db00d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20805_png.rf.e21fd761d8bc14505b77a330676659ba.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20847_png.rf.9d70730c4e18e1b6aeff2865bfdac195.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "20963_png.rf.84057a752747629b39694150ecea089c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21049_png.rf.f1260d5356e5d9aafa4000696b9057bc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2104_png.rf.f86513b6512fb82be16a1fef7bc02f4b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2107_png.rf.4fa141f0507e5c721434639607d096f1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21142_png.rf.c2dc42bb8a853443bd01ffa477ba973f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21143_png.rf.d1922a1ef2b3aa17980bef34ac5313a8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21144_png.rf.71596deb32555557881638d7c9e7ae93.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21168_png.rf.549bc339b00152307a78e5edace98754.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21169_png.rf.337c36141bdf396b176aa415b78c09cb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21211_png.rf.e0659b9a7edd5e7490d6dc68080cfb77.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21217_png.rf.253f6a9f02c1f1338e3b090ac95ac307.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21394_png.rf.0234ca27d91b58de56b149fc44d905d7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21467_png.rf.991f849a485d630bcca386cb2e30d7be.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21501_png.rf.cdf319567fbacc10750979bc8ad1df78.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2151_png.rf.2741083e6ea85884b49ef7f54c838a77.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21520_png.rf.cdf46c497c42af5f4b2cc05c90a54b49.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21521_png.rf.a990689340dc9c3772ee4d612bd7befd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21523_png.rf.acfca1193c084c7722848c07250a53ee.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21525_png.rf.f7a8595a2d6e13b96b7e4b3020cccbe6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21526_png.rf.7d197d96cb7041ba5bbe36defc05222f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21538_png.rf.b52178948425958e6c16632162db5945.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21549_png.rf.c8cbc115124e5a4ebbf32a43a36f35e4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21587_png.rf.b2c99f74e7772db6003ee3bea9699392.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2158_png.rf.76dc35b5f3f26c53ef3ef6cd616b36c2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21593_png.rf.6840b0330e0ee07f9ebce57b56f9e4b1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21599_png.rf.72fa5dd8747f016db935633cca0444e6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21634_png.rf.a579075d022bcc9bca497a0720bae79d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21638_png.rf.d544471262743d5d834098ef2e82e56f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21680_png.rf.3404e635fcecc7573c4e2147c13434aa.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21693_png.rf.381665c662be6a1684fe4551bc1006ae.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21735_png.rf.f7626cbb5a79e98272846827a89b18cf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21753_png.rf.958b5c42ce35219fb981d54a1461d5b9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2176_png.rf.3d212953676a8972032d667f73c4a083.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21857_png.rf.3c43891746b43054f4c6a7ce20e90a19.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21870_png.rf.45f284ec3b1eb24c8969bb002d0fab5e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21906_png.rf.f9c251f25e62d879fa78ee82cf85e785.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21925_png.rf.fb95a1385b837c5042fa72d5e0ac5482.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21938_png.rf.70b13a54347e5bfe397e9da0af2693bd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "21997_png.rf.3fa35181a20bf73f744ca9708d51de34.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22020_png.rf.cd93b26225f1bed749397a0bf76cf922.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22073_png.rf.bc9747892c6c6313cac92cf883c1f3a2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22095_png.rf.fc65da17ba33cb623e76b4480fb89f73.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22107_png.rf.e33c5b6275b8f9c3c6a38d39faaee086.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22112_png.rf.be94700834ff5496a0817b8ec370034f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22118_png.rf.e7c4340ee0946c16b6f1ed80e22e1f1a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22130_png.rf.994a1f662a0613f28537ca1ad9397619.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22138_png.rf.77e8672b981ddda421a1ccd0dfa2ef71.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22144_png.rf.858cb12287e5034e5a3444cf3d4b7972.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22153_png.rf.6c01b749e90e5289d693f90fba14729f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22207_png.rf.d5a63c7b464e9e1b531d494607ad5ed4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2221_png.rf.4dbf29fbb1592cbb865e8c5ce776f6bf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22228_png.rf.3cf7f177e1c97ddb5d9571970f8202f8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22320_png.rf.d62c3145365b4920cbbe3bceb9f91d1e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22322_png.rf.39abeea15eedf9100590490edb5b2ec1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22332_png.rf.25283e785c654cc396465b6163101b2e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22360_png.rf.044f2ff4e4d53eb1bdb5231ec8550002.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22366_png.rf.6256e90c4ce7a3b8968ae6f72a78d9d5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22373_png.rf.c7e52a66096b06288aec34240c59c1be.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22470_png.rf.3b596043ed4f3c9a8b58882bb88d0b29.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22507_png.rf.6bb846ad1dbf8852400062a1932c14ee.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22574_png.rf.171fb634963de66b8a5a7e742cb3e586.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22610_png.rf.d75c8bb6ad06485dfccd9cd9d63f8079.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22683_png.rf.da668c605318f5eff48fb6217c7302f9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22718_png.rf.1c41f26d2dd8356a4f632ddcd6d57463.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22774_png.rf.02d011e3953b94265d2f845eed5de895.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22803_png.rf.82d5ecd1dcf60d362a70532403540014.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22955_png.rf.c27096ac183ab62ad2344d2238139ecf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "22962_png.rf.49415122468fefe8cd2b924159697796.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23001_png.rf.4116d87d8b7ca5de7b5b1b967e51958c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23020_png.rf.0d160a6fe54b3d15768201f6799f3ec5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23036_png.rf.cb26f1c4877735047a3cc0949457cbf8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23090_png.rf.19d7dd36f1cf38845c78d6931fd36495.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23159_png.rf.bffce84510cfd437887f022acb08ece0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23208_png.rf.0f8166e3eb9466a8f604114ce4e79063.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23217_png.rf.b86334913a7b811870d3039d3a2e20ae.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2322_png.rf.783fdfa3d66cd392ddf15905bda990bc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2323_png.rf.d20d4e132bec883142e09b8250f0d074.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23249_png.rf.6158e446b53fe82f1933576bfc2db4fc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2324_png.rf.54a04fb6348979eb09fb9ddd9eecc495.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23262_png.rf.271e74be52949d20ea8b584a615121db.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23263_png.rf.c28ebe4049261542048dc4fc48055558.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23274_png.rf.17d950a12f3af18c1a71ffac47080dd7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2327_png.rf.b1b148c36897866136e424765ee22da4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23317_png.rf.2b866ef8289578ea4293b4e06ff16b0e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23372_png.rf.516aee0a9b0fa152829d6180d1ac31da.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23430_png.rf.0aba5208a7c670cd597444f29e2bd90c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23453_png.rf.f1ea59b87507cef8de6a2144eb16740e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23501_png.rf.992eefc3926206f0efbf7d76455f7e31.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23556_png.rf.efa39aca29fbf3814f68dab205c71536.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23559_png.rf.e8635e00915273e5784542b9a8036e3c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23571_png.rf.9f1d70b7df17b710bf330266b33f46ca.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23589_png.rf.13482c5695fad21907e80e25c8af1567.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2363_png.rf.de9d3ebac39860ddab5c8345b078f09b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23670_png.rf.d6c27ff233d6c3b5c568bdd8279ad72b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23699_png.rf.fb43020256a94dca05a6a12fbb394522.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23732_png.rf.92043fe66d141bf05871a85cdf45f266.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23743_png.rf.588b2c734aa8094459030dd1794213cb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23776_png.rf.8eb95bb3464e8f81bce543c91784b204.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23782_png.rf.937322833b35e1d690493bf1192e007b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23809_png.rf.f41f6130275bf286b5294eff4d54d1b2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "23883_png.rf.cbac0020cdf4b7151751a1524b794c10.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24021_png.rf.da1fcb8db15aee4dc7bb7fb36cf2ae72.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24049_png.rf.7b75902467433a1bc003256362049ccc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2407_png.rf.0ee209b7c8423d3ccdb5f100ff846684.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24146_png.rf.bd71084595a7db7bc38497eb1ff4e8cd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24199_png.rf.2b051cbae6964e4050056cc2fc17cf14.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24212_png.rf.a5636bb28199dc64fcdd34bf17bbf648.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2422_png.rf.7b7f0c2c5c615533862fb03a05054382.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24236_png.rf.ed62ec75fc5dda790b1a0eed1f25d9c8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24238_png.rf.535ef067840c6d9af6ec86b0aa89fa3b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24241_png.rf.29ce44ee679fa951d9a9f86e12cec175.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24272_png.rf.904fa97aa6c9a0fccb934fe62bb8fbdc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24332_png.rf.381c26d0dda0e00c78b84407c68fba16.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24339_png.rf.0fb0b58961c02f79fc390ee487117505.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2436_png.rf.46d34cbd1f9cbf69e66d954c49ed7f33.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2437_png.rf.c85a1889dcd26afc79510a0416db80ba.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "243_png.rf.bc32e9165619b5f4143c64b64ade52b6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24454_png.rf.a02b5dca15d8d251657c86849b0fad95.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24483_png.rf.686b8650b744da80340d3ac334f9c0c2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2449_png.rf.b7210b69d269013514f76fbd94d08bd3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24529_png.rf.321d7603c0b508dc2bd2e7268877522c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24561_png.rf.3c52ca4afbee5af381a5d52c5e99cb8b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24576_png.rf.051e2e29e036a91982d38dac48b6d01b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24616_png.rf.d35c0993fd439a84248e181b1961a4e9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24626_png.rf.d4bc0eecdbde8e0da1a987bad56d7927.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24642_png.rf.a2ed4b825182140e799ad6f8e6282b04.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24646_png.rf.96411dffa1d1d86f0a4ebcabd7cc4551.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2471_png.rf.ce0f087a428597575cf9a0643174d9e3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24749_png.rf.160ee8992ceb37bf52910b7d97c8d386.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24773_png.rf.1591244f9504b0f52dd558c4f13d7883.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2480_png.rf.23baf1f9d872c6c70deee7f0d49e7aa0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24839_png.rf.4b68037c79e6e2c3ef4a3209c0ef8b50.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24844_png.rf.4959ab7f1c2f43325a34960e79bfd33d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24851_png.rf.edbc446eb7755725b3da2691eeb24ffd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24870_png.rf.c29923b4d507eb2efcc941777708bd2a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24909_png.rf.f07357a35f58fa161c319ebadba0dc4a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "24912_png.rf.e754d278a7070429a1b78d242bf7f7a5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "25044_png.rf.1db9d889913c5e915900fd4c3f49fe29.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2511_png.rf.33a5af4f27b07cbf4949b943801ee4fb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "25159_png.rf.434517942b2e3f8fc8c58957c812ff49.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "25189_png.rf.21c54cce19192499a0f53e2cc0d542e7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "25343_png.rf.a7a3bfcca3bfb44fba8cea535107f53c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "25608_png.rf.1d9e421b27ba825ff4bbce38a191c730.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "25642_png.rf.d6467fd9241fd42e7a3eb6eefb634b87.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "25675_png.rf.88c1d9fefbcc9313b2014ae041ee9bac.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "25864_png.rf.8617e66c8cb1146a5f211c67a0f4f490.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "25944_png.rf.6c04f8521929872f359b1cac2f360298.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "26220_png.rf.e5c319d2cc71fc5bd381acf26605e3ca.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "26238_png.rf.65d70580e98b2552e978c3937a85c09e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "262_png.rf.bdba0e0fb1d1348270b05bf4968de088.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "26503_png.rf.e8a231c296651c77271937088fa01e72.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "26698_png.rf.a6843033beaeb808e5c5408a647f6944.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2671_png.rf.69e4457e1c685c95627e08386df0779e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "26727_png.rf.c2f812cd8088d87aaf83631bc62e11e0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2683_png.rf.203e897db9c76d5b0ec49c34a2190fde.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2684_png.rf.be15bc5459af3f0f17485e0837d3a9b4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "26860_png.rf.0f973f808949242dc779ae8180088445.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "26875_png.rf.1a1e8cdf1f3505a8d4ed68281e08e4a0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2691_png.rf.c84af058e2a70feecbdb418883e09517.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "26984_png.rf.15c46c06a1b5e484cd66ccf2ea1c3b20.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "26991_png.rf.8102a1a52b34bcbb767674b62167d654.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27063_png.rf.0ce5fea81237cfc36c2f132c04fe38f2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27064_png.rf.293d71dce76a2a4e47dde8aad8181eb6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27117_png.rf.9d00705c73ebf643c14312f148dec5c0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2723_png.rf.9ff6c39075d0a41b3d2a73de0b4f0c22.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27253_png.rf.047bfff4ecf8ee4581267e3c82a1b169.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2727_png.rf.1d6f586e2f101f36fe1af406ccea3c1d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27321_png.rf.476c730a3894c3085b873ff6c4ef3d7e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27481_png.rf.dafe8ff9b465357b150561556647b33a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27676_png.rf.4e01582d7670b34c0c07b7a0cef1bb8e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27680_png.rf.40afa003823bcc057de9bf136fa84736.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27798_png.rf.c755b7c30048957891c6ed7d186f2fa2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27813_png.rf.2862b862b74cbb58994860fcc6b0ff71.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "27982_png.rf.6d469a7ec84961dc83fe6abebedc1c4c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28029_png.rf.c4f7373dcf03b6e12a8c063dfd9b2445.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28064_png.rf.95951bf938239e6431f386350261e54f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28072_png.rf.e084995cc2d722bff8d223dfcfbfe040.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28096_png.rf.1b2f0a258bfb0facf8d7f2705e77b960.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28097_png.rf.6ef07882ebb772c8f984228c0cc3575d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28132_png.rf.178d97fcfcdb61cf8b86970cd6462fb3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28196_png.rf.64c09fcd4c66b519380d0ed1d0ae40f1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2822_png.rf.37538da10fd6562b421aa67225a1f67c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2827_png.rf.5c8e5d5e3ef5402d617decdd2927f5cb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2831_png.rf.b96b7ec669209fbbd7ce788727904b98.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28320_png.rf.323a1c23768006cca3d0997fc7240167.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28370_png.rf.a071c35ada0ec1c72f73f7bae9d545ad.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28419_png.rf.fc5f5cb8e7f79113f25f5f2b4bf9c671.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28428_png.rf.eb9feb2aea50b20e3ec34837ed7358c7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28453_png.rf.65278ce4e66d9cc89f0ddee8a734afeb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2848_png.rf.8a01e1f380a2d0829c3041a4d139fa96.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2850_png.rf.54041ca25465856e1238f33dd35eaec4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28612_png.rf.434621e47ac130828953f810c15e9fbd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2861_png.rf.2b0bdbf017180eef5a4b8a48cafb8bf7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28787_png.rf.d9e5ac9f03b8604dccb7e4f65b4f93c9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28788_png.rf.f79c85eea33c5e03f534f6833ce699a0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2882_png.rf.12765718a6ca07a867a7648bf06a10df.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28864_png.rf.5a4753da853f08252730309f7347c73e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "2894_png.rf.0fbf92f36774f10f62ba9a84f734c91c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "28999_png.rf.721b20625e25147cf1099d4491b4b79d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "290_png.rf.f21f0ae937668c8795f177893497b204.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29226_png.rf.787491300bc90587efcc769639298042.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29305_png.rf.e2800eed23a106a25c38e791caaae8ee.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29352_png.rf.262ea50e23c787b4f11150562a0b4b9b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29402_png.rf.e81033f0731c491f1336adc63d00c698.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29513_png.rf.459b2de5149dbc95a8e6c9b48cdd5434.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29715_png.rf.aab4502fc4bf7b4881504e4d6484aead.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29887_png.rf.cea181d338566b95d7246bcff7f7c8d7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29966_png.rf.be6d0db860a81d921b0877433166de20.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29971_png.rf.883eb0b585f680be14b0888a7b2a022f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "29976_png.rf.40e7331785e26fca57d43c6e6b903445.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "30013_png.rf.f991be0a42510fa56b22a9080073dc95.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "30178_png.rf.0cf5036c17de77531c209a355037c674.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "30183_png.rf.2d9768f5aed265d7751374b9ef030ce9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3018_png.rf.4ec6aae9cd521300bc6659bd35651243.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "30344_png.rf.f1d9bb0b9ec0d770b7dea894c945d18b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3066_png.rf.a271ccaade01ec4a7e1fe75ebb98ecd8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "30724_png.rf.427f713e7c3e85b0d4c0c554c302c2e7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "30766_png.rf.91c84f0277bcfe9dddb4bbf45de1a98a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3088_png.rf.0e6f3d2acf82f54250873ce3aee371a1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "30987_png.rf.3774f6bca56385558e0b2a92216b4bee.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3113_png.rf.227841737bfba654c919bf23f379b039.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "31365_png.rf.c15a4717175cda5927fce37d6fb4061f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "313_png.rf.f1cd239960cffb0fe77ebc4f682f67c6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "31647_png.rf.7ca4179afe32e6b929d81f09eab91238.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "31694_png.rf.95435a189cd059be35fe94b42cbeb305.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "31843_png.rf.64c9ba366dae600df36dd2697f5116d3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3186_png.rf.2b0c5bd536501aadb54a8edd741b3a71.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "31909_png.rf.8b384b9fc3e2fb7d12487889375ed8f3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3194_png.rf.2dc3fe63c82a7e1a2348f02be25db5fc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "31975_png.rf.75cd23cdc6433e54b6b58f49b3b58852.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "32038_png.rf.22d36cb7d61056002ce24fdc7f01fadb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "32190_png.rf.d1d8e8f654fe040dde4dc0bb2be04bfb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "32484_png.rf.dd0166b622b2599071c8b3ed9172458f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "32581_png.rf.cabe3111b4549e3e1632a2becdc1731b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3259_png.rf.30bfa8ac29eab7935e44ff168bec78fb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3282_png.rf.cb2b7c891c694d6f624396b2df2bf620.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "33018_png.rf.c16b388ebc53e99a4ff0e4740d75e361.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3315_png.rf.7af79332ac799612a1fedfd149dab0f5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "33488_png.rf.0cfcba2765651a114fdabb1abed26234.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "33734_png.rf.ffa451319d4e8b3f7f0f557efffc4046.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "33932_png.rf.fddcb8ac1ac0c922ddfd2adb4a21f355.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "34063_png.rf.073274167b7ec4df44ba2ce406ae8f42.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3465_png.rf.db832ad9d5f5eb77dec73ffa9e2917c7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "34666_png.rf.4931da82476b5797108c8ffd548a60b0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "34749_png.rf.44b539f8fe4cd664e86a179f36a94782.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "34754_png.rf.f2fa9644fae6aa252aa2b13bdb00b148.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "34755_png.rf.1a94f3ee8e735d9833f0d12f5a1d4915.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3497_png.rf.f749e36822fdb37a8352b1c67e9979a3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "35041_png.rf.866ea872fec26d26c46a4bdd7ee32a26.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "35064_png.rf.2475d3d7e0e01d84f8e6f2cacdaa9794.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "35107_png.rf.d007b7e9a001a70f0e56f951f971170e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "35110_png.rf.4cce77066468411a81f00b02c4e2cd96.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3535_png.rf.c37410f8ce454e00124c56051e867a53.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3538_png.rf.d13f5600cbdf56761396409c4a7553f8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3539_png.rf.d0b45ae7bbf0652dcd32bdbd0dd67c51.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "35635_png.rf.ed8cffda593e52b2fb35e3f840ead224.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "35830_png.rf.aa0c830021a10a34b1c983cc371d843d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3584_png.rf.800bd598bed42f1732ddf9c2f98a76a1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "35890_png.rf.001f127d55285846a4f99265d04e9dbb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "35908_png.rf.3bda3a0a0ba172fdeb26cf7e16fd4d4c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36024_png.rf.2b33f95a2cc332773085e72f0ac7b73b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36048_png.rf.24f54434c1467dd2b996e9c4d598c073.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36073_png.rf.67c8357aaca535e90fd1fcfedcd50273.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36164_png.rf.88a8deee78e555840ac4d3c51813d2e0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36278_png.rf.745f6e6efb75dd8a2247cad732e53033.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36397_png.rf.8a7c579736f3194cf37b1b2c039e9e7d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36507_png.rf.7d739c15979107593de1b5cfe420db5e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36580_png.rf.e922f52dd7acb96304e04b6462daf088.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36589_png.rf.ba276e6af890cc4fef150947783b2c51.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3669_png.rf.b0cc461619914eccfb949b7b2f8141c0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36706_png.rf.c78d6576d4536d6f59dae19ba3a2ce63.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3672_png.rf.bc20a19dd5292e019d804db4bd99fa69.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36742_png.rf.d973a209502131c9d076c6824f8acdae.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3690_png.rf.cae5d8584ffaed9847f7d5c721ecf079.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36934_png.rf.47d0ec801eef0227bcc5e2afd848da05.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3693_png.rf.ed7d1855ba2b9a9b5d93434ada1bc79a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "36982_png.rf.156e41619652dc640def29474cbb3f2e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3715_png.rf.647d5a8e016be4e75db58c3c5135c13f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "37259_png.rf.d523b8d5bf8bdc1d4ab291a363481a17.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3737_png.rf.6f95e393f6142a46671a79d81ad569b2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3738_png.rf.91f7de2349e4c759b53f15f1aa01fcbd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "37402_png.rf.951394944c3551fe9d92691e589efd70.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "37452_png.rf.fc2e5288977b7a649ae231d86308e42e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "37570_png.rf.68b89c805df3d017609ab428df50fee7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "37675_png.rf.0fb958d3674fd3ac1312a52554262378.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "37843_png.rf.569d78162f9a8c28c2050cdfc7808df0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3794_png.rf.f3b9a9fce3f6f5b4e453f71510572424.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3816_png.rf.c54a68048c65f5f39a8b635296765883.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "38216_png.rf.38c3b20a6aa1290f40ad6caca0b0c65d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "38232_png.rf.6c6d42f536fe3198c71c511a5028c9a8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "38351_png.rf.c5750fea42e078d6c2e76ed8291cbee0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "38386_png.rf.24757b253ce58772b253c3f6796e528a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "38456_png.rf.ad0b1bf45b2301a6c4d23f3c6d2619fe.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "38534_png.rf.b92d29040eee83bfe36d604a5014f325.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3853_png.rf.12c33a2b249a436cabb99f39227bc5de.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "38541_png.rf.0e3affeacaf69c5db5899df6d837bb5e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "38731_png.rf.13b673e839a2c6f7e95aa8cb734fb6be.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "38917_png.rf.eb26528112517575b50e9b799b3b4d50.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3897_png.rf.b4b36e72982453eba97773b12b50107f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "39221_png.rf.0cee711e518aaa6c5a93631c52839595.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3927_png.rf.9c97b6d9da1fcb92ce9cfff021240eb2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3928_png.rf.5b1acbb4f0360acfc8080cdb4121ab8e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "39459_png.rf.d36af01ef980ad7a1a89df16a22008fc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3958_png.rf.e0de404fe180cf8415137cc5862be1bf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3960_png.rf.afdedb8cd2971e64a9b69baa51fbc33c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "39638_png.rf.63ecf59d4325c925c4a450f3917eecb9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "3965_png.rf.13d8f8d322a601689093bcea292c8167.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "39843_png.rf.50a97e651a8e9afff6e91889edf2c460.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "39945_png.rf.c5a8d8392a9c793f30d73f91cc53c0f4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "399_png.rf.5d63443c9aafc319b05c65004b760100.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "40086_png.rf.b917fabb9958ef7ddde54e75b57fdac1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "40087_png.rf.459af1d37a667b67530e6dc428d51858.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4013_png.rf.2535e0ad86e726bc3cf658d15b729b96.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "40153_png.rf.694f059766ba3c47bd3c7b58a28d8b2f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "40170_png.rf.2aabb41ca8c52cb1d07c1e161b5dbf6b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "40230_png.rf.bbf17a1fca1413938d9d803ca3461799.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "40466_png.rf.4c909838f86c7e4212cb88c66bf82df1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4062_png.rf.e238c5d6effbca2359b31bb04d584153.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "40641_png.rf.289e8e68a7e3e47893ece6052ab9f857.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4074_png.rf.8f1f59d5723bbdfaea6a80b625b6bdca.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "40938_png.rf.6df1d77063a45032f503ade58edf8fbd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41013_png.rf.b022189da4a2642808896c3483a61d50.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41058_png.rf.39ca82295d461139c86f75b2b902cac0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41194_png.rf.9176ae4dab4cef87db205963755ff711.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4125_png.rf.34055c7499025a6b9c9054dc08dd370c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41315_png.rf.4e88a0d4ada1da18df670d260c9132e8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41518_png.rf.836c2f132aa4315430e1800db92f2936.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41524_png.rf.cd494c2ca94793455f10bf279161f739.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41536_png.rf.0a2bf9e55989df01e43bbf3bfb0e4e9c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41555_png.rf.e04d8d6bc43c95fe3827c77bee9a7a69.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41607_png.rf.efc76eb046a15beb634d0c5c8e137ec5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41652_png.rf.9345ef7f85f6669b45aae1ef0e00fce3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41712_png.rf.e48054b192cb5a0d3d8231caafb41d8e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41956_png.rf.5e54a5a7cbe303c738cc45cc448794d3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4198_png.rf.b57db732a414a81a2fa1092425d92bcc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "41_png.rf.83a5641ef2e5cffa366f14d32d2950ee.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4214_png.rf.63011f1174e6102dd9fe3055e43b3fed.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42236_png.rf.f72fca613e72f743c2a536f67efcba12.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4230_png.rf.047652382ca23903999d0e305059175b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42366_png.rf.6774d0f12f0c1de2117dc9d34cea85df.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4237_png.rf.0b1e37985785537803f73a6d6fcccf9f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42405_png.rf.29f7f349b16be7e94ac1df1662238c34.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42637_png.rf.0407eca74c6c3d10e03848b50618b864.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42739_png.rf.68ffe90b91e7afacd053a6b5688edc58.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42774_png.rf.435e369c554feec2104bc6c3e32e148a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42778_png.rf.1daa64c87ac6602fb0ce3efd48f35407.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42875_png.rf.8e076df8ad34491c4f8f67c84f57535b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42884_png.rf.06d5790c69e6a82861d980be0e321f0f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "42922_png.rf.d0234becc56c60545d279ed06ca8ff2f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43155_png.rf.5412df7a6a503f9f6606c89962014381.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4327_png.rf.0cd1e92922b9a528dffa6f50e718936d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43441_png.rf.7e3a496f05713223d8def36121c98ff3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43448_png.rf.bca20c65609e68f67d5524d0aae3406f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4349_png.rf.acc0f97096bc3c9df5fee8869df83aee.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4355_png.rf.437ac790e8f48eae09a92903d45e1e71.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43608_png.rf.bd1daeafa5bf7b85d86bf08a424a0b55.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4360_png.rf.475eaeaee3ba30c574becbbc30b9e696.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43658_png.rf.2df75b8ec946784a95799ae7b24008b2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4369_png.rf.22210329dce81c468fbeb35aa135d9c0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43778_png.rf.f510636eb3836b42a328f63d4cb53ef5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43814_png.rf.0ef22181b097ce02fdc1af72f107aa3f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43832_png.rf.5d81016a270b85507a52b7e11f724876.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43837_png.rf.b99b5079d7577f3038e2418a9c73640d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "438_png.rf.332522c738fd3e754ede01212f23d27a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43932_png.rf.a251c46826f0bcb9ae66e8553eb9856e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "43963_png.rf.42f8d5eae5478474e1042188dba71be5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "44009_png.rf.d5da48ac6751d38f5abbe45a647b595e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "44011_png.rf.b8010d20e10c17d969294065362394ef.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4414_png.rf.85844e1fc7464b1cdf256057802e1253.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4416_png.rf.9099e93ddc17a28068ff186f74e12cf1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "441_png.rf.fc0c2f3597222533276c22ee1c39cf68.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "44245_png.rf.7135ea4cf6ccb5ccb55c269ea730e0c0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4438_png.rf.1bac2880f4d26e47756d167c44d3b567.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "44394_png.rf.fe0ecec50eb29783c3ebb08db357917d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4439_png.rf.610e9a0fd76d19a6a2899c18836afd57.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "44497_png.rf.9954b474bd4e3698b9c7d17ee3d39129.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "44537_png.rf.a9b48ce8f4c325e39671bba83217f535.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "44651_png.rf.ca7c771668ea19232f3e2a4b56ca50a8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "44708_png.rf.b274ecb69d53074e54701bab3027dbf4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "44999_png.rf.b9122b1df3e70b3eb5464757fd01a529.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4499_png.rf.7e931b4843ae678ee241553cc6d203fc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "45009_png.rf.29188dbf4c7b2aae11beb626b3ff3654.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "45184_png.rf.013a707919eea2d1de359714f9124335.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "45186_png.rf.d2247abd7bc78e45daeabe57ac9c420f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4518_png.rf.282aab70c5c1d8bf02640277331d1c35.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "45451_png.rf.18a3ef7c87b5514180231b7c8467ab6e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "45474_png.rf.1e685a1eb16be41f03a875c50910a0df.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4555_png.rf.4c1a77eeca60e0f5c1a5e9cb0d61c406.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "45595_png.rf.6f7d4d567f49831c3f75ddf5c00348ec.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "45730_png.rf.4c82d81a810d269aad4ebfcb184d1e4b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4590_png.rf.d6a58a9881593408189a8d3fde9043f0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "45936_png.rf.11545571c07c781b02ac591c4bf14da6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "45943_png.rf.841089e782161fa700953584eb484d39.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4596_png.rf.fd2164a3401c343f7bb9cefb60a72a70.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "46037_png.rf.a5caea6a78f4a5bc7082a1223a89f3bb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "46075_png.rf.c689273d7d75a617e0aaa866734780f6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4653_png.rf.7039ec2cb05ff1b78f122fca704d4308.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "46785_png.rf.9e2a458c613a039f91324f24bcd0bb9a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "46958_png.rf.4d920dec2ec9cab9ac8d6d0cf7b21ce5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4695_png.rf.5d5e7d9f282a312c3fe33bada6dc729e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4709_png.rf.dfa78365d72de852abf174e9728a50eb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "47191_png.rf.43a8461e8d1c6b0bc3ae5b17b2666f4d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "47244_png.rf.d0f05e910f9b8b68ca87e97139b40a92.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "47252_png.rf.e26587aa844b57ff998cdacf508d15bd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "47446_png.rf.0da3296658251cd268ab7553cdbabac8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "47484_png.rf.2e4d6b8a0c0a3818cb4e58d84c65c04d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "47490_png.rf.5837e8afc36442541035f01f65991fa2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4755_png.rf.dc30b70100c8bfb777b5f9b100dc9914.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4769_png.rf.a624a0ad89b263d2fef56eb5b3c846d0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4791_png.rf.984f1f18caeafaf027aa8b499285f461.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48001_png.rf.5a83fc7a3bac61878cb7af906efdfa4d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48054_png.rf.1eedccf3fe12b10e19faf66183b89827.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48192_png.rf.6b8a1d334c8b77604d789c562d33db7f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4822_png.rf.bd5cf4a0453ba08b6b9e1fdd00214a9a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48310_png.rf.729f269a6795bba3df8f68faaaa86c7c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4832_png.rf.4777b2fe3d14025af07eeae25568c9ca.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4843_png.rf.cc0eff8f22e95a64c509eb470a001a23.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48549_png.rf.1698fc53a1a24c5a3565731663a47ab6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48557_png.rf.b1c96aa0d419e9101e5b409baca99c7b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48626_png.rf.6922b43e8099138225b597ea714472f8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48643_png.rf.21d8f2199e9164b378dbb95dfd8b0eae.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48785_png.rf.8d4772029fa0d8d4d7e7e1a8c9892279.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4883_png.rf.bc12ed3df9e489d720166ca8ff8c0922.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48947_png.rf.3e55b048621d48e97351cb399672a320.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "48968_png.rf.f80e687806c7bff53ce014d202be3bfc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49125_png.rf.82d62cb6e9b9f8a2e3579949cc680d10.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4929_png.rf.658f725045a76b8db340fbd4591860c4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49340_png.rf.7ba6cd9f08a0ae00bf48b1e9a960032e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49344_png.rf.aa643b07db48585cf85cae6c1205efe9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "493_png.rf.d0177eeed4291205c3ea50bbe3176267.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49405_png.rf.0dd165a6e812f3e6786a25f6bec6b9b0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49430_png.rf.d5c83972a655b4335996a73aca7b84f6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4948_png.rf.33a52a4373b175c525a77c830e127cf3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4951_png.rf.6f3c4e0e2425d644bbeef3fca8230d5e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "4956_png.rf.e4495ce0baf4b736032ce7556811b663.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49623_png.rf.1cb0d9eb5e8d72d7d878aca2da3a2664.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49638_png.rf.dfd0dd964fa94f41751773c54b7368df.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49666_png.rf.0c982a9c95fa0d8d01f24f9c787ac3d6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49729_png.rf.f13ba850e825e78908b29b3ef7309473.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "49787_png.rf.23e810f6a804f5be24db28dd891a4574.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5054_png.rf.17957b60d1ddfd9a16b4a3bb81eb99c0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5139_png.rf.6a3ad13f97f5cc38a787aa9d530a3407.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "513_png.rf.a8cf1a917d1f0e77736caa6d90738069.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5183_png.rf.54a25d75f1c844b4d6c6842f49f59d66.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5187_png.rf.4aa7de5382dc57822d4f56db2ce5a688.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5219_png.rf.a447de5b31060b92ba5b96d5e7a1926f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5244_png.rf.c7a2722a6baf3d05d612343b9eaf0df4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5256_png.rf.00bb471c838b311142520d5e44b72ce7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5340_png.rf.e62a764ff67708e3bfbe27be9af54320.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5367_png.rf.c48a484772457b253b783cc1a8145b90.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5368_png.rf.1bdfcdbe17eb2a778d769e696e1a4b9d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "536_png.rf.2bfdfab276806838ec9d8e469f6a8294.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5440_png.rf.f38438d3659ffea6553ebf735e649bec.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5474_png.rf.b5663f2dd563a50661043d373b6c8653.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5556_png.rf.196326bc5a89064ac0b11d48bf7e5ebc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5573_png.rf.ba6d2c593767fc2a4fb02a3744ad2f49.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5575_png.rf.fff4c65db54b2065384a8dd767846ce9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5589_png.rf.e279062ad1b7d1fb3a289ac17c41e928.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5596_png.rf.bbf5183724f856fdace14a3994166a5c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5629_png.rf.22a0f9f961a8f6cfba2ca48b527e6b6e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5653_png.rf.7d30bec6b0182b425ecd19fccabb957c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5674_png.rf.d9c8002dfb8a31c5f47fcac0257a6fa2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "568_png.rf.0d411275d5046ee9b56cdf429b830946.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5705_png.rf.dc16009d78592f58c9aa5ba9c898b6f9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5717_png.rf.f37b141701bb846dc9ef41c3703ba524.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5724_png.rf.f9286e2f2c9f18b338adc883df6a3d9b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5735_png.rf.16a1de888c096bd9ddb6ed7cae1fd617.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5742_png.rf.a657fc2d971a78518057f67d71c9de91.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5775_png.rf.1567eb5e29cf09b0a990c0b004f7c238.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5789_png.rf.27fc97caf59366507e72e74db56b4b94.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5805_png.rf.f292eeb0feac0d6552ce4d2f5870f620.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5808_png.rf.5127cc3729ab0bcff09cb886376d0bdb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5826_png.rf.4f9f62eb9948044c6c4752cdfb918265.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5829_png.rf.05d5c34f01f62ff71966906edb8d52c0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5850_png.rf.83f3633de7bffe3d9df333b325039a74.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5858_png.rf.9d04070dc573ad29b4de99d797a1e7d7.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5924_png.rf.b3609806540c821c7a51bba3bf0b1f09.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "5925_png.rf.8ceb030c4e0e9c6b8d6b7245514d98c2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "594_png.rf.6005a38bc02d3b813ff6aae980e25508.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6105_png.rf.8f34dcdb59791d80cf46b9a5fd4d9327.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6200_png.rf.7194127db214fc46c62671314a59785e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "624_png.rf.a877b339f7968c9348bc06df48697439.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6292_png.rf.91a19bc29379a0eecbf6d70a11854213.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6305_png.rf.19315c78123148b690402b169344918b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6373_png.rf.c9971e1dd014ee348e7e94e846904659.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6375_png.rf.f68689fe5fdad3045f2c9277dcd453bf.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6417_png.rf.59f6203773e4bb3b9811f05f53fcabfc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6430_png.rf.1560ff6586b62984a3bed7f30640b9ef.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "643_png.rf.019b56f3c8ab4761bea9c41f34a1a026.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6442_png.rf.c0b694c9cbc4fd262c4a58301978f692.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6451_png.rf.512cac543e298b37c9edd56f35ab6db0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6461_png.rf.bbda6bc25539ed6316cc2931695ad08c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6464_png.rf.87df45257826205d38fd0f5e450da5d8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6519_png.rf.16bdda5d9287fc0da343d70c91aab499.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6521_png.rf.a59eecfc6a8aee35d856da4be2e9e452.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6529_png.rf.abd49552285d6809e1aebaf5a1f746bd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6641_png.rf.1e250b794e83c45600b4652a5da57ee9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6760_png.rf.71c5e4e80ea3639441c8e50fcd077877.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6764_png.rf.b66063ce2b3fc8415f43e305b51665c8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6861_png.rf.650e2aaf1b3318dbb5bb7ee6902082ed.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6865_png.rf.533bcfd281f447cb9f7c6f273904298a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6873_png.rf.2189e4168b11b2d31395c309c1d65bdd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6875_png.rf.aaf3b531fed9afd3e5240990529fade2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6878_png.rf.597a89e751b0775ac34fed7efe81e9a2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6940_png.rf.90e6dec2d18a2c5af3a93a455bf1f635.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "6941_png.rf.349741ec7fc1c0940c5fb02870ef30de.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7113_png.rf.ff4219329210208f2f6c60d38a9ed457.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "711_png.rf.ea3ea5f0b97cdbcee658c5b52840c932.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7121_png.rf.fe63e2048a29d66bf20c549aacc46156.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7322_png.rf.eddb8b1ecf887b9f825ece8691b3d514.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7364_png.rf.59242b41035b37338282d3510dad8fbb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7415_png.rf.f8df5ddbb5771ab853ed6088cef411ad.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7430_png.rf.9efb79f77baebfdd13cdeca0c985aa14.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7435_png.rf.ac1e66a52d6fec3160994d9be8f559d4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7437_png.rf.355bc16d79853ef9241428aea5e5d5f3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7445_png.rf.249ddd7ebec56e401912cf567b03cdc4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7482_png.rf.9a39ddd3553680e613388426b8faa303.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7491_png.rf.a900f9eb8aacf4b01a7a3ff0e6aa8b4c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7511_png.rf.9500613c3799e68571e282bc9e728535.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7544_png.rf.6ac8aab7caf480a43e9d6d18c26d4c86.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7564_png.rf.864dfb321ff2c036d3126bfa0d9b6a1d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7625_png.rf.48ef0037de5545ce51ac52f4b0fd1813.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7672_png.rf.55284b1775870eb52dc4867662182714.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7697_png.rf.99ff9d6ac8a3d706ae42b62761cf2422.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7723_png.rf.3f7a0419d34aab1be5ff1c02a0078565.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7726_png.rf.c3932dca2b9da120de2d53db8afb6f6f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7727_png.rf.864cca146af3429885908740ac987571.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7767_png.rf.6cfd0ad8c2ea1281c50037a07cc259c2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7846_png.rf.9ccca16f72e3f7e984e805e18ab36280.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7858_png.rf.4fc394cd89a4dcbc1dd49717d93991f9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "7980_png.rf.c32d7efc9a3fc222edac940547fdae98.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8009_png.rf.c58a6fc7d1f8f49b8c7a15e4de9856d4.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "800_png.rf.126a3c219647c442a931d76c73a20d2f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8018_png.rf.b2d7f67c860b456ecf618ab0fd1d7ef3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "801_png.rf.e6a60e1ee4defef99e9b05f28731bf98.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8020_png.rf.f5a9c9e889509217d922f7772dd26c9b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "804_png.rf.0950afaf28ac4a8c7c12e146ffaf9a16.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8081_png.rf.2b5942d540577f1adcba7e173c73ee4d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8150_png.rf.e0389f9cf66b699a98273349564e4d61.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8160_png.rf.d7c3e44dea39699612b2277a0ad0db8b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8166_png.rf.e77c7e2af0976cf76255004f8a1af67f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8177_png.rf.e538bdbf2ec3e2cf737b7b4769be6548.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8179_png.rf.1fafaa46156537ee727048d76c1702ca.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "817_png.rf.d543d284b9e2a272ca38aa64a3adc94f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8239_png.rf.e3ad287213ebb273905f635a23e294a3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8264_png.rf.7002068211abc28d636e51670b890fd3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8273_png.rf.7f570badf008790b9aa7cc0d57e2ddeb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8286_png.rf.1df5cf83ce6fe0d16849c2fdce2ff46d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "829_png.rf.9d8a85349d93b264f7f78b346a97d30a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8321_png.rf.68697bd73058853fe67764aaf38edb66.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8323_png.rf.539337445d5d99a54ef6d7cd64717f90.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8324_png.rf.553a74c23df46f7da8b4c4fe116b9fbb.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8363_png.rf.f167d853d6992e86337f8a2a7c99ec97.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8371_png.rf.ab295ede96236966da170a69961f97c0.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8398_png.rf.c84e40254d86337ceccb5e753eea3a46.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8401_png.rf.00bd2903c02bcac02147fa512c6328ba.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8407_png.rf.d77ab47c9c113f2535ba4441cca92c67.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8417_png.rf.346bd79dc06ced713f8e2a214bbe31d9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "847_png.rf.5eb9fb475fffe86a7a262ff988743990.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8480_png.rf.a5e4333935058268b1cb8cbec26db70d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8491_png.rf.e4763e73769f67c00448523e64b80144.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8492_png.rf.b9f6531f8fc7096a4dcff98b14b96c11.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8533_png.rf.e47b5064e03759b83f2e75a6a054a1f3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8534_png.rf.7761572d36315b863a9d5994c6f192ea.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8541_png.rf.44d8065f6060e839111d978591e07d87.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "855_png.rf.191886cc397bb5884715b61f8552cd65.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "856_png.rf.f651654efe2b7fec3595f6991212a0d3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8571_png.rf.396574c8c5c59d14dd86ba35bc448049.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8666_png.rf.e2f5c4c68e09dd1082d7f399a3556eec.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8690_png.rf.4a1153cf0a7fb9918f349ccfd21e8d85.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8764_png.rf.a4ce00329960d08aad1b46614e36ab7a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8767_png.rf.83d9179e07f5a9dbb6d11896eb265a6d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8770_png.rf.a1cce3277f366e59be77f75f58b5098f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8814_png.rf.f55669f6a5d7904243698a6184343f52.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8821_png.rf.588c2366274eaaa2d626a5dadcecacff.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "884_png.rf.a01d32a1d05bb6ced3c0fa27e4e999f2.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8869_png.rf.17e47f487930e8f76cf098cb1f60f658.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8885_png.rf.74285f022c9c2ad67860334384c4b4d3.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8901_png.rf.32001739846a73c0afb2b6727cca8112.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8912_png.rf.38527ac32eb48a54586cf6ab7ee6e116.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8913_png.rf.5ee168233db8af3873820f99199ee2df.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "892_png.rf.4f429fb910f57cb24bf62cd772a81a8d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8944_png.rf.49aae74c5e64da6e56c291fb09b1db96.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8960_png.rf.8115ee82d24658dbba96575e8778cc60.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8977_png.rf.a2fa0068c53ac9d09a81beb77964ccb8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8993_png.rf.086560856d631bb95a74d2e575e8710a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "8998_png.rf.cfa5b091ce8d8f8ce96733c6446d5ebc.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9004_png.rf.8452c268c3981d6efe48b4963e8160ec.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9012_png.rf.c0ee8bfea7aab74d70427ea834ef5f1b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9040_png.rf.f257a3786c1f3cbadf8103b7a78ce4c8.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9130_png.rf.c58fcdbfa69e9c8d1e4365881af68f9f.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9143_png.rf.e8114be4e7a9a4105c2dc35b76e2933d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9220_png.rf.5f0b8ace73884390fb2a3a7bc7561c88.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9242_png.rf.34330bf09a0fd4ea3aef1800c4e8296b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9245_png.rf.6add88d4be13a9e36541272549c0b4c6.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9291_png.rf.7859f5d0164bedc1d65ebf665964c9c1.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "933_png.rf.ffac672aaa5cb14c7a7dc5802c66176b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "934_png.rf.b04a23a7a66d1f4238f7dd0fe853770a.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9379_png.rf.97f21dde596703ff4d0f0b433a74ced9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "937_png.rf.5be42699192062c1927e4d4ad7b5b835.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "93_png.rf.c0f4baad00e3b51e3868a0976756e4a5.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9416_png.rf.a281b157c8c3a26b0dbaae7e8eec74be.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9427_png.rf.f00929b61f0bcb1e78dfa0692e43d156.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9428_png.rf.7ea7270ad5d61b7afae6bb75c82ce242.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9445_png.rf.f6ab5bf4836fcfc0e66b3de5293f1179.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9446_png.rf.b6fc52cf007bc97604dd769e288c0d5c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9462_png.rf.a0e308ec0e2aefc3004a9eb32819c0ce.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9480_png.rf.c37cbf373997b3f197c686b707ffadac.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "94_png.rf.d1c5617e570ed7cc347e5d7803b47756.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9528_png.rf.3dbbe9014f0f5d0a2a64b5f35d02584c.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9585_png.rf.ca3becec795d806ad5c9f7f2961f339d.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9591_png.rf.d698d8a800a74223243f756f88e64844.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "959_png.rf.9a1f5b444e2c488f3f22e6e0c5581f08.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "95_png.rf.078ec6b979f6ef3502d431e03bc58b2e.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9656_png.rf.8b3323aa5c403b3cc2b8a3c27624a960.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9720_png.rf.03a758c497ddcb960b0f624a57e227c9.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "991_png.rf.fff53042ce709c0088acbd8e5e747106.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9932_png.rf.8263504373a45d5f382f0b24f3b8c97b.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9937_png.rf.310cbec2e6fe951138b67845b7fb9e15.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9940_png.rf.8f1ef95dd7aa5e704f9cb0dd4b4cc203.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9970_png.rf.635d1b2434ab17c91242a4214a1b03ca.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9984_png.rf.f25291d48f861319c9753fce3e9f8c01.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9985_png.rf.5077eca835f53d2d0ad55eb9436c7257.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "999_png.rf.db81a5df0db1f0c4854e58778b06debd.pdf",
+    "expectedKeywords": [[]]
+  },
+  {
+    "file": "9_png.rf.e576586aa93948569209eb7e75d6bf1e.pdf",
+    "expectedKeywords": [[]]
   }
 ]

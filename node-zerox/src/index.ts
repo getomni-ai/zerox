@@ -31,6 +31,7 @@ export const zerox = async ({
   let outputTokenCount = 0;
   let priorPage = "";
   const aggregatedMarkdown: string[] = [];
+  const aggregatedHtml: string[] = [];
   const startTime = new Date();
 
   llmParams = validateLLMParams(llmParams);
@@ -84,6 +85,7 @@ export const zerox = async ({
   }
 
   const endOfPath = localPath.split("/")[localPath.split("/").length - 1];
+  const originalFileName = endOfPath.split(".").slice(0, -1).join('.');
   const rawFileName = endOfPath.split(".")[0];
   const fileName = rawFileName
     .replace(/[^\w\s]/g, "")
@@ -107,6 +109,7 @@ export const zerox = async ({
           maintainFormat,
           model,
           priorPage,
+          debugData: { name: image, path: imagePath, pageNumber: idx + 1 },
         });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
@@ -124,17 +127,23 @@ export const zerox = async ({
     }
   } else {
     // Process in parallel with a limit on concurrent pages
-    const processPage = async (image: string): Promise<string | null> => {
+    const processPage = async (
+      image: string,
+      pageNumber: number
+    ): Promise<[string, string] | null> => {
       const imagePath = path.join(tempDirectory, image);
       try {
-        const { content, inputTokens, outputTokens } = await getCompletion({
-          apiKey: openaiAPIKey,
-          imagePath,
-          llmParams,
-          maintainFormat,
-          model,
-          priorPage,
-        });
+        const { content, inputTokens, outputTokens, html } =
+          await getCompletion({
+            apiKey: openaiAPIKey,
+            imagePath,
+            llmParams,
+            maintainFormat,
+            model,
+            pageNumber,
+            priorPage,
+            debugData: { name: image, path: imagePath, pageNumber },
+          });
         const formattedMarkdown = formatMarkdown(content);
         inputTokenCount += inputTokens;
         outputTokenCount += outputTokens;
@@ -143,7 +152,7 @@ export const zerox = async ({
         priorPage = formattedMarkdown;
 
         // Add all markdown results to array
-        return formattedMarkdown;
+        return [formattedMarkdown, html];
       } catch (error) {
         console.error(`Failed to process image ${image}:`, error);
         throw error;
@@ -152,7 +161,7 @@ export const zerox = async ({
 
     // Function to process pages with concurrency limit
     const processPagesInBatches = async (images: string[], limit: Limit) => {
-      const results: (string | null)[] = [];
+      const results: ([string, string] | null)[] = [];
 
       const promises = images.map((image, index) =>
         limit(() =>
@@ -168,14 +177,23 @@ export const zerox = async ({
 
     const limit = pLimit(concurrency);
     const results = await processPagesInBatches(images, limit);
-    const filteredResults = results.filter(isString);
-    aggregatedMarkdown.push(...filteredResults);
+    const filteredResults = results.filter(
+      (r) => r && isString(r[0]) && isString(r[1])
+    );
+    aggregatedMarkdown.push(...filteredResults.map((r) => r![0]));
+    aggregatedHtml.push(...filteredResults.map((r) => r![1]));
   }
 
   // Write the aggregated markdown to a file
   if (outputDir) {
     const resultFilePath = path.join(outputDir, `${fileName}.md`);
     await fs.writeFile(resultFilePath, aggregatedMarkdown.join("\n\n"));
+
+    // const resultHtmlFilePath = path.join(
+    //   path.join("/Users/zeeshan/work/zerox/node-zerox/tests", "results", `htmls`),
+    //   `${originalFileName}.html`
+    // );
+    // await fs.writeFile(resultHtmlFilePath, aggregatedHtml.join("\n\n"));
   }
 
   // Cleanup the downloaded PDF file

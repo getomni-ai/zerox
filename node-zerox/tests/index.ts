@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import fs from "node:fs";
 import path from "node:path";
 import pLimit from "p-limit";
+import { markdownToJson } from "../src/utils";
 
 dotenv.config({ path: path.join(__dirname, "../.env") });
 
@@ -19,7 +20,30 @@ const TEST_JSON_PATH = path.join(__dirname, "../../shared/test.json");
 const OUTPUT_DIR = path.join(__dirname, "results", `test-run-${Date.now()}`);
 const TEMP_DIR = path.join(OUTPUT_DIR, "temp");
 
+function getInputs() {
+  const files = fs.readdirSync(INPUT_DIR);
+
+  const fileIdentifier = (name: string) => parseInt(name.split("_png")[0]);
+
+  // Filter out files (ignoring directories)
+  const fileNames = files
+    .filter((file) => {
+      return (
+        fs.statSync(path.join(INPUT_DIR, file)).isFile() && file !== ".DS_Store"
+      );
+    })
+    .map((name) => ({ file: name, expectedKeywords: [[]] }));
+
+  return fileNames.sort(
+    (a, b) => fileIdentifier(a.file) - fileIdentifier(b.file)
+  );
+}
+
 async function main() {
+  // Copy and paste the result into test.json
+  // console.log("--->", JSON.stringify(getInputs()));
+  // return;
+
   const T1 = new Date();
 
   // Read the test inputs and expected keywords
@@ -32,42 +56,47 @@ async function main() {
 
   const limit = pLimit(FILE_CONCURRENCY);
 
+  const fileWhitelist = new Set([
+    "10091_png.rf.a90765e31cc48705fb7241b99bef4472.pdf",
+  ]);
   const results = await Promise.all(
-    testInputs.map((testInput) =>
-      limit(async () => {
-        const filePath = path.join(INPUT_DIR, testInput.file);
+    testInputs
+      .filter((i) => fileWhitelist.has(i.file))
+      .map((testInput) =>
+        limit(async () => {
+          const filePath = path.join(INPUT_DIR, testInput.file);
 
-        // Check if the file exists
-        if (!fs.existsSync(filePath)) {
-          console.warn(`File not found: ${filePath}`);
-          return null;
-        }
+          // Check if the file exists
+          if (!fs.existsSync(filePath)) {
+            console.warn(`File not found: ${filePath}`);
+            return null;
+          }
 
-        // Run OCR on the file
-        const ocrResult = await zerox({
-          cleanup: false,
-          filePath,
-          maintainFormat: false,
-          model: ModelOptions.gpt_4o,
-          openaiAPIKey: process.env.OPENAI_API_KEY,
-          outputDir: OUTPUT_DIR,
-          tempDir: TEMP_DIR,
-        });
+          // Run OCR on the file
+          const ocrResult = await zerox({
+            cleanup: false,
+            filePath,
+            maintainFormat: false,
+            model: ModelOptions.gpt_4o,
+            openaiAPIKey: process.env.OPENAI_API_KEY,
+            outputDir: OUTPUT_DIR,
+            tempDir: TEMP_DIR,
+          });
 
-        // Compare expected keywords with OCR output
-        const keywordCounts = compareKeywords(
-          ocrResult.pages,
-          testInput.expectedKeywords
-        );
+          // Compare expected keywords with OCR output
+          const keywordCounts = compareKeywords(
+            ocrResult.pages,
+            testInput.expectedKeywords
+          );
 
-        // Prepare the result
-        return {
-          file: testInput.file,
-          keywordCounts,
-          totalKeywords: testInput.expectedKeywords.flat().length,
-        };
-      })
-    )
+          // Prepare the result
+          return {
+            file: testInput.file,
+            keywordCounts,
+            totalKeywords: testInput.expectedKeywords.flat().length,
+          };
+        })
+      )
   );
 
   // Filter out any null results (due to missing files)
