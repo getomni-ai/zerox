@@ -6,6 +6,8 @@ export interface ZeroxArgs {
   llmParams?: LLMParams;
   maintainFormat?: boolean;
   model?: ModelOptions | string;
+  onPostProcess?: (params: { content: string }) => Promise<void>;
+  onPreProcess?: (params: { imagePath: string | Buffer }) => Promise<void>;
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];

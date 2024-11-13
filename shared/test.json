@@ -269,7 +269,7 @@
     ]
   },
   {
-    "file": "0005.pdf",
+    "file": "0005.png",
     "expectedKeywords": [
       [
         "Quest",
@@ -305,7 +305,7 @@
     ]
   },
   {
-    "file": "0006.pdf",
+    "file": "0006.png",
     "expectedKeywords": [
       [
         "T-Mobile",
@@ -330,7 +330,7 @@
     ]
   },
   {
-    "file": "0007.pdf",
+    "file": "0007.png",
     "expectedKeywords": [
       [
         "LABCORP",
@@ -357,7 +357,7 @@
     ]
   },
   {
-    "file": "0008.pdf",
+    "file": "0008.png",
     "expectedKeywords": [
       [
         "LABCORP LCLS BULK",
@@ -385,7 +385,7 @@
     ]
   },
   {
-    "file": "0009.pdf",
+    "file": "0009.png",
     "expectedKeywords": [
       [
         "3106932528",
@@ -416,7 +416,7 @@
     ]
   },
   {
-    "file": "0010.pdf",
+    "file": "0010.png",
     "expectedKeywords": [
       [
         "02/16/2019 6:09:27 PM",
@@ -438,6 +438,943 @@
         "confidential",
         "800-859-6046",
         "America® Holdings"
+      ]
+    ]
+  },
+  {
+    "file": "0011.png",
+    "expectedKeywords": [
+      [
+        "Bill of Lading",
+        "21099992723",
+        "123 Pick Up Street",
+        "Business without Dock or Forklift",
+        "800-866-4870",
+        "15 minutes",
+        "accountspayable@freghtera.com",
+        "dispatch@freghtera.com",
+        "Pallet",
+        "48x40x48 in",
+        "300 Lbs",
+        "declared value",
+        "per",
+        "TOTAL WEIGHT",
+        "14706(c)(1)(A)",
+        "certify",
+        "Shipper Signature",
+        "Freight Loaded",
+        "Carrier Signature",
+        "Pickup Date",
+        "LTL Only",
+        "123 Delivery Street",
+        "Vancouver",
+        "BCV5K 0A4",
+        "Canada",
+        "9:00AM",
+        "5:00PM",
+        "Protect From Freeze",
+        "EXAMPLE CARRIER",
+        "Seal Number",
+        "Freight Charges Term",
+        "3rd Party",
+        "BOL",
+        "POD"
+      ]
+    ]
+  },
+  {
+    "file": "0012.png",
+    "expectedKeywords": [
+      [
+        "UniformSoftware",
+        "transport business name",
+        "ABN",
+        "xx xxx xxx xxx",
+        "Tel",
+        "Cust A/c",
+        "Due Date",
+        "Inv. Date",
+        "Invoice #",
+        "1/1/2017",
+        "ref#1",
+        "MASCOT",
+        "SYDNENHAM",
+        "4PCS",
+        "0.500",
+        "187",
+        "$11.00",
+        "$0.88",
+        "$11.00",
+        "EAST BOTANY",
+        "PORT BOTANY",
+        "4.070",
+        "6459",
+        "1659",
+        "5/15/2017",
+        "44PCS",
+        "Please remit payment to",
+        "bank name",
+        "xxx-xxx",
+        "TOTAL",
+        "155.00",
+        "15.50",
+        "182.90"
+      ]
+    ]
+  },
+  {
+    "file": "0013.pdf",
+    "expectedKeywords": [
+      [
+        "MSFT",
+        "AAPL",
+        "10.6%",
+        "Portfolio Value",
+        "$545k",
+        "Allocation",
+        "82%/18% Stocks/Bonds",
+        "Cash",
+        "5.75",
+        "US Stocks",
+        "78.65",
+        "Non-US Stocks",
+        "3.45",
+        "Bonds",
+        "12.12",
+        "Other/Not Clsfd",
+        "0.03",
+        "Portfolio Construction",
+        "78.9%",
+        "2.4%",
+        "18.1%",
+        "0.5%",
+        "Cash",
+        "ETFs",
+        "Mutual Funds",
+        "Individual Stocks",
+        "Total Stock Holdings",
+        "634",
+        "Total Bond Holdings",
+        "9,748"
+      ],
+      [
+        "Your Equity Allocation",
+        "82%",
+        "Individual Stocks 96%",
+        "ETFs 4%",
+        "25% - 35%",
+        "600",
+        "Diversification Analysis",
+        "Owning multiple funds does not always produce the anticipated diversification benefits.",
+        "Equity Style",
+        "Large",
+        "Mid",
+        "Small",
+        "20",
+        "13",
+        "32",
+        "15",
+        "Sectors",
+        "20.62",
+        "28.73",
+        "Consumer Def",
+        "Bmark%",
+        "1.45"
+      ],
+      [
+        "Tax Transition/Overlap Analysis",
+        "$138,494",
+        "$19,943",
+        "PFIZER INC",
+        "($453)",
+        "2026",
+        "RIO TINTO PLC SPONSORED ADR",
+        "ISHARES 5-10 YEAR IG CORP BOND ETF",
+        "NXST",
+        "$1,198.95",
+        "$11.631.26",
+        "PROCTER & GAMBLE CO",
+        "PG",
+        "$283",
+        "($928)",
+        "1/31/2023"
+      ]
+    ]
+  },
+  {
+    "file": "0014.png",
+    "expectedKeywords": [
+      [
+        "Last quote update:",
+        "2013-11-30 05:20:51",
+        "54,659",
+        "(9.2%)",
+        "14.41%",
+        "Profit/Loss",
+        "66,087",
+        "0.36%",
+        "0.17%",
+        "60,105",
+        "If [Target-Actual]",
+        "Emerging",
+        "Real Estate",
+        "Healthcare",
+        "Technology",
+        "8%",
+        "Defensive",
+        "Sensitivity",
+        "DELL",
+        "Years-Current",
+        "161,200",
+        "-6",
+        "627",
+        "0.43%",
+        "29,455",
+        "138,898",
+        "53,601",
+        "13",
+        "0.08%",
+        "0.17%",
+        "13.10%",
+        "MTD",
+        "US Broad",
+        "CAD",
+        "XIU.TO"
+      ]
+    ]
+  },
+  {
+    "file": "0015.png",
+    "expectedKeywords": [
+      [
+        "通行费",
+        "湖北增值税电子普通发票",
+        "04201700112",
+        "499099660821",
+        "12636666022332927910",
+        "校 验 码",
+        "开票日期",
+        "2018年03月23日",
+        "密 码 区",
+        "030243319>1*+9239+></<59+3-",
+        "786-646/16<248>/-/029029>746",
+        "7>44<97929379677-955315>+-",
+        "6/53<13+8*010369194565>-5/04",
+        "武汉经济技术开发区车城大道7号 84289348",
+        "经营租货通行费",
+        "鄂AHG248",
+        "通行日期起",
+        "20180212",
+        "通行日期止",
+        "20180212",
+        "¥286.23",
+        "税率",
+        "3%",
+        "¥294.84",
+        "湖北随岳南高速公路有限公司",
+        "91420000753416406R",
+        "发票专用章",
+        "收 款 人",
+        "龙梦媛",
+        "复 核：",
+        "陈煜",
+        "贰佰玖拾肆元捌角贰分",
+        "武汉市经济开发区17C1地块东和中心B栋1601号027-83458755"
+      ]
+    ]
+  },
+  {
+    "file": "0016.pdf",
+    "expectedKeywords": [
+      [
+        "Valori Nutrizionali",
+        "Nutrition Facts",
+        "Nährwerte",
+        "Valores Nutricionales",
+        "Energia/Energy/Energie/Valor energético",
+        "Kj 2577/Kcal 616",
+        "di cui acidi grassi saturi/of which saturates/davon gesättigte Fettsäuren/de las cuales saturadas",
+        "8.3g",
+        "di cui zuccheri/of which sugars/davon Zucker/de los cuales azúcar",
+        "5.1 g",
+        "Proteine/Protein/Eiweiß/Proteínas",
+        "IT Ingredienti",
+        "100%",
+        "PEANUT BUTTER",
+        "BØWLPRØS",
+        "latte e sesamo",
+        "8 054145 812068",
+        "aloha@bowlpros.com",
+        "www.bowlpros.com",
+        "Da consumarsi preferibilmente entro il/Best before/Mindestens haltbar bis/Consumir preferentemente antes del"
+      ]
+    ]
+  },
+  {
+    "file": "0017.pdf",
+    "expectedKeywords": [
+      [
+        "御 見 積 書",
+        "⻑崎北郵便局",
+        "書類番号",
+        "202410-01439[01]",
+        "下記の通り御見積申し上げます",
+        "何卒御用命下さる様お願い申し上げます",
+        "発行日",
+        "⻑崎北郵便局（親時計更新）",
+        "60日間",
+        "90日間",
+        "荷造運賃",
+        "812-0026",
+        "福岡県福岡市博多区上川端町8-18",
+        "092-281-0020",
+        "092-281-0112",
+        "取付工事費",
+        "御見積金額",
+        "712,000",
+        "品目コード",
+        "親時計4回線壁掛型 ﾀｲﾏｰ･ﾁｬｲﾑ",
+        "単価",
+        "金額",
+        "※設置工事費含む",
+        "※キャンペーン期間中の為設置工事費無料です。",
+        "KM-82TC-4P",
+        "標準価格計",
+        "割引合計額",
+        "御了承ください",
+        "特注品の内容に関しては営業担当者へ確認ください"
+      ]
+    ]
+  },
+  {
+    "file": "0018.pdf",
+    "expectedKeywords": [
+      [
+        "Tesla Inc.",
+        "10-Q",
+        "Texas",
+        "I.R.S. Employer Identification No.",
+        "91-2197729",
+        "Zip Code",
+        "78725",
+        "Registrant’s telephone number, including area code",
+        "(512) 516-8177",
+        "Title of each class",
+        "Common stock",
+        "Name of each exchange on which registered",
+        "The Nasdaq Global Select Market"
+      ],
+      [
+        "Balance Sheets",
+        "Current assets",
+        "September 30, 2024",
+        "December 31, 2023",
+        "Cash and cash equivalents",
+        "18,111",
+        "16398",
+        "Short-term investments",
+        "Accounts receivable",
+        "Inventory",
+        "Total assets",
+        "119,852",
+        "106,618",
+        "Liabilities",
+        "Current liabilities",
+        "Accounts payable",
+        "14,654",
+        "14,431",
+        "Total liabilities",
+        "49,142",
+        "43,009",
+        "Equity",
+        "$0.001 par value; 100 shares authorized; no shares issued and outstanding",
+        "Total liabilities and equity",
+        "119,852",
+        "106,618"
+      ],
+      [
+        "Consolidated Statements of Operations",
+        "(in millions, except per share data)",
+        "(unaudited)",
+        "Revenues",
+        "Three Months Ended September 30,",
+        "Net income",
+        "2,183",
+        "1,878",
+        "4,821",
+        "7,031",
+        "Net income attributable to common stockholders",
+        "2,167",
+        "1,853",
+        "4,774",
+        "7,069"
+      ],
+      [
+        "Consolidated Statements of Comprehensive Income",
+        "Comprehensive income attributable to common stockholders",
+        "2,620",
+        "1,571",
+        "4,903",
+        "6,738",
+        "(289)",
+        "(343)"
+      ]
+    ]
+  },
+  {
+    "file": "0019.png",
+    "expectedKeywords": [
+      [
+        "Walmart",
+        "win $1000",
+        "7N5N1V1XCQDQ",
+        "317-851-1102",
+        "Mgr",
+        "JAMIE BROOKSHIRE",
+        "882 S. STATE ROAD 136",
+        "GREENWOOD",
+        "IN 46143",
+        "05483",
+        "TATER TOTS",
+        "001312000025",
+        "2.96",
+        "SNACK BARS",
+        "002190848816",
+        "4.98",
+        "VOIDED ENTRY",
+        "HRI CL CHS",
+        "GALE",
+        "000000000003K",
+        "32.00",
+        "BAGELS",
+        "001376402801",
+        "4.66",
+        "TOTAL",
+        "144.02",
+        "CASH",
+        "150.02",
+        "CHANGE DUE",
+        "6.00",
+        "ITEMS SOLD 26",
+        "0783 5080 4072 3416 2496 6",
+        "04/27/19",
+        "12:59:46",
+        "Scan with Walmart app to save receipt"
+      ]
+    ]
+  },
+  {
+    "file": "0020.png",
+    "expectedKeywords": [
+      [
+        "ZESTADO EXPRESS",
+        "ABN",
+        "16 112 221 123",
+        "Bill To",
+        "Custom Board Makeers",
+        "Administration Centre",
+        "12 Salvage Road",
+        "Acaacia Ridge BC QLD 4110",
+        "Australia",
+        "Issue Date",
+        "8th December 2021",
+        "Account No.",
+        "101234",
+        "Invoice Amount",
+        "$5,270.00 AUD",
+        "Pay By",
+        "15th December 2021",
+        "Waybill No.",
+        "012345A",
+        "GC12345",
+        "sales.gc@customboards.com",
+        "Surfboards",
+        "1,010 kg",
+        "Kahului Maui Hawaii Port",
+        "Maui Surf Shop",
+        "13' x 18\" x 3\"",
+        "Eco High Performance Mini Mals",
+        "$1,980.00",
+        "4321-A1 XL Custom Supreme Light Stand Up",
+        "13' x 18\" x 3\"",
+        "$1,035.00",
+        "$1,210.00"
+      ]
+    ]
+  },
+  {
+    "file": "0021.png",
+    "expectedKeywords": [
+      [
+        "RZECZPOSPOLITA",
+        "BRANDT",
+        "27.06.1988 CRIVITZ",
+        "4c. STAROSTA POLICKI",
+        "880627",
+        "00359/19/3211",
+        "8806670172",
+        "AM/B1/B",
+        "PL"
+      ]
+    ]
+  },
+  {
+    "file": "0022.png",
+    "expectedKeywords": [
+      [
+        "Ohio",
+        "LICENSE",
+        "STRICKLAND",
+        "Mike Rankin",
+        "Registrar BMV",
+        "JANE Q",
+        "9900TL5467900302",
+        "LICENSE NO.",
+        "TL545786",
+        "07-09-1962",
+        "04-01-2009",
+        "07-09-2012",
+        "ENDORS",
+        "07-09-1962",
+        "BRO",
+        "POWER OF ATTY",
+        "LIFE SUSTAINING",
+        "EQUIPMENT"
+      ]
+    ]
+  },
+  {
+    "file": "0023.png",
+    "expectedKeywords": [
+      [
+        "DRIVER",
+        "Tennessee",
+        "123456789",
+        "02/11/2026",
+        "DOB",
+        "02/11/1974",
+        "ISS",
+        "02/11/2019",
+        "REST",
+        "5'-05",
+        "1234567890123456",
+        "SAMPLE",
+        "JANICE",
+        "123 MAIN STREET",
+        "APT. 1",
+        "NASHVILLE",
+        "37210",
+        "DL"
+      ]
+    ]
+  },
+  {
+    "file": "0024.png",
+    "expectedKeywords": [
+      [
+        "CALIFORNIA",
+        "1986",
+        "N8685798",
+        "4641 Hayvenhurst",
+        "91316",
+        "Blk",
+        "Brn",
+        "8-29-58",
+        "PRE LIC EXP",
+        "CLASS 3",
+        "CORRECTIVE",
+        "SECTION 12804",
+        "Michael Joe Jackson",
+        "4-28-83",
+        "clckjw",
+        "AHIJ"
+      ]
+    ]
+  },
+  {
+    "file": "0025.png",
+    "expectedKeywords": [
+      [
+        "NEW YORK",
+        "LEARNER PERMIT",
+        "Mark J.F. Schroeder",
+        "Commissioner",
+        "987 654 321",
+        "BLU",
+        "DOB",
+        "Issued",
+        "10/31/2026",
+        "Michelle M. Motorist",
+        "MOTORIST",
+        "MICHELLE",
+        "2345 ANYWHERE STREET",
+        "12222",
+        "U18 UNTIL",
+        "OCT 21",
+        "U21 UNTIL",
+        "OCT 31 03",
+        "123456789"
+      ]
+    ]
+  },
+  {
+    "file": "0026.png",
+    "expectedKeywords": [
+      [
+        "California",
+        "DRIVER LICENSE",
+        "11234568",
+        "IMA",
+        "2570 24TH STREET",
+        "ANYTOWN",
+        "95818",
+        "DOB",
+        "08/31/1977",
+        "RSTR",
+        "DONOR",
+        "VETERAN",
+        "BRN",
+        "WGT",
+        "125 lb",
+        "00/00/0000NNNAN/ANFD/YY",
+        "08/31/2009",
+        "Cardholder",
+        "0831977"
+      ]
+    ]
+  },
+  {
+    "file": "0027.png",
+    "expectedKeywords": [
+      [
+        "Pennsylvania",
+        "IDENTIFICATION",
+        "visitPA.com",
+        "99 999 999",
+        "DUPS",
+        "01/07/1973",
+        "ANDREW JASON",
+        "123 MAIN STREET",
+        "HARRISBURG",
+        "17101-0000",
+        "01/31/2026",
+        "01/07/2022",
+        "HGT",
+        "1234567890123",
+        "456789012345",
+        "Andrew",
+        "Sample"
+      ]
+    ]
+  },
+  {
+    "file": "0028.png",
+    "expectedKeywords": [
+      [
+        "CALIFORNIA",
+        "1970",
+        "Ronald J. Thomas",
+        "ADMINISTRATOR",
+        "David Franklin Thomas",
+        "5798 Olive St",
+        "Calif",
+        "95969",
+        "W106438",
+        "Gry",
+        "COLOR EYES",
+        "Blu",
+        "DATE OF BIRTH",
+        "Aug 20, 1892",
+        "Corrective",
+        "D. F. Thomas",
+        "6,000 LBS",
+        "Paradise",
+        "8-4-65"
+      ]
+    ]
+  },
+  {
+    "file": "0029.png",
+    "expectedKeywords": [
+      [
+        "CALIFORNIA",
+        "OPERATING",
+        "1984",
+        "W0209369",
+        "James Scott Garner",
+        "35 Oakmont Dr",
+        "90049",
+        "Blk",
+        "Brn",
+        "6-3",
+        "PRE LIC EXP",
+        "4-7-23",
+        "CORRECTIVE",
+        "CONDITIONS",
+        "CLASS 3",
+        "SECTION 12804",
+        "James S. Garner",
+        "3-25-80",
+        "Gln rc",
+        "LAMINATE"
+      ]
+    ]
+  },
+  {
+    "file": "0030.png",
+    "expectedKeywords": [
+      [
+        "CALIFORNIA",
+        "DRIVER",
+        "RENEWAL",
+        "BIRTHDAY",
+        "N2287802",
+        "Shanaberger",
+        "1541 Beloit Ave",
+        "#208",
+        "90025",
+        "Brn",
+        "HEIGHT",
+        "5-6",
+        "130",
+        "CORRECTIVE",
+        "CONDITIONS",
+        "CLASS 3",
+        "SECTION 12804",
+        "08-21-80",
+        "Tor mw",
+        "LAMINATE"
+      ]
+    ]
+  },
+  {
+    "file": "0031.png",
+    "expectedKeywords": [
+      [
+        "SIGNATURE",
+        "TITULAIRE",
+        "FIRMA DEL TITULAR",
+        "PASAPORTE",
+        "UNITED STATES OF AMERICA",
+        "Codigo",
+        "546844936",
+        "Apellidos",
+        "ABRENICA",
+        "Date de naissance",
+        "Lugar de nacimiento",
+        "NEW YORK",
+        "06 Jun 2016",
+        "Autoridad",
+        "SEE PAGE 27",
+        "<USAAABRENICA<<JARED<MICHAEL",
+        "5468449363USA0102100M2106054275193173<681306"
+      ]
+    ]
+  },
+  {
+    "file": "0032.png",
+    "expectedKeywords": [
+      [
+        "ENDORSEMENTS AND LIMITATIONS",
+        "OBSERVATIONS BEGINNING",
+        "MENTIONS ET RESTRICTIONS",
+        "l'intention",
+        "GK141569",
+        "CANADA",
+        "Pays émetteur",
+        "passeport",
+        "MANN",
+        "Prénoms",
+        "JASKARAN SINGH",
+        "CANADIENNE",
+        "naissance",
+        "JNAOIA",
+        "délivrance",
+        "TORONTO",
+        "CANMANN<<JASKARAN<<SINGH",
+        "GK141569<8CAN8607294M2707202",
+        "ED197265"
+      ]
+    ]
+  },
+  {
+    "file": "0033.png",
+    "expectedKeywords": [
+      [
+        "Assinatura",
+        "Ce passeport",
+        "caso de incapacidad",
+        "AA000000",
+        "REPÚBLICA FEDERATIVA DO BRASIL",
+        "PAÍS EMISSOR",
+        "SOBRENOME",
+        "FARIAS DOS SANTOS",
+        "NOME",
+        "RODRIGO",
+        "BRASILEIRO(A)",
+        "16 MAR/MAR 2004",
+        "BRASÍLIA/DF",
+        "AMANDA FARIAS DOS SANTOS",
+        "Res. CNJ 131/11, Art. 13.",
+        "P<BRAFARIAS<DOS<SANTOS<<RODRIGO",
+        "AA000000<0BRA0403162M2507053"
+      ]
+    ]
+  },
+  {
+    "file": "0034.png",
+    "expectedKeywords": [
+      [
+        "ENDORSEMENTS AND LIMITATIONS",
+        "PAGE 5 (IF APPLICABLE)",
+        "MENTIONS ET RESTRICTIONS",
+        "HK444152",
+        "CANADA",
+        "Issuing Country",
+        "WITTMACK",
+        "Prénoms",
+        "BRIAN FREDRICK",
+        "Date de naissance",
+        "01 NOV 47",
+        "CONSORT CAN",
+        "Date d'expiration",
+        "MISSISSAUGA",
+        "P<CANWITTMACK<<BRIAN<FREDRICK",
+        "HK444152<5CAN4711018M2606130",
+        "EGD69494"
+      ]
+    ]
+  },
+  {
+    "file": "0035.png",
+    "expectedKeywords": [
+      [
+        "OBSERVATIONS OFFICIELLES (11)",
+        "UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND",
+        "518242591",
+        "Surname/Nom (1)",
+        "BRITISH CITIZEN",
+        "CROYDON",
+        "Date of expiry",
+        "24 APR / AVR 24",
+        "Holder's signature",
+        "P<GBRWEBB<<JAMES<ROBERT",
+        "5182425917GBR7702174M2404244"
+      ]
+    ]
+  },
+  {
+    "file": "0036.png",
+    "expectedKeywords": [
+      [
+        "RESIDENZA",
+        "TORINO (TO)",
+        "COLORE DEGLI OCCHI",
+        "MARRONI",
+        "REPUBBLICA ITALIANA",
+        "Tipo. Type. Type.",
+        "Codice Paese.",
+        "YA8116396",
+        "TREVISAN",
+        "Nome. Given Names. Prénoms. (2)",
+        "FELTRE (BL)",
+        "MINISTRO AFFARI ESTERI",
+        "E COOPERAZIONE INTERNAZIONALE",
+        "Firma del titolare",
+        "P<ITATREVISAN<<MARCO",
+        "YA81163966ITA6602129M2507097"
+      ]
+    ]
+  },
+  {
+    "file": "0037.png",
+    "expectedKeywords": [
+      [
+        "We the People",
+        "insure domestic Tranquility",
+        "Constitution for the United States of America",
+        "SIGNATURE OF BEARER",
+        "UNITED STATES OF AMERICA",
+        "Código",
+        "910239248",
+        "Apellidos",
+        "OBAMA",
+        "Date de naissance",
+        "17 Jan 1964",
+        "ILLINOIS, U.S.A.",
+        "Authority / Autorité / Autoridad",
+        "SEE PAGE 51",
+        "P<USABOBAMA<<MICHELLE",
+        "9102392482USA6401171F1812051900781200<129676"
+      ]
+    ]
+  },
+  {
+    "file": "0038.png",
+    "expectedKeywords": [
+      [
+        "Of the United States",
+        "PASSPORT",
+        "PASSEPORT",
+        "PASAPORTE",
+        "Code / Code / Código",
+        "488839667",
+        "VOLD",
+        "STEPHEN HANSL",
+        "Nationality / Nationalité / Nacionalidad",
+        "WASHINGTON, U.S.A.",
+        "21 May 2012",
+        "United States Department of State",
+        "Mentions Spéciale",
+        "SEE PAGE 51",
+        "P<USAVOLD<<STEPHEN<HANSL",
+        "4888396671USA6008156M220520112117147143<509936"
+      ]
+    ]
+  },
+  {
+    "file": "0039.png",
+    "expectedKeywords": [
+      [
+        "insure domestic Tranquility",
+        "Constitution for the United States of America.",
+        "PASSPORT",
+        "PASSEPORT",
+        "PASAPORTE",
+        "USA",
+        "Type / Type / Tipo",
+        "963545637",
+        "JOHN",
+        "15 Mar 1996",
+        "Fecha de expedición",
+        "United States Department of State",
+        "Endorsements",
+        "Mentions Spéciales",
+        "Anotaciones",
+        "SEE PAGE 17",
+        "P<USAJOHN<<DOE",
+        "9635456374USA9603150M27041402O2113962<804330"
+      ]
+    ]
+  },
+  {
+    "file": "0040.png",
+    "expectedKeywords": [
+      [
+        "OBSERVATIONS OFFICIELLES (11)",
+        "UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND",
+        "Code/Code",
+        "925600253",
+        "UK SPECIMEN",
+        "Prénoms (2)",
+        "ANGELA ZOE",
+        "Nationality",
+        "Nationalité",
+        "CROYDON",
+        "16 JUL / JUIL 10",
+        "Holder's signature",
+        "P<GBRUK<SPECIMEN<<ANGELA<ZOE<<<<<<<<<<<<<<<<",
+        "9256002538GBR8809117F2007162"
       ]
     ]
   }
