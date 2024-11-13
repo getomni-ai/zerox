@@ -21,6 +21,8 @@ export const zerox = async ({
   llmParams = {},
   maintainFormat = false,
   model = ModelOptions.gpt_4o_mini,
+  onPostProcess,
+  onPreProcess,
   openaiAPIKey = "",
   outputDir,
   pagesToConvertAsImages = -1,
@@ -127,6 +129,10 @@ export const zerox = async ({
     const processPage = async (image: string): Promise<string | null> => {
       const imagePath = path.join(tempDirectory, image);
       try {
+        if (onPreProcess) {
+          await onPreProcess({ imagePath });
+        }
+
         const { content, inputTokens, outputTokens } = await getCompletion({
           apiKey: openaiAPIKey,
           imagePath,
@@ -141,6 +147,10 @@ export const zerox = async ({
 
         // Update prior page to result from last processing step
         priorPage = formattedMarkdown;
+
+        if (onPostProcess) {
+          await onPostProcess({ content });
+        }
 
         // Add all markdown results to array
         return formattedMarkdown;
