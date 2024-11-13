@@ -7,7 +7,7 @@ export interface ZeroxArgs {
   maintainFormat?: boolean;
   model?: ModelOptions | string;
   onPostProcess?: (params: { content: string }) => Promise<void>;
-  onPreProcess?: (params: { imagePath: string | Buffer }) => Promise<void>;
+  onPreProcess?: (params: { imagePath: string }) => Promise<void>;
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
