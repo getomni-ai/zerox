@@ -126,11 +126,14 @@ export const zerox = async ({
     }
   } else {
     // Process in parallel with a limit on concurrent pages
-    const processPage = async (image: string): Promise<string | null> => {
+    const processPage = async (
+      image: string,
+      pageNumber: number
+    ): Promise<string | null> => {
       const imagePath = path.join(tempDirectory, image);
       try {
         if (onPreProcess) {
-          await onPreProcess({ imagePath });
+          await onPreProcess({ imagePath, pageNumber });
         }
 
         const { content, inputTokens, outputTokens } = await getCompletion({
@@ -149,7 +152,7 @@ export const zerox = async ({
         priorPage = formattedMarkdown;
 
         if (onPostProcess) {
-          await onPostProcess({ content });
+          await onPostProcess({ content, pageNumber });
         }
 
         // Add all markdown results to array
@@ -166,7 +169,7 @@ export const zerox = async ({
 
       const promises = images.map((image, index) =>
         limit(() =>
-          processPage(image).then((result) => {
+          processPage(image, index + 1).then((result) => {
             results[index] = result;
           })
         )
