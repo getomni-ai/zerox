@@ -3,7 +3,9 @@ import {
   convertPdfToImages,
   downloadFile,
   formatMarkdown,
+  initTesseractScheduler,
   isString,
+  terminateScheduler,
 } from "./utils";
 import { getCompletion } from "./openAI";
 import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
@@ -12,6 +14,7 @@ import fs from "fs-extra";
 import os from "os";
 import path from "path";
 import pLimit, { Limit } from "p-limit";
+import { NUM_STARTING_WORKERS } from "./constants";
 
 export const zerox = async ({
   cleanup = true,
@@ -20,6 +23,7 @@ export const zerox = async ({
   filePath,
   llmParams = {},
   maintainFormat = false,
+  maxTesseractWorkers = -1,
   model = ModelOptions.gpt_4o_mini,
   onPostProcess,
   onPreProcess,
@@ -34,6 +38,12 @@ export const zerox = async ({
   let priorPage = "";
   const aggregatedMarkdown: string[] = [];
   const startTime = new Date();
+
+  if (maxTesseractWorkers !== -1 && maxTesseractWorkers < NUM_STARTING_WORKERS) {
+    initTesseractScheduler(maxTesseractWorkers);
+  } else {
+    initTesseractScheduler(NUM_STARTING_WORKERS);
+  }
 
   llmParams = validateLLMParams(llmParams);
 
@@ -79,6 +89,7 @@ export const zerox = async ({
     await convertPdfToImages({
       correctOrientation,
       localPath: pdfPath,
+      maxTesseractWorkers,
       pagesToConvertAsImages,
       tempDir: tempDirectory,
       trimEdges,
@@ -184,6 +195,8 @@ export const zerox = async ({
     const filteredResults = results.filter(isString);
     aggregatedMarkdown.push(...filteredResults);
   }
+
+  terminateScheduler();
 
   // Write the aggregated markdown to a file
   if (outputDir) {
