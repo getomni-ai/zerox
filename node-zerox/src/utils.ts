@@ -93,9 +93,7 @@ export const downloadFile = async ({
   filePath: string;
   tempDir: string;
 }): Promise<{ extension: string; localPath: string }> => {
-  // Shorten the file name by removing URL parameters
-  const baseFileName = path.basename(filePath.split("?")[0]);
-  const fileNameExt = path.extname(baseFileName);
+  const fileNameExt = path.extname(filePath.split("?")[0]);
   const localPath = path.join(tempDir, uuidv4() + fileNameExt);
 
   let mimetype;
