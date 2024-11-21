@@ -50,14 +50,11 @@ export const zerox = async ({
   }
 
   if (correctOrientation) {
-    if (
-      maxTesseractWorkers !== -1 &&
-      maxTesseractWorkers < NUM_STARTING_WORKERS
-    ) {
-      initTesseractScheduler(maxTesseractWorkers);
-    } else {
-      initTesseractScheduler(NUM_STARTING_WORKERS);
-    }
+    const workerCount =
+      maxTesseractWorkers !== -1 && maxTesseractWorkers < NUM_STARTING_WORKERS
+        ? maxTesseractWorkers
+        : NUM_STARTING_WORKERS;
+    initTesseractScheduler(workerCount);
   }
 
   try {
