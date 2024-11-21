@@ -26,8 +26,8 @@ const defaultLLMParams: LLMParams = {
 };
 
 const addWorker = async () => {
-  const _worker = await Tesseract.createWorker("eng");
-  scheduler.addWorker(_worker);
+  const worker = await Tesseract.createWorker("eng");
+  scheduler.addWorker(worker);
 };
 
 export const initTesseractScheduler = async (numWorkers: number) => {
@@ -261,27 +261,30 @@ export const convertPdfToImages = async ({
     const convertResults = await storeAsImage.bulk(pagesToConvertAsImages, {
       responseType: "buffer",
     });
-    const numRequiredWorkers = convertResults.length * 4;
-    let numNewWorkers = numRequiredWorkers - NUM_STARTING_WORKERS;
 
-    if (maxTesseractWorkers !== -1) {
-      const numPreviouslyInitiatedWorkers =
-        maxTesseractWorkers < NUM_STARTING_WORKERS
-          ? maxTesseractWorkers
-          : NUM_STARTING_WORKERS;
+    if (correctOrientation) {
+      const numRequiredWorkers = convertResults.length * 4;
+      let numNewWorkers = numRequiredWorkers - NUM_STARTING_WORKERS;
 
-      if (numRequiredWorkers > numPreviouslyInitiatedWorkers) {
-        numNewWorkers = Math.min(
-          numRequiredWorkers - numPreviouslyInitiatedWorkers,
-          maxTesseractWorkers - numPreviouslyInitiatedWorkers
-        );
-      } else {
-        numNewWorkers = 0;
+      if (maxTesseractWorkers !== -1) {
+        const numPreviouslyInitiatedWorkers =
+          maxTesseractWorkers < NUM_STARTING_WORKERS
+            ? maxTesseractWorkers
+            : NUM_STARTING_WORKERS;
+
+        if (numRequiredWorkers > numPreviouslyInitiatedWorkers) {
+          numNewWorkers = Math.min(
+            numRequiredWorkers - numPreviouslyInitiatedWorkers,
+            maxTesseractWorkers - numPreviouslyInitiatedWorkers
+          );
+        } else {
+          numNewWorkers = 0;
+        }
       }
-    }
 
-    // Add more workers if needed
-    if (numNewWorkers > 0) initTesseractScheduler(numNewWorkers);
+      // Add more workers if needed
+      if (numNewWorkers > 0) initTesseractScheduler(numNewWorkers);
+    }
 
     await Promise.all(
       convertResults.map(async (result) => {
