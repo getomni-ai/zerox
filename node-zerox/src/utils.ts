@@ -9,6 +9,7 @@ import fs from "fs-extra";
 import mime from "mime-types";
 import path from "path";
 import sharp from "sharp";
+import { v4 as uuidv4 } from "uuid";
 
 const convertAsync = promisify(convert);
 
@@ -94,7 +95,9 @@ export const downloadFile = async ({
 }): Promise<{ extension: string; localPath: string }> => {
   // Shorten the file name by removing URL parameters
   const baseFileName = path.basename(filePath.split("?")[0]);
-  const localPath = path.join(tempDir, baseFileName);
+  const fileNameExt = path.extname(baseFileName);
+  const localPath = path.join(tempDir, uuidv4() + fileNameExt);
+
   let mimetype;
 
   // Check if filePath is a URL
