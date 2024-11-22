@@ -5,6 +5,7 @@ export interface ZeroxArgs {
   filePath: string;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
+  maxTesseractWorkers?: number;
   model?: ModelOptions | string;
   onPostProcess?: (params: {
     content: string;

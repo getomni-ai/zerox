@@ -9,9 +9,12 @@ import fs from "fs-extra";
 import mime from "mime-types";
 import path from "path";
 import sharp from "sharp";
+import { NUM_STARTING_WORKERS } from "./constants";
 import { v4 as uuidv4 } from "uuid";
 
 const convertAsync = promisify(convert);
+
+let scheduler: Tesseract.Scheduler;
 
 const MIN_ROTATION_CONFIDENCE = 60;
 
@@ -21,6 +24,28 @@ const defaultLLMParams: LLMParams = {
   presencePenalty: 0, // OpenAI defaults to 0
   temperature: 0,
   topP: 1, // OpenAI defaults to 1
+};
+
+const addWorker = async () => {
+  const worker = await Tesseract.createWorker("eng");
+  scheduler.addWorker(worker);
+};
+
+export const initTesseractScheduler = async (numWorkers: number) => {
+  scheduler = scheduler || Tesseract.createScheduler();
+  let resArr = Array(numWorkers);
+
+  for (let i = 0; i < numWorkers; i++) {
+    resArr[i] = addWorker();
+  }
+
+  await Promise.all(resArr);
+
+  return true;
+};
+
+export const terminateScheduler = () => {
+  return scheduler.terminate();
 };
 
 export const validateLLMParams = (params: Partial<LLMParams>): LLMParams => {
@@ -163,7 +188,7 @@ export const getTextFromImage = async (
     // @TODO: How can we generalize this to non eng languages?
     const {
       data: { confidence },
-    } = await Tesseract.recognize(croppedBuffer, "eng");
+    } = await scheduler.addJob("recognize", croppedBuffer);
 
     return { confidence };
   } catch (error) {
@@ -211,12 +236,14 @@ const determineOptimalRotation = async (
 export const convertPdfToImages = async ({
   correctOrientation,
   localPath,
+  maxTesseractWorkers,
   pagesToConvertAsImages,
   tempDir,
   trimEdges,
 }: {
   correctOrientation: boolean;
   localPath: string;
+  maxTesseractWorkers: number;
   pagesToConvertAsImages: number | number[];
   tempDir: string;
   trimEdges: boolean;
@@ -235,6 +262,31 @@ export const convertPdfToImages = async ({
     const convertResults = await storeAsImage.bulk(pagesToConvertAsImages, {
       responseType: "buffer",
     });
+
+    if (correctOrientation) {
+      const numRequiredWorkers = convertResults.length * 4;
+      let numNewWorkers = numRequiredWorkers - NUM_STARTING_WORKERS;
+
+      if (maxTesseractWorkers !== -1) {
+        const numPreviouslyInitiatedWorkers =
+          maxTesseractWorkers < NUM_STARTING_WORKERS
+            ? maxTesseractWorkers
+            : NUM_STARTING_WORKERS;
+
+        if (numRequiredWorkers > numPreviouslyInitiatedWorkers) {
+          numNewWorkers = Math.min(
+            numRequiredWorkers - numPreviouslyInitiatedWorkers,
+            maxTesseractWorkers - numPreviouslyInitiatedWorkers
+          );
+        } else {
+          numNewWorkers = 0;
+        }
+      }
+
+      // Add more workers if needed
+      if (numNewWorkers > 0) initTesseractScheduler(numNewWorkers);
+    }
+
     await Promise.all(
       convertResults.map(async (result) => {
         if (!result || !result.buffer) {
