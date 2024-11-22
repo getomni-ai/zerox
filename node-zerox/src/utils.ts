@@ -14,8 +14,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const convertAsync = promisify(convert);
 
-let scheduler: Tesseract.Scheduler;
-
 const MIN_ROTATION_CONFIDENCE = 60;
 
 const defaultLLMParams: LLMParams = {
@@ -26,25 +24,32 @@ const defaultLLMParams: LLMParams = {
   topP: 1, // OpenAI defaults to 1
 };
 
-const addWorker = async () => {
+export const getTesseractScheduler = async () => {
+  return Tesseract.createScheduler();
+};
+
+const createAndAddWorker = async (scheduler: Tesseract.Scheduler) => {
   const worker = await Tesseract.createWorker("eng");
   scheduler.addWorker(worker);
 };
 
-export const initTesseractScheduler = async (numWorkers: number) => {
-  scheduler = scheduler || Tesseract.createScheduler();
-  let resArr = Array(numWorkers);
+export const addWorkersToTesseractScheduler = async ({
+  numWorkers,
+  scheduler,
+}: {
+  numWorkers: number;
+  scheduler: Tesseract.Scheduler;
+}) => {
+  let resArr = Array.from({ length: numWorkers });
 
-  for (let i = 0; i < numWorkers; i++) {
-    resArr[i] = addWorker();
-  }
+  resArr.map(() => createAndAddWorker(scheduler));
 
   await Promise.all(resArr);
 
   return true;
 };
 
-export const terminateScheduler = () => {
+export const terminateScheduler = (scheduler: Tesseract.Scheduler) => {
   return scheduler.terminate();
 };
 
@@ -164,9 +169,13 @@ export const downloadFile = async ({
 };
 
 // Extract text confidence from image buffer using Tesseract
-export const getTextFromImage = async (
-  buffer: Buffer
-): Promise<{ confidence: number }> => {
+export const getTextFromImage = async ({
+  buffer,
+  scheduler,
+}: {
+  buffer: Buffer;
+  scheduler: Tesseract.Scheduler;
+}): Promise<{ confidence: number }> => {
   try {
     // Get image and metadata
     const image = sharp(buffer);
@@ -199,9 +208,13 @@ export const getTextFromImage = async (
 
 // Determine the optimal image orientation based on OCR confidence
 // Run Tesseract on 4 image orientations and compare the outputs
-const determineOptimalRotation = async (
-  image: sharp.Sharp
-): Promise<number> => {
+const determineOptimalRotation = async ({
+  image,
+  scheduler,
+}: {
+  image: sharp.Sharp;
+  scheduler: Tesseract.Scheduler;
+}): Promise<number> => {
   const rotations = [0, 90, 180, 270];
 
   const results = await Promise.all(
@@ -210,7 +223,10 @@ const determineOptimalRotation = async (
         .clone()
         .rotate(rotation)
         .toBuffer();
-      const { confidence } = await getTextFromImage(rotatedImageBuffer);
+      const { confidence } = await getTextFromImage({
+        buffer: rotatedImageBuffer,
+        scheduler,
+      });
       return { rotation, confidence };
     })
   );
@@ -238,6 +254,7 @@ export const convertPdfToImages = async ({
   localPath,
   maxTesseractWorkers,
   pagesToConvertAsImages,
+  scheduler,
   tempDir,
   trimEdges,
 }: {
@@ -245,6 +262,7 @@ export const convertPdfToImages = async ({
   localPath: string;
   maxTesseractWorkers: number;
   pagesToConvertAsImages: number | number[];
+  scheduler: Tesseract.Scheduler | null;
   tempDir: string;
   trimEdges: boolean;
 }) => {
@@ -284,7 +302,11 @@ export const convertPdfToImages = async ({
       }
 
       // Add more workers if needed
-      if (numNewWorkers > 0) initTesseractScheduler(numNewWorkers);
+      if (numNewWorkers > 0 && maxTesseractWorkers !== 0 && scheduler)
+        addWorkersToTesseractScheduler({
+          numWorkers: numNewWorkers,
+          scheduler,
+        });
     }
 
     await Promise.all(
@@ -301,8 +323,13 @@ export const convertPdfToImages = async ({
           image.trim();
         }
 
-        if (correctOrientation) {
-          const optimalRotation = await determineOptimalRotation(image);
+        // scheduler would always be non-null if correctOrientation is true
+        // Adding this check to satisfy typescript
+        if (correctOrientation && scheduler) {
+          const optimalRotation = await determineOptimalRotation({
+            image,
+            scheduler,
+          });
 
           if (optimalRotation) {
             image.rotate(optimalRotation);
