@@ -1,9 +1,10 @@
 import {
+  addWorkersToTesseractScheduler,
   convertFileToPdf,
   convertPdfToImages,
   downloadFile,
   formatMarkdown,
-  initTesseractScheduler,
+  getTesseractScheduler,
   isString,
   terminateScheduler,
 } from "./utils";
@@ -15,6 +16,7 @@ import os from "os";
 import path from "path";
 import pLimit, { Limit } from "p-limit";
 import { NUM_STARTING_WORKERS } from "./constants";
+import Tesseract from "tesseract.js";
 
 export const zerox = async ({
   cleanup = true,
@@ -48,13 +50,18 @@ export const zerox = async ({
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
   }
+  let scheduler: Tesseract.Scheduler | null = null;
 
   if (correctOrientation) {
+    scheduler = await getTesseractScheduler();
     const workerCount =
       maxTesseractWorkers !== -1 && maxTesseractWorkers < NUM_STARTING_WORKERS
         ? maxTesseractWorkers
         : NUM_STARTING_WORKERS;
-    initTesseractScheduler(workerCount);
+    addWorkersToTesseractScheduler({
+      numWorkers: workerCount,
+      scheduler,
+    });
   }
 
   try {
@@ -97,6 +104,7 @@ export const zerox = async ({
         localPath: pdfPath,
         maxTesseractWorkers,
         pagesToConvertAsImages,
+        scheduler,
         tempDir: tempDirectory,
         trimEdges,
       });
@@ -240,6 +248,8 @@ export const zerox = async ({
       pages: formattedPages,
     };
   } finally {
-    if (correctOrientation) terminateScheduler();
+    if (correctOrientation && scheduler) {
+      terminateScheduler(scheduler);
+    }
   }
 };
