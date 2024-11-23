@@ -165,7 +165,7 @@ async def zerox(
         # Write the aggregated markdown to a file
         if output_dir:
             result_file_path = os.path.join(output_dir, f"{file_name}.md")
-            async with aiofiles.open(result_file_path, "w") as f:
+            async with aiofiles.open(result_file_path, "w", encoding="utf-8") as f:
                 await f.write("\n\n".join(aggregated_markdown))
 
         # Cleanup the downloaded PDF file
