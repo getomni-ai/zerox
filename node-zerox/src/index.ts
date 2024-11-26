@@ -1,5 +1,6 @@
 import {
   addWorkersToTesseractScheduler,
+  cleanupImage,
   convertFileToPdf,
   convertPdfToImages,
   downloadFile,
@@ -58,7 +59,7 @@ export const zerox = async ({
       maxTesseractWorkers !== -1 && maxTesseractWorkers < NUM_STARTING_WORKERS
         ? maxTesseractWorkers
         : NUM_STARTING_WORKERS;
-    addWorkersToTesseractScheduler({
+    await addWorkersToTesseractScheduler({
       numWorkers: workerCount,
       scheduler,
     });
@@ -71,12 +72,15 @@ export const zerox = async ({
       tempDir || os.tmpdir(),
       `zerox-temp-${rand}`
     );
-    await fs.ensureDir(tempDirectory);
+    const sourceDirectory = path.join(tempDirectory, 'source')
+    const processedDirectory = path.join(tempDirectory, 'processed')
+    await fs.ensureDir(sourceDirectory);
+    await fs.ensureDir(processedDirectory);
 
     // Download the PDF. Get file name.
     const { extension, localPath } = await downloadFile({
       filePath,
-      tempDir: tempDirectory,
+      tempDir: sourceDirectory,
     });
     if (!localPath) throw "Failed to save file to local drive";
 
@@ -95,7 +99,7 @@ export const zerox = async ({
         pdfPath = await convertFileToPdf({
           extension,
           localPath,
-          tempDir: tempDirectory,
+          tempDir: sourceDirectory,
         });
       }
       // Convert the file to a series of images
@@ -105,9 +109,24 @@ export const zerox = async ({
         maxTesseractWorkers,
         pagesToConvertAsImages,
         scheduler,
-        tempDir: tempDirectory,
+        tempDir: processedDirectory,
         trimEdges,
       });
+    } else if (correctOrientation) {
+      const imageBuffer = await fs.readFile(localPath);
+
+      const correctedBuffer = await cleanupImage({
+        correctOrientation,
+        imageBuffer,
+        scheduler,
+        trimEdges,
+      });
+
+      const imagePath = path.join(
+        processedDirectory,
+        `${path.basename(localPath, path.extname(localPath))}_clean.png`
+      );
+      await fs.writeFile(imagePath, correctedBuffer);
     }
 
     const endOfPath = localPath.split("/")[localPath.split("/").length - 1];
@@ -119,13 +138,13 @@ export const zerox = async ({
       .substring(0, 255); // Truncate file name to 255 characters to prevent ENAMETOOLONG errors
 
     // Get list of converted images
-    const files = await fs.readdir(tempDirectory);
+    const files = await fs.readdir(processedDirectory);
     const images = files.filter((file) => file.endsWith(".png"));
 
     if (maintainFormat) {
       // Use synchronous processing
       for (const image of images) {
-        const imagePath = path.join(tempDirectory, image);
+        const imagePath = path.join(processedDirectory, image);
         try {
           const { content, inputTokens, outputTokens } = await getCompletion({
             apiKey: openaiAPIKey,
@@ -155,7 +174,7 @@ export const zerox = async ({
         image: string,
         pageNumber: number
       ): Promise<string | null> => {
-        const imagePath = path.join(tempDirectory, image);
+        const imagePath = path.join(processedDirectory, image);
         try {
           if (onPreProcess) {
             await onPreProcess({ imagePath, pageNumber });
