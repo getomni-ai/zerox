@@ -42,9 +42,7 @@ export const addWorkersToTesseractScheduler = async ({
 }) => {
   let resArr = Array.from({ length: numWorkers });
 
-  resArr.map(() => createAndAddWorker(scheduler));
-
-  await Promise.all(resArr);
+  await Promise.all(resArr.map(() => createAndAddWorker(scheduler)));
 
   return true;
 };
