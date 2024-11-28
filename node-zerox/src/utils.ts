@@ -14,8 +14,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const convertAsync = promisify(convert);
 
-const MIN_ROTATION_CONFIDENCE = 60;
-
 const defaultLLMParams: LLMParams = {
   frequencyPenalty: 0, // OpenAI defaults to 0
   maxTokens: 2000,
@@ -24,13 +22,28 @@ const defaultLLMParams: LLMParams = {
   topP: 1, // OpenAI defaults to 1
 };
 
+interface CleanupImageProps {
+  correctOrientation: boolean;
+  imageBuffer: Buffer;
+  scheduler: Tesseract.Scheduler | null;
+  trimEdges: boolean;
+}
+
 export const getTesseractScheduler = async () => {
   return Tesseract.createScheduler();
 };
 
 const createAndAddWorker = async (scheduler: Tesseract.Scheduler) => {
-  const worker = await Tesseract.createWorker("eng");
-  scheduler.addWorker(worker);
+  const worker = await Tesseract.createWorker("eng", 2, {
+    legacyCore: true,
+    legacyLang: true,
+  });
+
+  await worker.setParameters({
+    tessedit_pageseg_mode: Tesseract.PSM.OSD_ONLY,
+  });
+
+  return scheduler.addWorker(worker);
 };
 
 export const addWorkersToTesseractScheduler = async ({
@@ -166,44 +179,6 @@ export const downloadFile = async ({
   return { extension, localPath };
 };
 
-// Extract text confidence from image buffer using Tesseract
-export const getTextFromImage = async ({
-  buffer,
-  scheduler,
-}: {
-  buffer: Buffer;
-  scheduler: Tesseract.Scheduler;
-}): Promise<{ confidence: number }> => {
-  try {
-    // Get image and metadata
-    const image = sharp(buffer);
-    const metadata = await image.metadata();
-
-    // Crop to a 150px wide column in the center of the document.
-    // This section produced the highest confidence/speed tradeoffs.
-    const cropWidth = 150;
-    const cropHeight = metadata.height || 0;
-    const left = Math.max(0, Math.floor((metadata.width! - cropWidth) / 2));
-    const top = 0;
-
-    // Extract the cropped image
-    const croppedBuffer = await image
-      .extract({ left, top, width: cropWidth, height: cropHeight })
-      .toBuffer();
-
-    // Pass the croppedBuffer to Tesseract.recognize
-    // @TODO: How can we generalize this to non eng languages?
-    const {
-      data: { confidence },
-    } = await scheduler.addJob("recognize", croppedBuffer);
-
-    return { confidence };
-  } catch (error) {
-    console.error("Error during OCR:", error);
-    return { confidence: 0 };
-  }
-};
-
 // Determine the optimal image orientation based on OCR confidence
 // Run Tesseract on 4 image orientations and compare the outputs
 const determineOptimalRotation = async ({
@@ -213,35 +188,16 @@ const determineOptimalRotation = async ({
   image: sharp.Sharp;
   scheduler: Tesseract.Scheduler;
 }): Promise<number> => {
-  const rotations = [0, 90, 180, 270];
+  const imageBuffer = await image.toBuffer();
+  const {
+    data: { orientation_confidence, orientation_degrees },
+  } = await scheduler.addJob("detect", imageBuffer);
 
-  const results = await Promise.all(
-    rotations.map(async (rotation) => {
-      const rotatedImageBuffer = await image
-        .clone()
-        .rotate(rotation)
-        .toBuffer();
-      const { confidence } = await getTextFromImage({
-        buffer: rotatedImageBuffer,
-        scheduler,
-      });
-      return { rotation, confidence };
-    })
-  );
-
-  // Find the rotation with the best confidence score
-  const bestResult = results.reduce((best, current) =>
-    current.confidence > best.confidence ? current : best
-  );
-
-  if (
-    bestResult.confidence >= MIN_ROTATION_CONFIDENCE &&
-    bestResult.rotation !== 0
-  ) {
+  if (orientation_degrees) {
     console.log(
-      `Reorienting image ${bestResult.rotation} degrees (confidence: ${bestResult.confidence}%)`
+      `Reorienting image ${orientation_degrees} degrees (confidence: ${orientation_confidence}%)`
     );
-    return bestResult.rotation;
+    return orientation_degrees;
   }
   return 0;
 };
@@ -280,7 +236,7 @@ export const convertPdfToImages = async ({
     });
 
     if (correctOrientation) {
-      const numRequiredWorkers = convertResults.length * 4;
+      const numRequiredWorkers = convertResults.length;
       let numNewWorkers = numRequiredWorkers - NUM_STARTING_WORKERS;
 
       if (maxTesseractWorkers !== -1) {
@@ -315,27 +271,12 @@ export const convertPdfToImages = async ({
         if (!result.page) throw new Error("Could not identify page data");
         const paddedPageNumber = result.page.toString().padStart(5, "0");
 
-        const image = sharp(result.buffer);
-
-        if (trimEdges) {
-          image.trim();
-        }
-
-        // scheduler would always be non-null if correctOrientation is true
-        // Adding this check to satisfy typescript
-        if (correctOrientation && scheduler) {
-          const optimalRotation = await determineOptimalRotation({
-            image,
-            scheduler,
-          });
-
-          if (optimalRotation) {
-            image.rotate(optimalRotation);
-          }
-        }
-
-        // Correct the image orientation
-        const correctedBuffer = await image.toBuffer();
+        const correctedBuffer = await cleanupImage({
+          correctOrientation,
+          imageBuffer: result.buffer,
+          scheduler,
+          trimEdges,
+        });
 
         const imagePath = path.join(
           tempDir,
@@ -388,4 +329,35 @@ export const convertKeysToSnakeCase = (
   return Object.fromEntries(
     Object.entries(obj).map(([key, value]) => [camelToSnakeCase(key), value])
   );
+};
+
+export const cleanupImage = async ({
+  correctOrientation,
+  imageBuffer,
+  scheduler,
+  trimEdges,
+}: CleanupImageProps) => {
+  const image = sharp(imageBuffer);
+
+  // Trim extra space around the content in the image
+  if (trimEdges) {
+    image.trim();
+  }
+
+  // scheduler would always be non-null if correctOrientation is true
+  // Adding this check to satisfy typescript
+  if (correctOrientation && scheduler) {
+    const optimalRotation = await determineOptimalRotation({
+      image,
+      scheduler,
+    });
+
+    if (optimalRotation) {
+      image.rotate(optimalRotation);
+    }
+  }
+
+  // Correct the image orientation
+  const correctedBuffer = await image.toBuffer();
+  return correctedBuffer;
 };
