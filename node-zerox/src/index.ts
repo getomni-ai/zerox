@@ -166,13 +166,13 @@ export const zerox = async ({
       image: string,
       pageNumber: number,
       retryCount = 0
-    ): Promise<{ content: string; status: PageStatus }> => {
+    ): Promise<Page> => {
       const imagePath = path.join(tempDirectory, image);
+      if (onPreProcess) {
+        await onPreProcess({ imagePath, pageNumber });
+      }
+      let page: Page;
       try {
-        if (onPreProcess) {
-          await onPreProcess({ imagePath, pageNumber });
-        }
-
         const { content, inputTokens, outputTokens } = await getCompletion({
           apiKey: openaiAPIKey,
           imagePath,
@@ -188,13 +188,15 @@ export const zerox = async ({
         // Update prior page to result from last processing step
         priorPage = formattedMarkdown;
 
-        if (onPostProcess) {
-          await onPostProcess({ content, pageNumber });
-        }
-
+        page = {
+          content: formattedMarkdown,
+          contentLength: formattedMarkdown.length,
+          page: pageNumber,
+          status: PageStatus.SUCCESS,
+          inputTokens,
+          outputTokens,
+        };
         successfulPages++;
-        // Add all markdown results to array
-        return { content: formattedMarkdown, status: PageStatus.SUCCESS };
       } catch (error) {
         if (retryCount <= maxRetries) {
           console.log(`Retrying page ${pageNumber}...`);
@@ -206,13 +208,22 @@ export const zerox = async ({
           throw error;
         }
 
-        failedPages++;
         pageStatuses[pageNumber - 1] = PageStatus.ERROR;
-        return {
-          content: `Failed to process page ${pageNumber}: ${error}`,
+        page = {
+          content: "",
+          contentLength: 0,
+          error: `Failed to process page ${pageNumber}: ${error}`,
+          page: pageNumber,
           status: PageStatus.ERROR,
         };
+        failedPages++;
       }
+
+      if (onPostProcess) {
+        await onPostProcess(page);
+      }
+
+      return page;
     };
 
     // Function to process pages with concurrency limit
