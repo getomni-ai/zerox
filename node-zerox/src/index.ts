@@ -192,10 +192,6 @@ export const zerox = async ({
           await onPostProcess({ content, pageNumber });
         }
 
-        if (retryCount === 0) {
-          throw new Error("Intentionally throwing an error");
-        }
-
         successfulPages++;
         // Add all markdown results to array
         return { content: formattedMarkdown, status: PageStatus.SUCCESS };
@@ -269,8 +265,6 @@ export const zerox = async ({
       pageNumber = pagesToConvertAsImages;
     }
 
-    const error = pageStatuses[i] === PageStatus.ERROR ? el : undefined;
-
     let result: Page = {
       content: el,
       contentLength: el.length,
@@ -278,6 +272,7 @@ export const zerox = async ({
       status: pageStatuses[i],
     };
 
+    const error = pageStatuses[i] === PageStatus.ERROR ? el : undefined;
     if (error) {
       result = { ...result, content: "", contentLength: 0, error };
     }
