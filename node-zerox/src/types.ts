@@ -6,6 +6,7 @@ export interface ZeroxArgs {
   filePath: string;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
+  maxRetries?: number;
   model?: ModelOptions | string;
   onPostProcess?: (params: {
     content: string;

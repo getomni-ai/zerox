@@ -29,6 +29,7 @@ export const zerox = async ({
   filePath,
   llmParams = {},
   maintainFormat = false,
+  maxRetries = 1,
   model = ModelOptions.gpt_4o_mini,
   onPostProcess,
   onPreProcess,
@@ -117,40 +118,54 @@ export const zerox = async ({
     for (let i = 0; i < images.length; i++) {
       const image = images[i];
       const imagePath = path.join(tempDirectory, image);
-      try {
-        const { content, inputTokens, outputTokens } = await getCompletion({
-          apiKey: openaiAPIKey,
-          imagePath,
-          llmParams,
-          maintainFormat,
-          model,
-          priorPage,
-        });
-        const formattedMarkdown = formatMarkdown(content);
-        inputTokenCount += inputTokens;
-        outputTokenCount += outputTokens;
 
-        // Update prior page to result from last processing step
-        priorPage = formattedMarkdown;
+      let retryCount = 0;
 
-        // Add all markdown results to array
-        aggregatedMarkdown.push(formattedMarkdown);
-        successfulPages++;
-      } catch (error) {
-        console.error(`Failed to process image ${image}:`, error);
-        if (errorMode === ErrorMode.THROW) {
-          throw error;
+      while (retryCount <= maxRetries) {
+        try {
+          const { content, inputTokens, outputTokens } = await getCompletion({
+            apiKey: openaiAPIKey,
+            imagePath,
+            llmParams,
+            maintainFormat,
+            model,
+            priorPage,
+          });
+          const formattedMarkdown = formatMarkdown(content);
+          inputTokenCount += inputTokens;
+          outputTokenCount += outputTokens;
+
+          // Update prior page to result from last processing step
+          priorPage = formattedMarkdown;
+
+          // Add all markdown results to array
+          aggregatedMarkdown.push(formattedMarkdown);
+          successfulPages++;
+          break;
+        } catch (error) {
+          if (retryCount < maxRetries) {
+            console.log(`Retrying page ${i + 1}...`);
+            retryCount++;
+            continue;
+          }
+
+          console.error(`Failed to process image ${image}:`, error);
+          if (errorMode === ErrorMode.THROW) {
+            throw error;
+          }
+          aggregatedMarkdown.push(`Failed to process page ${image}: ${error}`);
+          pageStatuses[i] = PageStatus.ERROR;
+          failedPages++;
+          break;
         }
-        aggregatedMarkdown.push(`Failed to process page ${image}: ${error}`);
-        pageStatuses[i] = PageStatus.ERROR;
-        failedPages++;
       }
     }
   } else {
     // Process in parallel with a limit on concurrent pages
     const processPage = async (
       image: string,
-      pageNumber: number
+      pageNumber: number,
+      retryCount = 0
     ): Promise<{ content: string; status: PageStatus }> => {
       const imagePath = path.join(tempDirectory, image);
       try {
@@ -176,14 +191,25 @@ export const zerox = async ({
         if (onPostProcess) {
           await onPostProcess({ content, pageNumber });
         }
+
+        if (retryCount === 0) {
+          throw new Error("Intentionally throwing an error");
+        }
+
         successfulPages++;
         // Add all markdown results to array
         return { content: formattedMarkdown, status: PageStatus.SUCCESS };
       } catch (error) {
+        if (retryCount <= maxRetries) {
+          console.log(`Retrying page ${pageNumber}...`);
+          return processPage(image, pageNumber, retryCount + 1);
+        }
+
         console.error(`Failed to process image ${image}:`, error);
         if (errorMode === ErrorMode.THROW) {
           throw error;
         }
+
         failedPages++;
         pageStatuses[pageNumber - 1] = PageStatus.ERROR;
         return {
