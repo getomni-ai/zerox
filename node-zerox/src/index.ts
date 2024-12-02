@@ -1,3 +1,8 @@
+import os from "os";
+import fs from "fs-extra";
+import path from "path";
+import pLimit, { Limit } from "p-limit";
+
 import {
   convertFileToPdf,
   convertPdfToImages,
@@ -6,17 +11,21 @@ import {
   isString,
 } from "./utils";
 import { getCompletion } from "./openAI";
-import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
+import {
+  ErrorMode,
+  ModelOptions,
+  Page,
+  PageStatus,
+  ZeroxArgs,
+  ZeroxOutput,
+} from "./types";
 import { validateLLMParams } from "./utils";
-import fs from "fs-extra";
-import os from "os";
-import path from "path";
-import pLimit, { Limit } from "p-limit";
 
 export const zerox = async ({
   cleanup = true,
   concurrency = 10,
   correctOrientation = true,
+  errorMode = ErrorMode.IGNORE,
   filePath,
   llmParams = {},
   maintainFormat = false,
@@ -97,9 +106,16 @@ export const zerox = async ({
   const files = await fs.readdir(tempDirectory);
   const images = files.filter((file) => file.endsWith(".png"));
 
+  // Start processing the images using LLM
+  let successfulPages = 0;
+  let failedPages = 0;
+  const pageStatuses: PageStatus[] = new Array(images.length).fill(
+    PageStatus.SUCCESS
+  );
   if (maintainFormat) {
     // Use synchronous processing
-    for (const image of images) {
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
       const imagePath = path.join(tempDirectory, image);
       try {
         const { content, inputTokens, outputTokens } = await getCompletion({
@@ -119,9 +135,15 @@ export const zerox = async ({
 
         // Add all markdown results to array
         aggregatedMarkdown.push(formattedMarkdown);
+        successfulPages++;
       } catch (error) {
         console.error(`Failed to process image ${image}:`, error);
-        throw error;
+        if (errorMode === ErrorMode.THROW) {
+          throw error;
+        }
+        aggregatedMarkdown.push(`Failed to process page ${image}: ${error}`);
+        pageStatuses[i] = PageStatus.ERROR;
+        failedPages++;
       }
     }
   } else {
@@ -129,7 +151,7 @@ export const zerox = async ({
     const processPage = async (
       image: string,
       pageNumber: number
-    ): Promise<string | null> => {
+    ): Promise<{ content: string; status: PageStatus }> => {
       const imagePath = path.join(tempDirectory, image);
       try {
         if (onPreProcess) {
@@ -154,12 +176,20 @@ export const zerox = async ({
         if (onPostProcess) {
           await onPostProcess({ content, pageNumber });
         }
-
+        successfulPages++;
         // Add all markdown results to array
-        return formattedMarkdown;
+        return { content: formattedMarkdown, status: PageStatus.SUCCESS };
       } catch (error) {
         console.error(`Failed to process image ${image}:`, error);
-        throw error;
+        if (errorMode === ErrorMode.THROW) {
+          throw error;
+        }
+        failedPages++;
+        pageStatuses[pageNumber - 1] = PageStatus.ERROR;
+        return {
+          content: `Failed to process page ${pageNumber}: ${error}`,
+          status: PageStatus.ERROR,
+        };
       }
     };
 
@@ -170,7 +200,8 @@ export const zerox = async ({
       const promises = images.map((image, index) =>
         limit(() =>
           processPage(image, index + 1).then((result) => {
-            results[index] = result;
+            results[index] = result.content;
+            pageStatuses[index] = result.status;
           })
         )
       );
@@ -212,7 +243,20 @@ export const zerox = async ({
       pageNumber = pagesToConvertAsImages;
     }
 
-    return { content: el, page: pageNumber, contentLength: el.length };
+    const error = pageStatuses[i] === PageStatus.ERROR ? el : undefined;
+
+    let result: Page = {
+      content: el,
+      contentLength: el.length,
+      page: pageNumber,
+      status: pageStatuses[i],
+    };
+
+    if (error) {
+      result = { ...result, content: "", contentLength: 0, error };
+    }
+
+    return result;
   });
 
   return {
@@ -221,5 +265,10 @@ export const zerox = async ({
     inputTokens: inputTokenCount,
     outputTokens: outputTokenCount,
     pages: formattedPages,
+    summary: {
+      totalPages: formattedPages.length,
+      successfulPages,
+      failedPages,
+    },
   };
 };
