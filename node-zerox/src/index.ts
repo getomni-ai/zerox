@@ -291,6 +291,7 @@ export const zerox = async ({
         const promises = images.map((image, index) =>
           limit(() =>
             processPage(image, index + 1).then((result) => {
+              // Update the pages array with the result
               pages[index] = result;
             })
           )
@@ -317,24 +318,24 @@ export const zerox = async ({
     const completionTime = endTime.getTime() - startTime.getTime();
 
     const formattedPages = pages.map((page, i) => {
-      let pageNumber;
+      let correctPageNumber;
       // If we convert all pages, just use the array index
       if (pagesToConvertAsImages === -1) {
-        pageNumber = i + 1;
+        correctPageNumber = i + 1;
       }
       // Else if we convert specific pages, use the page number from the parameter
       else if (Array.isArray(pagesToConvertAsImages)) {
-        pageNumber = pagesToConvertAsImages[i];
+        correctPageNumber = pagesToConvertAsImages[i];
       }
       // Else, the parameter is a number and use it for the page number
       else {
-        pageNumber = pagesToConvertAsImages;
+        correctPageNumber = pagesToConvertAsImages;
       }
 
       // Return the page with the correct page number
       const result: Page = {
         ...page,
-        page: pageNumber,
+        page: correctPageNumber,
       };
 
       return result;
