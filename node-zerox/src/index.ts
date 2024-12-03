@@ -42,7 +42,7 @@ export const zerox = async ({
   let inputTokenCount = 0;
   let outputTokenCount = 0;
   let priorPage = "";
-  const aggregatedMarkdown: string[] = [];
+  const pages: Page[] = [];
   const startTime = new Date();
 
   llmParams = validateLLMParams(llmParams);
@@ -110,9 +110,7 @@ export const zerox = async ({
   // Start processing the images using LLM
   let successfulPages = 0;
   let failedPages = 0;
-  const pageStatuses: PageStatus[] = new Array(images.length).fill(
-    PageStatus.SUCCESS
-  );
+
   if (maintainFormat) {
     // Use synchronous processing
     for (let i = 0; i < images.length; i++) {
@@ -138,8 +136,14 @@ export const zerox = async ({
           // Update prior page to result from last processing step
           priorPage = formattedMarkdown;
 
-          // Add all markdown results to array
-          aggregatedMarkdown.push(formattedMarkdown);
+          pages.push({
+            content: formattedMarkdown,
+            contentLength: formattedMarkdown.length,
+            page: i + 1,
+            status: PageStatus.SUCCESS,
+            inputTokens,
+            outputTokens,
+          });
           successfulPages++;
           break;
         } catch (error) {
@@ -153,8 +157,14 @@ export const zerox = async ({
           if (errorMode === ErrorMode.THROW) {
             throw error;
           }
-          aggregatedMarkdown.push(`Failed to process page ${image}: ${error}`);
-          pageStatuses[i] = PageStatus.ERROR;
+
+          pages.push({
+            content: "",
+            contentLength: 0,
+            error: `Failed to process page ${i + 1}: ${error}`,
+            page: i + 1,
+            status: PageStatus.ERROR,
+          });
           failedPages++;
           break;
         }
@@ -208,7 +218,6 @@ export const zerox = async ({
           throw error;
         }
 
-        pageStatuses[pageNumber - 1] = PageStatus.ERROR;
         page = {
           content: "",
           contentLength: 0,
@@ -235,31 +244,26 @@ export const zerox = async ({
 
     // Function to process pages with concurrency limit
     const processPagesInBatches = async (images: string[], limit: Limit) => {
-      const results: (string | null)[] = [];
-
       const promises = images.map((image, index) =>
         limit(() =>
           processPage(image, index + 1).then((result) => {
-            results[index] = result.content;
-            pageStatuses[index] = result.status;
+            pages[index] = result;
           })
         )
       );
 
       await Promise.all(promises);
-      return results;
     };
 
     const limit = pLimit(concurrency);
-    const results = await processPagesInBatches(images, limit);
-    const filteredResults = results.filter(isString);
-    aggregatedMarkdown.push(...filteredResults);
+    await processPagesInBatches(images, limit);
   }
 
   // Write the aggregated markdown to a file
   if (outputDir) {
     const resultFilePath = path.join(outputDir, `${fileName}.md`);
-    await fs.writeFile(resultFilePath, aggregatedMarkdown.join("\n\n"));
+    const content = pages.map((page) => page.content).join("\n\n");
+    await fs.writeFile(resultFilePath, content);
   }
 
   // Cleanup the downloaded PDF file
@@ -268,7 +272,8 @@ export const zerox = async ({
   // Format JSON response
   const endTime = new Date();
   const completionTime = endTime.getTime() - startTime.getTime();
-  const formattedPages = aggregatedMarkdown.map((el, i) => {
+
+  const formattedPages = pages.map((page, i) => {
     let pageNumber;
     // If we convert all pages, just use the array index
     if (pagesToConvertAsImages === -1) {
@@ -283,17 +288,11 @@ export const zerox = async ({
       pageNumber = pagesToConvertAsImages;
     }
 
-    let result: Page = {
-      content: el,
-      contentLength: el.length,
+    // Return the page with the correct page number
+    const result: Page = {
+      ...page,
       page: pageNumber,
-      status: pageStatuses[i],
     };
-
-    const error = pageStatuses[i] === PageStatus.ERROR ? el : undefined;
-    if (error) {
-      result = { ...result, content: "", contentLength: 0, error };
-    }
 
     return result;
   });
