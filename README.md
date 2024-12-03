@@ -76,6 +76,7 @@ const result = await zerox({
   cleanup: true, // Clear images from tmp after run.
   concurrency: 10, // Number of pages to run at a time.
   correctOrientation: true, // True by default, attempts to identify and correct page orientation.
+  errorMode: ErrorMode.IGNORE, // ErrorMode.THROW or ErrorMode.IGNORE, defaults to ErrorMode.IGNORE.
   maintainFormat: false, // Slower but helps maintain consistent formatting.
   maxRetries: 1, // Number of retries to attempt on a failed page, defaults to 1.
   maxTesseractWorkers: -1, // Maximum number of tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed.
