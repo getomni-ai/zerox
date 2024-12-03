@@ -79,6 +79,8 @@ const result = await zerox({
   maintainFormat: false, // Slower but helps maintain consistent formatting.
   maxRetries: 1, // Number of retries to attempt on a failed page, defaults to 1.
   model: "gpt-4o-mini", // Model to use (gpt-4o-mini or gpt-4o).
+  onPostProcess: async ({ page, progressSummary }) => Promise<void>, // Callback function to run after each page is processed.
+  onPreProcess: async ({ imagePath, pageNumber }) => Promise<void>, // Callback function to run before each page is processed.
   outputDir: undefined, // Save combined result.md to a file.
   pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages.
   tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory).
@@ -132,9 +134,15 @@ Request #3 => page_2_markdown + page_3_image
         '**Terms:**  \n' +
         'Order ID : CA-2012-AB10015140-40974  ',
       page: 1,
-      contentLength: 747
+      contentLength: 747,
+      status: 'SUCCESS',
     }
-  ]
+  ],
+  summary: {
+    failedPages: 0,
+    successfulPages: 1,
+    totalPages: 1,
+  },
 }
 ```
 

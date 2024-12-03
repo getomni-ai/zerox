@@ -220,7 +220,14 @@ export const zerox = async ({
       }
 
       if (onPostProcess) {
-        await onPostProcess(page);
+        await onPostProcess({
+          page,
+          progressSummary: {
+            totalPages: images.length,
+            successfulPages,
+            failedPages,
+          },
+        });
       }
 
       return page;

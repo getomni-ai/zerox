@@ -8,7 +8,10 @@ export interface ZeroxArgs {
   maintainFormat?: boolean;
   maxRetries?: number;
   model?: ModelOptions | string;
-  onPostProcess?: (params: Page) => Promise<void>;
+  onPostProcess?: (params: {
+    page: Page;
+    progressSummary: Summary;
+  }) => Promise<void>;
   onPreProcess?: (params: {
     imagePath: string;
     pageNumber: number;
