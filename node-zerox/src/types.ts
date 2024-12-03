@@ -82,7 +82,7 @@ export interface LLMParams {
 }
 
 export interface Summary {
-  totalPages: number;
-  successfulPages: number;
-  failedPages: number;
+  numPages: number;
+  numSuccessfulPages: number;
+  numFailedPages: number;
 }

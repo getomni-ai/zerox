@@ -152,8 +152,8 @@ export const zerox = async ({
     const images = files.filter((file) => file.endsWith(".png"));
 
     // Start processing the images using LLM
-    let successfulPages = 0;
-    let failedPages = 0;
+    let numSuccessfulPages = 0;
+    let numFailedPages = 0;
 
     if (maintainFormat) {
       // Use synchronous processing
@@ -188,7 +188,7 @@ export const zerox = async ({
               inputTokens,
               outputTokens,
             });
-            successfulPages++;
+            numSuccessfulPages++;
             break;
           } catch (error) {
             if (retryCount < maxRetries) {
@@ -209,7 +209,7 @@ export const zerox = async ({
               page: i + 1,
               status: PageStatus.ERROR,
             });
-            failedPages++;
+            numFailedPages++;
             break;
           }
         }
@@ -250,7 +250,7 @@ export const zerox = async ({
             inputTokens,
             outputTokens,
           };
-          successfulPages++;
+          numSuccessfulPages++;
         } catch (error) {
           if (retryCount <= maxRetries) {
             console.log(`Retrying page ${pageNumber}...`);
@@ -269,16 +269,16 @@ export const zerox = async ({
             page: pageNumber,
             status: PageStatus.ERROR,
           };
-          failedPages++;
+          numFailedPages++;
         }
 
         if (onPostProcess) {
           await onPostProcess({
             page,
             progressSummary: {
-              totalPages: images.length,
-              successfulPages,
-              failedPages,
+              numPages: images.length,
+              numSuccessfulPages,
+              numFailedPages,
             },
           });
         }
@@ -347,9 +347,9 @@ export const zerox = async ({
       outputTokens: outputTokenCount,
       pages: formattedPages,
       summary: {
-        totalPages: formattedPages.length,
-        successfulPages,
-        failedPages,
+        numPages: formattedPages.length,
+        numSuccessfulPages,
+        numFailedPages,
       },
     };
   } finally {
