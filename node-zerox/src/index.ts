@@ -12,7 +12,6 @@ import {
   downloadFile,
   formatMarkdown,
   getTesseractScheduler,
-  isString,
   terminateScheduler,
 } from "./utils";
 import { getCompletion } from "./openAI";
