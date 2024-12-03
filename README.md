@@ -78,6 +78,7 @@ const result = await zerox({
   correctOrientation: true, // True by default, attempts to identify and correct page orientation.
   maintainFormat: false, // Slower but helps maintain consistent formatting.
   maxRetries: 1, // Number of retries to attempt on a failed page, defaults to 1.
+  maxTesseractWorkers: -1, // Maximum number of tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed.
   model: "gpt-4o-mini", // Model to use (gpt-4o-mini or gpt-4o).
   onPostProcess: async ({ page, progressSummary }) => Promise<void>, // Callback function to run after each page is processed.
   onPreProcess: async ({ imagePath, pageNumber }) => Promise<void>, // Callback function to run before each page is processed.

@@ -7,6 +7,7 @@ export interface ZeroxArgs {
   llmParams?: LLMParams;
   maintainFormat?: boolean;
   maxRetries?: number;
+  maxTesseractWorkers?: number;
   model?: ModelOptions | string;
   onPostProcess?: (params: {
     page: Page;
