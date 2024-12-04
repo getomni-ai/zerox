@@ -50,6 +50,7 @@ export const zerox = async ({
   let priorPage = "";
   const pages: Page[] = [];
   const startTime = new Date();
+  const initialTime = Date.now();
 
   llmParams = validateLLMParams(llmParams);
 
@@ -62,6 +63,7 @@ export const zerox = async ({
   }
   let scheduler: Tesseract.Scheduler | null = null;
 
+  const orientationStartTime = Date.now();
   if (correctOrientation) {
     scheduler = await getTesseractScheduler();
     const workerCount =
@@ -73,6 +75,12 @@ export const zerox = async ({
       scheduler,
     });
   }
+
+  const orientationEndTime = Date.now();
+  console.log(
+    "time to apply orientation correction",
+    `${(orientationEndTime - orientationStartTime) / 1000}s`
+  );
 
   try {
     // Ensure temp directory exists + create temp folder
@@ -91,6 +99,11 @@ export const zerox = async ({
       filePath,
       tempDir: sourceDirectory,
     });
+    const downloadEndTime = Date.now();
+    console.log(
+      "time to download file",
+      `${(downloadEndTime - orientationEndTime) / 1000}s`
+    );
     if (!localPath) throw "Failed to save file to local drive";
 
     // Sort the `pagesToConvertAsImages` array to make sure we use the right index
@@ -98,6 +111,8 @@ export const zerox = async ({
     if (Array.isArray(pagesToConvertAsImages)) {
       pagesToConvertAsImages.sort((a, b) => a - b);
     }
+
+    let convertEndTime = Date.now();
 
     // Convert file to PDF if necessary
     if (extension !== ".png") {
@@ -121,6 +136,11 @@ export const zerox = async ({
         tempDir: processedDirectory,
         trimEdges,
       });
+      convertEndTime = Date.now();
+      console.log(
+        "time to convert pdf to images",
+        `${(convertEndTime - downloadEndTime) / 1000}s`
+      );
     } else if (correctOrientation) {
       const imageBuffer = await fs.readFile(localPath);
 
@@ -302,6 +322,12 @@ export const zerox = async ({
       await processPagesInBatches(images, limit);
     }
 
+    const ocrEndTime = Date.now();
+    console.log(
+      "time to OCR pages",
+      `${(ocrEndTime - convertEndTime) / 1000}s`
+    );
+
     // Write the aggregated markdown to a file
     if (outputDir) {
       const resultFilePath = path.join(outputDir, `${fileName}.md`);
@@ -339,6 +365,12 @@ export const zerox = async ({
 
       return result;
     });
+
+    const writeEndTime = Date.now();
+    console.log(
+      "time to write results to file",
+      `${(writeEndTime - ocrEndTime) / 1000}s`
+    );
 
     return {
       completionTime,
