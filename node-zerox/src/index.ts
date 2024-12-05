@@ -13,6 +13,7 @@ import {
   formatMarkdown,
   getTesseractScheduler,
   terminateScheduler,
+  validateLLMParams,
 } from "./utils";
 import { getCompletion } from "./openAI";
 import {
@@ -23,7 +24,6 @@ import {
   ZeroxArgs,
   ZeroxOutput,
 } from "./types";
-import { validateLLMParams } from "./utils";
 import { NUM_STARTING_WORKERS } from "./constants";
 
 export const zerox = async ({
@@ -50,7 +50,6 @@ export const zerox = async ({
   let priorPage = "";
   const pages: Page[] = [];
   const startTime = new Date();
-  const initialTime = Date.now();
 
   llmParams = validateLLMParams(llmParams);
 
