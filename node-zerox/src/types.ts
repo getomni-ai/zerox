@@ -2,9 +2,9 @@ export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
   correctOrientation?: boolean;
-  density?: number;
+  imageDensity?: number;
   filePath: string;
-  height?: number;
+  imageHeight?: number;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
   maxTesseractWorkers?: number;

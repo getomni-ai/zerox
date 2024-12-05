@@ -23,9 +23,9 @@ export const zerox = async ({
   cleanup = true,
   concurrency = 10,
   correctOrientation = true,
-  density = 300,
+  imageDensity = 300,
   filePath,
-  height = 2048,
+  imageHeight = 2048,
   llmParams = {},
   maintainFormat = false,
   maxTesseractWorkers = -1,
@@ -107,8 +107,8 @@ export const zerox = async ({
       // Convert the file to a series of images
       await convertPdfToImages({
         correctOrientation,
-        density,
-        height,
+        imageDensity,
+        imageHeight,
         localPath: pdfPath,
         maxTesseractWorkers,
         pagesToConvertAsImages,
