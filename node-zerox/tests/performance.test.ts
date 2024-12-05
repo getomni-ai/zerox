@@ -4,6 +4,7 @@ import { zerox } from "../src";
 import { ModelOptions } from "../src/types";
 
 const MOCK_OPENAI_TIME = 5000;
+const TEST_FILES_DIR = path.join(__dirname, "data");
 
 interface TestResult {
   numPages: number;
@@ -26,7 +27,6 @@ jest.mock("../src/openAI", () => ({
 }));
 
 describe("Zerox Performance Tests", () => {
-  const TEST_FILES_DIR = path.join(__dirname, "data");
   const allResults: TestResult[] = [];
 
   beforeAll(async () => {
