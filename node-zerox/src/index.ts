@@ -21,10 +21,11 @@ import Tesseract from "tesseract.js";
 
 export const zerox = async ({
   cleanup = true,
-  concurrency = 10,
+  concurrency = 10, 
   correctOrientation = true,
   density = 300,
   filePath,
+  height = 2048,
   llmParams = {},
   maintainFormat = false,
   maxTesseractWorkers = -1,
@@ -107,6 +108,7 @@ export const zerox = async ({
       await convertPdfToImages({
         correctOrientation,
         density,
+        height,
         localPath: pdfPath,
         maxTesseractWorkers,
         pagesToConvertAsImages,

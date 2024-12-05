@@ -206,6 +206,7 @@ const determineOptimalRotation = async ({
 export const convertPdfToImages = async ({
   correctOrientation,
   density,
+  height,
   localPath,
   maxTesseractWorkers,
   pagesToConvertAsImages,
@@ -215,6 +216,7 @@ export const convertPdfToImages = async ({
 }: {
   correctOrientation: boolean;
   density: number;
+  height: number;
   localPath: string;
   maxTesseractWorkers: number;
   pagesToConvertAsImages: number | number[];
@@ -225,7 +227,7 @@ export const convertPdfToImages = async ({
   const options = {
     density,
     format: "png",
-    height: 2048,
+    height,
     preserveAspectRatio: true,
     saveFilename: path.basename(localPath, path.extname(localPath)),
     savePath: tempDir,
