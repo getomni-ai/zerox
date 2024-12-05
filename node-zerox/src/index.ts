@@ -21,7 +21,7 @@ import Tesseract from "tesseract.js";
 
 export const zerox = async ({
   cleanup = true,
-  concurrency = 10, 
+  concurrency = 10,
   correctOrientation = true,
   density = 300,
   filePath,
