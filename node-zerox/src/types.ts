@@ -3,6 +3,8 @@ export interface ZeroxArgs {
   concurrency?: number;
   correctOrientation?: boolean;
   filePath: string;
+  imageDensity?: number;
+  imageHeight?: number;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
   maxTesseractWorkers?: number;
