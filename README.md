@@ -144,7 +144,7 @@ Request #3 => page_2_markdown + page_3_image
 
 ### Installation:
 
-- Install **poppler-utils** on the system, it should be available in path variable
+- Install **poppler** on the system, it should be available in path variable. See the [pdf2image documentation](https://pdf2image.readthedocs.io/en/latest/installation.html) for instructions by platform.
 - Install py-zerox:
 
 ```sh
