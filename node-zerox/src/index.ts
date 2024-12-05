@@ -73,8 +73,8 @@ export const zerox = async ({
       tempDir || os.tmpdir(),
       `zerox-temp-${rand}`
     );
-    const sourceDirectory = path.join(tempDirectory, "source");
-    const processedDirectory = path.join(tempDirectory, "processed");
+    const sourceDirectory = path.join(tempDirectory, 'source');
+    const processedDirectory = path.join(tempDirectory, 'processed');
     await fs.ensureDir(sourceDirectory);
     await fs.ensureDir(processedDirectory);
 
