@@ -15,7 +15,7 @@ import {
   terminateScheduler,
   validateLLMParams,
 } from "./utils";
-import { getCompletion } from "./openAI";
+import { getCompletion } from "./models";
 import {
   ErrorMode,
   ModelOptions,
