@@ -2,8 +2,8 @@ export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
   correctOrientation?: boolean;
-  imageDensity?: number;
   filePath: string;
+  imageDensity?: number;
   imageHeight?: number;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
