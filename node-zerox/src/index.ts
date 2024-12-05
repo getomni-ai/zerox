@@ -77,12 +77,6 @@ export const zerox = async ({
     });
   }
 
-  const orientationEndTime = Date.now();
-  console.log(
-    "time to apply orientation correction",
-    `${(orientationEndTime - orientationStartTime) / 1000}s`
-  );
-
   try {
     // Ensure temp directory exists + create temp folder
     const rand = Math.floor(1000 + Math.random() * 9000).toString();
@@ -100,11 +94,7 @@ export const zerox = async ({
       filePath,
       tempDir: sourceDirectory,
     });
-    const downloadEndTime = Date.now();
-    console.log(
-      "time to download file",
-      `${(downloadEndTime - orientationEndTime) / 1000}s`
-    );
+
     if (!localPath) throw "Failed to save file to local drive";
 
     // Sort the `pagesToConvertAsImages` array to make sure we use the right index
@@ -136,12 +126,6 @@ export const zerox = async ({
       });
     }
 
-    const convertEndTime = Date.now();
-    console.log(
-      "time to convert file to images",
-      `${(convertEndTime - downloadEndTime) / 1000}s`
-    );
-
     if (correctOrientation) {
       await prepareWorkersForImageProcessing({
         maxTesseractWorkers,
@@ -149,12 +133,6 @@ export const zerox = async ({
         scheduler,
       });
     }
-
-    const preparedWorkersEndTime = Date.now();
-    console.log(
-      "time to prepare workers",
-      `${(preparedWorkersEndTime - convertEndTime) / 1000}s`
-    );
 
     // Start processing the images using LLM
     let numSuccessfulPages = 0;
@@ -325,12 +303,6 @@ export const zerox = async ({
       await processPagesInBatches(imagePaths, limit);
     }
 
-    const ocrEndTime = Date.now();
-    console.log(
-      "time to OCR pages",
-      `${(ocrEndTime - preparedWorkersEndTime) / 1000}s`
-    );
-
     // Write the aggregated markdown to a file
     const endOfPath = localPath.split("/")[localPath.split("/").length - 1];
     const rawFileName = endOfPath.split(".")[0];
@@ -376,12 +348,6 @@ export const zerox = async ({
 
       return result;
     });
-
-    const writeEndTime = Date.now();
-    console.log(
-      "time to write results to file",
-      `${(writeEndTime - ocrEndTime) / 1000}s`
-    );
 
     return {
       completionTime,
