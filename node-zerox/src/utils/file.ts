@@ -1,6 +1,5 @@
 import { fromPath } from "pdf2pic";
 import { pipeline } from "stream/promises";
-import * as Tesseract from "tesseract.js";
 import axios from "axios";
 import fs from "fs-extra";
 import mime from "mime-types";
@@ -8,11 +7,9 @@ import path from "path";
 import { promisify } from "util";
 import { v4 as uuidv4 } from "uuid";
 import { convert } from "libreoffice-convert";
+import { WriteImageResponse } from "pdf2pic/dist/types/convertResponse";
 
 import { isValidUrl } from "./common";
-import { addWorkersToTesseractScheduler } from "./tesseract";
-import { NUM_STARTING_WORKERS } from "../constants";
-import { cleanupImage } from "./image";
 
 const convertAsync = promisify(convert);
 
@@ -93,90 +90,41 @@ export const convertFileToPdf = async ({
   }
 };
 
-// Convert each page to a png, correct orientation, and save that image to tmp
+// Convert each page to a png and save that image to tempDir
 export const convertPdfToImages = async ({
-  correctOrientation,
-  localPath,
-  maxTesseractWorkers,
+  pdfPath,
   pagesToConvertAsImages,
-  scheduler,
   tempDir,
-  trimEdges,
 }: {
-  correctOrientation: boolean;
-  localPath: string;
-  maxTesseractWorkers: number;
+  pdfPath: string;
   pagesToConvertAsImages: number | number[];
-  scheduler: Tesseract.Scheduler | null;
   tempDir: string;
-  trimEdges: boolean;
-}) => {
+}): Promise<string[]> => {
   const options = {
     density: 300,
     format: "png",
     height: 2048,
     preserveAspectRatio: true,
-    saveFilename: path.basename(localPath, path.extname(localPath)),
+    saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
     savePath: tempDir,
   };
-  const storeAsImage = fromPath(localPath, options);
+  const storeAsImage = fromPath(pdfPath, options);
 
   try {
-    const convertResults = await storeAsImage.bulk(pagesToConvertAsImages, {
-      responseType: "buffer",
+    const convertResults: WriteImageResponse[] = await storeAsImage.bulk(
+      pagesToConvertAsImages
+    );
+
+    // validate that all pages were converted
+    let imagePaths: string[] = [];
+    convertResults.forEach((result) => {
+      if (!result.page || !result.path) {
+        throw new Error("Could not identify page data");
+      }
+      imagePaths.push(result.path);
     });
 
-    if (correctOrientation) {
-      const numRequiredWorkers = convertResults.length;
-      let numNewWorkers = numRequiredWorkers - NUM_STARTING_WORKERS;
-
-      if (maxTesseractWorkers !== -1) {
-        const numPreviouslyInitiatedWorkers =
-          maxTesseractWorkers < NUM_STARTING_WORKERS
-            ? maxTesseractWorkers
-            : NUM_STARTING_WORKERS;
-
-        if (numRequiredWorkers > numPreviouslyInitiatedWorkers) {
-          numNewWorkers = Math.min(
-            numRequiredWorkers - numPreviouslyInitiatedWorkers,
-            maxTesseractWorkers - numPreviouslyInitiatedWorkers
-          );
-        } else {
-          numNewWorkers = 0;
-        }
-      }
-
-      // Add more workers if needed
-      if (numNewWorkers > 0 && maxTesseractWorkers !== 0 && scheduler)
-        addWorkersToTesseractScheduler({
-          numWorkers: numNewWorkers,
-          scheduler,
-        });
-    }
-
-    await Promise.all(
-      convertResults.map(async (result) => {
-        if (!result || !result.buffer) {
-          throw new Error("Could not convert page to image buffer");
-        }
-        if (!result.page) throw new Error("Could not identify page data");
-        const paddedPageNumber = result.page.toString().padStart(5, "0");
-
-        const correctedBuffer = await cleanupImage({
-          correctOrientation,
-          imageBuffer: result.buffer,
-          scheduler,
-          trimEdges,
-        });
-
-        const imagePath = path.join(
-          tempDir,
-          `${options.saveFilename}_page_${paddedPageNumber}.png`
-        );
-        await fs.writeFile(imagePath, correctedBuffer);
-      })
-    );
-    return convertResults;
+    return imagePaths;
   } catch (err) {
     console.error("Error during PDF conversion:", err);
     throw err;

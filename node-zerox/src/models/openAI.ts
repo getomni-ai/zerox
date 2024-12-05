@@ -5,7 +5,7 @@ import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 
 export const getCompletion = async ({
   apiKey,
-  imagePath,
+  image,
   llmParams,
   maintainFormat,
   model,
@@ -30,7 +30,7 @@ export const getCompletion = async ({
   }
 
   // Add Image to request
-  const base64Image = await encodeImageToBase64(imagePath);
+  const base64Image = await encodeImageToBase64(image);
   messages.push({
     role: "user",
     content: [

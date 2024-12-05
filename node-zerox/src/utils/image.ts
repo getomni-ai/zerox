@@ -1,5 +1,5 @@
-import fs from "fs-extra";
 import sharp from "sharp";
+import Tesseract from "tesseract.js";
 
 interface CleanupImageProps {
   correctOrientation: boolean;
@@ -8,8 +8,7 @@ interface CleanupImageProps {
   trimEdges: boolean;
 }
 
-export const encodeImageToBase64 = async (imagePath: string) => {
-  const imageBuffer = await fs.readFile(imagePath);
+export const encodeImageToBase64 = async (imageBuffer: Buffer) => {
   return imageBuffer.toString("base64");
 };
 

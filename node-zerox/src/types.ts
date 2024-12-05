@@ -61,7 +61,7 @@ export interface CompletionResponse {
 
 export interface CompletionArgs {
   apiKey: string;
-  imagePath: string;
+  image: Buffer;
   llmParams?: LLMParams;
   maintainFormat: boolean;
   model: ModelOptions | string;

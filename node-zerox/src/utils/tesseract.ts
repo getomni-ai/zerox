@@ -1,5 +1,7 @@
 import * as Tesseract from "tesseract.js";
 
+import { NUM_STARTING_WORKERS } from "../constants";
+
 export const getTesseractScheduler = async () => {
   return Tesseract.createScheduler();
 };
@@ -33,4 +35,41 @@ export const addWorkersToTesseractScheduler = async ({
 
 export const terminateScheduler = (scheduler: Tesseract.Scheduler) => {
   return scheduler.terminate();
+};
+
+export const prepareWorkersForImageProcessing = async ({
+  numImages,
+  maxTesseractWorkers,
+  scheduler,
+}: {
+  numImages: number;
+  maxTesseractWorkers: number;
+  scheduler: Tesseract.Scheduler | null;
+}) => {
+  // Add more workers if correctOrientation is true
+  const numRequiredWorkers = numImages;
+  let numNewWorkers = numRequiredWorkers - NUM_STARTING_WORKERS;
+
+  if (maxTesseractWorkers !== -1) {
+    const numPreviouslyInitiatedWorkers =
+      maxTesseractWorkers < NUM_STARTING_WORKERS
+        ? maxTesseractWorkers
+        : NUM_STARTING_WORKERS;
+
+    if (numRequiredWorkers > numPreviouslyInitiatedWorkers) {
+      numNewWorkers = Math.min(
+        numRequiredWorkers - numPreviouslyInitiatedWorkers,
+        maxTesseractWorkers - numPreviouslyInitiatedWorkers
+      );
+    } else {
+      numNewWorkers = 0;
+    }
+  }
+
+  // Add more workers if needed
+  if (numNewWorkers > 0 && maxTesseractWorkers !== 0 && scheduler)
+    addWorkersToTesseractScheduler({
+      numWorkers: numNewWorkers,
+      scheduler,
+    });
 };
