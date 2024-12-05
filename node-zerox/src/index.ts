@@ -23,6 +23,7 @@ export const zerox = async ({
   cleanup = true,
   concurrency = 10,
   correctOrientation = true,
+  density = 300,
   filePath,
   llmParams = {},
   maintainFormat = false,
@@ -72,8 +73,8 @@ export const zerox = async ({
       tempDir || os.tmpdir(),
       `zerox-temp-${rand}`
     );
-    const sourceDirectory = path.join(tempDirectory, 'source')
-    const processedDirectory = path.join(tempDirectory, 'processed')
+    const sourceDirectory = path.join(tempDirectory, "source");
+    const processedDirectory = path.join(tempDirectory, "processed");
     await fs.ensureDir(sourceDirectory);
     await fs.ensureDir(processedDirectory);
 
@@ -105,6 +106,7 @@ export const zerox = async ({
       // Convert the file to a series of images
       await convertPdfToImages({
         correctOrientation,
+        density,
         localPath: pdfPath,
         maxTesseractWorkers,
         pagesToConvertAsImages,
