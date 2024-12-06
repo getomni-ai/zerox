@@ -92,18 +92,22 @@ export const convertFileToPdf = async ({
 
 // Convert each page to a png and save that image to tempDir
 export const convertPdfToImages = async ({
+  imageDensity = 300,
+  imageHeight = 2048,
   pdfPath,
   pagesToConvertAsImages,
   tempDir,
 }: {
+  imageDensity: number;
+  imageHeight: number;
   pdfPath: string;
   pagesToConvertAsImages: number | number[];
   tempDir: string;
 }): Promise<string[]> => {
   const options = {
-    density: 300,
+    density: imageDensity,
     format: "png",
-    height: 2048,
+    height: imageHeight,
     preserveAspectRatio: true,
     saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
     savePath: tempDir,
