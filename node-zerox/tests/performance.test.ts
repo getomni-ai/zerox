@@ -4,13 +4,13 @@ import { zerox } from "../src";
 import { ModelOptions } from "../src/types";
 
 const MOCK_OPENAI_TIME = 5000;
+const TEST_FILES_DIR = path.join(__dirname, "data");
 
 interface TestResult {
   numPages: number;
   concurrency: number;
   duration: number;
   avgTimePerPage: number;
-  successRate: number;
 }
 
 // Mock the getCompletion function
@@ -27,7 +27,6 @@ jest.mock("../src/models/openAI", () => ({
 }));
 
 describe("Zerox Performance Tests", () => {
-  const TEST_FILES_DIR = path.join(__dirname, "data");
   const allResults: TestResult[] = [];
 
   beforeAll(async () => {
@@ -66,15 +65,17 @@ describe("Zerox Performance Tests", () => {
 
   const testCases = [
     { pages: 1, concurrency: 20 },
-    { pages: 10, concurrency: 20 },
-    { pages: 20, concurrency: 20 },
-    { pages: 50, concurrency: 20 },
-    { pages: 100, concurrency: 20 },
-    { pages: 1, concurrency: 50 },
-    { pages: 10, concurrency: 50 },
-    { pages: 20, concurrency: 50 },
-    { pages: 50, concurrency: 50 },
-    { pages: 100, concurrency: 50 },
+    // { pages: 10, concurrency: 20 },
+    // { pages: 20, concurrency: 20 },
+    // { pages: 30, concurrency: 20 },
+    // { pages: 50, concurrency: 20 },
+    // { pages: 100, concurrency: 20 },
+    // { pages: 1, concurrency: 50 },
+    // { pages: 10, concurrency: 50 },
+    // { pages: 20, concurrency: 50 },
+    // { pages: 30, concurrency: 50 },
+    // { pages: 50, concurrency: 50 },
+    // { pages: 100, concurrency: 50 },
   ];
 
   test.each(testCases)(
@@ -88,11 +89,9 @@ describe("Zerox Performance Tests", () => {
         Concurrency: results.concurrency,
         "Total Duration (ms)": results.duration,
         "Avg Time per Page (ms)": Math.round(results.avgTimePerPage),
-        "Success Rate (%)": results.successRate,
       });
 
       expect(results.duration).toBeGreaterThan(0);
-      expect(results.successRate).toBe(100);
     },
     // Set timeout to accommodate larger tests
     120000

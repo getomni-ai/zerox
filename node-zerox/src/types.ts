@@ -4,6 +4,8 @@ export interface ZeroxArgs {
   correctOrientation?: boolean;
   errorMode?: ErrorMode;
   filePath: string;
+  imageDensity?: number;
+  imageHeight?: number;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
   maxRetries?: number;

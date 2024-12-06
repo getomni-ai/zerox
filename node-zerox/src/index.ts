@@ -33,6 +33,8 @@ export const zerox = async ({
   correctOrientation = true,
   errorMode = ErrorMode.IGNORE,
   filePath,
+  imageDensity = 300,
+  imageHeight = 2048,
   llmParams = {},
   maintainFormat = false,
   maxRetries = 1,
@@ -85,9 +87,7 @@ export const zerox = async ({
       `zerox-temp-${rand}`
     );
     const sourceDirectory = path.join(tempDirectory, "source");
-    const processedDirectory = path.join(tempDirectory, "processed");
     await fs.ensureDir(sourceDirectory);
-    await fs.ensureDir(processedDirectory);
 
     // Download the PDF. Get file name.
     const { extension, localPath } = await downloadFile({
@@ -121,6 +121,8 @@ export const zerox = async ({
       }
       imagePaths = await convertPdfToImages({
         pdfPath,
+        imageDensity,
+        imageHeight,
         pagesToConvertAsImages,
         tempDir: sourceDirectory,
       });
