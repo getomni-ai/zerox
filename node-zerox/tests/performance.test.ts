@@ -65,17 +65,17 @@ describe("Zerox Performance Tests", () => {
 
   const testCases = [
     { pages: 1, concurrency: 20 },
-    // { pages: 10, concurrency: 20 },
-    // { pages: 20, concurrency: 20 },
-    // { pages: 30, concurrency: 20 },
-    // { pages: 50, concurrency: 20 },
-    // { pages: 100, concurrency: 20 },
-    // { pages: 1, concurrency: 50 },
-    // { pages: 10, concurrency: 50 },
-    // { pages: 20, concurrency: 50 },
-    // { pages: 30, concurrency: 50 },
-    // { pages: 50, concurrency: 50 },
-    // { pages: 100, concurrency: 50 },
+    { pages: 10, concurrency: 20 },
+    { pages: 20, concurrency: 20 },
+    { pages: 30, concurrency: 20 },
+    { pages: 50, concurrency: 20 },
+    { pages: 100, concurrency: 20 },
+    { pages: 1, concurrency: 50 },
+    { pages: 10, concurrency: 50 },
+    { pages: 20, concurrency: 50 },
+    { pages: 30, concurrency: 50 },
+    { pages: 50, concurrency: 50 },
+    { pages: 100, concurrency: 50 },
   ];
 
   test.each(testCases)(
