@@ -24,3 +24,4 @@ eng.traineddata
 # Keep type declarations
 !.gitignore
 !node-zerox/dist/**/*.d.ts
+.pypirc

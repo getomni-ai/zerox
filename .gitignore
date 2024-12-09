@@ -79,7 +79,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 cover/
-
+.pypirc
 # Ignore localization files
 *.mo
 *.pot
