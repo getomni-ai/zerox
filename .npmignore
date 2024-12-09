@@ -17,7 +17,7 @@ setup.py
 Makefile
 eng.traineddata
 .env
-
+.pypirc
 # File types
 *.ts
 

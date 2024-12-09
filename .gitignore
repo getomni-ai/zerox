@@ -158,7 +158,7 @@ dmypy.json
 
 # Ignore Pytype specific files
 .pytype/
-
+.pypirc
 # Ignore Cython debug files
 cython_debug/
 
