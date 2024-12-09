@@ -77,6 +77,7 @@ const result = await zerox({
   concurrency: 10, // Number of pages to run at a time.
   correctOrientation: true, // True by default, attempts to identify and correct page orientation.
   maintainFormat: false, // Slower but helps maintain consistent formatting.
+  maxTesseractWorkers: -1, // Maximum number of tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed.
   model: 'gpt-4o-mini' // Model to use (gpt-4o-mini or gpt-4o).
   outputDir: undefined, // Save combined result.md to a file.
   pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages.
@@ -143,7 +144,7 @@ Request #3 => page_2_markdown + page_3_image
 
 ### Installation:
 
-- Install **poppler-utils** on the system, it should be available in path variable
+- Install **poppler** on the system, it should be available in path variable. See the [pdf2image documentation](https://pdf2image.readthedocs.io/en/latest/installation.html) for instructions by platform.
 - Install py-zerox:
 
 ```sh

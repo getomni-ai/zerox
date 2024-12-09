@@ -1,13 +1,14 @@
 {
   "name": "zerox",
-  "version": "1.0.39",
+  "version": "1.0.41",
   "description": "ocr documents using gpt-4o-mini",
   "main": "node-zerox/dist/index.js",
   "scripts": {
     "build": "tsc -p node-zerox/tsconfig.json",
     "postinstall": "node node-zerox/scripts/install-dependencies.js",
     "prepublishOnly": "npm run build",
-    "test": "ts-node node-zerox/tests/index.ts"
+    "test": "ts-node node-zerox/tests/index.ts",
+    "test:performance": "jest node-zerox/tests/performance.test.ts --runInBand"
   },
   "author": "tylermaran",
   "license": "MIT",
@@ -23,15 +24,19 @@
     "pdf2pic": "^3.1.1",
     "sharp": "^0.33.5",
     "tesseract.js": "^5.1.1",
-    "util": "^0.12.5"
+    "util": "^0.12.5",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
+    "@types/jest": "^29.5.14",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.14.11",
     "@types/prompts": "^2.4.9",
     "dotenv": "^16.4.5",
+    "jest": "^29.7.0",
     "prompts": "^2.4.2",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
