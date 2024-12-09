@@ -65,7 +65,6 @@ export const zerox = async ({
   }
   let scheduler: Tesseract.Scheduler | null = null;
 
-  const orientationStartTime = Date.now();
   // Add initial tesseract workers if we need to correct orientation
   if (correctOrientation) {
     scheduler = await getTesseractScheduler();
