@@ -14,7 +14,7 @@ interface TestResult {
 }
 
 // Mock the getCompletion function
-jest.mock("../src/openAI", () => ({
+jest.mock("../src/models/openAI", () => ({
   getCompletion: jest.fn().mockImplementation(async () => {
     await new Promise((resolve) => setTimeout(resolve, MOCK_OPENAI_TIME));
     return {
@@ -58,6 +58,8 @@ describe("Zerox Performance Tests", () => {
       concurrency,
       duration,
       avgTimePerPage: duration / numPages,
+      successRate:
+        (result.summary.numSuccessfulPages / result.summary.numPages) * 100,
     };
   };
 
