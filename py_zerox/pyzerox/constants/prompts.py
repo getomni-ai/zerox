@@ -5,4 +5,7 @@ class Prompts:
     Convert the following PDF page to markdown.
     Return only the markdown with no explanation text.
     Do not exclude any content from the page.
+    If there is more than one document in the same PDF
+    or image, separate the Markdown for each document as
+    separate sections.
     """
