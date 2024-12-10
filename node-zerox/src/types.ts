@@ -24,10 +24,7 @@ export interface ZeroxArgs {
   trimEdges?: boolean;
 }
 
-export enum ModelOptions {
-  gpt_4o = "gpt-4o",
-  gpt_4o_mini = "gpt-4o-mini",
-}
+export type ModelOptions = "gpt-4o" | "gpt-4o-mini";
 
 export interface Page {
   content: string;
