@@ -2,16 +2,18 @@ export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
   correctOrientation?: boolean;
+  errorMode?: ErrorMode;
   filePath: string;
   imageDensity?: number;
   imageHeight?: number;
   llmParams?: LLMParams;
   maintainFormat?: boolean;
+  maxRetries?: number;
   maxTesseractWorkers?: number;
   model?: ModelOptions | string;
   onPostProcess?: (params: {
-    content: string;
-    pageNumber: number;
+    page: Page;
+    progressSummary: Summary;
   }) => Promise<void>;
   onPreProcess?: (params: {
     imagePath: string;
@@ -29,10 +31,19 @@ export enum ModelOptions {
   gpt_4o_mini = "gpt-4o-mini",
 }
 
+export enum PageStatus {
+  SUCCESS = "SUCCESS",
+  ERROR = "ERROR",
+}
+
 export interface Page {
   content: string;
   contentLength: number;
   page: number;
+  status: PageStatus;
+  error?: string;
+  inputTokens?: number;
+  outputTokens?: number;
 }
 
 export interface ZeroxOutput {
@@ -41,6 +52,7 @@ export interface ZeroxOutput {
   inputTokens: number;
   outputTokens: number;
   pages: Page[];
+  summary: Summary;
 }
 
 export interface CompletionResponse {
@@ -51,11 +63,16 @@ export interface CompletionResponse {
 
 export interface CompletionArgs {
   apiKey: string;
-  imagePath: string;
+  image: Buffer;
   llmParams?: LLMParams;
   maintainFormat: boolean;
   model: ModelOptions | string;
   priorPage: string;
+}
+
+export enum ErrorMode {
+  THROW = "THROW",
+  IGNORE = "IGNORE",
 }
 
 export interface LLMParams {
@@ -64,4 +81,10 @@ export interface LLMParams {
   presencePenalty?: number;
   temperature?: number;
   topP?: number;
+}
+
+export interface Summary {
+  numPages: number;
+  numSuccessfulPages: number;
+  numFailedPages: number;
 }

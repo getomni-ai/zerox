@@ -1,3 +1,9 @@
+import os from "os";
+import fs from "fs-extra";
+import path from "path";
+import pLimit, { Limit } from "p-limit";
+import Tesseract from "tesseract.js";
+
 import "./handleWarnings";
 import {
   addWorkersToTesseractScheduler,
@@ -7,28 +13,32 @@ import {
   downloadFile,
   formatMarkdown,
   getTesseractScheduler,
-  isString,
   terminateScheduler,
+  validateLLMParams,
+  prepareWorkersForImageProcessing,
 } from "./utils";
-import { getCompletion } from "./openAI";
-import { ModelOptions, ZeroxArgs, ZeroxOutput } from "./types";
-import { validateLLMParams } from "./utils";
-import fs from "fs-extra";
-import os from "os";
-import path from "path";
-import pLimit, { Limit } from "p-limit";
+import { getCompletion } from "./models";
+import {
+  ErrorMode,
+  ModelOptions,
+  Page,
+  PageStatus,
+  ZeroxArgs,
+  ZeroxOutput,
+} from "./types";
 import { NUM_STARTING_WORKERS } from "./constants";
-import Tesseract from "tesseract.js";
 
 export const zerox = async ({
   cleanup = true,
   concurrency = 10,
   correctOrientation = true,
+  errorMode = ErrorMode.IGNORE,
   filePath,
   imageDensity = 300,
   imageHeight = 2048,
   llmParams = {},
   maintainFormat = false,
+  maxRetries = 1,
   maxTesseractWorkers = -1,
   model = ModelOptions.gpt_4o_mini,
   onPostProcess,
@@ -42,7 +52,7 @@ export const zerox = async ({
   let inputTokenCount = 0;
   let outputTokenCount = 0;
   let priorPage = "";
-  const aggregatedMarkdown: string[] = [];
+  const pages: Page[] = [];
   const startTime = new Date();
 
   llmParams = validateLLMParams(llmParams);
@@ -56,6 +66,7 @@ export const zerox = async ({
   }
   let scheduler: Tesseract.Scheduler | null = null;
 
+  // Add initial tesseract workers if we need to correct orientation
   if (correctOrientation) {
     scheduler = await getTesseractScheduler();
     const workerCount =
@@ -75,16 +86,15 @@ export const zerox = async ({
       tempDir || os.tmpdir(),
       `zerox-temp-${rand}`
     );
-    const sourceDirectory = path.join(tempDirectory, 'source')
-    const processedDirectory = path.join(tempDirectory, 'processed')
+    const sourceDirectory = path.join(tempDirectory, "source");
     await fs.ensureDir(sourceDirectory);
-    await fs.ensureDir(processedDirectory);
 
     // Download the PDF. Get file name.
     const { extension, localPath } = await downloadFile({
       filePath,
       tempDir: sourceDirectory,
     });
+
     if (!localPath) throw "Failed to save file to local drive";
 
     // Sort the `pagesToConvertAsImages` array to make sure we use the right index
@@ -93,47 +103,209 @@ export const zerox = async ({
       pagesToConvertAsImages.sort((a, b) => a - b);
     }
 
-    // Convert file to PDF if necessary
-    if (extension !== ".png") {
+    // Read the image file or convert the file to images
+    let imagePaths: string[] = [];
+    if (extension === ".png") {
+      imagePaths = [localPath];
+    } else {
       let pdfPath: string;
       if (extension === ".pdf") {
         pdfPath = localPath;
       } else {
+        // Convert file to PDF if necessary
         pdfPath = await convertFileToPdf({
           extension,
           localPath,
           tempDir: sourceDirectory,
         });
       }
-      // Convert the file to a series of images
-      await convertPdfToImages({
-        correctOrientation,
+      imagePaths = await convertPdfToImages({
+        pdfPath,
         imageDensity,
         imageHeight,
-        localPath: pdfPath,
-        maxTesseractWorkers,
         pagesToConvertAsImages,
-        scheduler,
-        tempDir: processedDirectory,
-        trimEdges,
+        tempDir: sourceDirectory,
       });
-    } else if (correctOrientation) {
-      const imageBuffer = await fs.readFile(localPath);
-
-      const correctedBuffer = await cleanupImage({
-        correctOrientation,
-        imageBuffer,
-        scheduler,
-        trimEdges,
-      });
-
-      const imagePath = path.join(
-        processedDirectory,
-        `${path.basename(localPath, path.extname(localPath))}_clean.png`
-      );
-      await fs.writeFile(imagePath, correctedBuffer);
     }
 
+    if (correctOrientation) {
+      await prepareWorkersForImageProcessing({
+        maxTesseractWorkers,
+        numImages: imagePaths.length,
+        scheduler,
+      });
+    }
+
+    // Start processing the images using LLM
+    let numSuccessfulPages = 0;
+    let numFailedPages = 0;
+
+    if (maintainFormat) {
+      // Use synchronous processing
+      for (let i = 0; i < imagePaths.length; i++) {
+        const imagePath = imagePaths[i];
+        const imageBuffer = await fs.readFile(imagePath);
+        const correctedBuffer = await cleanupImage({
+          correctOrientation,
+          imageBuffer,
+          scheduler,
+          trimEdges,
+        });
+
+        let retryCount = 0;
+
+        while (retryCount <= maxRetries) {
+          try {
+            const { content, inputTokens, outputTokens } = await getCompletion({
+              apiKey: openaiAPIKey,
+              image: correctedBuffer,
+              llmParams,
+              maintainFormat,
+              model,
+              priorPage,
+            });
+            const formattedMarkdown = formatMarkdown(content);
+            inputTokenCount += inputTokens;
+            outputTokenCount += outputTokens;
+
+            // Update prior page to result from last processing step
+            priorPage = formattedMarkdown;
+
+            pages.push({
+              content: formattedMarkdown,
+              contentLength: formattedMarkdown.length,
+              page: i + 1,
+              status: PageStatus.SUCCESS,
+              inputTokens,
+              outputTokens,
+            });
+            numSuccessfulPages++;
+            break;
+          } catch (error) {
+            if (retryCount < maxRetries) {
+              console.log(`Retrying page ${i + 1}...`);
+              retryCount++;
+              continue;
+            }
+
+            console.error(`Failed to process image ${imagePath}:`, error);
+            if (errorMode === ErrorMode.THROW) {
+              throw error;
+            }
+
+            pages.push({
+              content: "",
+              contentLength: 0,
+              error: `Failed to process page ${i + 1}: ${error}`,
+              page: i + 1,
+              status: PageStatus.ERROR,
+            });
+            numFailedPages++;
+            break;
+          }
+        }
+      }
+    } else {
+      // Process in parallel with a limit on concurrent pages
+      const processPage = async (
+        imagePath: string,
+        pageNumber: number,
+        retryCount = 0
+      ): Promise<Page> => {
+        const imageBuffer = await fs.readFile(imagePath);
+        const correctedBuffer = await cleanupImage({
+          correctOrientation,
+          imageBuffer,
+          scheduler,
+          trimEdges,
+        });
+
+        if (onPreProcess) {
+          await onPreProcess({ imagePath, pageNumber });
+        }
+
+        let page: Page;
+        try {
+          const { content, inputTokens, outputTokens } = await getCompletion({
+            apiKey: openaiAPIKey,
+            image: correctedBuffer,
+            llmParams,
+            maintainFormat,
+            model,
+            priorPage,
+          });
+          const formattedMarkdown = formatMarkdown(content);
+          inputTokenCount += inputTokens;
+          outputTokenCount += outputTokens;
+
+          // Update prior page to result from last processing step
+          priorPage = formattedMarkdown;
+
+          page = {
+            content: formattedMarkdown,
+            contentLength: formattedMarkdown.length,
+            page: pageNumber,
+            status: PageStatus.SUCCESS,
+            inputTokens,
+            outputTokens,
+          };
+          numSuccessfulPages++;
+        } catch (error) {
+          if (retryCount <= maxRetries) {
+            console.log(`Retrying page ${pageNumber}...`);
+            return processPage(imagePath, pageNumber, retryCount + 1);
+          }
+
+          console.error(`Failed to process image ${imagePath}:`, error);
+          if (errorMode === ErrorMode.THROW) {
+            throw error;
+          }
+
+          page = {
+            content: "",
+            contentLength: 0,
+            error: `Failed to process page ${pageNumber}: ${error}`,
+            page: pageNumber,
+            status: PageStatus.ERROR,
+          };
+          numFailedPages++;
+        }
+
+        if (onPostProcess) {
+          await onPostProcess({
+            page,
+            progressSummary: {
+              numPages: imagePaths.length,
+              numSuccessfulPages,
+              numFailedPages,
+            },
+          });
+        }
+
+        return page;
+      };
+
+      // Function to process pages with concurrency limit
+      const processPagesInBatches = async (
+        imagePaths: string[],
+        limit: Limit
+      ) => {
+        const promises = imagePaths.map((imagePath, index) =>
+          limit(() =>
+            processPage(imagePath, index + 1).then((result) => {
+              // Update the pages array with the result
+              pages[index] = result;
+            })
+          )
+        );
+        await Promise.all(promises);
+      };
+
+      const limit = pLimit(concurrency);
+      await processPagesInBatches(imagePaths, limit);
+    }
+
+    // Write the aggregated markdown to a file
     const endOfPath = localPath.split("/")[localPath.split("/").length - 1];
     const rawFileName = endOfPath.split(".")[0];
     const fileName = rawFileName
@@ -142,102 +314,10 @@ export const zerox = async ({
       .toLowerCase()
       .substring(0, 255); // Truncate file name to 255 characters to prevent ENAMETOOLONG errors
 
-    // Get list of converted images
-    const files = await fs.readdir(processedDirectory);
-    const images = files.filter((file) => file.endsWith(".png"));
-
-    if (maintainFormat) {
-      // Use synchronous processing
-      for (const image of images) {
-        const imagePath = path.join(processedDirectory, image);
-        try {
-          const { content, inputTokens, outputTokens } = await getCompletion({
-            apiKey: openaiAPIKey,
-            imagePath,
-            llmParams,
-            maintainFormat,
-            model,
-            priorPage,
-          });
-          const formattedMarkdown = formatMarkdown(content);
-          inputTokenCount += inputTokens;
-          outputTokenCount += outputTokens;
-
-          // Update prior page to result from last processing step
-          priorPage = formattedMarkdown;
-
-          // Add all markdown results to array
-          aggregatedMarkdown.push(formattedMarkdown);
-        } catch (error) {
-          console.error(`Failed to process image ${image}:`, error);
-          throw error;
-        }
-      }
-    } else {
-      // Process in parallel with a limit on concurrent pages
-      const processPage = async (
-        image: string,
-        pageNumber: number
-      ): Promise<string | null> => {
-        const imagePath = path.join(processedDirectory, image);
-        try {
-          if (onPreProcess) {
-            await onPreProcess({ imagePath, pageNumber });
-          }
-
-          const { content, inputTokens, outputTokens } = await getCompletion({
-            apiKey: openaiAPIKey,
-            imagePath,
-            llmParams,
-            maintainFormat,
-            model,
-            priorPage,
-          });
-          const formattedMarkdown = formatMarkdown(content);
-          inputTokenCount += inputTokens;
-          outputTokenCount += outputTokens;
-
-          // Update prior page to result from last processing step
-          priorPage = formattedMarkdown;
-
-          if (onPostProcess) {
-            await onPostProcess({ content, pageNumber });
-          }
-
-          // Add all markdown results to array
-          return formattedMarkdown;
-        } catch (error) {
-          console.error(`Failed to process image ${image}:`, error);
-          throw error;
-        }
-      };
-
-      // Function to process pages with concurrency limit
-      const processPagesInBatches = async (images: string[], limit: Limit) => {
-        const results: (string | null)[] = [];
-
-        const promises = images.map((image, index) =>
-          limit(() =>
-            processPage(image, index + 1).then((result) => {
-              results[index] = result;
-            })
-          )
-        );
-
-        await Promise.all(promises);
-        return results;
-      };
-
-      const limit = pLimit(concurrency);
-      const results = await processPagesInBatches(images, limit);
-      const filteredResults = results.filter(isString);
-      aggregatedMarkdown.push(...filteredResults);
-    }
-
-    // Write the aggregated markdown to a file
     if (outputDir) {
       const resultFilePath = path.join(outputDir, `${fileName}.md`);
-      await fs.writeFile(resultFilePath, aggregatedMarkdown.join("\n\n"));
+      const content = pages.map((page) => page.content).join("\n\n");
+      await fs.writeFile(resultFilePath, content);
     }
 
     // Cleanup the downloaded PDF file
@@ -246,22 +326,29 @@ export const zerox = async ({
     // Format JSON response
     const endTime = new Date();
     const completionTime = endTime.getTime() - startTime.getTime();
-    const formattedPages = aggregatedMarkdown.map((el, i) => {
-      let pageNumber;
+
+    const formattedPages = pages.map((page, i) => {
+      let correctPageNumber;
       // If we convert all pages, just use the array index
       if (pagesToConvertAsImages === -1) {
-        pageNumber = i + 1;
+        correctPageNumber = i + 1;
       }
       // Else if we convert specific pages, use the page number from the parameter
       else if (Array.isArray(pagesToConvertAsImages)) {
-        pageNumber = pagesToConvertAsImages[i];
+        correctPageNumber = pagesToConvertAsImages[i];
       }
       // Else, the parameter is a number and use it for the page number
       else {
-        pageNumber = pagesToConvertAsImages;
+        correctPageNumber = pagesToConvertAsImages;
       }
 
-      return { content: el, page: pageNumber, contentLength: el.length };
+      // Return the page with the correct page number
+      const result: Page = {
+        ...page,
+        page: correctPageNumber,
+      };
+
+      return result;
     });
 
     return {
@@ -270,6 +357,11 @@ export const zerox = async ({
       inputTokens: inputTokenCount,
       outputTokens: outputTokenCount,
       pages: formattedPages,
+      summary: {
+        numPages: formattedPages.length,
+        numSuccessfulPages,
+        numFailedPages,
+      },
     };
   } finally {
     if (correctOrientation && scheduler) {
