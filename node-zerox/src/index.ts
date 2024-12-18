@@ -4,6 +4,7 @@ import path from "path";
 import pLimit, { Limit } from "p-limit";
 import Tesseract from "tesseract.js";
 
+import "./handleWarnings";
 import {
   addWorkersToTesseractScheduler,
   cleanupImage,
