@@ -11,7 +11,7 @@ from ..constants import PDFConversionDefaultOptions, Messages
 from ..models import litellmmodel
 
 
-async def convert_pdf_to_images(image_density: int, image_height: tuple[Optional[int], int], local_path: str, temp_dir: str) -> List[str]:
+async def convert_pdf_to_images(image_density: int, image_height: tuple[Optional[int], int], local_path: str, temp_dir: str, poppler_path: str) -> List[str]:
     """Converts a PDF file to a series of images in the temp_dir. Returns a list of image paths in page order."""
     options = {
         "pdf_path": local_path,
@@ -22,6 +22,7 @@ async def convert_pdf_to_images(image_density: int, image_height: tuple[Optional
         "thread_count": PDFConversionDefaultOptions.THREAD_COUNT,
         "use_pdftocairo": PDFConversionDefaultOptions.USE_PDFTOCAIRO,
         "paths_only": True,
+        "poppler_path": poppler_path
     }
 
     try:
