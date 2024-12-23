@@ -133,7 +133,7 @@ async def zerox(
                                                  **subset_pdf_create_kwargs)
 
         # Convert the file to a series of images, below function returns a list of image paths in page order
-        images = await convert_pdf_to_images(image_density=image_density, image_height=image_height, local_path=local_path, temp_dir=temp_directory)
+        images = await convert_pdf_to_images(image_density=image_density, image_height=image_height, local_path=local_path, temp_dir=temp_directory, poppler_path=poppler_path)
 
         if maintain_format:
             for image in images:
