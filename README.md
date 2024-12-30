@@ -180,9 +180,13 @@ kwargs = {}
 
 ## system prompt to use for the vision model
 custom_system_prompt = None
-
 # to override
 # custom_system_prompt = "For the below pdf page, do something..something..." ## example
+
+## system role to use for the vision model
+custom_role = None
+# to override
+# custom_role = "user" ## example
 
 ###################### Example for OpenAI ######################
 model = "gpt-4o-mini" ## openai model
@@ -236,7 +240,8 @@ async def main():
 
     output_dir = "./output_test" ## directory to save the consolidated markdown file
     result = await zerox(file_path=file_path, model=model, output_dir=output_dir,
-                        custom_system_prompt=custom_system_prompt,select_pages=select_pages, **kwargs)
+                        custom_system_prompt=custom_system_prompt, select_pages=select_pages,
+                        custom_role=custom_role, **kwargs)
     return result
 
 
@@ -259,6 +264,7 @@ async def zerox(
     output_dir: Optional[str] = None,
     temp_dir: Optional[str] = None,
     custom_system_prompt: Optional[str] = None,
+    custom_role: Optional[str] = None,
     select_pages: Optional[Union[int, Iterable[int]]] = None,
     **kwargs
 ) -> ZeroxOutput:
@@ -283,7 +289,9 @@ Parameters
 - **temp_dir** (str, optional):
   The directory to store temporary files, defaults to some named folder in system's temp directory. If already exists, the contents will be deleted before zerox uses it.
 - **custom_system_prompt** (str, optional):
-  The system prompt to use for the model, this overrides the default system prompt of zerox.Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning. Defaults to None.
+  The system prompt to use for the model, this overrides the default system prompt of zerox. Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning. Defaults to None.
+- **custom_role** (str, optional):
+  The role assigned to the model can be customized, overriding the default system role. Typically, this isn't necessary unless you need to specify a particular role for a given LLM. If you choose to set it, a friendly warning will be displayed. By default, this option is set to None.
 - **select_pages** (Optional[Union[int, Iterable[int]]], optional):
   Pages to process, can be a single page number or an iterable of page numbers, Defaults to None
 - **kwargs** (dict, optional):
