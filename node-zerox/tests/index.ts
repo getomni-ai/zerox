@@ -48,7 +48,7 @@ async function main() {
           cleanup: false,
           filePath,
           maintainFormat: false,
-          model: ModelOptions.gpt_4o,
+          model: ModelOptions.GPT_4O,
           openaiAPIKey: process.env.OPENAI_API_KEY,
           outputDir: OUTPUT_DIR,
           tempDir: TEMP_DIR,

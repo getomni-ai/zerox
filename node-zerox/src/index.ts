@@ -13,18 +13,18 @@ import {
   downloadFile,
   formatMarkdown,
   getTesseractScheduler,
-  terminateScheduler,
-  validateLLMParams,
   prepareWorkersForImageProcessing,
+  terminateScheduler,
 } from "./utils";
-import { getCompletion } from "./models";
+import { createModel } from "./models";
 import {
   ErrorMode,
   ModelOptions,
+  ModelProvider,
   Page,
   PageStatus,
   ZeroxArgs,
-  ZeroxOutput,
+  ZeroxResponse,
 } from "./types";
 import { NUM_STARTING_WORKERS } from "./constants";
 
@@ -32,6 +32,7 @@ export const zerox = async ({
   cleanup = true,
   concurrency = 10,
   correctOrientation = true,
+  credentials = { apiKey: "" },
   errorMode = ErrorMode.IGNORE,
   filePath,
   imageDensity = 300,
@@ -40,7 +41,8 @@ export const zerox = async ({
   maintainFormat = false,
   maxRetries = 1,
   maxTesseractWorkers = -1,
-  model = ModelOptions.gpt_4o_mini,
+  model = ModelOptions.GPT_4O_MINI,
+  modelProvider = ModelProvider.OPENAI,
   onPostProcess,
   onPreProcess,
   openaiAPIKey = "",
@@ -48,18 +50,21 @@ export const zerox = async ({
   pagesToConvertAsImages = -1,
   tempDir = os.tmpdir(),
   trimEdges = true,
-}: ZeroxArgs): Promise<ZeroxOutput> => {
+}: ZeroxArgs): Promise<ZeroxResponse> => {
   let inputTokenCount = 0;
   let outputTokenCount = 0;
   let priorPage = "";
   const pages: Page[] = [];
   const startTime = new Date();
 
-  llmParams = validateLLMParams(llmParams);
+  if (openaiAPIKey && openaiAPIKey.length > 0) {
+    modelProvider = ModelProvider.OPENAI;
+    credentials = { apiKey: openaiAPIKey };
+  }
 
   // Validators
-  if (!openaiAPIKey || !openaiAPIKey.length) {
-    throw new Error("Missing OpenAI API key");
+  if (Object.values(credentials).every((credential) => !credential)) {
+    throw new Error("Missing credentials");
   }
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
@@ -140,6 +145,13 @@ export const zerox = async ({
     let numSuccessfulPages = 0;
     let numFailedPages = 0;
 
+    const modelInstance = createModel({
+      credentials,
+      llmParams,
+      model,
+      provider: modelProvider,
+    });
+
     if (maintainFormat) {
       // Use synchronous processing
       for (let i = 0; i < imagePaths.length; i++) {
@@ -156,14 +168,12 @@ export const zerox = async ({
 
         while (retryCount <= maxRetries) {
           try {
-            const { content, inputTokens, outputTokens } = await getCompletion({
-              apiKey: openaiAPIKey,
-              image: correctedBuffer,
-              llmParams,
-              maintainFormat,
-              model,
-              priorPage,
-            });
+            const { content, inputTokens, outputTokens } =
+              await modelInstance.getCompletion({
+                image: correctedBuffer,
+                maintainFormat,
+                priorPage,
+              });
             const formattedMarkdown = formatMarkdown(content);
             inputTokenCount += inputTokens;
             outputTokenCount += outputTokens;
@@ -226,14 +236,12 @@ export const zerox = async ({
 
         let page: Page;
         try {
-          const { content, inputTokens, outputTokens } = await getCompletion({
-            apiKey: openaiAPIKey,
-            image: correctedBuffer,
-            llmParams,
-            maintainFormat,
-            model,
-            priorPage,
-          });
+          const { content, inputTokens, outputTokens } =
+            await modelInstance.getCompletion({
+              image: correctedBuffer,
+              maintainFormat,
+              priorPage,
+            });
           const formattedMarkdown = formatMarkdown(content);
           inputTokenCount += inputTokens;
           outputTokenCount += outputTokens;
