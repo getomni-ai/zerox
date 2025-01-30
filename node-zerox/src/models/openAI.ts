@@ -5,6 +5,7 @@ import {
   ModelInterface,
   OpenAICredentials,
 } from "../types";
+import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 import axios from "axios";
 
@@ -28,11 +29,7 @@ export default class OpenAIModel implements ModelInterface {
     maintainFormat,
     priorPage,
   }: CompletionArgs): Promise<CompletionResponse> {
-    const systemPrompt = `
-      Convert the following PDF page to markdown.
-      Return only the markdown with no explanation text. Do not include deliminators like '''markdown.
-      You must include all information on the page. Do not exclude headers, footers, or subtext.
-    `;
+    const systemPrompt = SYSTEM_PROMPT_BASE;
 
     // Default system message
     const messages: any = [{ role: "system", content: systemPrompt }];
@@ -42,7 +39,7 @@ export default class OpenAIModel implements ModelInterface {
     if (maintainFormat && priorPage && priorPage.length) {
       messages.push({
         role: "system",
-        content: `Markdown must maintain consistent formatting with the following page: \n\n """${priorPage}"""`,
+        content: CONSISTENCY_PROMPT(priorPage),
       });
     }
 

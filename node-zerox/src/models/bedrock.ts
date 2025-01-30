@@ -9,6 +9,7 @@ import {
   LLMParams,
   ModelInterface,
 } from "../types";
+import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 
 export default class BedrockModel implements ModelInterface {
@@ -40,11 +41,7 @@ export default class BedrockModel implements ModelInterface {
     maintainFormat,
     priorPage,
   }: CompletionArgs): Promise<CompletionResponse> {
-    let systemPrompt = `
-      Convert the following PDF page to markdown.
-      Return only the markdown with no explanation text. Do not include delimiters like '''markdown.
-      You must include all information on the page. Do not exclude headers, footers, or subtext.
-    `;
+    let systemPrompt = SYSTEM_PROMPT_BASE;
 
     // Default system message
     const messages: any = [];
@@ -52,7 +49,7 @@ export default class BedrockModel implements ModelInterface {
     // If content has already been generated, add it to context.
     // This helps maintain the same format across pages
     if (maintainFormat && priorPage && priorPage.length) {
-      systemPrompt += `\n\nMarkdown must maintain consistent formatting with the following page: \n\n """${priorPage}"""`;
+      systemPrompt += `\n\n${CONSISTENCY_PROMPT(priorPage)}`;
     }
 
     // Add image to request
