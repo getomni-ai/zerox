@@ -28,7 +28,7 @@ export interface ZeroxArgs {
   trimEdges?: boolean;
 }
 
-export interface ZeroxResponse {
+export interface ZeroxOutput {
   completionTime: number;
   fileName: string;
   inputTokens: number;
@@ -48,7 +48,7 @@ export interface OpenAICredentials {
   apiKey: string;
 }
 
-type ModelCredentials = BedrockCredentials | OpenAICredentials;
+export type ModelCredentials = BedrockCredentials | OpenAICredentials;
 
 export enum ModelOptions {
   BEDROCK_CLAUDE_3_SONNET = "anthropic.claude-3-5-sonnet-20240620-v1:0",

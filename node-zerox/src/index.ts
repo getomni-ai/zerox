@@ -24,7 +24,7 @@ import {
   Page,
   PageStatus,
   ZeroxArgs,
-  ZeroxResponse,
+  ZeroxOutput,
 } from "./types";
 import { NUM_STARTING_WORKERS } from "./constants";
 
@@ -50,7 +50,7 @@ export const zerox = async ({
   pagesToConvertAsImages = -1,
   tempDir = os.tmpdir(),
   trimEdges = true,
-}: ZeroxArgs): Promise<ZeroxResponse> => {
+}: ZeroxArgs): Promise<ZeroxOutput> => {
   let inputTokenCount = 0;
   let outputTokenCount = 0;
   let priorPage = "";
