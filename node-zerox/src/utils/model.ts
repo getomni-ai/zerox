@@ -71,7 +71,7 @@ export const validateModelProvider = (
 ): void => {
   // Validate model
   if (!isValidModel(model)) {
-    throw new Error(`Invalid model: ${provider}`);
+    throw new Error(`Invalid model: ${model}`);
   }
 
   // Validate provider
