@@ -15,7 +15,6 @@ import {
   getTesseractScheduler,
   prepareWorkersForImageProcessing,
   terminateScheduler,
-  validateModelProvider,
 } from "./utils";
 import { createModel } from "./models";
 import {
@@ -64,7 +63,6 @@ export const zerox = async ({
   }
 
   // Validators
-  validateModelProvider(model, modelProvider);
   if (Object.values(credentials).every((credential) => !credential)) {
     throw new Error("Missing credentials");
   }
