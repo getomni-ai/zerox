@@ -15,6 +15,7 @@ import {
   getTesseractScheduler,
   prepareWorkersForImageProcessing,
   terminateScheduler,
+  validateModelProvider,
 } from "./utils";
 import { createModel } from "./models";
 import {
@@ -41,7 +42,7 @@ export const zerox = async ({
   maintainFormat = false,
   maxRetries = 1,
   maxTesseractWorkers = -1,
-  model = ModelOptions.GPT_4O_MINI,
+  model = ModelOptions.OPENAI_GPT_4O,
   modelProvider = ModelProvider.OPENAI,
   onPostProcess,
   onPreProcess,
@@ -63,6 +64,7 @@ export const zerox = async ({
   }
 
   // Validators
+  validateModelProvider(model, modelProvider);
   if (Object.values(credentials).every((credential) => !credential)) {
     throw new Error("Missing credentials");
   }

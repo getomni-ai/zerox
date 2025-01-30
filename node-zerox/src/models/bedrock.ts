@@ -12,6 +12,7 @@ import {
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 
+// Currently only supports Anthropic models
 export default class BedrockModel implements ModelInterface {
   private client: BedrockRuntimeClient;
   private model: string;

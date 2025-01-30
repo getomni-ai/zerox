@@ -1,4 +1,4 @@
-import { LLMParams, ModelProvider } from "../types";
+import { LLMParams, ModelOptions, ModelProvider } from "../types";
 
 const providerDefaultParams: Record<ModelProvider | string, LLMParams> = {
   [ModelProvider.BEDROCK]: {
@@ -13,6 +13,29 @@ const providerDefaultParams: Record<ModelProvider | string, LLMParams> = {
     temperature: 0,
     topP: 1,
   },
+};
+
+const providerModels = {
+  [ModelProvider.BEDROCK]: [
+    ModelOptions.BEDROCK_CLAUDE_3_HAIKU_2024_03,
+    ModelOptions.BEDROCK_CLAUDE_3_HAIKU_2024_10,
+    ModelOptions.BEDROCK_CLAUDE_3_SONNET_2024_02,
+    ModelOptions.BEDROCK_CLAUDE_3_SONNET_2024_06,
+    ModelOptions.BEDROCK_CLAUDE_3_SONNET_2024_10,
+    ModelOptions.BEDROCK_CLAUDE_3_OPUS_2024_02,
+  ],
+  [ModelProvider.OPENAI]: [
+    ModelOptions.OPENAI_GPT_4O,
+    ModelOptions.OPENAI_GPT_4O_MINI,
+  ],
+};
+
+const isValidModel = (m: string): m is ModelOptions => {
+  return Object.values(ModelOptions).includes(m as ModelOptions);
+};
+
+const isValidProvider = (p: string): p is ModelProvider => {
+  return Object.values(ModelProvider).includes(p as ModelProvider);
 };
 
 export const validateLLMParams = (
@@ -40,4 +63,24 @@ export const validateLLMParams = (
   }
 
   return { ...defaultParams, ...params };
+};
+
+export const validateModelProvider = (
+  model: ModelOptions | string,
+  provider: ModelProvider | string
+): void => {
+  // Validate model
+  if (!isValidModel(model)) {
+    throw new Error(`Invalid model: ${provider}`);
+  }
+
+  // Validate provider
+  if (!isValidProvider(provider)) {
+    throw new Error(`Invalid provider: ${provider}`);
+  }
+
+  const supportedModels = providerModels[provider];
+  if (!supportedModels?.includes(model)) {
+    throw new Error(`Model ${model} is not supported by provider ${provider}`);
+  }
 };

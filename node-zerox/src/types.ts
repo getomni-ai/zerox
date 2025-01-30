@@ -51,9 +51,17 @@ export interface OpenAICredentials {
 export type ModelCredentials = BedrockCredentials | OpenAICredentials;
 
 export enum ModelOptions {
-  BEDROCK_CLAUDE_3_SONNET = "anthropic.claude-3-5-sonnet-20240620-v1:0",
-  GPT_4O = "gpt-4o",
-  GPT_4O_MINI = "gpt-4o-mini",
+  // Bedrock Claude 3 Models
+  BEDROCK_CLAUDE_3_HAIKU_2024_10 = "anthropic.claude-3-5-haiku-20241022-v1:0",
+  BEDROCK_CLAUDE_3_SONNET_2024_06 = "anthropic.claude-3-5-sonnet-20240620-v1:0",
+  BEDROCK_CLAUDE_3_SONNET_2024_10 = "anthropic.claude-3-5-sonnet-20241022-v2:0",
+  BEDROCK_CLAUDE_3_HAIKU_2024_03 = "anthropic.claude-3-haiku-20240307-v1:0",
+  BEDROCK_CLAUDE_3_OPUS_2024_02 = "anthropic.claude-3-opus-20240229-v1:0",
+  BEDROCK_CLAUDE_3_SONNET_2024_02 = "anthropic.claude-3-sonnet-20240229-v1:0",
+
+  // OpenAI GPT-4 Models
+  OPENAI_GPT_4O = "gpt-4o",
+  OPENAI_GPT_4O_MINI = "gpt-4o-mini",
 }
 
 export enum ModelProvider {
