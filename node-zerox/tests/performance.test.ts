@@ -46,7 +46,7 @@ describe("Zerox Performance Tests", () => {
       cleanup: true,
       concurrency,
       filePath,
-      model: ModelOptions.gpt_4o,
+      model: ModelOptions.OPENAI_GPT_4O,
       openaiAPIKey: "mock-key",
     });
 
