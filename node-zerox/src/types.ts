@@ -37,6 +37,11 @@ export interface ZeroxOutput {
   summary: Summary;
 }
 
+export interface AzureCredentials {
+  apiKey: string;
+  endpoint: string;
+}
+
 export interface BedrockCredentials {
   accessKeyId?: string;
   region: string;
@@ -65,6 +70,7 @@ export enum ModelOptions {
 }
 
 export enum ModelProvider {
+  AZURE = "AZURE",
   BEDROCK = "BEDROCK",
   OPENAI = "OPENAI",
 }
