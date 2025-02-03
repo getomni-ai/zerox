@@ -37,6 +37,11 @@ export interface ZeroxOutput {
   summary: Summary;
 }
 
+export interface AzureCredentials {
+  apiKey: string;
+  endpoint: string;
+}
+
 export interface BedrockCredentials {
   accessKeyId?: string;
   region: string;
@@ -48,7 +53,10 @@ export interface OpenAICredentials {
   apiKey: string;
 }
 
-export type ModelCredentials = BedrockCredentials | OpenAICredentials;
+export type ModelCredentials =
+  | AzureCredentials
+  | BedrockCredentials
+  | OpenAICredentials;
 
 export enum ModelOptions {
   // Bedrock Claude 3 Models
@@ -65,6 +73,7 @@ export enum ModelOptions {
 }
 
 export enum ModelProvider {
+  AZURE = "AZURE",
   BEDROCK = "BEDROCK",
   OPENAI = "OPENAI",
 }
