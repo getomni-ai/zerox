@@ -19,6 +19,7 @@
     "fs-extra": "^11.2.0",
     "libreoffice-convert": "^1.6.0",
     "mime-types": "^2.1.35",
+    "openai": "^4.82.0",
     "os": "^0.1.2",
     "p-limit": "^3.1.0",
     "path": "^0.12.7",
