@@ -1,13 +1,26 @@
 import {
+  AzureCredentials,
   BedrockCredentials,
   CreateModelArgs,
   ModelInterface,
   ModelProvider,
   OpenAICredentials,
 } from "../types";
+import { validateLLMParams } from "../utils/model";
+import AzureModel from "./azure";
 import BedrockModel from "./bedrock";
 import OpenAIModel from "./openAI";
-import { validateLLMParams } from "../utils/model";
+
+// Type guard for Azure credentials
+const isAzureCredentials = (
+  credentials: any
+): credentials is AzureCredentials => {
+  return (
+    credentials &&
+    typeof credentials.endpoint === "string" &&
+    typeof credentials.apiKey === "string"
+  );
+};
 
 // Type guard for Bedrock credentials
 const isBedrockCredentials = (
@@ -32,6 +45,12 @@ export const createModel = ({
   const validatedParams = validateLLMParams(llmParams, provider);
 
   switch (provider) {
+    case ModelProvider.AZURE:
+      if (!isAzureCredentials(credentials)) {
+        throw new Error("Invalid credentials for Azure provider");
+      }
+      return new AzureModel(credentials, model, validatedParams);
+
     case ModelProvider.BEDROCK:
       if (!isBedrockCredentials(credentials)) {
         throw new Error("Invalid credentials for Bedrock provider");
