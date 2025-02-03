@@ -53,7 +53,10 @@ export interface OpenAICredentials {
   apiKey: string;
 }
 
-export type ModelCredentials = BedrockCredentials | OpenAICredentials;
+export type ModelCredentials =
+  | AzureCredentials
+  | BedrockCredentials
+  | OpenAICredentials;
 
 export enum ModelOptions {
   // Bedrock Claude 3 Models
