@@ -1,6 +1,13 @@
 import { LLMParams, ModelProvider } from "../types";
 
 const providerDefaultParams: Record<ModelProvider | string, LLMParams> = {
+  [ModelProvider.AZURE]: {
+    frequencyPenalty: 0,
+    maxTokens: 4000,
+    presencePenalty: 0,
+    temperature: 0,
+    topP: 1,
+  },
   [ModelProvider.BEDROCK]: {
     maxTokens: 4000,
     temperature: 0,
