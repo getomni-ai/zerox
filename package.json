@@ -4,7 +4,7 @@
   "description": "ocr documents using gpt-4o-mini",
   "main": "node-zerox/dist/index.js",
   "scripts": {
-    "clean": "rimraf node-zerox/dist",
+    "clean": "rm -rf node-zerox/dist",
     "build": "npm run clean && tsc -p node-zerox/tsconfig.json",
     "postinstall": "node node-zerox/scripts/install-dependencies.js",
     "prepublishOnly": "npm run build",
