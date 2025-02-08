@@ -1,9 +1,9 @@
 import {
   CompletionArgs,
   CompletionResponse,
-  LLMParams,
-  ModelInterface,
   GoogleCredentials,
+  GoogleLLMParams,
+  ModelInterface,
 } from "../types";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
@@ -12,12 +12,12 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 export default class GoogleModel implements ModelInterface {
   private client: GoogleGenerativeAI;
   private model: string;
-  private llmParams?: Partial<LLMParams>;
+  private llmParams?: Partial<GoogleLLMParams>;
 
   constructor(
     credentials: GoogleCredentials,
     model: string,
-    llmParams?: Partial<LLMParams>
+    llmParams?: Partial<GoogleLLMParams>
   ) {
     this.client = new GoogleGenerativeAI(credentials.apiKey);
     this.model = model;

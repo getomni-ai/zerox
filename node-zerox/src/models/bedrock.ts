@@ -1,14 +1,14 @@
 import {
+  BedrockCredentials,
+  BedrockLLMParams,
+  CompletionArgs,
+  CompletionResponse,
+  ModelInterface,
+} from "../types";
+import {
   BedrockRuntimeClient,
   InvokeModelCommand,
 } from "@aws-sdk/client-bedrock-runtime";
-import {
-  CompletionArgs,
-  CompletionResponse,
-  BedrockCredentials,
-  LLMParams,
-  ModelInterface,
-} from "../types";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 
@@ -16,12 +16,12 @@ import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 export default class BedrockModel implements ModelInterface {
   private client: BedrockRuntimeClient;
   private model: string;
-  private llmParams?: Partial<LLMParams>;
+  private llmParams?: Partial<BedrockLLMParams>;
 
   constructor(
     credentials: BedrockCredentials,
     model: string,
-    llmParams?: Partial<LLMParams>
+    llmParams?: Partial<BedrockLLMParams>
   ) {
     this.client = new BedrockRuntimeClient({
       region: credentials.region,

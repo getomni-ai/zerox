@@ -7,7 +7,7 @@ export interface ZeroxArgs {
   filePath: string;
   imageDensity?: number;
   imageHeight?: number;
-  llmParams?: LLMParams;
+  llmParams?: Partial<LLMParams>;
   maintainFormat?: boolean;
   maxRetries?: number;
   maxTesseractWorkers?: number;
@@ -130,14 +130,35 @@ export enum ErrorMode {
   IGNORE = "IGNORE",
 }
 
-export interface LLMParams {
+interface BaseLLMParams {
   frequencyPenalty?: number;
-  maxOutputTokens?: number;
-  maxTokens?: number;
   presencePenalty?: number;
   temperature?: number;
   topP?: number;
 }
+
+export interface AzureLLMParams extends BaseLLMParams {
+  maxTokens: number;
+}
+
+export interface BedrockLLMParams extends BaseLLMParams {
+  maxTokens: number;
+}
+
+export interface GoogleLLMParams extends BaseLLMParams {
+  maxOutputTokens: number;
+}
+
+export interface OpenAILLMParams extends BaseLLMParams {
+  maxTokens: number;
+}
+
+// Union type of all provider params
+export type LLMParams =
+  | AzureLLMParams
+  | BedrockLLMParams
+  | GoogleLLMParams
+  | OpenAILLMParams;
 
 export interface ModelInterface {
   getCompletion(params: CompletionArgs): Promise<CompletionResponse>;
