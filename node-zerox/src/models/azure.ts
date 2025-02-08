@@ -1,22 +1,22 @@
-import { AzureOpenAI } from "openai";
 import {
   AzureCredentials,
+  AzureLLMParams,
   CompletionArgs,
   CompletionResponse,
-  LLMParams,
   ModelInterface,
 } from "../types";
+import { AzureOpenAI } from "openai";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 
 export default class AzureModel implements ModelInterface {
   private client: AzureOpenAI;
-  private llmParams?: Partial<LLMParams>;
+  private llmParams?: Partial<AzureLLMParams>;
 
   constructor(
     credentials: AzureCredentials,
     model: string,
-    llmParams?: Partial<LLMParams>
+    llmParams?: Partial<AzureLLMParams>
   ) {
     this.client = new AzureOpenAI({
       apiKey: credentials.apiKey,

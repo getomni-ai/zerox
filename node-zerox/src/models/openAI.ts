@@ -1,9 +1,9 @@
 import {
   CompletionArgs,
   CompletionResponse,
-  LLMParams,
   ModelInterface,
   OpenAICredentials,
+  OpenAILLMParams,
 } from "../types";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
@@ -12,12 +12,12 @@ import axios from "axios";
 export default class OpenAIModel implements ModelInterface {
   private apiKey: string;
   private model: string;
-  private llmParams?: Partial<LLMParams>;
+  private llmParams?: Partial<OpenAILLMParams>;
 
   constructor(
     credentials: OpenAICredentials,
     model: string,
-    llmParams?: Partial<LLMParams>
+    llmParams?: Partial<OpenAILLMParams>
   ) {
     this.apiKey = credentials.apiKey;
     this.model = model;
