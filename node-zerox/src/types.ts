@@ -49,19 +49,19 @@ export interface BedrockCredentials {
   sessionToken?: string;
 }
 
-export interface OpenAICredentials {
+export interface GoogleCredentials {
   apiKey: string;
 }
 
-export interface GoogleCredentials {
+export interface OpenAICredentials {
   apiKey: string;
 }
 
 export type ModelCredentials =
   | AzureCredentials
   | BedrockCredentials
-  | OpenAICredentials
-  | GoogleCredentials;
+  | GoogleCredentials
+  | OpenAICredentials;
 
 export enum ModelOptions {
   // Bedrock Claude 3 Models
@@ -77,11 +77,11 @@ export enum ModelOptions {
   OPENAI_GPT_4O_MINI = "gpt-4o-mini",
 
   // Google Gemini Models
-  GOOGLE_GEMINI_2_FLASH = "gemini-2.0-flash-001",
-  GOOGLE_GEMINI_2_FLASH_LITE = "gemini-2.0-flash-lite-preview-02-05",
   GOOGLE_GEMINI_1_5_FLASH = "gemini-1.5-flash",
   GOOGLE_GEMINI_1_5_FLASH_8B = "gemini-1.5-flash-8b",
   GOOGLE_GEMINI_1_5_PRO = "gemini-1.5-pro",
+  GOOGLE_GEMINI_2_FLASH = "gemini-2.0-flash-001",
+  GOOGLE_GEMINI_2_FLASH_LITE = "gemini-2.0-flash-lite-preview-02-05",
 }
 
 export enum ModelProvider {
@@ -132,6 +132,7 @@ export enum ErrorMode {
 
 export interface LLMParams {
   frequencyPenalty?: number;
+  maxOutputTokens?: number;
   maxTokens?: number;
   presencePenalty?: number;
   temperature?: number;

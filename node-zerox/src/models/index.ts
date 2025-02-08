@@ -31,17 +31,17 @@ const isBedrockCredentials = (
   return credentials && typeof credentials.region === "string";
 };
 
-// Type guard for OpenAI credentials
-const isOpenAICredentials = (
-  credentials: any
-): credentials is OpenAICredentials => {
-  return credentials && typeof credentials.apiKey === "string";
-};
-
 // Type guard for Google credentials
 const isGoogleCredentials = (
   credentials: any
 ): credentials is GoogleCredentials => {
+  return credentials && typeof credentials.apiKey === "string";
+};
+
+// Type guard for OpenAI credentials
+const isOpenAICredentials = (
+  credentials: any
+): credentials is OpenAICredentials => {
   return credentials && typeof credentials.apiKey === "string";
 };
 
@@ -59,23 +59,21 @@ export const createModel = ({
         throw new Error("Invalid credentials for Azure provider");
       }
       return new AzureModel(credentials, model, validatedParams);
-
     case ModelProvider.BEDROCK:
       if (!isBedrockCredentials(credentials)) {
         throw new Error("Invalid credentials for Bedrock provider");
       }
       return new BedrockModel(credentials, model, validatedParams);
-    case ModelProvider.OPENAI:
-      if (!isOpenAICredentials(credentials)) {
-        throw new Error("Invalid credentials for OpenAI provider");
-      }
-      return new OpenAIModel(credentials, model, validatedParams);
-
     case ModelProvider.GOOGLE:
       if (!isGoogleCredentials(credentials)) {
         throw new Error("Invalid credentials for Google provider");
       }
       return new GoogleModel(credentials, model, validatedParams);
+    case ModelProvider.OPENAI:
+      if (!isOpenAICredentials(credentials)) {
+        throw new Error("Invalid credentials for OpenAI provider");
+      }
+      return new OpenAIModel(credentials, model, validatedParams);
     default:
       throw new Error(`Unsupported model provider: ${provider}`);
   }

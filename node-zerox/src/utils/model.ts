@@ -13,6 +13,13 @@ const providerDefaultParams: Record<ModelProvider | string, LLMParams> = {
     temperature: 0,
     topP: 1,
   },
+  [ModelProvider.GOOGLE]: {
+    frequencyPenalty: 0,
+    maxOutputTokens: 4000,
+    presencePenalty: 0,
+    temperature: 0,
+    topP: 1,
+  },
   [ModelProvider.OPENAI]: {
     frequencyPenalty: 0,
     maxTokens: 4000,

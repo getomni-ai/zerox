@@ -1,4 +1,3 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import {
   CompletionArgs,
   CompletionResponse,
@@ -8,6 +7,7 @@ import {
 } from "../types";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default class GoogleModel implements ModelInterface {
   private client: GoogleGenerativeAI;
@@ -30,6 +30,7 @@ export default class GoogleModel implements ModelInterface {
     priorPage,
   }: CompletionArgs): Promise<CompletionResponse> {
     const generativeModel = this.client.getGenerativeModel({
+      generationConfig: convertKeysToSnakeCase(this.llmParams ?? null),
       model: this.model,
     });
 
@@ -57,7 +58,6 @@ export default class GoogleModel implements ModelInterface {
     try {
       const result = await generativeModel.generateContent({
         contents: [{ role: "user", parts: promptParts }],
-        ...convertKeysToSnakeCase(this.llmParams ?? null),
       });
 
       const response = await result.response;
@@ -66,11 +66,11 @@ export default class GoogleModel implements ModelInterface {
         content: response.text(),
         // Note: Gemini might not provide token counts in the same way
         // You might need to implement a different way to count tokens
-        inputTokens: 0, // TODO: Implement token counting if needed
-        outputTokens: 0, // TODO: Implement token counting if needed
+        inputTokens: response.usageMetadata?.promptTokenCount || 0,
+        outputTokens: response.usageMetadata?.candidatesTokenCount || 0,
       };
     } catch (err) {
-      console.error("Error in Google Gemini completion", err);
+      console.error("Error in Google completion", err);
       throw err;
     }
   }
