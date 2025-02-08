@@ -64,8 +64,6 @@ export default class GoogleModel implements ModelInterface {
 
       return {
         content: response.text(),
-        // Note: Gemini might not provide token counts in the same way
-        // You might need to implement a different way to count tokens
         inputTokens: response.usageMetadata?.promptTokenCount || 0,
         outputTokens: response.usageMetadata?.candidatesTokenCount || 0,
       };
