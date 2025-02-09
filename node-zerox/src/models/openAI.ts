@@ -4,6 +4,7 @@ import {
   ModelInterface,
   OpenAICredentials,
   OpenAILLMParams,
+  OperationMode,
 } from "../types";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
@@ -11,15 +12,18 @@ import axios from "axios";
 
 export default class OpenAIModel implements ModelInterface {
   private apiKey: string;
+  private mode: OperationMode;
   private model: string;
   private llmParams?: Partial<OpenAILLMParams>;
 
   constructor(
     credentials: OpenAICredentials,
+    mode: OperationMode,
     model: string,
     llmParams?: Partial<OpenAILLMParams>
   ) {
     this.apiKey = credentials.apiKey;
+    this.mode = mode;
     this.model = model;
     this.llmParams = llmParams;
   }

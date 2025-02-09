@@ -4,6 +4,7 @@ import {
   CompletionArgs,
   CompletionResponse,
   ModelInterface,
+  OperationMode,
 } from "../types";
 import { AzureOpenAI } from "openai";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
@@ -11,10 +12,12 @@ import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 
 export default class AzureModel implements ModelInterface {
   private client: AzureOpenAI;
+  private mode: OperationMode;
   private llmParams?: Partial<AzureLLMParams>;
 
   constructor(
     credentials: AzureCredentials,
+    mode: OperationMode,
     model: string,
     llmParams?: Partial<AzureLLMParams>
   ) {
@@ -24,6 +27,7 @@ export default class AzureModel implements ModelInterface {
       deployment: model,
       endpoint: credentials.endpoint,
     });
+    this.mode = mode;
     this.llmParams = llmParams;
   }
 

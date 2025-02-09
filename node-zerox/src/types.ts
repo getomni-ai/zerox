@@ -1,3 +1,5 @@
+import { JSONSchema } from "openai/lib/jsonschema";
+
 export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
@@ -11,6 +13,7 @@ export interface ZeroxArgs {
   maintainFormat?: boolean;
   maxRetries?: number;
   maxTesseractWorkers?: number;
+  mode?: OperationMode;
   model?: ModelOptions | string;
   modelProvider?: ModelProvider | string;
   onPostProcess?: (params: {
@@ -24,6 +27,7 @@ export interface ZeroxArgs {
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
+  schema?: JSONSchema;
   tempDir?: string;
   trimEdges?: boolean;
 }
@@ -91,6 +95,11 @@ export enum ModelProvider {
   OPENAI = "OPENAI",
 }
 
+export enum OperationMode {
+  EXTRACTION = "EXTRACTION",
+  OCR = "OCR",
+}
+
 export enum PageStatus {
   SUCCESS = "SUCCESS",
   ERROR = "ERROR",
@@ -121,6 +130,7 @@ export interface CompletionResponse {
 export interface CreateModelArgs {
   credentials: ModelCredentials;
   llmParams: Partial<LLMParams>;
+  mode: OperationMode;
   model: ModelOptions | string;
   provider: ModelProvider | string;
 }

@@ -21,6 +21,7 @@ import {
   ErrorMode,
   ModelOptions,
   ModelProvider,
+  OperationMode,
   Page,
   PageStatus,
   ZeroxArgs,
@@ -41,6 +42,7 @@ export const zerox = async ({
   maintainFormat = false,
   maxRetries = 1,
   maxTesseractWorkers = -1,
+  mode = OperationMode.OCR,
   model = ModelOptions.OPENAI_GPT_4O,
   modelProvider = ModelProvider.OPENAI,
   onPostProcess,
@@ -48,6 +50,7 @@ export const zerox = async ({
   openaiAPIKey = "",
   outputDir,
   pagesToConvertAsImages = -1,
+  schema,
   tempDir = os.tmpdir(),
   trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
@@ -68,6 +71,9 @@ export const zerox = async ({
   }
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
+  }
+  if (mode === OperationMode.EXTRACTION && !schema) {
+    throw new Error("Schema is required for extraction mode");
   }
   let scheduler: Tesseract.Scheduler | null = null;
 
@@ -148,6 +154,7 @@ export const zerox = async ({
     const modelInstance = createModel({
       credentials,
       llmParams,
+      mode,
       model,
       provider: modelProvider,
     });

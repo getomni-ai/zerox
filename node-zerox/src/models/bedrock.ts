@@ -4,6 +4,7 @@ import {
   CompletionArgs,
   CompletionResponse,
   ModelInterface,
+  OperationMode,
 } from "../types";
 import {
   BedrockRuntimeClient,
@@ -15,11 +16,13 @@ import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 // Currently only supports Anthropic models
 export default class BedrockModel implements ModelInterface {
   private client: BedrockRuntimeClient;
+  private mode: OperationMode;
   private model: string;
   private llmParams?: Partial<BedrockLLMParams>;
 
   constructor(
     credentials: BedrockCredentials,
+    mode: OperationMode,
     model: string,
     llmParams?: Partial<BedrockLLMParams>
   ) {
@@ -33,6 +36,7 @@ export default class BedrockModel implements ModelInterface {
           }
         : undefined,
     });
+    this.mode = mode;
     this.model = model;
     this.llmParams = llmParams;
   }
