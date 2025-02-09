@@ -1,6 +1,8 @@
 import {
   CompletionArgs,
   CompletionResponse,
+  ExtractionArgs,
+  ExtractionResponse,
   GoogleCredentials,
   GoogleLLMParams,
   ModelInterface,
@@ -28,7 +30,16 @@ export default class GoogleModel implements ModelInterface {
     this.llmParams = llmParams;
   }
 
-  async getCompletion({
+  async getCompletion(
+    params: CompletionArgs | ExtractionArgs
+  ): Promise<CompletionResponse | ExtractionResponse> {
+    if (this.mode === OperationMode.OCR) {
+      return this.handleOCR(params as CompletionArgs);
+    }
+    throw new Error(`Unsupported operation mode: ${this.mode}`);
+  }
+
+  private async handleOCR({
     image,
     maintainFormat,
     priorPage,

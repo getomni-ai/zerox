@@ -1,6 +1,8 @@
 import {
   CompletionArgs,
   CompletionResponse,
+  ExtractionArgs,
+  ExtractionResponse,
   ModelInterface,
   OpenAICredentials,
   OpenAILLMParams,
@@ -28,7 +30,19 @@ export default class OpenAIModel implements ModelInterface {
     this.llmParams = llmParams;
   }
 
-  async getCompletion({
+  async getCompletion(
+    params: CompletionArgs | ExtractionArgs
+  ): Promise<CompletionResponse | ExtractionResponse> {
+    if (this.mode === OperationMode.EXTRACTION) {
+      return this.handleExtraction(params as ExtractionArgs);
+    }
+    if (this.mode === OperationMode.OCR) {
+      return this.handleOCR(params as CompletionArgs);
+    }
+    throw new Error(`Unsupported operation mode: ${this.mode}`);
+  }
+
+  private async handleOCR({
     image,
     maintainFormat,
     priorPage,
@@ -65,6 +79,51 @@ export default class OpenAIModel implements ModelInterface {
         {
           messages,
           model: this.model,
+          ...convertKeysToSnakeCase(this.llmParams ?? null),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${this.apiKey}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = response.data;
+
+      return {
+        content: data.choices[0].message.content,
+        inputTokens: data.usage.prompt_tokens,
+        outputTokens: data.usage.completion_tokens,
+      };
+    } catch (err) {
+      console.error("Error in OpenAI completion", err);
+      throw err;
+    }
+  }
+
+  private async handleExtraction({
+    image,
+    schema,
+  }: ExtractionArgs): Promise<ExtractionResponse> {
+    const base64Image = await encodeImageToBase64(image);
+    const messages: any = {
+      role: "user",
+      content: [
+        {
+          type: "image_url",
+          image_url: { url: `data:image/png;base64,${base64Image}` },
+        },
+      ],
+    };
+
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          messages,
+          model: this.model,
+          response_format: { type: "json_schema", json_schema: schema },
           ...convertKeysToSnakeCase(this.llmParams ?? null),
         },
         {

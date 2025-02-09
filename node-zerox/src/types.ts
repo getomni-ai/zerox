@@ -182,7 +182,9 @@ export type LLMParams =
   | OpenAILLMParams;
 
 export interface ModelInterface {
-  getCompletion(params: CompletionArgs): Promise<CompletionResponse>;
+  getCompletion(
+    params: CompletionArgs | ExtractionArgs
+  ): Promise<CompletionResponse | ExtractionResponse>;
 }
 
 export interface Summary {

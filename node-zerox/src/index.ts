@@ -180,6 +180,7 @@ export const zerox = async ({
                 image: correctedBuffer,
                 maintainFormat,
                 priorPage,
+                schema,
               });
             const formattedMarkdown = formatMarkdown(content);
             inputTokenCount += inputTokens;
@@ -248,6 +249,7 @@ export const zerox = async ({
               image: correctedBuffer,
               maintainFormat,
               priorPage,
+              schema,
             });
           const formattedMarkdown = formatMarkdown(content);
           inputTokenCount += inputTokens;

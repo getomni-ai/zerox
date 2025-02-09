@@ -3,6 +3,8 @@ import {
   AzureLLMParams,
   CompletionArgs,
   CompletionResponse,
+  ExtractionArgs,
+  ExtractionResponse,
   ModelInterface,
   OperationMode,
 } from "../types";
@@ -31,7 +33,16 @@ export default class AzureModel implements ModelInterface {
     this.llmParams = llmParams;
   }
 
-  async getCompletion({
+  async getCompletion(
+    params: CompletionArgs | ExtractionArgs
+  ): Promise<CompletionResponse | ExtractionResponse> {
+    if (this.mode === OperationMode.OCR) {
+      return this.handleOCR(params as CompletionArgs);
+    }
+    throw new Error(`Unsupported operation mode: ${this.mode}`);
+  }
+
+  private async handleOCR({
     image,
     maintainFormat,
     priorPage,
