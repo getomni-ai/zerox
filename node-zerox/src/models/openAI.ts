@@ -8,8 +8,12 @@ import {
   OpenAILLMParams,
   OperationMode,
 } from "../types";
+import {
+  CompletionProcessor,
+  convertKeysToSnakeCase,
+  encodeImageToBase64,
+} from "../utils";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
-import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 import axios from "axios";
 
 export default class OpenAIModel implements ModelInterface {
@@ -33,13 +37,22 @@ export default class OpenAIModel implements ModelInterface {
   async getCompletion(
     params: CompletionArgs | ExtractionArgs
   ): Promise<CompletionResponse | ExtractionResponse> {
-    if (this.mode === OperationMode.EXTRACTION) {
-      return this.handleExtraction(params as ExtractionArgs);
+    const modeHandlers = {
+      [OperationMode.EXTRACTION]: () =>
+        this.handleExtraction(params as ExtractionArgs),
+      [OperationMode.OCR]: () => this.handleOCR(params as CompletionArgs),
+    };
+
+    const handler = modeHandlers[this.mode];
+    if (!handler) {
+      throw new Error(`Unsupported operation mode: ${this.mode}`);
     }
-    if (this.mode === OperationMode.OCR) {
-      return this.handleOCR(params as CompletionArgs);
-    }
-    throw new Error(`Unsupported operation mode: ${this.mode}`);
+
+    const response = await handler();
+    return {
+      ...response,
+      content: CompletionProcessor.process(this.mode, response.content),
+    };
   }
 
   private async handleOCR({
@@ -107,15 +120,17 @@ export default class OpenAIModel implements ModelInterface {
     schema,
   }: ExtractionArgs): Promise<ExtractionResponse> {
     const base64Image = await encodeImageToBase64(image);
-    const messages: any = {
-      role: "user",
-      content: [
-        {
-          type: "image_url",
-          image_url: { url: `data:image/png;base64,${base64Image}` },
-        },
-      ],
-    };
+    const messages: any = [
+      {
+        role: "user",
+        content: [
+          {
+            type: "image_url",
+            image_url: { url: `data:image/png;base64,${base64Image}` },
+          },
+        ],
+      },
+    ];
 
     try {
       const response = await axios.post(
@@ -123,7 +138,10 @@ export default class OpenAIModel implements ModelInterface {
         {
           messages,
           model: this.model,
-          response_format: { type: "json_schema", json_schema: schema },
+          response_format: {
+            json_schema: { name: "extraction", schema },
+            type: "json_schema",
+          },
           ...convertKeysToSnakeCase(this.llmParams ?? null),
         },
         {

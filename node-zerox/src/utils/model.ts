@@ -1,4 +1,17 @@
-import { LLMParams, ModelProvider } from "../types";
+import { formatMarkdown } from "./common";
+import { LLMParams, ModelProvider, OperationMode } from "../types";
+
+export class CompletionProcessor {
+  static process(mode: OperationMode, content: any): any {
+    if (mode === OperationMode.OCR) {
+      return formatMarkdown(content);
+    }
+    if (mode === OperationMode.EXTRACTION) {
+      return JSON.parse(content);
+    }
+    return content;
+  }
+}
 
 const providerDefaultParams: Record<ModelProvider | string, LLMParams> = {
   [ModelProvider.AZURE]: {

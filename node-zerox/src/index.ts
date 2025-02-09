@@ -11,7 +11,6 @@ import {
   convertFileToPdf,
   convertPdfToImages,
   downloadFile,
-  formatMarkdown,
   getTesseractScheduler,
   prepareWorkersForImageProcessing,
   terminateScheduler,
@@ -182,16 +181,15 @@ export const zerox = async ({
                 priorPage,
                 schema,
               });
-            const formattedMarkdown = formatMarkdown(content);
             inputTokenCount += inputTokens;
             outputTokenCount += outputTokens;
 
             // Update prior page to result from last processing step
-            priorPage = formattedMarkdown;
+            priorPage = content;
 
             pages.push({
-              content: formattedMarkdown,
-              contentLength: formattedMarkdown.length,
+              content: content,
+              contentLength: content?.length || 0,
               page: i + 1,
               status: PageStatus.SUCCESS,
               inputTokens,
@@ -251,16 +249,15 @@ export const zerox = async ({
               priorPage,
               schema,
             });
-          const formattedMarkdown = formatMarkdown(content);
           inputTokenCount += inputTokens;
           outputTokenCount += outputTokens;
 
           // Update prior page to result from last processing step
-          priorPage = formattedMarkdown;
+          priorPage = content;
 
           page = {
-            content: formattedMarkdown,
-            contentLength: formattedMarkdown.length,
+            content: content,
+            contentLength: content?.length || 0,
             page: pageNumber,
             status: PageStatus.SUCCESS,
             inputTokens,

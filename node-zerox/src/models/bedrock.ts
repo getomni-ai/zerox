@@ -3,8 +3,6 @@ import {
   BedrockLLMParams,
   CompletionArgs,
   CompletionResponse,
-  ExtractionArgs,
-  ExtractionResponse,
   ModelInterface,
   OperationMode,
 } from "../types";
@@ -12,8 +10,12 @@ import {
   BedrockRuntimeClient,
   InvokeModelCommand,
 } from "@aws-sdk/client-bedrock-runtime";
+import {
+  CompletionProcessor,
+  convertKeysToSnakeCase,
+  encodeImageToBase64,
+} from "../utils";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
-import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 
 // Currently only supports Anthropic models
 export default class BedrockModel implements ModelInterface {
@@ -43,13 +45,23 @@ export default class BedrockModel implements ModelInterface {
     this.llmParams = llmParams;
   }
 
-  async getCompletion(
-    params: CompletionArgs | ExtractionArgs
-  ): Promise<CompletionResponse | ExtractionResponse> {
-    if (this.mode === OperationMode.OCR) {
-      return this.handleOCR(params as CompletionArgs);
+  async getCompletion(params: CompletionArgs): Promise<CompletionResponse> {
+    const modeHandlers: Partial<
+      Record<OperationMode, () => Promise<CompletionResponse>>
+    > = {
+      [OperationMode.OCR]: () => this.handleOCR(params as CompletionArgs),
+    };
+
+    const handler = modeHandlers[this.mode];
+    if (!handler) {
+      throw new Error(`Unsupported operation mode: ${this.mode}`);
     }
-    throw new Error(`Unsupported operation mode: ${this.mode}`);
+
+    const response = await handler();
+    return {
+      ...response,
+      content: CompletionProcessor.process(this.mode, response.content),
+    };
   }
 
   private async handleOCR({

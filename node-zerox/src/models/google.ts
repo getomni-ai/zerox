@@ -1,15 +1,17 @@
 import {
   CompletionArgs,
   CompletionResponse,
-  ExtractionArgs,
-  ExtractionResponse,
   GoogleCredentials,
   GoogleLLMParams,
   ModelInterface,
   OperationMode,
 } from "../types";
+import {
+  CompletionProcessor,
+  convertKeysToSnakeCase,
+  encodeImageToBase64,
+} from "../utils";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
-import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default class GoogleModel implements ModelInterface {
@@ -30,13 +32,23 @@ export default class GoogleModel implements ModelInterface {
     this.llmParams = llmParams;
   }
 
-  async getCompletion(
-    params: CompletionArgs | ExtractionArgs
-  ): Promise<CompletionResponse | ExtractionResponse> {
-    if (this.mode === OperationMode.OCR) {
-      return this.handleOCR(params as CompletionArgs);
+  async getCompletion(params: CompletionArgs): Promise<CompletionResponse> {
+    const modeHandlers: Partial<
+      Record<OperationMode, () => Promise<CompletionResponse>>
+    > = {
+      [OperationMode.OCR]: () => this.handleOCR(params as CompletionArgs),
+    };
+
+    const handler = modeHandlers[this.mode];
+    if (!handler) {
+      throw new Error(`Unsupported operation mode: ${this.mode}`);
     }
-    throw new Error(`Unsupported operation mode: ${this.mode}`);
+
+    const response = await handler();
+    return {
+      ...response,
+      content: CompletionProcessor.process(this.mode, response.content),
+    };
   }
 
   private async handleOCR({
