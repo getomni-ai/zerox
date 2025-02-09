@@ -140,6 +140,17 @@ export enum ErrorMode {
   IGNORE = "IGNORE",
 }
 
+export interface ExtractionArgs {
+  image: Buffer;
+  schema: JSONSchema;
+}
+
+export interface ExtractionResponse {
+  content: string;
+  inputTokens: number;
+  outputTokens: number;
+}
+
 interface BaseLLMParams {
   frequencyPenalty?: number;
   presencePenalty?: number;
