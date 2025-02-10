@@ -4,10 +4,10 @@ import { LLMParams, ModelProvider, OperationMode } from "../types";
 export class CompletionProcessor {
   static process(mode: OperationMode, content: any): any {
     if (mode === OperationMode.OCR) {
-      return formatMarkdown(content);
+      return typeof content === "string" ? formatMarkdown(content) : content;
     }
     if (mode === OperationMode.EXTRACTION) {
-      return JSON.parse(content);
+      return typeof content === "object" ? content : JSON.parse(content);
     }
     return content;
   }

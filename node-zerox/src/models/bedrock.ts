@@ -137,26 +137,37 @@ export default class BedrockModel implements ModelInterface {
     schema,
   }: ExtractionArgs): Promise<ExtractionResponse> {
     const base64Image = await encodeImageToBase64(image);
-    const messages = {
-      role: "user",
-      content: [
-        {
-          type: "image",
-          source: {
-            data: base64Image,
-            media_type: "image/png",
-            type: "base64",
+    const messages = [
+      {
+        role: "user",
+        content: [
+          {
+            type: "image",
+            source: {
+              data: base64Image,
+              media_type: "image/png",
+              type: "base64",
+            },
           },
-        },
-      ],
-    };
+        ],
+      },
+    ];
+
+    const tools = [
+      {
+        description: "Extract schema data from the following image",
+        input_schema: schema,
+        name: "json",
+      },
+    ];
 
     try {
       const body = {
         anthropic_version: "bedrock-2023-05-31",
         max_tokens: this.llmParams?.maxTokens || 4096,
         messages,
-        schema,
+        tool_choice: { name: "json", type: "tool" },
+        tools,
         ...convertKeysToSnakeCase(this.llmParams ?? {}),
       };
 
@@ -173,7 +184,7 @@ export default class BedrockModel implements ModelInterface {
       );
 
       return {
-        content: parsedResponse.content[0].text,
+        content: parsedResponse.content[0].input,
         inputTokens: parsedResponse.usage?.input_tokens || 0,
         outputTokens: parsedResponse.usage?.output_tokens || 0,
       };
