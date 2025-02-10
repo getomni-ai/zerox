@@ -119,6 +119,13 @@ export default class GoogleModel implements ModelInterface {
       model: this.model,
     });
 
+    // Build the prompt parts
+    const promptParts = [];
+
+    // Add system prompt
+    const text = "Extract schema data from the following image";
+    promptParts.push({ text });
+
     const base64Image = await encodeImageToBase64(image);
     const imageData = {
       inlineData: {
@@ -126,7 +133,7 @@ export default class GoogleModel implements ModelInterface {
         mimeType: "image/png",
       },
     };
-    const promptParts: any = [{ role: "user", parts: [{ imageData }] }];
+    promptParts.push(imageData);
 
     try {
       const result = await generativeModel.generateContent({
