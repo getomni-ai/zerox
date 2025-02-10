@@ -1,6 +1,8 @@
 import {
   CompletionArgs,
   CompletionResponse,
+  ExtractionArgs,
+  ExtractionResponse,
   GoogleCredentials,
   GoogleLLMParams,
   ModelInterface,
@@ -32,10 +34,12 @@ export default class GoogleModel implements ModelInterface {
     this.llmParams = llmParams;
   }
 
-  async getCompletion(params: CompletionArgs): Promise<CompletionResponse> {
-    const modeHandlers: Partial<
-      Record<OperationMode, () => Promise<CompletionResponse>>
-    > = {
+  async getCompletion(
+    params: CompletionArgs | ExtractionArgs
+  ): Promise<CompletionResponse | ExtractionResponse> {
+    const modeHandlers = {
+      [OperationMode.EXTRACTION]: () =>
+        this.handleExtraction(params as ExtractionArgs),
       [OperationMode.OCR]: () => this.handleOCR(params as CompletionArgs),
     };
 
@@ -93,6 +97,46 @@ export default class GoogleModel implements ModelInterface {
         content: response.text(),
         // Note: Gemini might not provide token counts in the same way
         // You might need to implement a different way to count tokens
+        inputTokens: response.usageMetadata?.promptTokenCount || 0,
+        outputTokens: response.usageMetadata?.candidatesTokenCount || 0,
+      };
+    } catch (err) {
+      console.error("Error in Google completion", err);
+      throw err;
+    }
+  }
+
+  private async handleExtraction({
+    image,
+    schema,
+  }: ExtractionArgs): Promise<ExtractionResponse> {
+    const generativeModel = this.client.getGenerativeModel({
+      generationConfig: {
+        ...convertKeysToSnakeCase(this.llmParams ?? null),
+        responseMimeType: "application/json",
+        responseSchema: schema,
+      },
+      model: this.model,
+    });
+
+    const base64Image = await encodeImageToBase64(image);
+    const imageData = {
+      inlineData: {
+        data: base64Image,
+        mimeType: "image/png",
+      },
+    };
+    const promptParts: any = [{ role: "user", parts: [{ imageData }] }];
+
+    try {
+      const result = await generativeModel.generateContent({
+        contents: [{ role: "user", parts: promptParts }],
+      });
+
+      const response = await result.response;
+
+      return {
+        content: response.text(),
         inputTokens: response.usageMetadata?.promptTokenCount || 0,
         outputTokens: response.usageMetadata?.candidatesTokenCount || 0,
       };

@@ -1,5 +1,3 @@
-import { JSONSchema } from "openai/lib/jsonschema";
-
 export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
@@ -27,7 +25,7 @@ export interface ZeroxArgs {
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
-  schema?: JSONSchema;
+  schema?: Record<string, unknown>;
   tempDir?: string;
   trimEdges?: boolean;
 }
@@ -142,7 +140,7 @@ export enum ErrorMode {
 
 export interface ExtractionArgs {
   image: Buffer;
-  schema: JSONSchema;
+  schema: Record<string, unknown>;
 }
 
 export interface ExtractionResponse {
