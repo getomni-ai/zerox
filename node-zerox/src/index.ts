@@ -8,11 +8,12 @@ import "./handleWarnings";
 import {
   addWorkersToTesseractScheduler,
   cleanupImage,
+  CompletionProcessor,
   convertFileToPdf,
   convertPdfToImages,
   downloadFile,
-  formatMarkdown,
   getTesseractScheduler,
+  isCompletionResponse,
   prepareWorkersForImageProcessing,
   terminateScheduler,
 } from "./utils";
@@ -21,6 +22,7 @@ import {
   ErrorMode,
   ModelOptions,
   ModelProvider,
+  OperationMode,
   Page,
   PageStatus,
   ZeroxArgs,
@@ -41,6 +43,7 @@ export const zerox = async ({
   maintainFormat = false,
   maxRetries = 1,
   maxTesseractWorkers = -1,
+  mode = OperationMode.OCR,
   model = ModelOptions.OPENAI_GPT_4O,
   modelProvider = ModelProvider.OPENAI,
   onPostProcess,
@@ -48,6 +51,7 @@ export const zerox = async ({
   openaiAPIKey = "",
   outputDir,
   pagesToConvertAsImages = -1,
+  schema,
   tempDir = os.tmpdir(),
   trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
@@ -68,6 +72,9 @@ export const zerox = async ({
   }
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
+  }
+  if (mode === OperationMode.EXTRACTION && !schema) {
+    throw new Error("Schema is required for extraction mode");
   }
   let scheduler: Tesseract.Scheduler | null = null;
 
@@ -148,6 +155,7 @@ export const zerox = async ({
     const modelInstance = createModel({
       credentials,
       llmParams,
+      mode,
       model,
       provider: modelProvider,
     });
@@ -168,26 +176,26 @@ export const zerox = async ({
 
         while (retryCount <= maxRetries) {
           try {
-            const { content, inputTokens, outputTokens } =
-              await modelInstance.getCompletion({
-                image: correctedBuffer,
-                maintainFormat,
-                priorPage,
-              });
-            const formattedMarkdown = formatMarkdown(content);
-            inputTokenCount += inputTokens;
-            outputTokenCount += outputTokens;
+            const rawResponse = await modelInstance.getCompletion({
+              image: correctedBuffer,
+              maintainFormat,
+              priorPage,
+              schema,
+            });
+            const response = CompletionProcessor.process(mode, rawResponse);
+
+            inputTokenCount += response.inputTokens;
+            outputTokenCount += response.outputTokens;
 
             // Update prior page to result from last processing step
-            priorPage = formattedMarkdown;
+            if (isCompletionResponse(mode, response)) {
+              priorPage = response.content;
+            }
 
             pages.push({
-              content: formattedMarkdown,
-              contentLength: formattedMarkdown.length,
+              ...response,
               page: i + 1,
               status: PageStatus.SUCCESS,
-              inputTokens,
-              outputTokens,
             });
             numSuccessfulPages++;
             break;
@@ -236,26 +244,26 @@ export const zerox = async ({
 
         let page: Page;
         try {
-          const { content, inputTokens, outputTokens } =
-            await modelInstance.getCompletion({
-              image: correctedBuffer,
-              maintainFormat,
-              priorPage,
-            });
-          const formattedMarkdown = formatMarkdown(content);
-          inputTokenCount += inputTokens;
-          outputTokenCount += outputTokens;
+          const rawResponse = await modelInstance.getCompletion({
+            image: correctedBuffer,
+            maintainFormat,
+            priorPage,
+            schema,
+          });
+          const response = CompletionProcessor.process(mode, rawResponse);
+
+          inputTokenCount += response.inputTokens;
+          outputTokenCount += response.outputTokens;
 
           // Update prior page to result from last processing step
-          priorPage = formattedMarkdown;
+          if (isCompletionResponse(mode, response)) {
+            priorPage = response.content;
+          }
 
           page = {
-            content: formattedMarkdown,
-            contentLength: formattedMarkdown.length,
+            ...response,
             page: pageNumber,
             status: PageStatus.SUCCESS,
-            inputTokens,
-            outputTokens,
           };
           numSuccessfulPages++;
         } catch (error) {

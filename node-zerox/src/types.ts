@@ -11,6 +11,7 @@ export interface ZeroxArgs {
   maintainFormat?: boolean;
   maxRetries?: number;
   maxTesseractWorkers?: number;
+  mode?: OperationMode;
   model?: ModelOptions | string;
   modelProvider?: ModelProvider | string;
   onPostProcess?: (params: {
@@ -24,6 +25,7 @@ export interface ZeroxArgs {
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
+  schema?: Record<string, unknown>;
   tempDir?: string;
   trimEdges?: boolean;
 }
@@ -91,19 +93,25 @@ export enum ModelProvider {
   OPENAI = "OPENAI",
 }
 
+export enum OperationMode {
+  EXTRACTION = "EXTRACTION",
+  OCR = "OCR",
+}
+
 export enum PageStatus {
   SUCCESS = "SUCCESS",
   ERROR = "ERROR",
 }
 
 export interface Page {
-  content: string;
-  contentLength: number;
-  page: number;
-  status: PageStatus;
+  content?: string;
+  contentLength?: number;
   error?: string;
+  extracted?: Record<string, unknown>;
   inputTokens?: number;
   outputTokens?: number;
+  page: number;
+  status: PageStatus;
 }
 
 export interface CompletionArgs {
@@ -121,6 +129,7 @@ export interface CompletionResponse {
 export interface CreateModelArgs {
   credentials: ModelCredentials;
   llmParams: Partial<LLMParams>;
+  mode: OperationMode;
   model: ModelOptions | string;
   provider: ModelProvider | string;
 }
@@ -128,6 +137,17 @@ export interface CreateModelArgs {
 export enum ErrorMode {
   THROW = "THROW",
   IGNORE = "IGNORE",
+}
+
+export interface ExtractionArgs {
+  image: Buffer;
+  schema: Record<string, unknown>;
+}
+
+export interface ExtractionResponse {
+  extracted: Record<string, unknown>;
+  inputTokens: number;
+  outputTokens: number;
 }
 
 interface BaseLLMParams {
@@ -161,7 +181,9 @@ export type LLMParams =
   | OpenAILLMParams;
 
 export interface ModelInterface {
-  getCompletion(params: CompletionArgs): Promise<CompletionResponse>;
+  getCompletion(
+    params: CompletionArgs | ExtractionArgs
+  ): Promise<CompletionResponse | ExtractionResponse>;
 }
 
 export interface Summary {

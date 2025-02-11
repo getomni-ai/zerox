@@ -3,18 +3,23 @@ import {
   AzureLLMParams,
   CompletionArgs,
   CompletionResponse,
+  ExtractionArgs,
+  ExtractionResponse,
   ModelInterface,
+  OperationMode,
 } from "../types";
 import { AzureOpenAI } from "openai";
-import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
+import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 
 export default class AzureModel implements ModelInterface {
   private client: AzureOpenAI;
+  private mode: OperationMode;
   private llmParams?: Partial<AzureLLMParams>;
 
   constructor(
     credentials: AzureCredentials,
+    mode: OperationMode,
     model: string,
     llmParams?: Partial<AzureLLMParams>
   ) {
@@ -24,10 +29,28 @@ export default class AzureModel implements ModelInterface {
       deployment: model,
       endpoint: credentials.endpoint,
     });
+    this.mode = mode;
     this.llmParams = llmParams;
   }
 
-  async getCompletion({
+  async getCompletion(
+    params: CompletionArgs | ExtractionArgs
+  ): Promise<CompletionResponse | ExtractionResponse> {
+    const modeHandlers = {
+      [OperationMode.EXTRACTION]: () =>
+        this.handleExtraction(params as ExtractionArgs),
+      [OperationMode.OCR]: () => this.handleOCR(params as CompletionArgs),
+    };
+
+    const handler = modeHandlers[this.mode];
+    if (!handler) {
+      throw new Error(`Unsupported operation mode: ${this.mode}`);
+    }
+
+    return await handler();
+  }
+
+  private async handleOCR({
     image,
     maintainFormat,
     priorPage,
@@ -71,7 +94,46 @@ export default class AzureModel implements ModelInterface {
         outputTokens: response.usage?.completion_tokens || 0,
       };
     } catch (err) {
-      console.error("Error in Azure OpenAI completion", err);
+      console.error("Error in Azure completion", err);
+      throw err;
+    }
+  }
+
+  private async handleExtraction({
+    image,
+    schema,
+  }: ExtractionArgs): Promise<ExtractionResponse> {
+    const base64Image = await encodeImageToBase64(image);
+    const messages: any = [
+      {
+        role: "user",
+        content: [
+          {
+            type: "image_url",
+            image_url: { url: `data:image/png;base64,${base64Image}` },
+          },
+        ],
+      },
+    ];
+
+    try {
+      const response = await this.client.chat.completions.create({
+        messages,
+        model: "",
+        response_format: {
+          json_schema: { name: "extraction", schema },
+          type: "json_schema",
+        },
+        ...convertKeysToSnakeCase(this.llmParams ?? null),
+      });
+
+      return {
+        extracted: JSON.parse(response.choices[0].message.content || ""),
+        inputTokens: response.usage?.prompt_tokens || 0,
+        outputTokens: response.usage?.completion_tokens || 0,
+      };
+    } catch (err) {
+      console.error("Error in Azure completion", err);
       throw err;
     }
   }
