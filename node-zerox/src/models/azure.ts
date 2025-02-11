@@ -102,7 +102,7 @@ export default class AzureModel implements ModelInterface {
         outputTokens: response.usage?.completion_tokens || 0,
       };
     } catch (err) {
-      console.error("Error in Azure OpenAI completion", err);
+      console.error("Error in Azure completion", err);
       throw err;
     }
   }
@@ -141,7 +141,7 @@ export default class AzureModel implements ModelInterface {
         outputTokens: response.usage?.completion_tokens || 0,
       };
     } catch (err) {
-      console.error("Error in OpenAI completion", err);
+      console.error("Error in Azure completion", err);
       throw err;
     }
   }
