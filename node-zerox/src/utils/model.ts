@@ -14,7 +14,7 @@ export const isCompletionResponse = (
   return mode === OperationMode.OCR;
 };
 
-export const isExtractionResponse = (
+const isExtractionResponse = (
   mode: OperationMode,
   response: CompletionResponse | ExtractionResponse
 ): response is ExtractionResponse => {
@@ -33,6 +33,14 @@ export class CompletionProcessor {
         content:
           typeof content === "string" ? formatMarkdown(content) : content,
         contentLength: response.content?.length || 0,
+      };
+    }
+    if (isExtractionResponse(mode, response)) {
+      const extracted = response.extracted;
+      return {
+        ...response,
+        extracted:
+          typeof extracted === "object" ? extracted : JSON.parse(extracted),
       };
     }
     return response;
