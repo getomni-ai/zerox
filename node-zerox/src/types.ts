@@ -104,13 +104,14 @@ export enum PageStatus {
 }
 
 export interface Page {
-  content: string;
-  contentLength: number;
-  page: number;
-  status: PageStatus;
+  content?: string;
+  contentLength?: number;
   error?: string;
+  extracted?: Record<string, unknown>;
   inputTokens?: number;
   outputTokens?: number;
+  page: number;
+  status: PageStatus;
 }
 
 export interface CompletionArgs {
@@ -144,7 +145,7 @@ export interface ExtractionArgs {
 }
 
 export interface ExtractionResponse {
-  content: string;
+  extracted: Record<string, unknown>;
   inputTokens: number;
   outputTokens: number;
 }

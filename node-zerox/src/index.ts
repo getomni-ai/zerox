@@ -8,10 +8,12 @@ import "./handleWarnings";
 import {
   addWorkersToTesseractScheduler,
   cleanupImage,
+  CompletionProcessor,
   convertFileToPdf,
   convertPdfToImages,
   downloadFile,
   getTesseractScheduler,
+  isCompletionResponse,
   prepareWorkersForImageProcessing,
   terminateScheduler,
 } from "./utils";
@@ -174,26 +176,26 @@ export const zerox = async ({
 
         while (retryCount <= maxRetries) {
           try {
-            const { content, inputTokens, outputTokens } =
-              await modelInstance.getCompletion({
-                image: correctedBuffer,
-                maintainFormat,
-                priorPage,
-                schema,
-              });
-            inputTokenCount += inputTokens;
-            outputTokenCount += outputTokens;
+            const rawResponse = await modelInstance.getCompletion({
+              image: correctedBuffer,
+              maintainFormat,
+              priorPage,
+              schema,
+            });
+            const response = CompletionProcessor.process(mode, rawResponse);
+
+            inputTokenCount += response.inputTokens;
+            outputTokenCount += response.outputTokens;
 
             // Update prior page to result from last processing step
-            priorPage = content;
+            if (isCompletionResponse(mode, response)) {
+              priorPage = response.content;
+            }
 
             pages.push({
-              content: content,
-              contentLength: content?.length || 0,
+              ...response,
               page: i + 1,
               status: PageStatus.SUCCESS,
-              inputTokens,
-              outputTokens,
             });
             numSuccessfulPages++;
             break;
@@ -242,26 +244,26 @@ export const zerox = async ({
 
         let page: Page;
         try {
-          const { content, inputTokens, outputTokens } =
-            await modelInstance.getCompletion({
-              image: correctedBuffer,
-              maintainFormat,
-              priorPage,
-              schema,
-            });
-          inputTokenCount += inputTokens;
-          outputTokenCount += outputTokens;
+          const rawResponse = await modelInstance.getCompletion({
+            image: correctedBuffer,
+            maintainFormat,
+            priorPage,
+            schema,
+          });
+          const response = CompletionProcessor.process(mode, rawResponse);
+
+          inputTokenCount += response.inputTokens;
+          outputTokenCount += response.outputTokens;
 
           // Update prior page to result from last processing step
-          priorPage = content;
+          if (isCompletionResponse(mode, response)) {
+            priorPage = response.content;
+          }
 
           page = {
-            content: content,
-            contentLength: content?.length || 0,
+            ...response,
             page: pageNumber,
             status: PageStatus.SUCCESS,
-            inputTokens,
-            outputTokens,
           };
           numSuccessfulPages++;
         } catch (error) {

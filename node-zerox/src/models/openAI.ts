@@ -8,11 +8,7 @@ import {
   OpenAILLMParams,
   OperationMode,
 } from "../types";
-import {
-  CompletionProcessor,
-  convertKeysToSnakeCase,
-  encodeImageToBase64,
-} from "../utils";
+import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import axios from "axios";
 
@@ -48,11 +44,7 @@ export default class OpenAIModel implements ModelInterface {
       throw new Error(`Unsupported operation mode: ${this.mode}`);
     }
 
-    const response = await handler();
-    return {
-      ...response,
-      content: CompletionProcessor.process(this.mode, response.content),
-    };
+    return await handler();
   }
 
   private async handleOCR({
@@ -155,7 +147,7 @@ export default class OpenAIModel implements ModelInterface {
       const data = response.data;
 
       return {
-        content: data.choices[0].message.content,
+        extracted: data.choices[0].message.content,
         inputTokens: data.usage.prompt_tokens,
         outputTokens: data.usage.completion_tokens,
       };

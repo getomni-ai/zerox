@@ -12,11 +12,7 @@ import {
   BedrockRuntimeClient,
   InvokeModelCommand,
 } from "@aws-sdk/client-bedrock-runtime";
-import {
-  CompletionProcessor,
-  convertKeysToSnakeCase,
-  encodeImageToBase64,
-} from "../utils";
+import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 
 // Currently only supports Anthropic models
@@ -61,11 +57,7 @@ export default class BedrockModel implements ModelInterface {
       throw new Error(`Unsupported operation mode: ${this.mode}`);
     }
 
-    const response = await handler();
-    return {
-      ...response,
-      content: CompletionProcessor.process(this.mode, response.content),
-    };
+    return await handler();
   }
 
   private async handleOCR({
@@ -184,7 +176,7 @@ export default class BedrockModel implements ModelInterface {
       );
 
       return {
-        content: parsedResponse.content[0].input,
+        extracted: parsedResponse.content[0].input,
         inputTokens: parsedResponse.usage?.input_tokens || 0,
         outputTokens: parsedResponse.usage?.output_tokens || 0,
       };

@@ -1,15 +1,41 @@
+import {
+  CompletionResponse,
+  ExtractionResponse,
+  LLMParams,
+  ModelProvider,
+  OperationMode,
+} from "../types";
 import { formatMarkdown } from "./common";
-import { LLMParams, ModelProvider, OperationMode } from "../types";
+
+export const isCompletionResponse = (
+  mode: OperationMode,
+  response: CompletionResponse | ExtractionResponse
+): response is CompletionResponse => {
+  return mode === OperationMode.OCR;
+};
+
+export const isExtractionResponse = (
+  mode: OperationMode,
+  response: CompletionResponse | ExtractionResponse
+): response is ExtractionResponse => {
+  return mode === OperationMode.EXTRACTION;
+};
 
 export class CompletionProcessor {
-  static process(mode: OperationMode, content: any): any {
-    if (mode === OperationMode.OCR) {
-      return typeof content === "string" ? formatMarkdown(content) : content;
+  static process(
+    mode: OperationMode,
+    response: CompletionResponse | ExtractionResponse
+  ): (CompletionResponse & { contentLength: number }) | ExtractionResponse {
+    if (isCompletionResponse(mode, response)) {
+      const content = response.content;
+      return {
+        ...response,
+        content:
+          typeof content === "string" ? formatMarkdown(content) : content,
+        contentLength: response.content?.length || 0,
+      };
     }
-    if (mode === OperationMode.EXTRACTION) {
-      return typeof content === "object" ? content : JSON.parse(content);
-    }
-    return content;
+    return response;
   }
 }
 

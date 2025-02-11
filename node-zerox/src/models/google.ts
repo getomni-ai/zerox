@@ -8,11 +8,7 @@ import {
   ModelInterface,
   OperationMode,
 } from "../types";
-import {
-  CompletionProcessor,
-  convertKeysToSnakeCase,
-  encodeImageToBase64,
-} from "../utils";
+import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
@@ -48,11 +44,7 @@ export default class GoogleModel implements ModelInterface {
       throw new Error(`Unsupported operation mode: ${this.mode}`);
     }
 
-    const response = await handler();
-    return {
-      ...response,
-      content: CompletionProcessor.process(this.mode, response.content),
-    };
+    return await handler();
   }
 
   private async handleOCR({
@@ -143,7 +135,7 @@ export default class GoogleModel implements ModelInterface {
       const response = await result.response;
 
       return {
-        content: response.text(),
+        extracted: JSON.parse(response.text()),
         inputTokens: response.usageMetadata?.promptTokenCount || 0,
         outputTokens: response.usageMetadata?.candidatesTokenCount || 0,
       };

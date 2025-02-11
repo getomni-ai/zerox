@@ -9,11 +9,7 @@ import {
   OperationMode,
 } from "../types";
 import { AzureOpenAI } from "openai";
-import {
-  CompletionProcessor,
-  convertKeysToSnakeCase,
-  encodeImageToBase64,
-} from "../utils";
+import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 
 export default class AzureModel implements ModelInterface {
@@ -51,11 +47,7 @@ export default class AzureModel implements ModelInterface {
       throw new Error(`Unsupported operation mode: ${this.mode}`);
     }
 
-    const response = await handler();
-    return {
-      ...response,
-      content: CompletionProcessor.process(this.mode, response.content),
-    };
+    return await handler();
   }
 
   private async handleOCR({
@@ -136,7 +128,7 @@ export default class AzureModel implements ModelInterface {
       });
 
       return {
-        content: response.choices[0].message.content || "",
+        extracted: JSON.parse(response.choices[0].message.content || ""),
         inputTokens: response.usage?.prompt_tokens || 0,
         outputTokens: response.usage?.completion_tokens || 0,
       };
