@@ -19,6 +19,10 @@ class Messages:
     Custom system prompt was provided which overrides the default system prompt. We assume that you know what you are doing.  
     """
 
+    CUSTOM_SYSTEM_ROLE_WARNING = """
+    Custom system role was provided which overrides the default system role. We assume that you know what you are doing.\
+    """
+
     MAINTAIN_FORMAT_SELECTED_PAGES_WARNING = """
     The maintain_format flag is set to True in conjunction with select_pages input given. This may result in unexpected behavior.
     """

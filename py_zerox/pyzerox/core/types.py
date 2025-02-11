@@ -16,6 +16,7 @@ class ZeroxArgs:
     output_dir: Optional[str] = None
     temp_dir: Optional[str] = None
     custom_system_prompt: Optional[str] = None
+    custom_role: Optional[str] = None
     select_pages: Optional[Union[int, Iterable[int]]] = None
     kwargs: Dict[str, Any] = field(default_factory=dict)
 

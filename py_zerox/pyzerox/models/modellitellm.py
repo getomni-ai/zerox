@@ -10,14 +10,17 @@ from .types import CompletionResponse
 from ..errors import ModelAccessError, NotAVisionModel, MissingEnvironmentVariables
 from ..constants.messages import Messages
 from ..constants.prompts import Prompts
+from ..constants.roles import Roles
 from ..processor.image import encode_image_to_base64
 
 DEFAULT_SYSTEM_PROMPT = Prompts.DEFAULT_SYSTEM_PROMPT
+DEFAULT_SYSTEM_ROLE = Roles.DEFAULT_SYSTEM_ROLE
 
 
 class litellmmodel(BaseModel):
     ## setting the default system prompt
     _system_prompt = DEFAULT_SYSTEM_PROMPT
+    _system_role = DEFAULT_SYSTEM_ROLE
 
     def __init__(
         self,
@@ -42,15 +45,29 @@ class litellmmodel(BaseModel):
     def system_prompt(self) -> str:
         '''Returns the system prompt for the model.'''
         return self._system_prompt
+
+    @property
+    def system_role(self) -> str:
+        '''Returns the system role for the model.'''
+        return self._system_role
     
     @system_prompt.setter
     def system_prompt(self, prompt: str) -> None:
         '''
         Sets/overrides the system prompt for the model.
-        Will raise a friendly warning to notify the user. 
+        Will raise a friendly warning to notify the user.
         '''
         warnings.warn(f"{Messages.CUSTOM_SYSTEM_PROMPT_WARNING}. Default prompt for zerox is:\n {DEFAULT_SYSTEM_PROMPT}")
         self._system_prompt = prompt
+
+    @system_role.setter
+    def system_role(self, role: str) -> None:
+        '''
+        Sets/overrides the system role for the model.
+        Will raise a friendly warning to notify the user.
+        '''
+        warnings.warn(f"{Messages.CUSTOM_SYSTEM_ROLE_WARNING}. Default role for zerox is: {DEFAULT_SYSTEM_ROLE}")
+        self._system_role = role
 
     ## custom method on top of BaseModel
     def validate_environment(self) -> None:
@@ -126,7 +143,7 @@ class litellmmodel(BaseModel):
         # Default system message
         messages: List[Dict[str, Any]] = [
             {
-                "role": "system",
+                "role": self._system_role,
                 "content": self._system_prompt,
             },
         ]
@@ -136,7 +153,7 @@ class litellmmodel(BaseModel):
         if maintain_format and prior_page:
             messages.append(
                 {
-                    "role": "system",
+                    "role": self._system_role,
                     "content": f'Markdown must maintain consistent formatting with the following page: \n\n """{prior_page}"""',
                 },
             )

@@ -34,6 +34,7 @@ async def zerox(
     output_dir: Optional[str] = None,
     temp_dir: Optional[str] = None,
     custom_system_prompt: Optional[str] = None,
+    custom_role: Optional[str] = None,
     select_pages: Optional[Union[int, Iterable[int]]] = None,
     **kwargs
 ) -> ZeroxOutput:
@@ -57,6 +58,8 @@ async def zerox(
     :type temp_dir: str, optional
     :param custom_system_prompt: The system prompt to use for the model, this overrides the default system prompt of zerox. Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning, defaults to None
     :type custom_system_prompt: str, optional
+    :param custom_role: The role assigned to the model can be customized, overriding the default system role. Typically, this isn't necessary unless you need to specify a particular role for a given LLM. If you choose to set it, a friendly warning will be displayed. By default, this option is set to None.
+    :type custom_role: str, optional
     :param select_pages: Pages to process, can be a single page number or an iterable of page numbers, defaults to None
     :type select_pages: int or Iterable[int], optional
 
@@ -81,6 +84,10 @@ async def zerox(
     # override the system prompt if a custom prompt is provided
     if custom_system_prompt:
         vision_model.system_prompt = custom_system_prompt
+
+    # override the system role if a custom role is provided
+    if custom_role:
+        vision_model.system_role = custom_role
 
     # Check if both maintain_format and select_pages are provided
     if maintain_format and select_pages is not None:
