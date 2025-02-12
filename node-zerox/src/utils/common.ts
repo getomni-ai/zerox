@@ -58,13 +58,16 @@ export const formatMarkdown = (text: string): string => {
 export const splitSchema = (
   schema: Record<string, unknown>,
   extractPerPage?: string[]
-) => {
+): {
+  fullDocSchema: Record<string, unknown> | null;
+  perPageSchema: Record<string, unknown> | null;
+} => {
   if (!extractPerPage?.length) {
     return { fullDocSchema: schema, perPageSchema: null };
   }
 
-  const perPageSchema: Record<string, unknown> = {};
   const fullDocSchema: Record<string, unknown> = {};
+  const perPageSchema: Record<string, unknown> = {};
 
   for (const [key, value] of Object.entries(schema.properties || {})) {
     (extractPerPage.includes(key) ? perPageSchema : fullDocSchema)[key] = value;

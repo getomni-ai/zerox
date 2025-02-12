@@ -33,6 +33,7 @@ export interface ZeroxArgs {
 
 export interface ZeroxOutput {
   completionTime: number;
+  extracted: Record<string, unknown> | null;
   fileName: string;
   inputTokens: number;
   outputTokens: number;

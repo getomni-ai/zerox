@@ -15,6 +15,7 @@ import {
   getTesseractScheduler,
   isCompletionResponse,
   prepareWorkersForImageProcessing,
+  splitSchema,
   terminateScheduler,
 } from "./utils";
 import { createModel } from "./models";
@@ -56,9 +57,10 @@ export const zerox = async ({
   tempDir = os.tmpdir(),
   trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
-  let inputTokenCount = 0;
-  let outputTokenCount = 0;
-  let priorPage = "";
+  let extracted: Record<string, unknown> = {};
+  let inputTokenCount: number = 0;
+  let outputTokenCount: number = 0;
+  let priorPage: string = "";
   const pages: Page[] = [];
   const startTime = new Date();
 
@@ -76,6 +78,9 @@ export const zerox = async ({
   }
   if (mode === OperationMode.EXTRACTION && !schema) {
     throw new Error("Schema is required for extraction mode");
+  }
+  if (maintainFormat && mode === OperationMode.EXTRACTION) {
+    throw new Error("Maintain format is only supported in OCR mode");
   }
   let scheduler: Tesseract.Scheduler | null = null;
 
@@ -150,8 +155,8 @@ export const zerox = async ({
     }
 
     // Start processing the images using LLM
-    let numSuccessfulPages = 0;
-    let numFailedPages = 0;
+    let numSuccessfulPages: number = 0;
+    let numFailedPages: number = 0;
 
     const modelInstance = createModel({
       credentials,
@@ -224,8 +229,8 @@ export const zerox = async ({
           }
         }
       }
-    } else {
-      // Process in parallel with a limit on concurrent pages
+    } else if (mode === OperationMode.OCR) {
+      // Process OCR first
       const processPage = async (
         imagePath: string,
         pageNumber: number,
@@ -247,17 +252,19 @@ export const zerox = async ({
         try {
           const rawResponse = await modelInstance.getCompletion({
             image: correctedBuffer,
-            maintainFormat,
+            maintainFormat: false,
             priorPage,
-            schema,
           });
-          const response = CompletionProcessor.process(mode, rawResponse);
+          const response = CompletionProcessor.process(
+            OperationMode.OCR,
+            rawResponse
+          );
 
           inputTokenCount += response.inputTokens;
           outputTokenCount += response.outputTokens;
 
           // Update prior page to result from last processing step
-          if (isCompletionResponse(mode, response)) {
+          if (isCompletionResponse(OperationMode.OCR, response)) {
             priorPage = response.content;
           }
 
@@ -322,6 +329,115 @@ export const zerox = async ({
       await processPagesInBatches(imagePaths, limit);
     }
 
+    if (schema) {
+      const { fullDocSchema, perPageSchema } = splitSchema(
+        schema,
+        extractPerPage
+      );
+
+      const processExtraction = async (
+        input: string | string[],
+        pageNumber: number,
+        retryCount = 0,
+        schema: Record<string, unknown>
+      ): Promise<void> => {
+        try {
+          const rawResponse = await modelInstance.getCompletion({
+            input,
+            options: { correctOrientation, scheduler, trimEdges },
+            schema,
+          });
+
+          const response = CompletionProcessor.process(
+            OperationMode.EXTRACTION,
+            rawResponse
+          );
+
+          inputTokenCount += response.inputTokens;
+          outputTokenCount += response.outputTokens;
+          numSuccessfulPages++;
+
+          Object.keys(perPageSchema?.properties || {}).forEach((key) => {
+            if (!extracted[key]) {
+              extracted[key] = [];
+            }
+            const arr = extracted[key];
+            if (
+              response.extracted[key] !== null &&
+              response.extracted[key] !== undefined &&
+              Array.isArray(arr)
+            ) {
+              arr.push({
+                page: pageNumber,
+                value: response.extracted[key],
+              });
+            }
+          });
+        } catch (error) {
+          if (retryCount < maxRetries) {
+            await processExtraction(input, pageNumber, retryCount + 1, schema);
+          } else {
+            numFailedPages++;
+            throw error;
+          }
+        }
+      };
+
+      if (mode === OperationMode.OCR) {
+        if (perPageSchema) {
+          await Promise.all(
+            pages.map((page, index) =>
+              processExtraction(page.content || "", index + 1, 0, perPageSchema)
+            )
+          );
+        }
+        if (fullDocSchema) {
+          const content = pages.reduce((acc, el, i) => {
+            if (i !== 0) acc += "\n<hr><hr>\n";
+            acc += el.content;
+            return acc;
+          }, "");
+
+          const rawResponse = await modelInstance.getCompletion({
+            input: content,
+            options: { correctOrientation, scheduler, trimEdges },
+            schema: fullDocSchema,
+          });
+          const response = CompletionProcessor.process(
+            OperationMode.EXTRACTION,
+            rawResponse
+          );
+
+          inputTokenCount += response.inputTokens;
+          outputTokenCount += response.outputTokens;
+          extracted = { ...extracted, ...response?.extracted };
+        }
+      } else {
+        if (perPageSchema) {
+          await Promise.all(
+            imagePaths.map((imagePath, index) =>
+              processExtraction([imagePath], index + 1, 0, perPageSchema)
+            )
+          );
+        }
+        if (fullDocSchema) {
+          const rawResponse = await modelInstance.getCompletion({
+            input: imagePaths,
+            options: { correctOrientation, scheduler, trimEdges },
+            schema: fullDocSchema,
+          });
+          const response = CompletionProcessor.process(
+            OperationMode.EXTRACTION,
+            rawResponse
+          );
+
+          inputTokenCount += response.inputTokens;
+          outputTokenCount += response.outputTokens;
+          extracted = { ...extracted, ...response.extracted };
+        }
+      }
+    }
+
     // Write the aggregated markdown to a file
     const endOfPath = localPath.split("/")[localPath.split("/").length - 1];
     const rawFileName = endOfPath.split(".")[0];
@@ -370,6 +486,7 @@ export const zerox = async ({
 
     return {
       completionTime,
+      extracted,
       fileName,
       inputTokens: inputTokenCount,
       outputTokens: outputTokenCount,
