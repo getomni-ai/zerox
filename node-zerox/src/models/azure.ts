@@ -5,12 +5,18 @@ import {
   CompletionResponse,
   ExtractionArgs,
   ExtractionResponse,
+  MessageContentArgs,
   ModelInterface,
   OperationMode,
 } from "../types";
 import { AzureOpenAI } from "openai";
-import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
+import {
+  cleanupImage,
+  convertKeysToSnakeCase,
+  encodeImageToBase64,
+} from "../utils";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
+import fs from "fs-extra";
 
 export default class AzureModel implements ModelInterface {
   private client: AzureOpenAI;
@@ -48,6 +54,35 @@ export default class AzureModel implements ModelInterface {
     }
 
     return await handler();
+  }
+
+  private async createMessageContent({
+    input,
+    options,
+  }: MessageContentArgs): Promise<any> {
+    if (Array.isArray(input)) {
+      return Promise.all(
+        input.map(async (imagePath) => {
+          const imageBuffer = await fs.readFile(imagePath);
+          const correctedBuffer = await cleanupImage({
+            correctOrientation: options?.correctOrientation ?? false,
+            imageBuffer,
+            scheduler: options?.scheduler ?? null,
+            trimEdges: options?.trimEdges ?? false,
+          });
+          return {
+            image_url: {
+              url: `data:image/png;base64,${encodeImageToBase64(
+                correctedBuffer
+              )}`,
+            },
+            type: "image_url",
+          };
+        })
+      );
+    }
+
+    return [{ text: input, type: "text" }];
   }
 
   private async handleOCR({
@@ -100,23 +135,18 @@ export default class AzureModel implements ModelInterface {
   }
 
   private async handleExtraction({
-    image,
+    input,
+    options,
     schema,
   }: ExtractionArgs): Promise<ExtractionResponse> {
-    const base64Image = await encodeImageToBase64(image);
-    const messages: any = [
-      {
-        role: "user",
-        content: [
-          {
-            type: "image_url",
-            image_url: { url: `data:image/png;base64,${base64Image}` },
-          },
-        ],
-      },
-    ];
-
     try {
+      const messages: any = [
+        {
+          role: "user",
+          content: await this.createMessageContent({ input, options }),
+        },
+      ];
+
       const response = await this.client.chat.completions.create({
         messages,
         model: "",

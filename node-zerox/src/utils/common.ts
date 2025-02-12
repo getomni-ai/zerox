@@ -28,7 +28,7 @@ export const isValidUrl = (string: string): boolean => {
 };
 
 // Strip out the ```markdown wrapper
-export const formatMarkdown = (text: string) => {
+export const formatMarkdown = (text: string): string => {
   let formattedMarkdown = text?.trim();
   let loopCount = 0;
   const maxLoops = 3;
@@ -53,4 +53,39 @@ export const formatMarkdown = (text: string) => {
   }
 
   return formattedMarkdown;
+};
+
+export const splitSchema = (
+  schema: Record<string, unknown>,
+  extractPerPage?: string[]
+) => {
+  if (!extractPerPage?.length) {
+    return { fullDocSchema: schema, perPageSchema: null };
+  }
+
+  const perPageSchema: Record<string, unknown> = {};
+  const fullDocSchema: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(schema.properties || {})) {
+    (extractPerPage.includes(key) ? perPageSchema : fullDocSchema)[key] = value;
+  }
+
+  const requiredKeys = Array.isArray(schema.required) ? schema.required : [];
+
+  return {
+    fullDocSchema: Object.keys(fullDocSchema).length
+      ? {
+          type: schema.type,
+          properties: fullDocSchema,
+          required: requiredKeys.filter((key) => !extractPerPage.includes(key)),
+        }
+      : null,
+    perPageSchema: Object.keys(perPageSchema).length
+      ? {
+          type: schema.type,
+          properties: perPageSchema,
+          required: requiredKeys.filter((key) => extractPerPage.includes(key)),
+        }
+      : null,
+  };
 };

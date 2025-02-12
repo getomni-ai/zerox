@@ -36,6 +36,7 @@ export const zerox = async ({
   correctOrientation = true,
   credentials = { apiKey: "" },
   errorMode = ErrorMode.IGNORE,
+  extractPerPage,
   filePath,
   imageDensity = 300,
   imageHeight = 2048,

@@ -4,6 +4,7 @@ export interface ZeroxArgs {
   correctOrientation?: boolean;
   credentials?: ModelCredentials;
   errorMode?: ErrorMode;
+  extractPerPage?: string[];
   filePath: string;
   imageDensity?: number;
   imageHeight?: number;
@@ -140,7 +141,12 @@ export enum ErrorMode {
 }
 
 export interface ExtractionArgs {
-  image: Buffer;
+  input: string | string[];
+  options?: {
+    correctOrientation?: boolean;
+    scheduler?: Tesseract.Scheduler;
+    trimEdges?: boolean;
+  };
   schema: Record<string, unknown>;
 }
 
@@ -179,6 +185,15 @@ export type LLMParams =
   | BedrockLLMParams
   | GoogleLLMParams
   | OpenAILLMParams;
+
+export interface MessageContentArgs {
+  input: string | string[];
+  options?: {
+    correctOrientation?: boolean;
+    scheduler?: Tesseract.Scheduler;
+    trimEdges?: boolean;
+  };
+}
 
 export interface ModelInterface {
   getCompletion(

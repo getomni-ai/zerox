@@ -1,16 +1,22 @@
 import {
+  cleanupImage,
+  convertKeysToSnakeCase,
+  encodeImageToBase64,
+} from "../utils";
+import {
   CompletionArgs,
   CompletionResponse,
   ExtractionArgs,
   ExtractionResponse,
   GoogleCredentials,
   GoogleLLMParams,
+  MessageContentArgs,
   ModelInterface,
   OperationMode,
 } from "../types";
-import { convertKeysToSnakeCase, encodeImageToBase64 } from "../utils";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import fs from "fs-extra";
 
 export default class GoogleModel implements ModelInterface {
   private client: GoogleGenerativeAI;
@@ -45,6 +51,33 @@ export default class GoogleModel implements ModelInterface {
     }
 
     return await handler();
+  }
+
+  private async createMessageContent({
+    input,
+    options,
+  }: MessageContentArgs): Promise<any> {
+    if (Array.isArray(input)) {
+      return Promise.all(
+        input.map(async (imagePath) => {
+          const imageBuffer = await fs.readFile(imagePath);
+          const correctedBuffer = await cleanupImage({
+            correctOrientation: options?.correctOrientation ?? false,
+            imageBuffer,
+            scheduler: options?.scheduler ?? null,
+            trimEdges: options?.trimEdges ?? false,
+          });
+          return {
+            inlineData: {
+              data: encodeImageToBase64(correctedBuffer),
+              mimeType: "image/png",
+            },
+          };
+        })
+      );
+    }
+
+    return [{ text: input }];
   }
 
   private async handleOCR({
@@ -97,7 +130,8 @@ export default class GoogleModel implements ModelInterface {
   }
 
   private async handleExtraction({
-    image,
+    input,
+    options,
     schema,
   }: ExtractionArgs): Promise<ExtractionResponse> {
     const generativeModel = this.client.getGenerativeModel({
@@ -113,17 +147,11 @@ export default class GoogleModel implements ModelInterface {
     const promptParts = [];
 
     // Add system prompt
-    const text = "Extract schema data from the following image";
+    const text = "Extract schema data";
     promptParts.push({ text });
 
-    const base64Image = await encodeImageToBase64(image);
-    const imageData = {
-      inlineData: {
-        data: base64Image,
-        mimeType: "image/png",
-      },
-    };
-    promptParts.push(imageData);
+    const parts = await this.createMessageContent({ input, options });
+    promptParts.push(...parts);
 
     try {
       const result = await generativeModel.generateContent({
