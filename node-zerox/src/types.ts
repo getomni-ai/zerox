@@ -144,7 +144,7 @@ export interface ExtractionArgs {
   input: string | string[];
   options?: {
     correctOrientation?: boolean;
-    scheduler?: Tesseract.Scheduler;
+    scheduler: Tesseract.Scheduler | null;
     trimEdges?: boolean;
   };
   schema: Record<string, unknown>;
@@ -190,7 +190,7 @@ export interface MessageContentArgs {
   input: string | string[];
   options?: {
     correctOrientation?: boolean;
-    scheduler?: Tesseract.Scheduler;
+    scheduler: Tesseract.Scheduler | null;
     trimEdges?: boolean;
   };
 }
