@@ -15,6 +15,7 @@ import {
   getTesseractScheduler,
   isCompletionResponse,
   prepareWorkersForImageProcessing,
+  runRetries,
   splitSchema,
   terminateScheduler,
 } from "./utils";
@@ -82,8 +83,8 @@ export const zerox = async ({
   if (maintainFormat && mode === OperationMode.EXTRACTION) {
     throw new Error("Maintain format is only supported in OCR mode");
   }
-  let scheduler: Tesseract.Scheduler | null = null;
 
+  let scheduler: Tesseract.Scheduler | null = null;
   // Add initial tesseract workers if we need to correct orientation
   if (correctOrientation) {
     scheduler = await getTesseractScheduler();
@@ -161,80 +162,15 @@ export const zerox = async ({
     const modelInstance = createModel({
       credentials,
       llmParams,
-      mode,
       model,
       provider: modelProvider,
     });
 
-    if (maintainFormat) {
-      // Use synchronous processing
-      for (let i = 0; i < imagePaths.length; i++) {
-        const imagePath = imagePaths[i];
-        const imageBuffer = await fs.readFile(imagePath);
-        const correctedBuffer = await cleanupImage({
-          correctOrientation,
-          imageBuffer,
-          scheduler,
-          trimEdges,
-        });
-
-        let retryCount = 0;
-
-        while (retryCount <= maxRetries) {
-          try {
-            const rawResponse = await modelInstance.getCompletion({
-              image: correctedBuffer,
-              maintainFormat,
-              priorPage,
-              schema,
-            });
-            const response = CompletionProcessor.process(mode, rawResponse);
-
-            inputTokenCount += response.inputTokens;
-            outputTokenCount += response.outputTokens;
-
-            // Update prior page to result from last processing step
-            if (isCompletionResponse(mode, response)) {
-              priorPage = response.content;
-            }
-
-            pages.push({
-              ...response,
-              page: i + 1,
-              status: PageStatus.SUCCESS,
-            });
-            numSuccessfulPages++;
-            break;
-          } catch (error) {
-            if (retryCount < maxRetries) {
-              console.log(`Retrying page ${i + 1}...`);
-              retryCount++;
-              continue;
-            }
-
-            console.error(`Failed to process image ${imagePath}:`, error);
-            if (errorMode === ErrorMode.THROW) {
-              throw error;
-            }
-
-            pages.push({
-              content: "",
-              contentLength: 0,
-              error: `Failed to process page ${i + 1}: ${error}`,
-              page: i + 1,
-              status: PageStatus.ERROR,
-            });
-            numFailedPages++;
-            break;
-          }
-        }
-      }
-    } else if (mode === OperationMode.OCR) {
-      // Process OCR first
-      const processPage = async (
+    if (mode === OperationMode.OCR) {
+      const processOCR = async (
         imagePath: string,
         pageNumber: number,
-        retryCount = 0
+        maintainFormat: boolean
       ): Promise<Page> => {
         const imageBuffer = await fs.readFile(imagePath);
         const correctedBuffer = await cleanupImage({
@@ -250,11 +186,16 @@ export const zerox = async ({
 
         let page: Page;
         try {
-          const rawResponse = await modelInstance.getCompletion({
-            image: correctedBuffer,
-            maintainFormat: false,
-            priorPage,
-          });
+          const rawResponse = await runRetries(
+            () =>
+              modelInstance.getCompletion(mode, {
+                image: correctedBuffer,
+                maintainFormat,
+                priorPage,
+              }),
+            maxRetries,
+            pageNumber
+          );
           const response = CompletionProcessor.process(
             OperationMode.OCR,
             rawResponse
@@ -263,7 +204,6 @@ export const zerox = async ({
           inputTokenCount += response.inputTokens;
           outputTokenCount += response.outputTokens;
 
-          // Update prior page to result from last processing step
           if (isCompletionResponse(OperationMode.OCR, response)) {
             priorPage = response.content;
           }
@@ -275,11 +215,6 @@ export const zerox = async ({
           };
           numSuccessfulPages++;
         } catch (error) {
-          if (retryCount <= maxRetries) {
-            console.log(`Retrying page ${pageNumber}...`);
-            return processPage(imagePath, pageNumber, retryCount + 1);
-          }
-
           console.error(`Failed to process image ${imagePath}:`, error);
           if (errorMode === ErrorMode.THROW) {
             throw error;
@@ -299,9 +234,9 @@ export const zerox = async ({
           await onPostProcess({
             page,
             progressSummary: {
+              numFailedPages,
               numPages: imagePaths.length,
               numSuccessfulPages,
-              numFailedPages,
             },
           });
         }
@@ -309,24 +244,27 @@ export const zerox = async ({
         return page;
       };
 
-      // Function to process pages with concurrency limit
-      const processPagesInBatches = async (
-        imagePaths: string[],
-        limit: Limit
-      ) => {
-        const promises = imagePaths.map((imagePath, index) =>
-          limit(() =>
-            processPage(imagePath, index + 1).then((result) => {
-              // Update the pages array with the result
-              pages[index] = result;
-            })
+      if (maintainFormat) {
+        // Use synchronous processing
+        for (let i = 0; i < imagePaths.length; i++) {
+          const page = await processOCR(imagePaths[i], i + 1, true);
+          pages.push(page);
+          if (page.status === PageStatus.ERROR) {
+            break;
+          }
+        }
+      } else {
+        const limit = pLimit(concurrency);
+        await Promise.all(
+          imagePaths.map((imagePath, i) =>
+            limit(() =>
+              processOCR(imagePath, i + 1, false).then((page) => {
+                pages[i] = page;
+              })
+            )
           )
         );
-        await Promise.all(promises);
-      };
-
-      const limit = pLimit(concurrency);
-      await processPagesInBatches(imagePaths, limit);
+      }
     }
 
     if (schema) {
@@ -338,103 +276,80 @@ export const zerox = async ({
       const processExtraction = async (
         input: string | string[],
         pageNumber: number,
-        retryCount = 0,
         schema: Record<string, unknown>
       ): Promise<void> => {
-        try {
-          const rawResponse = await modelInstance.getCompletion({
-            input,
-            options: { correctOrientation, scheduler, trimEdges },
-            schema,
-          });
+        await runRetries(
+          async () => {
+            const rawResponse = await modelInstance.getCompletion(mode, {
+              input,
+              options: { correctOrientation, scheduler, trimEdges },
+              schema,
+            });
+            const response = CompletionProcessor.process(
+              OperationMode.EXTRACTION,
+              rawResponse
+            );
 
-          const response = CompletionProcessor.process(
-            OperationMode.EXTRACTION,
-            rawResponse
-          );
+            inputTokenCount += response.inputTokens;
+            outputTokenCount += response.outputTokens;
 
-          inputTokenCount += response.inputTokens;
-          outputTokenCount += response.outputTokens;
-          numSuccessfulPages++;
+            numSuccessfulPages++;
 
-          Object.keys(perPageSchema?.properties || {}).forEach((key) => {
-            if (!extracted[key]) {
-              extracted[key] = [];
-            }
-            const arr = extracted[key];
-            if (
-              response.extracted[key] !== null &&
-              response.extracted[key] !== undefined &&
-              Array.isArray(arr)
-            ) {
-              arr.push({
-                page: pageNumber,
-                value: response.extracted[key],
-              });
-            }
-          });
-        } catch (error) {
-          if (retryCount < maxRetries) {
-            await processExtraction(input, pageNumber, retryCount + 1, schema);
-          } else {
-            numFailedPages++;
-            throw error;
-          }
-        }
+            Object.keys(schema?.properties || {}).forEach((key) => {
+              const extractedArray = extracted[key] || [];
+              if (
+                Array.isArray(extractedArray) &&
+                response.extracted[key] !== null &&
+                response.extracted[key] !== undefined
+              ) {
+                extractedArray.push({
+                  page: pageNumber,
+                  value: response.extracted[key],
+                });
+              }
+            });
+          },
+          maxRetries,
+          pageNumber
+        );
       };
 
-      if (mode === OperationMode.OCR) {
-        if (perPageSchema) {
-          await Promise.all(
-            pages.map((page, index) =>
-              processExtraction(page.content || "", index + 1, 0, perPageSchema)
+      if (perPageSchema) {
+        const inputs =
+          mode === OperationMode.OCR
+            ? pages.map((page) => page.content || "")
+            : imagePaths.map((imagePath) => [imagePath]);
+        await Promise.all(
+          inputs.map((input, i) =>
+            processExtraction(input, i + 1, perPageSchema)
+          )
+        );
+      }
+
+      if (fullDocSchema) {
+        let input: string | string[];
+        if (mode === OperationMode.OCR) {
+          input = pages
+            .map((page, i) =>
+              i === 0 ? page.content : "\n<hr><hr>\n" + page.content
             )
-          );
+            .join("");
+        } else {
+          input = imagePaths;
         }
-        if (fullDocSchema) {
-          const content = pages.reduce((acc, el, i) => {
-            if (i !== 0) acc += "\n<hr><hr>\n";
-            acc += el.content;
-            return acc;
-          }, "");
+        const rawResponse = await modelInstance.getCompletion(mode, {
+          input,
+          options: { correctOrientation, scheduler, trimEdges },
+          schema: fullDocSchema,
+        });
+        const response = CompletionProcessor.process(
+          OperationMode.EXTRACTION,
+          rawResponse
+        );
 
-          const rawResponse = await modelInstance.getCompletion({
-            input: content,
-            options: { correctOrientation, scheduler, trimEdges },
-            schema: fullDocSchema,
-          });
-          const response = CompletionProcessor.process(
-            OperationMode.EXTRACTION,
-            rawResponse
-          );
-
-          inputTokenCount += response.inputTokens;
-          outputTokenCount += response.outputTokens;
-          extracted = { ...extracted, ...response?.extracted };
-        }
-      } else {
-        if (perPageSchema) {
-          await Promise.all(
-            imagePaths.map((imagePath, index) =>
-              processExtraction([imagePath], index + 1, 0, perPageSchema)
-            )
-          );
-        }
-        if (fullDocSchema) {
-          const rawResponse = await modelInstance.getCompletion({
-            input: imagePaths,
-            options: { correctOrientation, scheduler, trimEdges },
-            schema: fullDocSchema,
-          });
-          const response = CompletionProcessor.process(
-            OperationMode.EXTRACTION,
-            rawResponse
-          );
-
-          inputTokenCount += response.inputTokens;
-          outputTokenCount += response.outputTokens;
-          extracted = { ...extracted, ...response.extracted };
-        }
+        inputTokenCount += response.inputTokens;
+        outputTokenCount += response.outputTokens;
+        extracted = { ...extracted, ...response.extracted };
       }
     }
 

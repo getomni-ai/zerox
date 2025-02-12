@@ -131,7 +131,6 @@ export interface CompletionResponse {
 export interface CreateModelArgs {
   credentials: ModelCredentials;
   llmParams: Partial<LLMParams>;
-  mode: OperationMode;
   model: ModelOptions | string;
   provider: ModelProvider | string;
 }
@@ -198,6 +197,7 @@ export interface MessageContentArgs {
 
 export interface ModelInterface {
   getCompletion(
+    mode: OperationMode,
     params: CompletionArgs | ExtractionArgs
   ): Promise<CompletionResponse | ExtractionResponse>;
 }

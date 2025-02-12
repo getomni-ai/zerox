@@ -20,12 +20,10 @@ import fs from "fs-extra";
 
 export default class AzureModel implements ModelInterface {
   private client: AzureOpenAI;
-  private mode: OperationMode;
   private llmParams?: Partial<AzureLLMParams>;
 
   constructor(
     credentials: AzureCredentials,
-    mode: OperationMode,
     model: string,
     llmParams?: Partial<AzureLLMParams>
   ) {
@@ -35,11 +33,11 @@ export default class AzureModel implements ModelInterface {
       deployment: model,
       endpoint: credentials.endpoint,
     });
-    this.mode = mode;
     this.llmParams = llmParams;
   }
 
   async getCompletion(
+    mode: OperationMode,
     params: CompletionArgs | ExtractionArgs
   ): Promise<CompletionResponse | ExtractionResponse> {
     const modeHandlers = {
@@ -48,9 +46,9 @@ export default class AzureModel implements ModelInterface {
       [OperationMode.OCR]: () => this.handleOCR(params as CompletionArgs),
     };
 
-    const handler = modeHandlers[this.mode];
+    const handler = modeHandlers[mode];
     if (!handler) {
-      throw new Error(`Unsupported operation mode: ${this.mode}`);
+      throw new Error(`Unsupported operation mode: ${mode}`);
     }
 
     return await handler();

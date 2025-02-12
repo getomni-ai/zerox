@@ -24,13 +24,11 @@ import fs from "fs-extra";
 // Currently only supports Anthropic models
 export default class BedrockModel implements ModelInterface {
   private client: BedrockRuntimeClient;
-  private mode: OperationMode;
   private model: string;
   private llmParams?: Partial<BedrockLLMParams>;
 
   constructor(
     credentials: BedrockCredentials,
-    mode: OperationMode,
     model: string,
     llmParams?: Partial<BedrockLLMParams>
   ) {
@@ -44,12 +42,12 @@ export default class BedrockModel implements ModelInterface {
           }
         : undefined,
     });
-    this.mode = mode;
     this.model = model;
     this.llmParams = llmParams;
   }
 
   async getCompletion(
+    mode: OperationMode,
     params: CompletionArgs | ExtractionArgs
   ): Promise<CompletionResponse | ExtractionResponse> {
     const modeHandlers = {
@@ -58,9 +56,9 @@ export default class BedrockModel implements ModelInterface {
       [OperationMode.OCR]: () => this.handleOCR(params as CompletionArgs),
     };
 
-    const handler = modeHandlers[this.mode];
+    const handler = modeHandlers[mode];
     if (!handler) {
-      throw new Error(`Unsupported operation mode: ${this.mode}`);
+      throw new Error(`Unsupported operation mode: ${mode}`);
     }
 
     return await handler();

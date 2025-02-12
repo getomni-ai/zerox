@@ -20,23 +20,21 @@ import fs from "fs-extra";
 
 export default class OpenAIModel implements ModelInterface {
   private apiKey: string;
-  private mode: OperationMode;
   private model: string;
   private llmParams?: Partial<OpenAILLMParams>;
 
   constructor(
     credentials: OpenAICredentials,
-    mode: OperationMode,
     model: string,
     llmParams?: Partial<OpenAILLMParams>
   ) {
     this.apiKey = credentials.apiKey;
-    this.mode = mode;
     this.model = model;
     this.llmParams = llmParams;
   }
 
   async getCompletion(
+    mode: OperationMode,
     params: CompletionArgs | ExtractionArgs
   ): Promise<CompletionResponse | ExtractionResponse> {
     const modeHandlers = {
@@ -45,9 +43,9 @@ export default class OpenAIModel implements ModelInterface {
       [OperationMode.OCR]: () => this.handleOCR(params as CompletionArgs),
     };
 
-    const handler = modeHandlers[this.mode];
+    const handler = modeHandlers[mode];
     if (!handler) {
-      throw new Error(`Unsupported operation mode: ${this.mode}`);
+      throw new Error(`Unsupported operation mode: ${mode}`);
     }
 
     return await handler();

@@ -55,6 +55,26 @@ export const formatMarkdown = (text: string): string => {
   return formattedMarkdown;
 };
 
+export const runRetries = async <T>(
+  operation: () => Promise<T>,
+  maxRetries: number,
+  pageNumber: number
+): Promise<T> => {
+  let retryCount = 0;
+  while (retryCount <= maxRetries) {
+    try {
+      return await operation();
+    } catch (error) {
+      if (retryCount === maxRetries) {
+        throw error;
+      }
+      console.log(`Retrying page ${pageNumber}...`);
+      retryCount++;
+    }
+  }
+  throw new Error("Unexpected retry error");
+};
+
 export const splitSchema = (
   schema: Record<string, unknown>,
   extractPerPage?: string[]

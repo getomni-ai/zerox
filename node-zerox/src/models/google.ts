@@ -20,23 +20,21 @@ import fs from "fs-extra";
 
 export default class GoogleModel implements ModelInterface {
   private client: GoogleGenerativeAI;
-  private mode: OperationMode;
   private model: string;
   private llmParams?: Partial<GoogleLLMParams>;
 
   constructor(
     credentials: GoogleCredentials,
-    mode: OperationMode,
     model: string,
     llmParams?: Partial<GoogleLLMParams>
   ) {
     this.client = new GoogleGenerativeAI(credentials.apiKey);
-    this.mode = mode;
     this.model = model;
     this.llmParams = llmParams;
   }
 
   async getCompletion(
+    mode: OperationMode,
     params: CompletionArgs | ExtractionArgs
   ): Promise<CompletionResponse | ExtractionResponse> {
     const modeHandlers = {
@@ -45,9 +43,9 @@ export default class GoogleModel implements ModelInterface {
       [OperationMode.OCR]: () => this.handleOCR(params as CompletionArgs),
     };
 
-    const handler = modeHandlers[this.mode];
+    const handler = modeHandlers[mode];
     if (!handler) {
-      throw new Error(`Unsupported operation mode: ${this.mode}`);
+      throw new Error(`Unsupported operation mode: ${mode}`);
     }
 
     return await handler();
