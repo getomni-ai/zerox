@@ -58,7 +58,7 @@ export const zerox = async ({
   tempDir = os.tmpdir(),
   trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
-  let extracted: Record<string, unknown> = {};
+  let extracted: Record<string, unknown> | null = null;
   let inputTokenCount: number = 0;
   let outputTokenCount: number = 0;
   let priorPage: string = "";
@@ -304,10 +304,10 @@ export const zerox = async ({
             for (const key of Object.keys(schema?.properties ?? {})) {
               const value = response.extracted[key];
               if (value !== null && value !== undefined) {
-                if (!Array.isArray(extracted[key])) {
-                  extracted[key] = [];
+                if (!Array.isArray(result[key])) {
+                  result[key] = [];
                 }
-                (extracted[key] as any[]).push({ page: pageNumber, value });
+                (result[key] as any[]).push({ page: pageNumber, value });
               }
             }
           },
@@ -373,7 +373,7 @@ export const zerox = async ({
           }
         });
         return acc;
-      }, extracted);
+      }, {});
     }
 
     // Write the aggregated markdown to a file
