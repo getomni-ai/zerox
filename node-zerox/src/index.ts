@@ -449,14 +449,18 @@ export const zerox = async ({
       pages: formattedPages,
       summary: {
         totalPages: imagePaths.length,
-        ocr: {
-          successful: numSuccessfulOCRRequests,
-          failed: numFailedOCRRequests,
-        },
-        extraction: {
-          successful: numSuccessfulExtractionRequests,
-          failed: numFailedExtractionRequests,
-        },
+        ocr: !extractOnly
+          ? {
+              successful: numSuccessfulOCRRequests,
+              failed: numFailedOCRRequests,
+            }
+          : null,
+        extraction: schema
+          ? {
+              successful: numSuccessfulExtractionRequests,
+              failed: numFailedExtractionRequests,
+            }
+          : null,
       },
     };
   } finally {
