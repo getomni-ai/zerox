@@ -4,6 +4,7 @@ export interface ZeroxArgs {
   correctOrientation?: boolean;
   credentials?: ModelCredentials;
   errorMode?: ErrorMode;
+  extractOnly?: boolean;
   extractPerPage?: string[];
   filePath: string;
   imageDensity?: number;
@@ -12,7 +13,6 @@ export interface ZeroxArgs {
   maintainFormat?: boolean;
   maxRetries?: number;
   maxTesseractWorkers?: number;
-  mode?: OperationMode;
   model?: ModelOptions | string;
   modelProvider?: ModelProvider | string;
   onPostProcess?: (params: {

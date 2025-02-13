@@ -1,7 +1,7 @@
-import os from "os";
 import fs from "fs-extra";
+import os from "os";
 import path from "path";
-import pLimit, { Limit } from "p-limit";
+import pLimit from "p-limit";
 import Tesseract from "tesseract.js";
 
 import "./handleWarnings";
@@ -38,6 +38,7 @@ export const zerox = async ({
   correctOrientation = true,
   credentials = { apiKey: "" },
   errorMode = ErrorMode.IGNORE,
+  extractOnly = false,
   extractPerPage,
   filePath,
   imageDensity = 300,
@@ -46,7 +47,6 @@ export const zerox = async ({
   maintainFormat = false,
   maxRetries = 1,
   maxTesseractWorkers = -1,
-  mode = OperationMode.OCR,
   model = ModelOptions.OPENAI_GPT_4O,
   modelProvider = ModelProvider.OPENAI,
   onPostProcess,
@@ -77,10 +77,10 @@ export const zerox = async ({
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
   }
-  if (mode === OperationMode.EXTRACTION && !schema) {
+  if (extractOnly && !schema) {
     throw new Error("Schema is required for extraction mode");
   }
-  if (maintainFormat && mode === OperationMode.EXTRACTION) {
+  if (extractOnly && maintainFormat) {
     throw new Error("Maintain format is only supported in OCR mode");
   }
 
@@ -166,7 +166,7 @@ export const zerox = async ({
       provider: modelProvider,
     });
 
-    if (mode === OperationMode.OCR) {
+    if (!extractOnly) {
       const processOCR = async (
         imagePath: string,
         pageNumber: number,
@@ -318,10 +318,9 @@ export const zerox = async ({
       };
 
       if (perPageSchema) {
-        const inputs =
-          mode === OperationMode.OCR
-            ? pages.map((page) => page.content || "")
-            : imagePaths.map((imagePath) => [imagePath]);
+        const inputs = extractOnly
+          ? imagePaths.map((imagePath) => [imagePath])
+          : pages.map((page) => page.content || "");
 
         extractionTasks.push(
           ...inputs.map((input, i) =>
@@ -331,14 +330,13 @@ export const zerox = async ({
       }
 
       if (fullDocSchema) {
-        const input: string | string[] =
-          mode === OperationMode.OCR
-            ? pages
-                .map((page, i) =>
-                  i === 0 ? page.content : "\n<hr><hr>\n" + page.content
-                )
-                .join("")
-            : imagePaths;
+        const input: string | string[] = extractOnly
+          ? imagePaths
+          : pages
+              .map((page, i) =>
+                i === 0 ? page.content : "\n<hr><hr>\n" + page.content
+              )
+              .join("");
 
         extractionTasks.push(
           (async () => {
