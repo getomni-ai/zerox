@@ -278,7 +278,9 @@ export const zerox = async ({
         input: string | string[],
         pageNumber: number,
         schema: Record<string, unknown>
-      ): Promise<void> => {
+      ): Promise<Record<string, any>> => {
+        let result: Record<string, any> = {};
+
         await runRetries(
           async () => {
             const rawResponse = await modelInstance.getCompletion(
@@ -299,24 +301,20 @@ export const zerox = async ({
 
             numSuccessfulPages++;
 
-            Object.keys(schema?.properties || {}).forEach((key) => {
-              const extractedArray = extracted[key] || [];
-              if (
-                Array.isArray(extractedArray) &&
-                response.extracted[key] !== null &&
-                response.extracted[key] !== undefined
-              ) {
-                extractedArray.push({
-                  page: pageNumber,
-                  value: response.extracted[key],
-                });
+            for (const key of Object.keys(schema?.properties ?? {})) {
+              const value = response.extracted[key];
+              if (value !== null && value !== undefined) {
+                if (!Array.isArray(extracted[key])) {
+                  extracted[key] = [];
+                }
+                (extracted[key] as any[]).push({ page: pageNumber, value });
               }
-              extracted[key] = extractedArray;
-            });
+            }
           },
           maxRetries,
           pageNumber
         );
+        return result;
       };
 
       if (perPageSchema) {
@@ -366,7 +364,7 @@ export const zerox = async ({
 
       const results = await Promise.all(extractionTasks);
       extracted = results.reduce((acc, result) => {
-        Object.entries(result).forEach(([key, value]) => {
+        Object.entries(result || {}).forEach(([key, value]) => {
           if (!acc[key]) {
             acc[key] = [];
           }
@@ -377,7 +375,7 @@ export const zerox = async ({
           }
         });
         return acc;
-      }, {});
+      }, extracted);
     }
 
     // Write the aggregated markdown to a file
