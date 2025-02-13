@@ -155,9 +155,9 @@ export const zerox = async ({
       });
     }
 
-    // Start processing the images using LLM
-    let numSuccessfulPages: number = 0;
-    let numFailedPages: number = 0;
+    // Start processing OCR using LLM
+    let numSuccessfulOCRRequests: number = 0;
+    let numFailedOCRRequests: number = 0;
 
     const modelInstance = createModel({
       credentials,
@@ -213,7 +213,7 @@ export const zerox = async ({
             page: pageNumber,
             status: PageStatus.SUCCESS,
           };
-          numSuccessfulPages++;
+          numSuccessfulOCRRequests++;
         } catch (error) {
           console.error(`Failed to process image ${imagePath}:`, error);
           if (errorMode === ErrorMode.THROW) {
@@ -227,16 +227,19 @@ export const zerox = async ({
             page: pageNumber,
             status: PageStatus.ERROR,
           };
-          numFailedPages++;
+          numFailedOCRRequests++;
         }
 
         if (onPostProcess) {
           await onPostProcess({
             page,
             progressSummary: {
-              numFailedPages,
-              numPages: imagePaths.length,
-              numSuccessfulPages,
+              totalPages: imagePaths.length,
+              ocr: {
+                successful: numSuccessfulOCRRequests,
+                failed: numFailedOCRRequests,
+              },
+              extraction: null,
             },
           });
         }
@@ -267,6 +270,10 @@ export const zerox = async ({
       }
     }
 
+    // Start processing extraction using LLM
+    let numSuccessfulExtractionRequests: number = 0;
+    let numFailedExtractionRequests: number = 0;
+
     if (schema) {
       const { fullDocSchema, perPageSchema } = splitSchema(
         schema,
@@ -280,40 +287,45 @@ export const zerox = async ({
         schema: Record<string, unknown>
       ): Promise<Record<string, any>> => {
         let result: Record<string, any> = {};
-
-        await runRetries(
-          async () => {
-            const rawResponse = await modelInstance.getCompletion(
-              OperationMode.EXTRACTION,
-              {
-                input,
-                options: { correctOrientation, scheduler, trimEdges },
-                schema,
-              }
-            );
-            const response = CompletionProcessor.process(
-              OperationMode.EXTRACTION,
-              rawResponse
-            );
-
-            inputTokenCount += response.inputTokens;
-            outputTokenCount += response.outputTokens;
-
-            numSuccessfulPages++;
-
-            for (const key of Object.keys(schema?.properties ?? {})) {
-              const value = response.extracted[key];
-              if (value !== null && value !== undefined) {
-                if (!Array.isArray(result[key])) {
-                  result[key] = [];
+        try {
+          await runRetries(
+            async () => {
+              const rawResponse = await modelInstance.getCompletion(
+                OperationMode.EXTRACTION,
+                {
+                  input,
+                  options: { correctOrientation, scheduler, trimEdges },
+                  schema,
                 }
-                (result[key] as any[]).push({ page: pageNumber, value });
+              );
+              const response = CompletionProcessor.process(
+                OperationMode.EXTRACTION,
+                rawResponse
+              );
+
+              inputTokenCount += response.inputTokens;
+              outputTokenCount += response.outputTokens;
+
+              numSuccessfulExtractionRequests++;
+
+              for (const key of Object.keys(schema?.properties ?? {})) {
+                const value = response.extracted[key];
+                if (value !== null && value !== undefined) {
+                  if (!Array.isArray(result[key])) {
+                    result[key] = [];
+                  }
+                  (result[key] as any[]).push({ page: pageNumber, value });
+                }
               }
-            }
-          },
-          maxRetries,
-          pageNumber
-        );
+            },
+            maxRetries,
+            pageNumber
+          );
+        } catch (error) {
+          numFailedExtractionRequests++;
+          throw error;
+        }
+
         return result;
       };
 
@@ -340,22 +352,28 @@ export const zerox = async ({
 
         extractionTasks.push(
           (async () => {
-            const rawResponse = await modelInstance.getCompletion(
-              OperationMode.EXTRACTION,
-              {
-                input,
-                options: { correctOrientation, scheduler, trimEdges },
-                schema: fullDocSchema,
-              }
-            );
-            const response = CompletionProcessor.process(
-              OperationMode.EXTRACTION,
-              rawResponse
-            );
+            try {
+              const rawResponse = await modelInstance.getCompletion(
+                OperationMode.EXTRACTION,
+                {
+                  input,
+                  options: { correctOrientation, scheduler, trimEdges },
+                  schema: fullDocSchema,
+                }
+              );
+              const response = CompletionProcessor.process(
+                OperationMode.EXTRACTION,
+                rawResponse
+              );
 
-            inputTokenCount += response.inputTokens;
-            outputTokenCount += response.outputTokens;
-            return response.extracted;
+              inputTokenCount += response.inputTokens;
+              outputTokenCount += response.outputTokens;
+              numSuccessfulExtractionRequests++;
+              return response.extracted;
+            } catch (error) {
+              numFailedExtractionRequests++;
+              throw error;
+            }
           })()
         );
       }
@@ -430,9 +448,15 @@ export const zerox = async ({
       outputTokens: outputTokenCount,
       pages: formattedPages,
       summary: {
-        numPages: formattedPages.length,
-        numSuccessfulPages,
-        numFailedPages,
+        totalPages: imagePaths.length,
+        ocr: {
+          successful: numSuccessfulOCRRequests,
+          failed: numFailedOCRRequests,
+        },
+        extraction: {
+          successful: numSuccessfulExtractionRequests,
+          failed: numFailedExtractionRequests,
+        },
       },
     };
   } finally {

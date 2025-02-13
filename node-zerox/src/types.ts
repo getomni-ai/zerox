@@ -203,7 +203,13 @@ export interface ModelInterface {
 }
 
 export interface Summary {
-  numPages: number;
-  numSuccessfulPages: number;
-  numFailedPages: number;
+  totalPages: number;
+  ocr: {
+    successful: number;
+    failed: number;
+  } | null;
+  extraction: {
+    successful: number;
+    failed: number;
+  } | null;
 }
