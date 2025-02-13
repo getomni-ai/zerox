@@ -188,7 +188,7 @@ export const zerox = async ({
         try {
           const rawResponse = await runRetries(
             () =>
-              modelInstance.getCompletion(mode, {
+              modelInstance.getCompletion(OperationMode.OCR, {
                 image: correctedBuffer,
                 maintainFormat,
                 priorPage,
@@ -272,6 +272,7 @@ export const zerox = async ({
         schema,
         extractPerPage
       );
+      const extractionTasks: Promise<any>[] = [];
 
       const processExtraction = async (
         input: string | string[],
@@ -280,11 +281,14 @@ export const zerox = async ({
       ): Promise<void> => {
         await runRetries(
           async () => {
-            const rawResponse = await modelInstance.getCompletion(mode, {
-              input,
-              options: { correctOrientation, scheduler, trimEdges },
-              schema,
-            });
+            const rawResponse = await modelInstance.getCompletion(
+              OperationMode.EXTRACTION,
+              {
+                input,
+                options: { correctOrientation, scheduler, trimEdges },
+                schema,
+              }
+            );
             const response = CompletionProcessor.process(
               OperationMode.EXTRACTION,
               rawResponse
@@ -307,6 +311,7 @@ export const zerox = async ({
                   value: response.extracted[key],
                 });
               }
+              extracted[key] = extractedArray;
             });
           },
           maxRetries,
@@ -319,38 +324,60 @@ export const zerox = async ({
           mode === OperationMode.OCR
             ? pages.map((page) => page.content || "")
             : imagePaths.map((imagePath) => [imagePath]);
-        await Promise.all(
-          inputs.map((input, i) =>
+
+        extractionTasks.push(
+          ...inputs.map((input, i) =>
             processExtraction(input, i + 1, perPageSchema)
           )
         );
       }
 
       if (fullDocSchema) {
-        let input: string | string[];
-        if (mode === OperationMode.OCR) {
-          input = pages
-            .map((page, i) =>
-              i === 0 ? page.content : "\n<hr><hr>\n" + page.content
-            )
-            .join("");
-        } else {
-          input = imagePaths;
-        }
-        const rawResponse = await modelInstance.getCompletion(mode, {
-          input,
-          options: { correctOrientation, scheduler, trimEdges },
-          schema: fullDocSchema,
-        });
-        const response = CompletionProcessor.process(
-          OperationMode.EXTRACTION,
-          rawResponse
-        );
+        const input: string | string[] =
+          mode === OperationMode.OCR
+            ? pages
+                .map((page, i) =>
+                  i === 0 ? page.content : "\n<hr><hr>\n" + page.content
+                )
+                .join("")
+            : imagePaths;
 
-        inputTokenCount += response.inputTokens;
-        outputTokenCount += response.outputTokens;
-        extracted = { ...extracted, ...response.extracted };
+        extractionTasks.push(
+          (async () => {
+            const rawResponse = await modelInstance.getCompletion(
+              OperationMode.EXTRACTION,
+              {
+                input,
+                options: { correctOrientation, scheduler, trimEdges },
+                schema: fullDocSchema,
+              }
+            );
+            const response = CompletionProcessor.process(
+              OperationMode.EXTRACTION,
+              rawResponse
+            );
+
+            inputTokenCount += response.inputTokens;
+            outputTokenCount += response.outputTokens;
+            return response.extracted;
+          })()
+        );
       }
+
+      const results = await Promise.all(extractionTasks);
+      extracted = results.reduce((acc, result) => {
+        Object.entries(result).forEach(([key, value]) => {
+          if (!acc[key]) {
+            acc[key] = [];
+          }
+          if (Array.isArray(value)) {
+            acc[key].push(...value);
+          } else {
+            acc[key] = value;
+          }
+        });
+        return acc;
+      }, {});
     }
 
     // Write the aggregated markdown to a file
