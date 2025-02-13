@@ -4,6 +4,10 @@ export interface ZeroxArgs {
   correctOrientation?: boolean;
   credentials?: ModelCredentials;
   errorMode?: ErrorMode;
+  extractionCredentials?: ModelCredentials;
+  extractionLlmParams?: Partial<LLMParams>;
+  extractionModel?: ModelOptions | string;
+  extractionModelProvider?: ModelProvider | string;
   extractOnly?: boolean;
   extractPerPage?: string[];
   filePath: string;

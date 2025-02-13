@@ -38,6 +38,10 @@ export const zerox = async ({
   correctOrientation = true,
   credentials = { apiKey: "" },
   errorMode = ErrorMode.IGNORE,
+  extractionCredentials = { apiKey: "" },
+  extractionLlmParams = {},
+  extractionModel = ModelOptions.OPENAI_GPT_4O,
+  extractionModelProvider = ModelProvider.OPENAI,
   extractOnly = false,
   extractPerPage,
   filePath,
@@ -69,6 +73,11 @@ export const zerox = async ({
     modelProvider = ModelProvider.OPENAI;
     credentials = { apiKey: openaiAPIKey };
   }
+
+  extractionCredentials = extractionCredentials ?? credentials;
+  extractionLlmParams = extractionLlmParams ?? llmParams;
+  extractionModel = extractionModel ?? model;
+  extractionModelProvider = extractionModelProvider ?? modelProvider;
 
   // Validators
   if (Object.values(credentials).every((credential) => !credential)) {
@@ -164,6 +173,13 @@ export const zerox = async ({
       llmParams,
       model,
       provider: modelProvider,
+    });
+
+    const extractionModelInstance = createModel({
+      credentials: extractionCredentials,
+      llmParams: extractionLlmParams,
+      model: extractionModel,
+      provider: extractionModelProvider,
     });
 
     if (!extractOnly) {
@@ -290,7 +306,7 @@ export const zerox = async ({
         try {
           await runRetries(
             async () => {
-              const rawResponse = await modelInstance.getCompletion(
+              const rawResponse = await extractionModelInstance.getCompletion(
                 OperationMode.EXTRACTION,
                 {
                   input,
@@ -353,7 +369,7 @@ export const zerox = async ({
         extractionTasks.push(
           (async () => {
             try {
-              const rawResponse = await modelInstance.getCompletion(
+              const rawResponse = await extractionModelInstance.getCompletion(
                 OperationMode.EXTRACTION,
                 {
                   input,
