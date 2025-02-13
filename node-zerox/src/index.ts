@@ -38,10 +38,10 @@ export const zerox = async ({
   correctOrientation = true,
   credentials = { apiKey: "" },
   errorMode = ErrorMode.IGNORE,
-  extractionCredentials = { apiKey: "" },
-  extractionLlmParams = {},
-  extractionModel = ModelOptions.OPENAI_GPT_4O,
-  extractionModelProvider = ModelProvider.OPENAI,
+  extractionCredentials,
+  extractionLlmParams,
+  extractionModel,
+  extractionModelProvider,
   extractOnly = false,
   extractPerPage,
   filePath,
@@ -301,8 +301,8 @@ export const zerox = async ({
         input: string | string[],
         pageNumber: number,
         schema: Record<string, unknown>
-      ): Promise<Record<string, any>> => {
-        let result: Record<string, any> = {};
+      ): Promise<Record<string, unknown>> => {
+        let result: Record<string, unknown> = {};
         try {
           await runRetries(
             async () => {
@@ -368,24 +368,33 @@ export const zerox = async ({
 
         extractionTasks.push(
           (async () => {
+            let result: Record<string, unknown> = {};
             try {
-              const rawResponse = await extractionModelInstance.getCompletion(
-                OperationMode.EXTRACTION,
-                {
-                  input,
-                  options: { correctOrientation, scheduler, trimEdges },
-                  schema: fullDocSchema,
-                }
-              );
-              const response = CompletionProcessor.process(
-                OperationMode.EXTRACTION,
-                rawResponse
-              );
+              await runRetries(
+                async () => {
+                  const rawResponse =
+                    await extractionModelInstance.getCompletion(
+                      OperationMode.EXTRACTION,
+                      {
+                        input,
+                        options: { correctOrientation, scheduler, trimEdges },
+                        schema: fullDocSchema,
+                      }
+                    );
+                  const response = CompletionProcessor.process(
+                    OperationMode.EXTRACTION,
+                    rawResponse
+                  );
 
-              inputTokenCount += response.inputTokens;
-              outputTokenCount += response.outputTokens;
-              numSuccessfulExtractionRequests++;
-              return response.extracted;
+                  inputTokenCount += response.inputTokens;
+                  outputTokenCount += response.outputTokens;
+                  numSuccessfulExtractionRequests++;
+                  result = response.extracted;
+                },
+                maxRetries,
+                0
+              );
+              return result;
             } catch (error) {
               numFailedExtractionRequests++;
               throw error;
