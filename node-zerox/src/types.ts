@@ -212,7 +212,7 @@ export interface Summary {
     successful: number;
     failed: number;
   } | null;
-  extracted: {
+  extract: {
     successful: number;
     failed: number;
   } | null;

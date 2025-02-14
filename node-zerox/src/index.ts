@@ -255,7 +255,7 @@ export const zerox = async ({
                 successful: numSuccessfulOCRRequests,
                 failed: numFailedOCRRequests,
               },
-              extracted: null,
+              extract: null,
             },
           });
         }
@@ -480,7 +480,7 @@ export const zerox = async ({
               failed: numFailedOCRRequests,
             }
           : null,
-        extracted: schema
+        extract: schema
           ? {
               successful: numSuccessfulExtractionRequests,
               failed: numFailedExtractionRequests,
