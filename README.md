@@ -1,4 +1,4 @@
-![Hero Image](./examples/heroImage.png)
+![Hero Image](./assets/heroImage.png)
 
 ## Zerox OCR
 
