@@ -3,30 +3,35 @@ import { zerox } from "zerox";
 
 /**
  * Example using Azure OpenAI with Zerox to extract structured data from documents.
- * This shows extraction setup with schema definition for an invoice document.
+ * This shows extraction setup with schema definition for a property report document.
  */
 async function main() {
-  // Define the schema for invoice data extraction
+  // Define the schema for property report data extraction
   const schema = {
     type: "object",
     properties: {
-      invoiceNumber: { type: "string" },
-      date: { type: "string" },
-      totalAmount: { type: "number" },
-      lineItems: {
+      commercial_office: {
+        type: "object",
+        properties: {
+          average: { type: "string" },
+          median: { type: "string" },
+        },
+        required: ["average", "median"],
+      },
+      transactions_by_quarter: {
         type: "array",
         items: {
           type: "object",
           properties: {
-            description: { type: "string" },
-            quantity: { type: "number" },
-            price: { type: "number" },
+            quarter: { type: "string" },
+            transactions: { type: "integer" },
           },
-          required: ["description", "quantity", "price"],
+          required: ["quarter", "transactions"],
         },
       },
+      year: { type: "integer" },
     },
-    required: ["invoiceNumber", "date", "totalAmount", "lineItems"],
+    required: ["commercial_office", "transactions_by_quarter", "year"],
   };
 
   try {
@@ -36,8 +41,8 @@ async function main() {
         endpoint: process.env.AZURE_ENDPOINT || "",
       },
       extractOnly: true, // Skip OCR, only perform extraction (defaults to false)
-      extractPerPage: ["lineItems"], // Data to extract from each page separately
-      filePath: "https://example.com/invoice.pdf",
+      filePath:
+        "https://omni-demo-data.s3.amazonaws.com/test/property_report.png",
       model: ModelOptions.OPENAI_GPT_4O,
       modelProvider: ModelProvider.AZURE,
       schema,
