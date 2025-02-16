@@ -25,6 +25,30 @@ Zerox is available as both a Node and Python package.
 - [Node Readme](#node-zerox) - [npm package](https://www.npmjs.com/package/zerox)
 - [Python Readme](#python-zerox) - [pip package](https://pypi.org/project/py-zerox/)
 
+## Package Comparison
+
+| Feature                   | Node.js                             | Python                     |
+| ------------------------- | ----------------------------------- | -------------------------- |
+| PDF Processing            | ✓ (requires graphicsmagick)         | ✓ (requires poppler)       |
+| Image Processing          | ✓                                   | ✓                          |
+| OpenAI Support            | ✓                                   | ✓                          |
+| Azure OpenAI Support      | ✓                                   | ✓                          |
+| AWS Bedrock Support       | ✓                                   | ✓                          |
+| Google Gemini Support     | ✓                                   | ✓                          |
+| Vertex AI Support         | ✗                                   | ✓                          |
+| Data Extraction           | ✓ (`schema`)                        | ✗                          |
+| Per-page Extraction       | ✓ (`extractPerPage`)                | ✗                          |
+| Custom System Prompts     | ✗                                   | ✓ (`custom_system_prompt`) |
+| Maintain Format Option    | ✓ (`maintainFormat`)                | ✓ (`maintain_format`)      |
+| Progress Callbacks        | ✓ (`onPreProcess`, `onPostProcess`) | ✗                          |
+| Async API                 | ✓                                   | ✓                          |
+| Error Handling Modes      | ✓ (`errorMode`)                     | ✗                          |
+| Concurrent Processing     | ✓ (`concurrency`)                   | ✓ (`concurrency`)          |
+| Temp Directory Management | ✓ (`tempDir`)                       | ✓ (`temp_dir`)             |
+| Page Selection            | ✓ (`pagesToConvertAsImages`)        | ✓ (`select_pages`)         |
+| Orientation Correction    | ✓ (`correctOrientation`)            | ✗                          |
+| Edge Trimming             | ✓ (`trimEdges`)                     | ✗                          |
+
 ## Node Zerox
 
 (Node.js SDK - supports vision models from different providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock, Google Gemini, etc.)
@@ -238,7 +262,7 @@ kwargs = {}
 custom_system_prompt = None
 
 # to override
-# custom_system_prompt = "For the below pdf page, do something..something..." ## example
+# custom_system_prompt = "For the below PDF page, do something..something..." ## example
 
 ###################### Example for OpenAI ######################
 model = "gpt-4o-mini" ## openai model
@@ -408,7 +432,7 @@ ZeroxOutput(
 
 ## Supported File Types
 
-We use a combination of `libreoffice` and `graphicsmagick` to do document => image conversion. For non-image / non-pdf files, we use libreoffice to convert that file to a pdf, and then to an image.
+We use a combination of `libreoffice` and `graphicsmagick` to do document => image conversion. For non-image / non-PDF files, we use libreoffice to convert that file to a PDF, and then to an image.
 
 ```js
 [
