@@ -112,13 +112,13 @@ const result = await zerox({
   correctOrientation: true, // True by default, attempts to identify and correct page orientation
   errorMode: ErrorMode.IGNORE, // ErrorMode.THROW or ErrorMode.IGNORE, defaults to ErrorMode.IGNORE
   extractOnly: false, // Set to true to only extract structured data using a schema
-  extractPerPage: false, // Extract data per page instead of the entire document
+  extractPerPage, // Extract data per page instead of the entire document
   imageDensity: 300, // DPI for image conversion
   imageHeight: 2048, // Maximum height for converted images
   llmParams: {}, // Additional parameters to pass to the LLM
   maintainFormat: false, // Slower but helps maintain consistent formatting
   maxRetries: 1, // Number of retries to attempt on a failed page, defaults to 1
-  maxTesseractWorkers: -1, // Maximum number of tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed
+  maxTesseractWorkers: -1, // Maximum number of Tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed
   model: ModelOptions.OPENAI_GPT_4O, // Model to use (supports various models from different providers)
   modelProvider: ModelProvider.OPENAI, // Choose from OPENAI, BEDROCK, GOOGLE, or AZURE
   onPostProcess: async ({ page, progressSummary }) => Promise<void>, // Callback function to run after each page is processed
@@ -127,11 +127,11 @@ const result = await zerox({
   pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages
   schema: undefined, // Schema for structured data extraction
   tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory)
-  trimEdges: true, // True by default, trims pixels from all edges that contain values similar to the given background colour, which defaults to that of the top-left pixel
+  trimEdges: true, // True by default, trims pixels from all edges that contain values similar to the given background color, which defaults to that of the top-left pixel
 });
 ```
 
-The `maintainFormat` option trys to return the markdown in a consistent format by passing the output of a prior page in as additional context for the next page. This requires the requests to run synchronously, so it's a lot slower. But valuable if your documents have a lot of tabular data, or frequently have tables that cross pages.
+The `maintainFormat` option tries to return the markdown in a consistent format by passing the output of a prior page in as additional context for the next page. This requires the requests to run synchronously, so it's a lot slower. But valuable if your documents have a lot of tabular data, or frequently have tables that cross pages.
 
 ```
 Request #1 => page_1_image
@@ -184,8 +184,8 @@ Request #3 => page_2_markdown + page_3_image
   summary: {
     totalPages: 1,
     ocr: {
-      failedPages: 0,
-      successfulPages: 1,
+      failed: 0,
+      successful: 1,
     },
     extracted: null,
   },
@@ -407,11 +407,11 @@ Parameters
 - **output_dir** (Optional[str], optional):
   The directory to save the markdown output. Defaults to None.
 - **temp_dir** (str, optional):
-  The directory to store temporary files, defaults to some named folder in system's temp directory. If already exists, the contents will be deleted before zerox uses it.
+  The directory to store temporary files, defaults to some named folder in system's temp directory. If already exists, the contents will be deleted before Zerox uses it.
 - **custom_system_prompt** (str, optional):
-  The system prompt to use for the model, this overrides the default system prompt of zerox.Generally it is not required unless you want some specific behaviour. When set, it will raise a friendly warning. Defaults to None.
+  The system prompt to use for the model, this overrides the default system prompt of Zerox.Generally it is not required unless you want some specific behavior. Defaults to None.
 - **select_pages** (Optional[Union[int, Iterable[int]]], optional):
-  Pages to process, can be a single page number or an iterable of page numbers, Defaults to None
+  Pages to process, can be a single page number or an iterable of page numbers. Defaults to None
 - **kwargs** (dict, optional):
   Additional keyword arguments to pass to the litellm.completion method.
   Refer to the LiteLLM Documentation and Completion Input for details.
