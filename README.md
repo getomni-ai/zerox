@@ -10,12 +10,13 @@ A dead simple way of OCR-ing a document for AI ingestion. Documents are meant to
 
 The general logic:
 
-- Pass in a file (pdf, docx, image, etc.)
+- Pass in a file (PDF, DOCX, image, etc.)
 - Convert that file into a series of images
 - Pass each image to GPT and ask nicely for Markdown
 - Aggregate the responses and return Markdown
 
 Try out the hosted version here: <https://getomni.ai/ocr-demo>
+Or visit our full documentation at: <https://docs.getomni.ai/zerox>
 
 ## Getting Started
 
@@ -26,11 +27,15 @@ Zerox is available as both a Node and Python package.
 
 ## Node Zerox
 
+(Node.js SDK - supports vision models from different providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock, Google Gemini, etc.)
+
+### Installation
+
 ```sh
 npm install zerox
 ```
 
-Zerox uses `graphicsmagick` and `ghostscript` for the pdf => image processing step. These should be pulled automatically, but you may need to manually install.
+Zerox uses `graphicsmagick` and `ghostscript` for the PDF => image processing step. These should be pulled automatically, but you may need to manually install.
 
 On linux use:
 
@@ -48,21 +53,35 @@ import { zerox } from "zerox";
 
 const result = await zerox({
   filePath: "https://omni-demo-data.s3.amazonaws.com/test/cs101.pdf",
-  openaiAPIKey: process.env.OPENAI_API_KEY,
+  credentials: {
+    apiKey: process.env.OPENAI_API_KEY,
+  },
 });
 ```
 
 **From local path**
 
 ```ts
-import path from "path";
 import { zerox } from "zerox";
+import path from "path";
 
 const result = await zerox({
   filePath: path.resolve(__dirname, "./cs101.pdf"),
-  openaiAPIKey: process.env.OPENAI_API_KEY,
+  credentials: {
+    apiKey: process.env.OPENAI_API_KEY,
+  },
 });
 ```
+
+### Data Extraction
+
+Zerox supports structured data extraction from documents using a schema. This allows you to pull specific information from documents in a structured format instead of getting the full markdown conversion.
+
+Set `extractOnly: true` and provide a `schema` to extract structured data. The schema follows the [JSON Schema standard](https://json-schema.org/understanding-json-schema/).
+
+Use `extractPerPage` to extract data per page instead of from the whole document at once.
+
+You can also set `extractionModel`, `extractionModelProvider`, and `extractionCredentials` to use a different model for extraction than OCR. By default, the same model is used.
 
 ### Options
 
@@ -70,23 +89,33 @@ const result = await zerox({
 const result = await zerox({
   // Required
   filePath: "path/to/file",
-  openaiAPIKey: process.env.OPENAI_API_KEY,
+  credentials: {
+    apiKey: "your-api-key",
+    // Additional provider-specific credentials as needed
+  },
 
   // Optional
-  cleanup: true, // Clear images from tmp after run.
-  concurrency: 10, // Number of pages to run at a time.
-  correctOrientation: true, // True by default, attempts to identify and correct page orientation.
-  errorMode: ErrorMode.IGNORE, // ErrorMode.THROW or ErrorMode.IGNORE, defaults to ErrorMode.IGNORE.
-  maintainFormat: false, // Slower but helps maintain consistent formatting.
-  maxRetries: 1, // Number of retries to attempt on a failed page, defaults to 1.
-  maxTesseractWorkers: -1, // Maximum number of tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed.
-  model: "gpt-4o-mini", // Model to use (gpt-4o-mini or gpt-4o).
-  onPostProcess: async ({ page, progressSummary }) => Promise<void>, // Callback function to run after each page is processed.
-  onPreProcess: async ({ imagePath, pageNumber }) => Promise<void>, // Callback function to run before each page is processed.
-  outputDir: undefined, // Save combined result.md to a file.
-  pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages.
-  tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory).
-  trimEdges: true, // True by default, trims pixels from all edges that contain values similar to the given background colour, which defaults to that of the top-left pixel.
+  cleanup: true, // Clear images from tmp after run
+  concurrency: 10, // Number of pages to run at a time
+  correctOrientation: true, // True by default, attempts to identify and correct page orientation
+  errorMode: ErrorMode.IGNORE, // ErrorMode.THROW or ErrorMode.IGNORE, defaults to ErrorMode.IGNORE
+  extractOnly: false, // Set to true to only extract structured data using a schema
+  extractPerPage: false, // Extract data per page instead of the entire document
+  imageDensity: 300, // DPI for image conversion
+  imageHeight: 2048, // Maximum height for converted images
+  llmParams: {}, // Additional parameters to pass to the LLM
+  maintainFormat: false, // Slower but helps maintain consistent formatting
+  maxRetries: 1, // Number of retries to attempt on a failed page, defaults to 1
+  maxTesseractWorkers: -1, // Maximum number of tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed
+  model: ModelOptions.OPENAI_GPT_4O, // Model to use (supports various models from different providers)
+  modelProvider: ModelProvider.OPENAI, // Choose from OPENAI, BEDROCK, GOOGLE, or AZURE
+  onPostProcess: async ({ page, progressSummary }) => Promise<void>, // Callback function to run after each page is processed
+  onPreProcess: async ({ imagePath, pageNumber }) => Promise<void>, // Callback function to run before each page is processed
+  outputDir: undefined, // Save combined result.md to a file
+  pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages
+  schema: undefined, // Schema for structured data extraction
+  tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory)
+  trimEdges: true, // True by default, trims pixels from all edges that contain values similar to the given background colour, which defaults to that of the top-left pixel
 });
 ```
 
@@ -98,6 +127,30 @@ Request #2 => page_1_markdown + page_2_image
 Request #3 => page_2_markdown + page_3_image
 ```
 
+### Supported Models
+
+Zerox supports a wide range of models across different providers:
+
+- **Azure OpenAI**
+
+  - GPT-4 Vision (gpt-4o)
+  - GPT-4 Vision Mini (gpt-4o-mini)
+
+- **OpenAI**
+
+  - GPT-4 Vision (gpt-4o)
+  - GPT-4 Vision Mini (gpt-4o-mini)
+
+- **Bedrock Claude 3**
+
+  - Claude 3 Haiku (2024.03, 2024.10)
+  - Claude 3 Sonnet (2024.02, 2024.06, 2024.10)
+  - Claude 3 Opus (2024.02)
+
+- **Google Gemini**
+  - Gemini 1.5 (Flash, Flash-8B, Pro)
+  - Gemini 2.0 (Flash, Flash-Lite)
+
 ### Example Output
 
 ```js
@@ -108,6 +161,7 @@ Request #3 => page_2_markdown + page_3_image
   outputTokens: 210,
   pages: [
     {
+      page: 1,
       content: '# INVOICE # 36258\n' +
         '**Date:** Mar 06 2012  \n' +
         '**Ship Mode:** First Class  \n' +
@@ -135,22 +189,24 @@ Request #3 => page_2_markdown + page_3_image
         'Thanks for your business!  \n' +
         '**Terms:**  \n' +
         'Order ID : CA-2012-AB10015140-40974  ',
-      page: 1,
       contentLength: 747,
-      status: 'SUCCESS',
     }
   ],
+  extracted: null,
   summary: {
-    failedPages: 0,
-    successfulPages: 1,
     totalPages: 1,
+    ocr: {
+      failedPages: 0,
+      successfulPages: 1,
+    },
+    extracted: null,
   },
 }
 ```
 
 ## Python Zerox
 
-(Python SDK - supports vision models from different providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock etc)
+(Python SDK - supports vision models from different providers like OpenAI, Azure OpenAI, Anthropic, AWS Bedrock, etc.)
 
 ### Installation
 
