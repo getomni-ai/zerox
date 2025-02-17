@@ -1,3 +1,5 @@
+import Tesseract from "tesseract.js";
+
 export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
