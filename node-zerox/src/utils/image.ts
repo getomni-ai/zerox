@@ -8,7 +8,7 @@ interface CleanupImageProps {
   trimEdges: boolean;
 }
 
-export const encodeImageToBase64 = async (imageBuffer: Buffer) => {
+export const encodeImageToBase64 = (imageBuffer: Buffer) => {
   return imageBuffer.toString("base64");
 };
 

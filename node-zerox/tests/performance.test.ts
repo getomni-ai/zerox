@@ -59,7 +59,8 @@ describe("Zerox Performance Tests", () => {
       duration,
       avgTimePerPage: duration / numPages,
       successRate:
-        (result.summary.numSuccessfulPages / result.summary.numPages) * 100,
+        ((result.summary.ocr?.successful || 0) / result.summary.totalPages) *
+        100,
     };
   };
 

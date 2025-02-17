@@ -22,10 +22,12 @@ const isExtractionResponse = (
 };
 
 export class CompletionProcessor {
-  static process(
-    mode: OperationMode,
+  static process<T extends OperationMode>(
+    mode: T,
     response: CompletionResponse | ExtractionResponse
-  ): (CompletionResponse & { contentLength: number }) | ExtractionResponse {
+  ): T extends OperationMode.EXTRACTION
+    ? ExtractionResponse
+    : CompletionResponse & { contentLength: number } {
     if (isCompletionResponse(mode, response)) {
       const content = response.content;
       return {
@@ -33,7 +35,9 @@ export class CompletionProcessor {
         content:
           typeof content === "string" ? formatMarkdown(content) : content,
         contentLength: response.content?.length || 0,
-      };
+      } as T extends OperationMode.EXTRACTION
+        ? ExtractionResponse
+        : CompletionResponse & { contentLength: number };
     }
     if (isExtractionResponse(mode, response)) {
       const extracted = response.extracted;
@@ -41,9 +45,13 @@ export class CompletionProcessor {
         ...response,
         extracted:
           typeof extracted === "object" ? extracted : JSON.parse(extracted),
-      };
+      } as T extends OperationMode.EXTRACTION
+        ? ExtractionResponse
+        : CompletionResponse & { contentLength: number };
     }
-    return response;
+    return response as T extends OperationMode.EXTRACTION
+      ? ExtractionResponse
+      : CompletionResponse & { contentLength: number };
   }
 }
 

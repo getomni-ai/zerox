@@ -1,7 +1,7 @@
-import os from "os";
 import fs from "fs-extra";
+import os from "os";
 import path from "path";
-import pLimit, { Limit } from "p-limit";
+import pLimit from "p-limit";
 import Tesseract from "tesseract.js";
 
 import "./handleWarnings";
@@ -15,6 +15,8 @@ import {
   getTesseractScheduler,
   isCompletionResponse,
   prepareWorkersForImageProcessing,
+  runRetries,
+  splitSchema,
   terminateScheduler,
 } from "./utils";
 import { createModel } from "./models";
@@ -36,6 +38,12 @@ export const zerox = async ({
   correctOrientation = true,
   credentials = { apiKey: "" },
   errorMode = ErrorMode.IGNORE,
+  extractionCredentials,
+  extractionLlmParams,
+  extractionModel,
+  extractionModelProvider,
+  extractOnly = false,
+  extractPerPage,
   filePath,
   imageDensity = 300,
   imageHeight = 2048,
@@ -43,7 +51,6 @@ export const zerox = async ({
   maintainFormat = false,
   maxRetries = 1,
   maxTesseractWorkers = -1,
-  mode = OperationMode.OCR,
   model = ModelOptions.OPENAI_GPT_4O,
   modelProvider = ModelProvider.OPENAI,
   onPostProcess,
@@ -55,9 +62,10 @@ export const zerox = async ({
   tempDir = os.tmpdir(),
   trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
-  let inputTokenCount = 0;
-  let outputTokenCount = 0;
-  let priorPage = "";
+  let extracted: Record<string, unknown> | null = null;
+  let inputTokenCount: number = 0;
+  let outputTokenCount: number = 0;
+  let priorPage: string = "";
   const pages: Page[] = [];
   const startTime = new Date();
 
@@ -66,6 +74,11 @@ export const zerox = async ({
     credentials = { apiKey: openaiAPIKey };
   }
 
+  extractionCredentials = extractionCredentials ?? credentials;
+  extractionLlmParams = extractionLlmParams ?? llmParams;
+  extractionModel = extractionModel ?? model;
+  extractionModelProvider = extractionModelProvider ?? modelProvider;
+
   // Validators
   if (Object.values(credentials).every((credential) => !credential)) {
     throw new Error("Missing credentials");
@@ -73,11 +86,14 @@ export const zerox = async ({
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
   }
-  if (mode === OperationMode.EXTRACTION && !schema) {
+  if (extractOnly && !schema) {
     throw new Error("Schema is required for extraction mode");
   }
-  let scheduler: Tesseract.Scheduler | null = null;
+  if (extractOnly && maintainFormat) {
+    throw new Error("Maintain format is only supported in OCR mode");
+  }
 
+  let scheduler: Tesseract.Scheduler | null = null;
   // Add initial tesseract workers if we need to correct orientation
   if (correctOrientation) {
     scheduler = await getTesseractScheduler();
@@ -148,87 +164,29 @@ export const zerox = async ({
       });
     }
 
-    // Start processing the images using LLM
-    let numSuccessfulPages = 0;
-    let numFailedPages = 0;
+    // Start processing OCR using LLM
+    let numSuccessfulOCRRequests: number = 0;
+    let numFailedOCRRequests: number = 0;
 
     const modelInstance = createModel({
       credentials,
       llmParams,
-      mode,
       model,
       provider: modelProvider,
     });
 
-    if (maintainFormat) {
-      // Use synchronous processing
-      for (let i = 0; i < imagePaths.length; i++) {
-        const imagePath = imagePaths[i];
-        const imageBuffer = await fs.readFile(imagePath);
-        const correctedBuffer = await cleanupImage({
-          correctOrientation,
-          imageBuffer,
-          scheduler,
-          trimEdges,
-        });
+    const extractionModelInstance = createModel({
+      credentials: extractionCredentials,
+      llmParams: extractionLlmParams,
+      model: extractionModel,
+      provider: extractionModelProvider,
+    });
 
-        let retryCount = 0;
-
-        while (retryCount <= maxRetries) {
-          try {
-            const rawResponse = await modelInstance.getCompletion({
-              image: correctedBuffer,
-              maintainFormat,
-              priorPage,
-              schema,
-            });
-            const response = CompletionProcessor.process(mode, rawResponse);
-
-            inputTokenCount += response.inputTokens;
-            outputTokenCount += response.outputTokens;
-
-            // Update prior page to result from last processing step
-            if (isCompletionResponse(mode, response)) {
-              priorPage = response.content;
-            }
-
-            pages.push({
-              ...response,
-              page: i + 1,
-              status: PageStatus.SUCCESS,
-            });
-            numSuccessfulPages++;
-            break;
-          } catch (error) {
-            if (retryCount < maxRetries) {
-              console.log(`Retrying page ${i + 1}...`);
-              retryCount++;
-              continue;
-            }
-
-            console.error(`Failed to process image ${imagePath}:`, error);
-            if (errorMode === ErrorMode.THROW) {
-              throw error;
-            }
-
-            pages.push({
-              content: "",
-              contentLength: 0,
-              error: `Failed to process page ${i + 1}: ${error}`,
-              page: i + 1,
-              status: PageStatus.ERROR,
-            });
-            numFailedPages++;
-            break;
-          }
-        }
-      }
-    } else {
-      // Process in parallel with a limit on concurrent pages
-      const processPage = async (
+    if (!extractOnly) {
+      const processOCR = async (
         imagePath: string,
         pageNumber: number,
-        retryCount = 0
+        maintainFormat: boolean
       ): Promise<Page> => {
         const imageBuffer = await fs.readFile(imagePath);
         const correctedBuffer = await cleanupImage({
@@ -244,19 +202,25 @@ export const zerox = async ({
 
         let page: Page;
         try {
-          const rawResponse = await modelInstance.getCompletion({
-            image: correctedBuffer,
-            maintainFormat,
-            priorPage,
-            schema,
-          });
-          const response = CompletionProcessor.process(mode, rawResponse);
+          const rawResponse = await runRetries(
+            () =>
+              modelInstance.getCompletion(OperationMode.OCR, {
+                image: correctedBuffer,
+                maintainFormat,
+                priorPage,
+              }),
+            maxRetries,
+            pageNumber
+          );
+          const response = CompletionProcessor.process(
+            OperationMode.OCR,
+            rawResponse
+          );
 
           inputTokenCount += response.inputTokens;
           outputTokenCount += response.outputTokens;
 
-          // Update prior page to result from last processing step
-          if (isCompletionResponse(mode, response)) {
+          if (isCompletionResponse(OperationMode.OCR, response)) {
             priorPage = response.content;
           }
 
@@ -265,13 +229,8 @@ export const zerox = async ({
             page: pageNumber,
             status: PageStatus.SUCCESS,
           };
-          numSuccessfulPages++;
+          numSuccessfulOCRRequests++;
         } catch (error) {
-          if (retryCount <= maxRetries) {
-            console.log(`Retrying page ${pageNumber}...`);
-            return processPage(imagePath, pageNumber, retryCount + 1);
-          }
-
           console.error(`Failed to process image ${imagePath}:`, error);
           if (errorMode === ErrorMode.THROW) {
             throw error;
@@ -284,16 +243,19 @@ export const zerox = async ({
             page: pageNumber,
             status: PageStatus.ERROR,
           };
-          numFailedPages++;
+          numFailedOCRRequests++;
         }
 
         if (onPostProcess) {
           await onPostProcess({
             page,
             progressSummary: {
-              numPages: imagePaths.length,
-              numSuccessfulPages,
-              numFailedPages,
+              totalPages: imagePaths.length,
+              ocr: {
+                successful: numSuccessfulOCRRequests,
+                failed: numFailedOCRRequests,
+              },
+              extracted: null,
             },
           });
         }
@@ -301,24 +263,160 @@ export const zerox = async ({
         return page;
       };
 
-      // Function to process pages with concurrency limit
-      const processPagesInBatches = async (
-        imagePaths: string[],
-        limit: Limit
-      ) => {
-        const promises = imagePaths.map((imagePath, index) =>
-          limit(() =>
-            processPage(imagePath, index + 1).then((result) => {
-              // Update the pages array with the result
-              pages[index] = result;
-            })
+      if (maintainFormat) {
+        // Use synchronous processing
+        for (let i = 0; i < imagePaths.length; i++) {
+          const page = await processOCR(imagePaths[i], i + 1, true);
+          pages.push(page);
+          if (page.status === PageStatus.ERROR) {
+            break;
+          }
+        }
+      } else {
+        const limit = pLimit(concurrency);
+        await Promise.all(
+          imagePaths.map((imagePath, i) =>
+            limit(() =>
+              processOCR(imagePath, i + 1, false).then((page) => {
+                pages[i] = page;
+              })
+            )
           )
         );
-        await Promise.all(promises);
+      }
+    }
+
+    // Start processing extraction using LLM
+    let numSuccessfulExtractionRequests: number = 0;
+    let numFailedExtractionRequests: number = 0;
+
+    if (schema) {
+      const { fullDocSchema, perPageSchema } = splitSchema(
+        schema,
+        extractPerPage
+      );
+      const extractionTasks: Promise<any>[] = [];
+
+      const processExtraction = async (
+        input: string | string[],
+        pageNumber: number,
+        schema: Record<string, unknown>
+      ): Promise<Record<string, unknown>> => {
+        let result: Record<string, unknown> = {};
+        try {
+          await runRetries(
+            async () => {
+              const rawResponse = await extractionModelInstance.getCompletion(
+                OperationMode.EXTRACTION,
+                {
+                  input,
+                  options: { correctOrientation, scheduler, trimEdges },
+                  schema,
+                }
+              );
+              const response = CompletionProcessor.process(
+                OperationMode.EXTRACTION,
+                rawResponse
+              );
+
+              inputTokenCount += response.inputTokens;
+              outputTokenCount += response.outputTokens;
+
+              numSuccessfulExtractionRequests++;
+
+              for (const key of Object.keys(schema?.properties ?? {})) {
+                const value = response.extracted[key];
+                if (value !== null && value !== undefined) {
+                  if (!Array.isArray(result[key])) {
+                    result[key] = [];
+                  }
+                  (result[key] as any[]).push({ page: pageNumber, value });
+                }
+              }
+            },
+            maxRetries,
+            pageNumber
+          );
+        } catch (error) {
+          numFailedExtractionRequests++;
+          throw error;
+        }
+
+        return result;
       };
 
-      const limit = pLimit(concurrency);
-      await processPagesInBatches(imagePaths, limit);
+      if (perPageSchema) {
+        const inputs = extractOnly
+          ? imagePaths.map((imagePath) => [imagePath])
+          : pages.map((page) => page.content || "");
+
+        extractionTasks.push(
+          ...inputs.map((input, i) =>
+            processExtraction(input, i + 1, perPageSchema)
+          )
+        );
+      }
+
+      if (fullDocSchema) {
+        const input: string | string[] = extractOnly
+          ? imagePaths
+          : pages
+              .map((page, i) =>
+                i === 0 ? page.content : "\n<hr><hr>\n" + page.content
+              )
+              .join("");
+
+        extractionTasks.push(
+          (async () => {
+            let result: Record<string, unknown> = {};
+            try {
+              await runRetries(
+                async () => {
+                  const rawResponse =
+                    await extractionModelInstance.getCompletion(
+                      OperationMode.EXTRACTION,
+                      {
+                        input,
+                        options: { correctOrientation, scheduler, trimEdges },
+                        schema: fullDocSchema,
+                      }
+                    );
+                  const response = CompletionProcessor.process(
+                    OperationMode.EXTRACTION,
+                    rawResponse
+                  );
+
+                  inputTokenCount += response.inputTokens;
+                  outputTokenCount += response.outputTokens;
+                  numSuccessfulExtractionRequests++;
+                  result = response.extracted;
+                },
+                maxRetries,
+                0
+              );
+              return result;
+            } catch (error) {
+              numFailedExtractionRequests++;
+              throw error;
+            }
+          })()
+        );
+      }
+
+      const results = await Promise.all(extractionTasks);
+      extracted = results.reduce((acc, result) => {
+        Object.entries(result || {}).forEach(([key, value]) => {
+          if (!acc[key]) {
+            acc[key] = [];
+          }
+          if (Array.isArray(value)) {
+            acc[key].push(...value);
+          } else {
+            acc[key] = value;
+          }
+        });
+        return acc;
+      }, {});
     }
 
     // Write the aggregated markdown to a file
@@ -369,14 +467,25 @@ export const zerox = async ({
 
     return {
       completionTime,
+      extracted,
       fileName,
       inputTokens: inputTokenCount,
       outputTokens: outputTokenCount,
       pages: formattedPages,
       summary: {
-        numPages: formattedPages.length,
-        numSuccessfulPages,
-        numFailedPages,
+        totalPages: imagePaths.length,
+        ocr: !extractOnly
+          ? {
+              successful: numSuccessfulOCRRequests,
+              failed: numFailedOCRRequests,
+            }
+          : null,
+        extracted: schema
+          ? {
+              successful: numSuccessfulExtractionRequests,
+              failed: numFailedExtractionRequests,
+            }
+          : null,
       },
     };
   } finally {

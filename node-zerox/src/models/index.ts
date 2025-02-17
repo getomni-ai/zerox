@@ -48,7 +48,6 @@ const isOpenAICredentials = (
 export const createModel = ({
   credentials,
   llmParams,
-  mode,
   model,
   provider,
 }: CreateModelArgs): ModelInterface => {
@@ -59,22 +58,22 @@ export const createModel = ({
       if (!isAzureCredentials(credentials)) {
         throw new Error("Invalid credentials for Azure provider");
       }
-      return new AzureModel(credentials, mode, model, validatedParams);
+      return new AzureModel(credentials, model, validatedParams);
     case ModelProvider.BEDROCK:
       if (!isBedrockCredentials(credentials)) {
         throw new Error("Invalid credentials for Bedrock provider");
       }
-      return new BedrockModel(credentials, mode, model, validatedParams);
+      return new BedrockModel(credentials, model, validatedParams);
     case ModelProvider.GOOGLE:
       if (!isGoogleCredentials(credentials)) {
         throw new Error("Invalid credentials for Google provider");
       }
-      return new GoogleModel(credentials, mode, model, validatedParams);
+      return new GoogleModel(credentials, model, validatedParams);
     case ModelProvider.OPENAI:
       if (!isOpenAICredentials(credentials)) {
         throw new Error("Invalid credentials for OpenAI provider");
       }
-      return new OpenAIModel(credentials, mode, model, validatedParams);
+      return new OpenAIModel(credentials, model, validatedParams);
     default:
       throw new Error(`Unsupported model provider: ${provider}`);
   }
