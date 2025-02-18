@@ -29,31 +29,15 @@ export const isValidUrl = (string: string): boolean => {
 
 // Strip out the ```markdown wrapper
 export const formatMarkdown = (text: string): string => {
-  let formatted = text?.trim();
-  let loopCount = 0;
-  const maxLoops = 3;
-
-  const startsWithHtml = formatted.startsWith("```html");
-  const startsWithMarkdown = formatted.startsWith("```markdown");
-  while ((startsWithHtml || startsWithMarkdown) && loopCount < maxLoops) {
-    const endsWithClosing = formatted.endsWith("```");
-
-    if ((startsWithHtml || startsWithMarkdown) && endsWithClosing) {
-      const outerBlockRegex = /^```(html|markdown)\n([\s\S]*?)\n```$/;
-      const match = outerBlockRegex.exec(formatted);
-
-      if (match) {
-        formatted = match[1].trim();
-        loopCount++;
-      } else {
-        break;
-      }
-    } else {
-      break;
-    }
-  }
-
-  return formatted;
+  return (
+    text
+      // First preserve all language code blocks except html and markdown
+      .replace(/```(?!html|markdown)(\w+)([\s\S]*?)```/g, "§§§$1$2§§§")
+      // Then remove html and markdown code markers
+      .replace(/```(?:html|markdown)|````(?:html|markdown)|```/g, "")
+      // Finally restore all preserved language blocks
+      .replace(/§§§(\w+)([\s\S]*?)§§§/g, "```$1$2```")
+  );
 };
 
 export const runRetries = async <T>(
