@@ -25,27 +25,26 @@ Zerox is available as both a Node and Python package.
 - [Node README](#node-zerox) - [npm package](https://www.npmjs.com/package/zerox)
 - [Python README](#python-zerox) - [pip package](https://pypi.org/project/py-zerox/)
 
-| Feature                   | Node.js                             | Python                     |
-| ------------------------- | ----------------------------------- | -------------------------- |
-| PDF Processing            | ✓ (requires graphicsmagick)         | ✓ (requires poppler)       |
-| Image Processing          | ✓                                   | ✓                          |
-| OpenAI Support            | ✓                                   | ✓                          |
-| Azure OpenAI Support      | ✓                                   | ✓                          |
-| AWS Bedrock Support       | ✓                                   | ✓                          |
-| Google Gemini Support     | ✓                                   | ✓                          |
-| Vertex AI Support         | ✗                                   | ✓                          |
-| Data Extraction           | ✓ (`schema`)                        | ✗                          |
-| Per-page Extraction       | ✓ (`extractPerPage`)                | ✗                          |
-| Custom System Prompts     | ✗                                   | ✓ (`custom_system_prompt`) |
-| Maintain Format Option    | ✓ (`maintainFormat`)                | ✓ (`maintain_format`)      |
-| Progress Callbacks        | ✓ (`onPreProcess`, `onPostProcess`) | ✗                          |
-| Async API                 | ✓                                   | ✓                          |
-| Error Handling Modes      | ✓ (`errorMode`)                     | ✗                          |
-| Concurrent Processing     | ✓ (`concurrency`)                   | ✓ (`concurrency`)          |
-| Temp Directory Management | ✓ (`tempDir`)                       | ✓ (`temp_dir`)             |
-| Page Selection            | ✓ (`pagesToConvertAsImages`)        | ✓ (`select_pages`)         |
-| Orientation Correction    | ✓ (`correctOrientation`)            | ✗                          |
-| Edge Trimming             | ✓ (`trimEdges`)                     | ✗                          |
+| Feature                   | Node.js                      | Python                     |
+| ------------------------- | ---------------------------- | -------------------------- |
+| PDF Processing            | ✓ (requires graphicsmagick)  | ✓ (requires poppler)       |
+| Image Processing          | ✓                            | ✓                          |
+| OpenAI Support            | ✓                            | ✓                          |
+| Azure OpenAI Support      | ✓                            | ✓                          |
+| AWS Bedrock Support       | ✓                            | ✓                          |
+| Google Gemini Support     | ✓                            | ✓                          |
+| Vertex AI Support         | ✗                            | ✓                          |
+| Data Extraction           | ✓ (`schema`)                 | ✗                          |
+| Per-page Extraction       | ✓ (`extractPerPage`)         | ✗                          |
+| Custom System Prompts     | ✗                            | ✓ (`custom_system_prompt`) |
+| Maintain Format Option    | ✓ (`maintainFormat`)         | ✓ (`maintain_format`)      |
+| Async API                 | ✓                            | ✓                          |
+| Error Handling Modes      | ✓ (`errorMode`)              | ✗                          |
+| Concurrent Processing     | ✓ (`concurrency`)            | ✓ (`concurrency`)          |
+| Temp Directory Management | ✓ (`tempDir`)                | ✓ (`temp_dir`)             |
+| Page Selection            | ✓ (`pagesToConvertAsImages`) | ✓ (`select_pages`)         |
+| Orientation Correction    | ✓ (`correctOrientation`)     | ✗                          |
+| Edge Trimming             | ✓ (`trimEdges`)              | ✗                          |
 
 ## Node Zerox
 
@@ -121,8 +120,6 @@ const result = await zerox({
   maxTesseractWorkers: -1, // Maximum number of Tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed
   model: ModelOptions.OPENAI_GPT_4O, // Model to use (supports various models from different providers)
   modelProvider: ModelProvider.OPENAI, // Choose from OPENAI, BEDROCK, GOOGLE, or AZURE
-  onPostProcess: async ({ page, progressSummary }) => Promise<void>, // Callback function to run after each page is processed
-  onPreProcess: async ({ imagePath, pageNumber }) => Promise<void>, // Callback function to run before each page is processed
   outputDir: undefined, // Save combined result.md to a file
   pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages
   schema: undefined, // Schema for structured data extraction

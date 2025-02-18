@@ -21,7 +21,9 @@ import {
 } from "./utils";
 import { createModel } from "./models";
 import {
+  CompletionResponse,
   ErrorMode,
+  ExtractionResponse,
   ModelOptions,
   ModelProvider,
   OperationMode,
@@ -37,6 +39,7 @@ export const zerox = async ({
   concurrency = 10,
   correctOrientation = true,
   credentials = { apiKey: "" },
+  customModelFunction,
   errorMode = ErrorMode.IGNORE,
   extractionCredentials,
   extractionLlmParams,
@@ -53,8 +56,6 @@ export const zerox = async ({
   maxTesseractWorkers = -1,
   model = ModelOptions.OPENAI_GPT_4O,
   modelProvider = ModelProvider.OPENAI,
-  onPostProcess,
-  onPreProcess,
   openaiAPIKey = "",
   outputDir,
   pagesToConvertAsImages = -1,
@@ -196,22 +197,33 @@ export const zerox = async ({
           trimEdges,
         });
 
-        if (onPreProcess) {
-          await onPreProcess({ imagePath, pageNumber });
-        }
-
         let page: Page;
         try {
-          const rawResponse = await runRetries(
-            () =>
-              modelInstance.getCompletion(OperationMode.OCR, {
-                image: correctedBuffer,
-                maintainFormat,
-                priorPage,
-              }),
-            maxRetries,
-            pageNumber
-          );
+          let rawResponse: CompletionResponse | ExtractionResponse;
+          if (customModelFunction) {
+            rawResponse = await runRetries(
+              () =>
+                customModelFunction({
+                  buffer: correctedBuffer,
+                  image: imagePath,
+                  maintainFormat,
+                  priorPage,
+                }),
+              maxRetries,
+              pageNumber
+            );
+          } else {
+            rawResponse = await runRetries(
+              () =>
+                modelInstance.getCompletion(OperationMode.OCR, {
+                  image: correctedBuffer,
+                  maintainFormat,
+                  priorPage,
+                }),
+              maxRetries,
+              pageNumber
+            );
+          }
           const response = CompletionProcessor.process(
             OperationMode.OCR,
             rawResponse
@@ -244,20 +256,6 @@ export const zerox = async ({
             status: PageStatus.ERROR,
           };
           numFailedOCRRequests++;
-        }
-
-        if (onPostProcess) {
-          await onPostProcess({
-            page,
-            progressSummary: {
-              totalPages: imagePaths.length,
-              ocr: {
-                successful: numSuccessfulOCRRequests,
-                failed: numFailedOCRRequests,
-              },
-              extracted: null,
-            },
-          });
         }
 
         return page;
