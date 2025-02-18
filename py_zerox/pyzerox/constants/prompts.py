@@ -3,7 +3,7 @@ class Prompts:
 
     DEFAULT_SYSTEM_PROMPT = """
     Convert the following document to markdown.
-    Return only the markdown with no explanation text. Do not include delimiters like '''markdown or '''html.
+    Return only the markdown with no explanation text. Do not include delimiters like ```markdown or ```html.
 
     RULES:
       - You must include all information on the page. Do not exclude headers, footers, or subtext.
