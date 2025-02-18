@@ -5,6 +5,12 @@ export interface ZeroxArgs {
   concurrency?: number;
   correctOrientation?: boolean;
   credentials?: ModelCredentials;
+  customModelFunction?: (params: {
+    buffer: Buffer;
+    image: string;
+    maintainFormat: boolean;
+    priorPage: string;
+  }) => Promise<CompletionResponse>;
   errorMode?: ErrorMode;
   extractionCredentials?: ModelCredentials;
   extractionLlmParams?: Partial<LLMParams>;
@@ -21,14 +27,6 @@ export interface ZeroxArgs {
   maxTesseractWorkers?: number;
   model?: ModelOptions | string;
   modelProvider?: ModelProvider | string;
-  onPostProcess?: (params: {
-    page: Page;
-    progressSummary: Summary;
-  }) => Promise<void>;
-  onPreProcess?: (params: {
-    imagePath: string;
-    pageNumber: number;
-  }) => Promise<void>;
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
