@@ -2,7 +2,6 @@ import logging
 import os
 import asyncio
 from typing import List, Optional, Tuple
-from pdf2image import convert_from_path
 
 # Package Imports
 from .image import save_image
@@ -11,26 +10,70 @@ from ..constants import PDFConversionDefaultOptions, Messages
 from ..models import litellmmodel
 
 
-async def convert_pdf_to_images(image_density: int, image_height: tuple[Optional[int], int], local_path: str, temp_dir: str) -> List[str]:
+async def convert_pdf_to_images(local_path: str, temp_dir: str) -> List[str]:
     """Converts a PDF file to a series of images in the temp_dir. Returns a list of image paths in page order."""
-    options = {
-        "pdf_path": local_path,
-        "output_folder": temp_dir,
-        "dpi": image_density,
-        "fmt": PDFConversionDefaultOptions.FORMAT,
-        "size": image_height,
-        "thread_count": PDFConversionDefaultOptions.THREAD_COUNT,
-        "use_pdftocairo": PDFConversionDefaultOptions.USE_PDFTOCAIRO,
-        "paths_only": True,
-    }
-
     try:
+        logging.info("Attempting to use pdf2image library...")
+
+        # import and try to use pdf2image library
+        from pdf2image import convert_from_path
+
+        options = {
+            "pdf_path": local_path,
+            "output_folder": temp_dir,
+            "dpi": PDFConversionDefaultOptions.DPI,
+            "fmt": PDFConversionDefaultOptions.FORMAT,
+            "size": PDFConversionDefaultOptions.SIZE,
+            "thread_count": PDFConversionDefaultOptions.THREAD_COUNT,
+            "use_pdftocairo": PDFConversionDefaultOptions.USE_PDFTOCAIRO,
+            "paths_only": True,
+        }
         image_paths = await asyncio.to_thread(
             convert_from_path, **options
         )
         return image_paths
+    
     except Exception as err:
-        logging.error(f"Error converting PDF to images: {err}")
+        logging.warning(f"Poppler conversion failed, falling back to PyMuPDF: {err}")
+        
+        # import PyMuPDF library and the Image library
+        import fitz
+        import io
+        from PIL import Image
+
+        try:
+            # Fallback to PyMuPDF
+            image_paths = []
+            doc = fitz.open(local_path)
+            
+            for page_num in range(len(doc)):
+                page = doc[page_num]
+                # Convert to image with specified DPI
+                pix = page.get_pixmap(dpi=PDFConversionDefaultOptions.DPI)
+                
+                # Convert to PIL Image for potential resizing
+                img_data = pix.tobytes("png")
+                img = Image.open(io.BytesIO(img_data))
+                
+                # Resize if needed based on image_height parameter
+                if PDFConversionDefaultOptions.SIZE[1]:
+                    aspect_ratio = img.width / img.height
+                    new_height = min(PDFConversionDefaultOptions.SIZE[1], img.height)
+                    if PDFConversionDefaultOptions.SIZE[0]:
+                        new_height = max(PDFConversionDefaultOptions.SIZE[0], new_height)
+                    new_width = int(new_height * aspect_ratio)
+                    img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+                
+                # Save the image
+                output_path = f"{temp_dir}/page_{page_num + 1}.png"
+                img.save(output_path)
+                image_paths.append(output_path)
+            
+            return image_paths
+
+        except Exception as err:
+            logging.error(f"Both Poppler and PyMuPDF conversion failed: {err}")
+            raise
 
 
 async def process_page(
