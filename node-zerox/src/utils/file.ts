@@ -90,7 +90,7 @@ export const convertHeicToJpeg = async ({
     await fs.writeFile(jpegPath, Buffer.from(outputBuffer));
     return jpegPath;
   } catch (err) {
-    console.error(`Error converting HEIC to JPEG:`, err);
+    console.error(`Error converting .heic to .jpeg:`, err);
     throw err;
   }
 };
