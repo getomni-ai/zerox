@@ -8,6 +8,7 @@ import { promisify } from "util";
 import { v4 as uuidv4 } from "uuid";
 import { convert } from "libreoffice-convert";
 import { WriteImageResponse } from "pdf2pic/dist/types/convertResponse";
+import heicConvert from "heic-convert";
 
 import { isValidUrl } from "./common";
 
@@ -64,6 +65,34 @@ export const downloadFile = async ({
   }
 
   return { extension, localPath };
+};
+
+// Convert HEIC file to JPEG
+export const convertHeicToJpeg = async ({
+  localPath,
+  tempDir,
+}: {
+  localPath: string;
+  tempDir: string;
+}): Promise<string> => {
+  try {
+    const inputBuffer = await fs.readFile(localPath);
+    const outputBuffer = await heicConvert({
+      buffer: inputBuffer,
+      format: "JPEG",
+      quality: 1,
+    });
+
+    const jpegPath = path.join(
+      tempDir,
+      `${path.basename(localPath, ".heic")}.jpg`
+    );
+    await fs.writeFile(jpegPath, Buffer.from(outputBuffer));
+    return jpegPath;
+  } catch (err) {
+    console.error(`Error converting HEIC to JPEG:`, err);
+    throw err;
+  }
 };
 
 // Convert each page (from other formats like docx) to a png and save that image to tmp

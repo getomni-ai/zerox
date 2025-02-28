@@ -10,6 +10,7 @@ import {
   cleanupImage,
   CompletionProcessor,
   convertFileToPdf,
+  convertHeicToJpeg,
   convertPdfToImages,
   downloadFile,
   getTesseractScheduler,
@@ -134,8 +135,14 @@ export const zerox = async ({
 
     // Read the image file or convert the file to images
     let imagePaths: string[] = [];
-    if (extension === ".png") {
+    if (extension === ".png" || extension === ".jpg" || extension === ".jpeg") {
       imagePaths = [localPath];
+    } else if (extension === ".heic") {
+      const imagePath = await convertHeicToJpeg({
+        localPath,
+        tempDir: sourceDirectory,
+      });
+      imagePaths = [imagePath];
     } else {
       let pdfPath: string;
       if (extension === ".pdf") {

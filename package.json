@@ -19,6 +19,7 @@
     "axios": "^1.7.2",
     "child_process": "^1.0.2",
     "fs-extra": "^11.2.0",
+    "heic-convert": "^2.1.0",
     "libreoffice-convert": "^1.6.0",
     "mime-types": "^2.1.35",
     "openai": "^4.82.0",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
+    "@types/heic-convert": "^2.1.0",
     "@types/jest": "^29.5.14",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^20.14.11",
