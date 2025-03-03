@@ -9,6 +9,7 @@ import {
   addWorkersToTesseractScheduler,
   cleanupImage,
   CompletionProcessor,
+  compressImage,
   convertFileToPdf,
   convertHeicToJpeg,
   convertPdfToImages,
@@ -53,6 +54,7 @@ export const zerox = async ({
   imageHeight = 2048,
   llmParams = {},
   maintainFormat = false,
+  maxImageSize = 15,
   maxRetries = 1,
   maxTesseractWorkers = -1,
   model = ModelOptions.OPENAI_GPT_4O,
@@ -162,6 +164,24 @@ export const zerox = async ({
         pagesToConvertAsImages,
         tempDir: sourceDirectory,
       });
+    }
+
+    // Compress images if maxImageSize is specified
+    if (maxImageSize && maxImageSize > 0) {
+      const compressPromises = imagePaths.map(async (imagePath, index) => {
+        const imageBuffer = await fs.readFile(imagePath);
+        const compressedBuffer = await compressImage(imageBuffer, maxImageSize);
+        const originalName = path.basename(imagePath, path.extname(imagePath));
+        const compressedPath = path.join(
+          sourceDirectory,
+          `${originalName}_compressed.png`
+        );
+        await fs.writeFile(compressedPath, compressedBuffer);
+        return compressedPath;
+      });
+
+      // Process compressions in parallel for better performance
+      imagePaths = await Promise.all(compressPromises);
     }
 
     if (correctOrientation) {

@@ -65,3 +65,49 @@ const determineOptimalRotation = async ({
   }
   return 0;
 };
+
+/**
+ * Compress an image to a maximum size
+ * @param image - The image to compress as a buffer
+ * @param maxSize - The maximum size in MB
+ * @returns The compressed image as a buffer
+ */
+export const compressImage = async (
+  image: Buffer,
+  maxSize: number
+): Promise<Buffer> => {
+  if (maxSize <= 0) {
+    throw new Error("maxSize must be greater than 0");
+  }
+
+  // Convert maxSize from MB to bytes
+  const maxBytes = maxSize * 1024 * 1024;
+
+  // If image is already smaller than maxSize, return original
+  if (image.length <= maxBytes) {
+    return image;
+  }
+
+  try {
+    // Start with quality 90 and gradually decrease if needed
+    let quality = 90;
+    let compressedImage: Buffer;
+
+    do {
+      compressedImage = await sharp(image).jpeg({ quality }).toBuffer();
+
+      quality -= 10;
+
+      if (quality < 20) {
+        throw new Error(
+          `Unable to compress image to ${maxSize}MB while maintaining acceptable quality.`
+        );
+      }
+    } while (compressedImage.length > maxBytes);
+
+    return compressedImage;
+  } catch (error) {
+    // if image compression fails, return original image
+    return image;
+  }
+};
