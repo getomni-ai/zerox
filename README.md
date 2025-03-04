@@ -116,6 +116,7 @@ const result = await zerox({
   imageHeight: 2048, // Maximum height for converted images
   llmParams: {}, // Additional parameters to pass to the LLM
   maintainFormat: false, // Slower but helps maintain consistent formatting
+  maxImageSize: 15, // Maximum size of images to compress, defaults to 15MB
   maxRetries: 1, // Number of retries to attempt on a failed page, defaults to 1
   maxTesseractWorkers: -1, // Maximum number of Tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed
   model: ModelOptions.OPENAI_GPT_4O, // Model to use (supports various models from different providers)

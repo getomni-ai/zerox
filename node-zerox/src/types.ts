@@ -23,6 +23,7 @@ export interface ZeroxArgs {
   imageHeight?: number;
   llmParams?: Partial<LLMParams>;
   maintainFormat?: boolean;
+  maxImageSize?: number;
   maxRetries?: number;
   maxTesseractWorkers?: number;
   model?: ModelOptions | string;
