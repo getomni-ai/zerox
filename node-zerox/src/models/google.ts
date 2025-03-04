@@ -82,6 +82,7 @@ export default class GoogleModel implements ModelInterface {
     image,
     maintainFormat,
     priorPage,
+    prompt,
   }: CompletionArgs): Promise<CompletionResponse> {
     const generativeModel = this.client.getGenerativeModel({
       generationConfig: convertKeysToSnakeCase(this.llmParams ?? null),
@@ -89,10 +90,10 @@ export default class GoogleModel implements ModelInterface {
     });
 
     // Build the prompt parts
-    const promptParts = [];
+    const promptParts: any = [];
 
     // Add system prompt
-    promptParts.push({ text: SYSTEM_PROMPT_BASE });
+    promptParts.push({ text: prompt || SYSTEM_PROMPT_BASE });
 
     // If content has already been generated, add it to context
     if (maintainFormat && priorPage && priorPage.length) {
@@ -130,6 +131,7 @@ export default class GoogleModel implements ModelInterface {
   private async handleExtraction({
     input,
     options,
+    prompt,
     schema,
   }: ExtractionArgs): Promise<ExtractionResponse> {
     const generativeModel = this.client.getGenerativeModel({
@@ -154,6 +156,7 @@ export default class GoogleModel implements ModelInterface {
     try {
       const result = await generativeModel.generateContent({
         contents: [{ role: "user", parts: promptParts }],
+        systemInstruction: prompt,
       });
 
       const response = await result.response;

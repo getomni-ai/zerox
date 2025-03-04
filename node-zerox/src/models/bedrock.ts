@@ -97,8 +97,9 @@ export default class BedrockModel implements ModelInterface {
     image,
     maintainFormat,
     priorPage,
+    prompt,
   }: CompletionArgs): Promise<CompletionResponse> {
-    let systemPrompt = SYSTEM_PROMPT_BASE;
+    let systemPrompt = prompt || SYSTEM_PROMPT_BASE;
 
     // Default system message
     const messages: any = [];
@@ -160,6 +161,7 @@ export default class BedrockModel implements ModelInterface {
   private async handleExtraction({
     input,
     options,
+    prompt,
     schema,
   }: ExtractionArgs): Promise<ExtractionResponse> {
     try {
@@ -182,6 +184,7 @@ export default class BedrockModel implements ModelInterface {
         anthropic_version: "bedrock-2023-05-31",
         max_tokens: this.llmParams?.maxTokens || 4096,
         messages,
+        system: prompt,
         tool_choice: { name: "json", type: "tool" },
         tools,
         ...convertKeysToSnakeCase(this.llmParams ?? {}),

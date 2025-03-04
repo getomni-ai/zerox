@@ -109,6 +109,7 @@ const result = await zerox({
   cleanup: true, // Clear images from tmp after run
   concurrency: 10, // Number of pages to run at a time
   correctOrientation: true, // True by default, attempts to identify and correct page orientation
+  directImageExtraction: false, // Extract data directly from document images instead of the markdown
   errorMode: ErrorMode.IGNORE, // ErrorMode.THROW or ErrorMode.IGNORE, defaults to ErrorMode.IGNORE
   extractOnly: false, // Set to true to only extract structured data using a schema
   extractPerPage, // Extract data per page instead of the entire document
