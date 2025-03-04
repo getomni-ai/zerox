@@ -83,7 +83,6 @@ export const compressImage = async (
   // Convert maxSize from MB to bytes
   const maxBytes = maxSize * 1024 * 1024;
 
-  // If image is already smaller than maxSize, return original
   if (image.length <= maxBytes) {
     return image;
   }
@@ -107,7 +106,6 @@ export const compressImage = async (
 
     return compressedImage;
   } catch (error) {
-    // if image compression fails, return original image
     return image;
   }
 };
