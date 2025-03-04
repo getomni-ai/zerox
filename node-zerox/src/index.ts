@@ -180,7 +180,6 @@ export const zerox = async ({
         return compressedPath;
       });
 
-      // Process compressions in parallel for better performance
       imagePaths = await Promise.all(compressPromises);
     }
 
