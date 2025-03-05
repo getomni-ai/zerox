@@ -174,7 +174,6 @@ export default class BedrockModel implements ModelInterface {
 
       const tools = [
         {
-          description: "Extract schema data",
           input_schema: schema,
           name: "json",
         },
