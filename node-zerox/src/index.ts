@@ -17,6 +17,7 @@ import {
   extractPagesFromStructuredDataFile,
   getTesseractScheduler,
   isCompletionResponse,
+  isImageEmpty,
   isStructuredDataFile,
   prepareWorkersForImageProcessing,
   runRetries,
@@ -25,9 +26,7 @@ import {
 } from "./utils";
 import { createModel } from "./models";
 import {
-  CompletionResponse,
   ErrorMode,
-  ExtractionResponse,
   ModelOptions,
   ModelProvider,
   OperationMode,
@@ -107,19 +106,15 @@ export const zerox = async ({
 
   if (extractOnly) directImageExtraction = true;
 
-  let scheduler: Tesseract.Scheduler | null = null;
-  // Add initial tesseract workers if we need to correct orientation
-  if (correctOrientation) {
-    scheduler = await getTesseractScheduler();
-    const workerCount =
-      maxTesseractWorkers !== -1 && maxTesseractWorkers < NUM_STARTING_WORKERS
-        ? maxTesseractWorkers
-        : NUM_STARTING_WORKERS;
-    await addWorkersToTesseractScheduler({
-      numWorkers: workerCount,
-      scheduler,
-    });
-  }
+  let scheduler: Tesseract.Scheduler = await getTesseractScheduler();
+  const workerCount =
+    maxTesseractWorkers !== -1 && maxTesseractWorkers < NUM_STARTING_WORKERS
+      ? maxTesseractWorkers
+      : NUM_STARTING_WORKERS;
+  await addWorkersToTesseractScheduler({
+    numWorkers: workerCount,
+    scheduler,
+  });
 
   try {
     // Ensure temp directory exists + create temp folder
@@ -207,13 +202,11 @@ export const zerox = async ({
         imagePaths = await Promise.all(compressPromises);
       }
 
-      if (correctOrientation) {
-        await prepareWorkersForImageProcessing({
-          maxTesseractWorkers,
-          numImages: imagePaths.length,
-          scheduler,
-        });
-      }
+      await prepareWorkersForImageProcessing({
+        maxTesseractWorkers,
+        numImages: imagePaths.length,
+        scheduler,
+      });
 
       // Start processing OCR using LLM
       const modelInstance = createModel({
@@ -239,49 +232,56 @@ export const zerox = async ({
 
           let page: Page;
           try {
-            let rawResponse: CompletionResponse | ExtractionResponse;
-            if (customModelFunction) {
-              rawResponse = await runRetries(
+            const [isEmpty, rawResponse] = await Promise.all([
+              isImageEmpty({ imageBuffer: correctedBuffer, scheduler }),
+              runRetries(
                 () =>
-                  customModelFunction({
-                    buffer: correctedBuffer,
-                    image: imagePath,
-                    maintainFormat,
-                    priorPage,
-                  }),
+                  customModelFunction
+                    ? customModelFunction({
+                        buffer: correctedBuffer,
+                        image: imagePath,
+                        maintainFormat,
+                        priorPage,
+                      })
+                    : modelInstance.getCompletion(OperationMode.OCR, {
+                        image: correctedBuffer,
+                        maintainFormat,
+                        priorPage,
+                        prompt,
+                      }),
                 maxRetries,
                 pageNumber
-              );
+              ),
+            ]);
+
+            if (isEmpty) {
+              page = {
+                content: "",
+                contentLength: 0,
+                inputTokens: 0,
+                outputTokens: 0,
+                page: pageNumber,
+                status: PageStatus.SUCCESS,
+              };
             } else {
-              rawResponse = await runRetries(
-                () =>
-                  modelInstance.getCompletion(OperationMode.OCR, {
-                    image: correctedBuffer,
-                    maintainFormat,
-                    priorPage,
-                    prompt,
-                  }),
-                maxRetries,
-                pageNumber
+              const response = CompletionProcessor.process(
+                OperationMode.OCR,
+                rawResponse
               );
+
+              inputTokenCount += response.inputTokens;
+              outputTokenCount += response.outputTokens;
+
+              if (isCompletionResponse(OperationMode.OCR, response)) {
+                priorPage = response.content;
+              }
+
+              page = {
+                ...response,
+                page: pageNumber,
+                status: PageStatus.SUCCESS,
+              };
             }
-            const response = CompletionProcessor.process(
-              OperationMode.OCR,
-              rawResponse
-            );
-
-            inputTokenCount += response.inputTokens;
-            outputTokenCount += response.outputTokens;
-
-            if (isCompletionResponse(OperationMode.OCR, response)) {
-              priorPage = response.content;
-            }
-
-            page = {
-              ...response,
-              page: pageNumber,
-              status: PageStatus.SUCCESS,
-            };
             numSuccessfulOCRRequests++;
           } catch (error) {
             console.error(`Failed to process image ${imagePath}:`, error);
