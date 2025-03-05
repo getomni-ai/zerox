@@ -192,19 +192,35 @@ export const convertExcelToHtml = async (
     for (const sheetName of workbook.SheetNames) {
       const worksheet = workbook.Sheets[sheetName];
 
-      let sheetContent = "";
-      sheetContent += `<h2>Sheet: ${sheetName}</h2>\n`;
-
-      const sheetHtml = xlsx.utils.sheet_to_html(worksheet, {
-        id: `sheet-${sheetName.replace(/[^a-zA-Z0-9]/g, "-")}`,
-        editable: false,
+      const jsonData = xlsx.utils.sheet_to_json<any[]>(worksheet, {
+        header: 1,
       });
 
-      let processedHtml = sheetHtml.replace(
-        "<table",
-        `<table class="${tableClass}"`
-      );
-      sheetContent += processedHtml;
+      let sheetContent = "";
+      sheetContent += `<h2>Sheet: ${sheetName}</h2>`;
+
+      sheetContent += `<table class="${tableClass}">`;
+
+      if (jsonData.length > 0) {
+        jsonData.forEach((row: any[], rowIndex: number) => {
+          sheetContent += "<tr>";
+
+          const cellTag = rowIndex === 0 ? "th" : "td";
+
+          if (row && row.length > 0) {
+            row.forEach((cell) => {
+              const cellContent =
+                cell !== null && cell !== undefined ? cell.toString() : "";
+
+              sheetContent += `<${cellTag}>${cellContent}</${cellTag}>`;
+            });
+          }
+
+          sheetContent += "</tr>";
+        });
+      }
+
+      sheetContent += "</table>";
 
       sheets.push({
         sheetName,
