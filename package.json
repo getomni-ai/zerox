@@ -30,7 +30,8 @@
     "sharp": "^0.33.5",
     "tesseract.js": "^5.1.1",
     "util": "^0.12.5",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
