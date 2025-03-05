@@ -218,3 +218,9 @@ export interface Summary {
     failed: number;
   } | null;
 }
+
+export interface ExcelSheetContent {
+  sheetName: string;
+  content: string;
+  contentLength: number;
+}
