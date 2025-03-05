@@ -25,7 +25,7 @@ export const cleanupImage = async ({
     image.trim();
   }
 
-  // scheduler would always be non-null if correctOrientation is true
+  // Scheduler would always be non-null if correctOrientation is true
   // Adding this check to satisfy typescript
   if (correctOrientation && scheduler) {
     const optimalRotation = await determineOptimalRotation({
@@ -43,8 +43,13 @@ export const cleanupImage = async ({
   return correctedBuffer;
 };
 
-// Determine the optimal image orientation based on OCR confidence
-// Run Tesseract on 4 image orientations and compare the outputs
+/**
+ * Determine the optimal image orientation based on OCR confidence
+ * Runs Tesseract on 4 image orientations and compares the outputs
+ * @param image - The image to analyze
+ * @param scheduler - The Tesseract scheduler for OCR operations
+ * @returns The degrees to rotate the image
+ */
 const determineOptimalRotation = async ({
   image,
   scheduler,
@@ -108,4 +113,23 @@ export const compressImage = async (
   } catch (error) {
     return image;
   }
+};
+
+/**
+ * Checks if an image contains meaningful text using OCR
+ * @param imageBuffer - The image buffer to analyze
+ * @param scheduler - The Tesseract scheduler for OCR operations
+ * @returns True if the image is empty, otherwise false
+ */
+export const isImageEmpty = async ({
+  imageBuffer,
+  scheduler,
+}: {
+  imageBuffer: Buffer;
+  scheduler: Tesseract.Scheduler;
+}): Promise<boolean> => {
+  const {
+    data: { text },
+  } = await scheduler.addJob("recognize", imageBuffer);
+  return !text.trim();
 };
