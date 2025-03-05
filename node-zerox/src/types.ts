@@ -11,11 +11,13 @@ export interface ZeroxArgs {
     maintainFormat: boolean;
     priorPage: string;
   }) => Promise<CompletionResponse>;
+  directImageExtraction?: boolean;
   errorMode?: ErrorMode;
   extractionCredentials?: ModelCredentials;
   extractionLlmParams?: Partial<LLMParams>;
   extractionModel?: ModelOptions | string;
   extractionModelProvider?: ModelProvider | string;
+  extractionPrompt?: string;
   extractOnly?: boolean;
   extractPerPage?: string[];
   filePath: string;
@@ -31,6 +33,7 @@ export interface ZeroxArgs {
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
+  prompt?: string;
   schema?: Record<string, unknown>;
   tempDir?: string;
   trimEdges?: boolean;
@@ -125,6 +128,7 @@ export interface CompletionArgs {
   image: Buffer;
   maintainFormat: boolean;
   priorPage: string;
+  prompt?: string;
 }
 
 export interface CompletionResponse {
@@ -152,6 +156,7 @@ export interface ExtractionArgs {
     scheduler: Tesseract.Scheduler | null;
     trimEdges?: boolean;
   };
+  prompt?: string;
   schema: Record<string, unknown>;
 }
 
