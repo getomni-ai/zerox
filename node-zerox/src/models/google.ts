@@ -144,7 +144,7 @@ export default class GoogleModel implements ModelInterface {
     });
 
     // Build the prompt parts
-    const promptParts = [];
+    const promptParts: any = [];
 
     // Add system prompt
     const text = prompt || "Extract schema data";
