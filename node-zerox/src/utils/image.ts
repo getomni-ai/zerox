@@ -131,15 +131,5 @@ export const isImageEmpty = async ({
   const {
     data: { text },
   } = await scheduler.addJob("recognize", imageBuffer);
-  if (text.trim()) {
-    return false;
-  }
-
-  const stats = await sharp(imageBuffer).stats();
-  const hasComplexity = stats.entropy > 1;
-  const hasContent = stats.channels.some(
-    (channel) => channel.max - channel.min > 0
-  );
-
-  return !hasComplexity && !hasContent;
+  return !text.trim();
 };
