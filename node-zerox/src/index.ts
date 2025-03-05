@@ -44,11 +44,13 @@ export const zerox = async ({
   correctOrientation = true,
   credentials = { apiKey: "" },
   customModelFunction,
+  directImageExtraction = false,
   errorMode = ErrorMode.IGNORE,
   extractionCredentials,
   extractionLlmParams,
   extractionModel,
   extractionModelProvider,
+  extractionPrompt,
   extractOnly = false,
   extractPerPage,
   filePath,
@@ -64,6 +66,7 @@ export const zerox = async ({
   openaiAPIKey = "",
   outputDir,
   pagesToConvertAsImages = -1,
+  prompt,
   schema,
   tempDir = os.tmpdir(),
   trimEdges = true,
@@ -101,6 +104,8 @@ export const zerox = async ({
   if (extractOnly && maintainFormat) {
     throw new Error("Maintain format is only supported in OCR mode");
   }
+
+  if (extractOnly) directImageExtraction = true;
 
   let scheduler: Tesseract.Scheduler | null = null;
   // Add initial tesseract workers if we need to correct orientation
@@ -254,6 +259,7 @@ export const zerox = async ({
                     image: correctedBuffer,
                     maintainFormat,
                     priorPage,
+                    prompt,
                   }),
                 maxRetries,
                 pageNumber
@@ -352,6 +358,7 @@ export const zerox = async ({
                 {
                   input,
                   options: { correctOrientation, scheduler, trimEdges },
+                  prompt: extractionPrompt,
                   schema,
                 }
               );
@@ -388,7 +395,7 @@ export const zerox = async ({
 
       if (perPageSchema) {
         const inputs =
-          extractOnly && !isStructuredDataFile(localPath)
+          directImageExtraction && !isStructuredDataFile(localPath)
             ? imagePaths.map((imagePath) => [imagePath])
             : pages.map((page) => page.content || "");
 
@@ -401,7 +408,7 @@ export const zerox = async ({
 
       if (fullDocSchema) {
         const input =
-          extractOnly && !isStructuredDataFile(localPath)
+          directImageExtraction && !isStructuredDataFile(localPath)
             ? imagePaths
             : pages
                 .map((page, i) =>
@@ -421,6 +428,7 @@ export const zerox = async ({
                       {
                         input,
                         options: { correctOrientation, scheduler, trimEdges },
+                        prompt: extractionPrompt,
                         schema: fullDocSchema,
                       }
                     );

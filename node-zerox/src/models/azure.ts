@@ -87,8 +87,9 @@ export default class AzureModel implements ModelInterface {
     image,
     maintainFormat,
     priorPage,
+    prompt,
   }: CompletionArgs): Promise<CompletionResponse> {
-    const systemPrompt = SYSTEM_PROMPT_BASE;
+    const systemPrompt = prompt || SYSTEM_PROMPT_BASE;
 
     // Default system message
     const messages: any = [{ role: "system", content: systemPrompt }];
@@ -135,15 +136,20 @@ export default class AzureModel implements ModelInterface {
   private async handleExtraction({
     input,
     options,
+    prompt,
     schema,
   }: ExtractionArgs): Promise<ExtractionResponse> {
     try {
-      const messages: any = [
-        {
-          role: "user",
-          content: await this.createMessageContent({ input, options }),
-        },
-      ];
+      const messages: any = [];
+
+      if (prompt) {
+        messages.push({ role: "system", content: prompt });
+      }
+
+      messages.push({
+        role: "user",
+        content: await this.createMessageContent({ input, options }),
+      });
 
       const response = await this.client.chat.completions.create({
         messages,

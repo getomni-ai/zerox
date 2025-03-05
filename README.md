@@ -109,7 +109,9 @@ const result = await zerox({
   cleanup: true, // Clear images from tmp after run
   concurrency: 10, // Number of pages to run at a time
   correctOrientation: true, // True by default, attempts to identify and correct page orientation
+  directImageExtraction: false, // Extract data directly from document images instead of the markdown
   errorMode: ErrorMode.IGNORE, // ErrorMode.THROW or ErrorMode.IGNORE, defaults to ErrorMode.IGNORE
+  extractionPrompt: "", // LLM instructions for extracting data from document
   extractOnly: false, // Set to true to only extract structured data using a schema
   extractPerPage, // Extract data per page instead of the entire document
   imageDensity: 300, // DPI for image conversion
@@ -123,6 +125,7 @@ const result = await zerox({
   modelProvider: ModelProvider.OPENAI, // Choose from OPENAI, BEDROCK, GOOGLE, or AZURE
   outputDir: undefined, // Save combined result.md to a file
   pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages
+  prompt: "", // LLM instructions for processing the document
   schema: undefined, // Schema for structured data extraction
   tempDir: "/os/tmp", // Directory to use for temporary files (default: system temp directory)
   trimEdges: true, // True by default, trims pixels from all edges that contain values similar to the given background color, which defaults to that of the top-left pixel
