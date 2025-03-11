@@ -1,6 +1,19 @@
 export const camelToSnakeCase = (str: string) =>
   str.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`);
 
+export const convertKeysToCamelCase = (
+  obj: Record<string, any> | null
+): Record<string, any> => {
+  if (typeof obj !== "object" || obj === null) {
+    console.log("hereee", obj);
+    return obj ?? {};
+  }
+  console.log("HEREEEEE");
+  return Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [snakeToCamelCase(key), value])
+  );
+};
+
 export const convertKeysToSnakeCase = (
   obj: Record<string, any> | null
 ): Record<string, any> => {
@@ -59,6 +72,9 @@ export const runRetries = async <T>(
   }
   throw new Error("Unexpected retry error");
 };
+
+export const snakeToCamelCase = (str: string): string =>
+  str.replace(/_([a-z])/g, (_, letter: string) => letter.toUpperCase());
 
 export const splitSchema = (
   schema: Record<string, unknown>,

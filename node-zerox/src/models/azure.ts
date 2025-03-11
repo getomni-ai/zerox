@@ -12,6 +12,7 @@ import {
 import { AzureOpenAI } from "openai";
 import {
   cleanupImage,
+  convertKeysToCamelCase,
   convertKeysToSnakeCase,
   encodeImageToBase64,
 } from "../utils";
@@ -126,6 +127,12 @@ export default class AzureModel implements ModelInterface {
         content: response.choices[0].message.content || "",
         inputTokens: response.usage?.prompt_tokens || 0,
         outputTokens: response.usage?.completion_tokens || 0,
+        ...(this.llmParams?.logprobs
+          ? {
+              logprobs: convertKeysToCamelCase(response.choices[0].logprobs)
+                ?.content,
+            }
+          : {}),
       };
     } catch (err) {
       console.error("Error in Azure completion", err);
@@ -165,6 +172,12 @@ export default class AzureModel implements ModelInterface {
         extracted: JSON.parse(response.choices[0].message.content || ""),
         inputTokens: response.usage?.prompt_tokens || 0,
         outputTokens: response.usage?.completion_tokens || 0,
+        ...(this.llmParams?.logprobs
+          ? {
+              logprobs: convertKeysToCamelCase(response.choices[0].logprobs)
+                ?.content,
+            }
+          : {}),
       };
     } catch (err) {
       console.error("Error in Azure completion", err);

@@ -11,6 +11,7 @@ import {
 } from "../types";
 import {
   cleanupImage,
+  convertKeysToCamelCase,
   convertKeysToSnakeCase,
   encodeImageToBase64,
 } from "../utils";
@@ -134,6 +135,12 @@ export default class OpenAIModel implements ModelInterface {
         content: data.choices[0].message.content,
         inputTokens: data.usage.prompt_tokens,
         outputTokens: data.usage.completion_tokens,
+        ...(this.llmParams?.logprobs
+          ? {
+              logprobs: convertKeysToCamelCase(data.choices[0].logprobs)
+                ?.content,
+            }
+          : {}),
       };
     } catch (err) {
       console.error("Error in OpenAI completion", err);
@@ -184,6 +191,12 @@ export default class OpenAIModel implements ModelInterface {
         extracted: data.choices[0].message.content,
         inputTokens: data.usage.prompt_tokens,
         outputTokens: data.usage.completion_tokens,
+        ...(this.llmParams?.logprobs
+          ? {
+              logprobs: convertKeysToCamelCase(data.choices[0].logprobs)
+                ?.content,
+            }
+          : {}),
       };
     } catch (err) {
       console.error("Error in OpenAI completion", err);

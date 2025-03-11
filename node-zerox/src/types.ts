@@ -1,3 +1,4 @@
+import { ChatCompletionTokenLogprob } from "openai/resources";
 import Tesseract from "tesseract.js";
 
 export interface ZeroxArgs {
@@ -44,6 +45,7 @@ export interface ZeroxOutput {
   extracted: Record<string, unknown> | null;
   fileName: string;
   inputTokens: number;
+  logprobs: ChatCompletionTokenLogprob[] | null;
   outputTokens: number;
   pages: Page[];
   summary: Summary;
@@ -119,6 +121,7 @@ export interface Page {
   error?: string;
   extracted?: Record<string, unknown>;
   inputTokens?: number;
+  logprobs?: ChatCompletionTokenLogprob[] | null;
   outputTokens?: number;
   page: number;
   status: PageStatus;
@@ -134,6 +137,7 @@ export interface CompletionArgs {
 export interface CompletionResponse {
   content: string;
   inputTokens: number;
+  logprobs?: ChatCompletionTokenLogprob[] | null;
   outputTokens: number;
 }
 
@@ -163,6 +167,7 @@ export interface ExtractionArgs {
 export interface ExtractionResponse {
   extracted: Record<string, unknown>;
   inputTokens: number;
+  logprobs?: ChatCompletionTokenLogprob[] | null;
   outputTokens: number;
 }
 
@@ -174,6 +179,7 @@ interface BaseLLMParams {
 }
 
 export interface AzureLLMParams extends BaseLLMParams {
+  logprobs: boolean;
   maxTokens: number;
 }
 
@@ -186,6 +192,7 @@ export interface GoogleLLMParams extends BaseLLMParams {
 }
 
 export interface OpenAILLMParams extends BaseLLMParams {
+  logprobs: boolean;
   maxTokens: number;
 }
 
