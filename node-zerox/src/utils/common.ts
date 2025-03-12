@@ -5,10 +5,9 @@ export const convertKeysToCamelCase = (
   obj: Record<string, any> | null
 ): Record<string, any> => {
   if (typeof obj !== "object" || obj === null) {
-    console.log("hereee", obj);
     return obj ?? {};
   }
-  console.log("HEREEEEE");
+
   return Object.fromEntries(
     Object.entries(obj).map(([key, value]) => [snakeToCamelCase(key), value])
   );
