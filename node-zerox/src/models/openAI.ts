@@ -131,17 +131,19 @@ export default class OpenAIModel implements ModelInterface {
 
       const data = response.data;
 
-      return {
+      const result: CompletionResponse = {
         content: data.choices[0].message.content,
         inputTokens: data.usage.prompt_tokens,
         outputTokens: data.usage.completion_tokens,
-        ...(this.llmParams?.logprobs
-          ? {
-              logprobs: convertKeysToCamelCase(data.choices[0].logprobs)
-                ?.content,
-            }
-          : {}),
       };
+
+      if (this.llmParams?.logprobs) {
+        result["logprobs"] = convertKeysToCamelCase(
+          data.choices[0].logprobs
+        )?.content;
+      }
+
+      return result;
     } catch (err) {
       console.error("Error in OpenAI completion", err);
       throw err;
@@ -187,17 +189,19 @@ export default class OpenAIModel implements ModelInterface {
 
       const data = response.data;
 
-      return {
+      const result: ExtractionResponse = {
         extracted: data.choices[0].message.content,
         inputTokens: data.usage.prompt_tokens,
         outputTokens: data.usage.completion_tokens,
-        ...(this.llmParams?.logprobs
-          ? {
-              logprobs: convertKeysToCamelCase(data.choices[0].logprobs)
-                ?.content,
-            }
-          : {}),
       };
+
+      if (this.llmParams?.logprobs) {
+        result["logprobs"] = convertKeysToCamelCase(
+          data.choices[0].logprobs
+        )?.content;
+      }
+
+      return result;
     } catch (err) {
       console.error("Error in OpenAI completion", err);
       throw err;
