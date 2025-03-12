@@ -45,7 +45,7 @@ export interface ZeroxOutput {
   extracted: Record<string, unknown> | null;
   fileName: string;
   inputTokens: number;
-  logprobs: ChatCompletionTokenLogprob[] | null;
+  logprobs?: Logprobs;
   outputTokens: number;
   pages: Page[];
   summary: Summary;
@@ -121,7 +121,6 @@ export interface Page {
   error?: string;
   extracted?: Record<string, unknown>;
   inputTokens?: number;
-  logprobs?: ChatCompletionTokenLogprob[] | null;
   outputTokens?: number;
   page: number;
   status: PageStatus;
@@ -140,6 +139,13 @@ export interface CompletionResponse {
   logprobs?: ChatCompletionTokenLogprob[] | null;
   outputTokens: number;
 }
+
+export type ProcessedCompletionResponse = Omit<
+  CompletionResponse,
+  "logprobs"
+> & {
+  contentLength: number;
+};
 
 export interface CreateModelArgs {
   credentials: ModelCredentials;
@@ -170,6 +176,8 @@ export interface ExtractionResponse {
   logprobs?: ChatCompletionTokenLogprob[] | null;
   outputTokens: number;
 }
+
+export type ProcessedExtractionResponse = Omit<ExtractionResponse, "logprobs">;
 
 interface BaseLLMParams {
   frequencyPenalty?: number;
@@ -203,6 +211,16 @@ export type LLMParams =
   | GoogleLLMParams
   | OpenAILLMParams;
 
+export interface LogprobPage {
+  page: number | null;
+  value: ChatCompletionTokenLogprob[];
+}
+
+interface Logprobs {
+  ocr: LogprobPage[] | null;
+  extracted: LogprobPage[] | null;
+}
+
 export interface MessageContentArgs {
   input: string | string[];
   options?: {
@@ -232,7 +250,7 @@ export interface Summary {
 }
 
 export interface ExcelSheetContent {
-  sheetName: string;
   content: string;
   contentLength: number;
+  sheetName: string;
 }

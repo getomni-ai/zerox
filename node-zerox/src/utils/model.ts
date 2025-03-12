@@ -4,6 +4,8 @@ import {
   LLMParams,
   ModelProvider,
   OperationMode,
+  ProcessedCompletionResponse,
+  ProcessedExtractionResponse,
 } from "../types";
 import { formatMarkdown } from "./common";
 
@@ -26,32 +28,33 @@ export class CompletionProcessor {
     mode: T,
     response: CompletionResponse | ExtractionResponse
   ): T extends OperationMode.EXTRACTION
-    ? ExtractionResponse
-    : CompletionResponse & { contentLength: number } {
+    ? ProcessedExtractionResponse
+    : ProcessedCompletionResponse {
+    const { logprobs, ...responseWithoutLogprobs } = response;
     if (isCompletionResponse(mode, response)) {
       const content = response.content;
       return {
-        ...response,
+        ...responseWithoutLogprobs,
         content:
           typeof content === "string" ? formatMarkdown(content) : content,
         contentLength: response.content?.length || 0,
       } as T extends OperationMode.EXTRACTION
-        ? ExtractionResponse
-        : CompletionResponse & { contentLength: number };
+        ? ProcessedExtractionResponse
+        : ProcessedCompletionResponse;
     }
     if (isExtractionResponse(mode, response)) {
       const extracted = response.extracted;
       return {
-        ...response,
+        ...responseWithoutLogprobs,
         extracted:
           typeof extracted === "object" ? extracted : JSON.parse(extracted),
       } as T extends OperationMode.EXTRACTION
-        ? ExtractionResponse
-        : CompletionResponse & { contentLength: number };
+        ? ProcessedExtractionResponse
+        : ProcessedCompletionResponse;
     }
-    return response as T extends OperationMode.EXTRACTION
-      ? ExtractionResponse
-      : CompletionResponse & { contentLength: number };
+    return responseWithoutLogprobs as T extends OperationMode.EXTRACTION
+      ? ProcessedExtractionResponse
+      : ProcessedCompletionResponse;
   }
 }
 
