@@ -1,3 +1,4 @@
+import { ChatCompletionTokenLogprob } from "openai/resources";
 import Tesseract from "tesseract.js";
 
 export interface ZeroxArgs {
@@ -44,6 +45,7 @@ export interface ZeroxOutput {
   extracted: Record<string, unknown> | null;
   fileName: string;
   inputTokens: number;
+  logprobs?: Logprobs;
   outputTokens: number;
   pages: Page[];
   summary: Summary;
@@ -134,8 +136,16 @@ export interface CompletionArgs {
 export interface CompletionResponse {
   content: string;
   inputTokens: number;
+  logprobs?: ChatCompletionTokenLogprob[] | null;
   outputTokens: number;
 }
+
+export type ProcessedCompletionResponse = Omit<
+  CompletionResponse,
+  "logprobs"
+> & {
+  contentLength: number;
+};
 
 export interface CreateModelArgs {
   credentials: ModelCredentials;
@@ -163,8 +173,11 @@ export interface ExtractionArgs {
 export interface ExtractionResponse {
   extracted: Record<string, unknown>;
   inputTokens: number;
+  logprobs?: ChatCompletionTokenLogprob[] | null;
   outputTokens: number;
 }
+
+export type ProcessedExtractionResponse = Omit<ExtractionResponse, "logprobs">;
 
 interface BaseLLMParams {
   frequencyPenalty?: number;
@@ -174,6 +187,7 @@ interface BaseLLMParams {
 }
 
 export interface AzureLLMParams extends BaseLLMParams {
+  logprobs: boolean;
   maxTokens: number;
 }
 
@@ -186,6 +200,7 @@ export interface GoogleLLMParams extends BaseLLMParams {
 }
 
 export interface OpenAILLMParams extends BaseLLMParams {
+  logprobs: boolean;
   maxTokens: number;
 }
 
@@ -195,6 +210,16 @@ export type LLMParams =
   | BedrockLLMParams
   | GoogleLLMParams
   | OpenAILLMParams;
+
+export interface LogprobPage {
+  page: number | null;
+  value: ChatCompletionTokenLogprob[];
+}
+
+interface Logprobs {
+  ocr: LogprobPage[] | null;
+  extracted: LogprobPage[] | null;
+}
 
 export interface MessageContentArgs {
   input: string | string[];
@@ -225,7 +250,7 @@ export interface Summary {
 }
 
 export interface ExcelSheetContent {
-  sheetName: string;
   content: string;
   contentLength: number;
+  sheetName: string;
 }

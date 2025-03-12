@@ -12,6 +12,7 @@ import {
 import { AzureOpenAI } from "openai";
 import {
   cleanupImage,
+  convertKeysToCamelCase,
   convertKeysToSnakeCase,
   encodeImageToBase64,
 } from "../utils";
@@ -122,11 +123,19 @@ export default class AzureModel implements ModelInterface {
         ...convertKeysToSnakeCase(this.llmParams ?? null),
       });
 
-      return {
+      const result: CompletionResponse = {
         content: response.choices[0].message.content || "",
         inputTokens: response.usage?.prompt_tokens || 0,
         outputTokens: response.usage?.completion_tokens || 0,
       };
+
+      if (this.llmParams?.logprobs) {
+        result["logprobs"] = convertKeysToCamelCase(
+          response.choices[0].logprobs
+        )?.content;
+      }
+
+      return result;
     } catch (err) {
       console.error("Error in Azure completion", err);
       throw err;
@@ -161,11 +170,19 @@ export default class AzureModel implements ModelInterface {
         ...convertKeysToSnakeCase(this.llmParams ?? null),
       });
 
-      return {
+      const result: ExtractionResponse = {
         extracted: JSON.parse(response.choices[0].message.content || ""),
         inputTokens: response.usage?.prompt_tokens || 0,
         outputTokens: response.usage?.completion_tokens || 0,
       };
+
+      if (this.llmParams?.logprobs) {
+        result["logprobs"] = convertKeysToCamelCase(
+          response.choices[0].logprobs
+        )?.content;
+      }
+
+      return result;
     } catch (err) {
       console.error("Error in Azure completion", err);
       throw err;

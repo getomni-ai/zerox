@@ -28,6 +28,7 @@ import {
   CompletionResponse,
   ErrorMode,
   ExtractionResponse,
+  LogprobPage,
   ModelOptions,
   ModelProvider,
   OperationMode,
@@ -72,10 +73,12 @@ export const zerox = async ({
   trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
   let extracted: Record<string, unknown> | null = null;
+  let extractedLogprobs: LogprobPage[] = [];
   let inputTokenCount: number = 0;
   let outputTokenCount: number = 0;
   let numSuccessfulOCRRequests: number = 0;
   let numFailedOCRRequests: number = 0;
+  let ocrLogprobs: LogprobPage[] = [];
   let priorPage: string = "";
   let pages: Page[] = [];
   let imagePaths: string[] = [];
@@ -265,6 +268,14 @@ export const zerox = async ({
                 pageNumber
               );
             }
+
+            if (rawResponse.logprobs) {
+              ocrLogprobs.push({
+                page: pageNumber,
+                value: rawResponse.logprobs,
+              });
+            }
+
             const response = CompletionProcessor.process(
               OperationMode.OCR,
               rawResponse
@@ -362,6 +373,14 @@ export const zerox = async ({
                   schema,
                 }
               );
+
+              if (rawResponse.logprobs) {
+                extractedLogprobs.push({
+                  page: pageNumber,
+                  value: rawResponse.logprobs,
+                });
+              }
+
               const response = CompletionProcessor.process(
                 OperationMode.EXTRACTION,
                 rawResponse
@@ -432,6 +451,14 @@ export const zerox = async ({
                         schema: fullDocSchema,
                       }
                     );
+
+                  if (rawResponse.logprobs) {
+                    extractedLogprobs.push({
+                      page: null,
+                      value: rawResponse.logprobs,
+                    });
+                  }
+
                   const response = CompletionProcessor.process(
                     OperationMode.EXTRACTION,
                     rawResponse
@@ -521,6 +548,14 @@ export const zerox = async ({
       extracted,
       fileName,
       inputTokens: inputTokenCount,
+      ...(ocrLogprobs.length || extractedLogprobs.length
+        ? {
+            logprobs: {
+              ocr: !extractOnly ? ocrLogprobs : null,
+              extracted: schema ? extractedLogprobs : null,
+            },
+          }
+        : {}),
       outputTokens: outputTokenCount,
       pages: formattedPages,
       summary: {
