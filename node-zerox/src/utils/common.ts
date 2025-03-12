@@ -8,8 +8,15 @@ export const convertKeysToCamelCase = (
     return obj ?? {};
   }
 
+  if (Array.isArray(obj)) {
+    return obj.map(convertKeysToCamelCase);
+  }
+
   return Object.fromEntries(
-    Object.entries(obj).map(([key, value]) => [snakeToCamelCase(key), value])
+    Object.entries(obj).map(([key, value]) => [
+      snakeToCamelCase(key),
+      convertKeysToCamelCase(value),
+    ])
   );
 };
 
