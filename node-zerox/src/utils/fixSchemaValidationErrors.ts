@@ -1,5 +1,5 @@
 import { formatJsonValue } from "../utils";
-import { JSONSchema } from "openai/lib/jsonschema";
+import { JSONSchema, JSONSchemaDefinition } from "openai/lib/jsonschema";
 import { ZodError } from "zod";
 
 /**
@@ -38,14 +38,26 @@ export const fixSchemaValidationErrors = ({
     let defaultValue = null;
     if (schema) {
       let schemaProperty = schema;
-      let properties = schemaProperty.properties || schemaProperty;
+      let properties: JSONSchema | JSONSchemaDefinition[] =
+        schemaProperty.properties || schemaProperty;
 
-      for (const pathKey of error.path) {
+      for (let i = 0; i < error.path.length; i++) {
+        const pathKey = error.path[i];
         if (properties && properties[pathKey as keyof typeof properties]) {
           schemaProperty = properties[
             pathKey as keyof typeof properties
           ] as JSONSchema;
-          properties = schemaProperty.properties || {};
+          if (schemaProperty.type === "array" && schemaProperty.items) {
+            // If array of object (table)
+            if ((schemaProperty.items as JSONSchema).type === "object") {
+              properties = (schemaProperty.items as JSONSchema).properties || {};
+              i++; // Skip the numeric path (row index)
+            } else {
+              properties = schemaProperty.items as JSONSchema;
+            }
+          } else {
+            properties = schemaProperty.properties || {};
+          }
         }
       }
 
@@ -92,8 +104,7 @@ export const fixSchemaValidationErrors = ({
         currentValue === undefined
       ) {
         parent[lastKey] = defaultValue !== null ? defaultValue : null;
-      }
-      else {
+      } else {
         parent[lastKey] = defaultValue !== null ? defaultValue : null;
       }
     }
