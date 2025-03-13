@@ -1,13 +1,29 @@
 import {
+  CompletionProcessParams,
   CompletionResponse,
+  ExtractionProcessParams,
   ExtractionResponse,
   LLMParams,
   ModelProvider,
   OperationMode,
   ProcessedCompletionResponse,
   ProcessedExtractionResponse,
+  ProcessParams,
 } from "../types";
 import { formatMarkdown } from "./common";
+import { validate } from "./validate";
+
+const isExtractionParams = (
+  params: ProcessParams
+): params is ExtractionProcessParams => {
+  return params.mode === OperationMode.EXTRACTION;
+};
+
+const isCompletionParams = (
+  params: ProcessParams
+): params is CompletionProcessParams => {
+  return params.mode === OperationMode.OCR;
+};
 
 export const isCompletionResponse = (
   mode: OperationMode,
@@ -16,45 +32,43 @@ export const isCompletionResponse = (
   return mode === OperationMode.OCR;
 };
 
-const isExtractionResponse = (
-  mode: OperationMode,
-  response: CompletionResponse | ExtractionResponse
-): response is ExtractionResponse => {
-  return mode === OperationMode.EXTRACTION;
-};
-
 export class CompletionProcessor {
-  static process<T extends OperationMode>(
-    mode: T,
-    response: CompletionResponse | ExtractionResponse
-  ): T extends OperationMode.EXTRACTION
-    ? ProcessedExtractionResponse
-    : ProcessedCompletionResponse {
-    const { logprobs, ...responseWithoutLogprobs } = response;
-    if (isCompletionResponse(mode, response)) {
+  // Overload for extraction mode
+  static process(params: ExtractionProcessParams): ProcessedExtractionResponse;
+
+  // Overload for OCR mode
+  static process(params: CompletionProcessParams): ProcessedCompletionResponse;
+
+  static process(
+    params: ProcessParams
+  ): ProcessedExtractionResponse | ProcessedCompletionResponse {
+    if (isCompletionParams(params)) {
+      const { response } = params;
+      const { logprobs, ...responseWithoutLogprobs } = response;
+
       const content = response.content;
       return {
         ...responseWithoutLogprobs,
         content:
           typeof content === "string" ? formatMarkdown(content) : content,
         contentLength: response.content?.length || 0,
-      } as T extends OperationMode.EXTRACTION
-        ? ProcessedExtractionResponse
-        : ProcessedCompletionResponse;
+      } as ProcessedCompletionResponse;
     }
-    if (isExtractionResponse(mode, response)) {
-      const extracted = response.extracted;
+    if (isExtractionParams(params)) {
+      const { response, schema } = params;
+      const { logprobs, ...responseWithoutLogprobs } = response;
+      const extracted =
+        typeof response.extracted === "object"
+          ? response.extracted
+          : JSON.parse(response.extracted);
+      const result = validate({ schema, value: extracted });
       return {
         ...responseWithoutLogprobs,
-        extracted:
-          typeof extracted === "object" ? extracted : JSON.parse(extracted),
-      } as T extends OperationMode.EXTRACTION
-        ? ProcessedExtractionResponse
-        : ProcessedCompletionResponse;
+        extracted: result.value,
+        issues: result.issues,
+      } as ProcessedExtractionResponse;
     }
-    return responseWithoutLogprobs as T extends OperationMode.EXTRACTION
-      ? ProcessedExtractionResponse
-      : ProcessedCompletionResponse;
+    throw new Error(`Unsupported operation mode: ${params["mode"]}`);
   }
 }
 
