@@ -53,7 +53,11 @@ export const downloadFile = async ({
     mimetype = mime.lookup(localPath);
   }
 
-  let extension = mime.extension(mimetype) || "";
+  let extension = fileNameExt;
+  if (!extension) {
+    extension = mime.extension(mimetype) || "";
+  }
+
   if (!extension) {
     if (mimetype === "binary/octet-stream") {
       extension = ".bin";
