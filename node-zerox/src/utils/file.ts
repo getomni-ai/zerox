@@ -53,9 +53,9 @@ export const downloadFile = async ({
     mimetype = mime.lookup(localPath);
   }
 
-  let extension = fileNameExt;
+  let extension = mime.extension(mimetype);
   if (!extension) {
-    extension = mime.extension(mimetype) || "";
+    extension = fileNameExt || "";
   }
 
   if (!extension) {
