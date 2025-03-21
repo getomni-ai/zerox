@@ -102,14 +102,14 @@ export const zerox = async ({
   if (!filePath || !filePath.length) {
     throw new Error("Missing file path");
   }
+  if (enableHybridExtraction && !schema) {
+    throw new Error("Schema is required when hybrid extraction is enabled");
+  }
   if (extractOnly && !schema) {
     throw new Error("Schema is required for extraction mode");
   }
   if (extractOnly && maintainFormat) {
     throw new Error("Maintain format is only supported in OCR mode");
-  }
-  if (enableHybridExtraction && !schema) {
-    throw new Error("");
   }
 
   if (extractOnly) directImageExtraction = true;
