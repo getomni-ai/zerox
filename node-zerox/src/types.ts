@@ -180,7 +180,7 @@ export interface ExtractionResponse {
 
 export type ProcessedExtractionResponse = Omit<ExtractionResponse, "logprobs">;
 
-interface HybridInput {
+export interface HybridInput {
   imagePaths: string[];
   text: string;
 }

@@ -28,6 +28,7 @@ import {
   CompletionResponse,
   ErrorMode,
   ExtractionResponse,
+  HybridInput,
   LogprobPage,
   ModelOptions,
   ModelProvider,
@@ -365,7 +366,7 @@ export const zerox = async ({
       const extractionTasks: Promise<any>[] = [];
 
       const processExtraction = async (
-        input: string | string[] | { imagePaths: string[]; text: string },
+        input: string | string[] | HybridInput,
         pageNumber: number,
         schema: Record<string, unknown>
       ): Promise<Record<string, unknown>> => {
