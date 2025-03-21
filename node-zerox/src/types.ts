@@ -13,6 +13,7 @@ export interface ZeroxArgs {
     priorPage: string;
   }) => Promise<CompletionResponse>;
   directImageExtraction?: boolean;
+  enableHybridExtraction?: boolean;
   errorMode?: ErrorMode;
   extractionCredentials?: ModelCredentials;
   extractionLlmParams?: Partial<LLMParams>;
@@ -160,7 +161,7 @@ export enum ErrorMode {
 }
 
 export interface ExtractionArgs {
-  input: string | string[];
+  input: string | string[] | HybridInput;
   options?: {
     correctOrientation?: boolean;
     scheduler: Tesseract.Scheduler | null;
@@ -178,6 +179,11 @@ export interface ExtractionResponse {
 }
 
 export type ProcessedExtractionResponse = Omit<ExtractionResponse, "logprobs">;
+
+interface HybridInput {
+  imagePaths: string[];
+  text: string;
+}
 
 interface BaseLLMParams {
   frequencyPenalty?: number;
@@ -222,7 +228,7 @@ interface Logprobs {
 }
 
 export interface MessageContentArgs {
-  input: string | string[];
+  input: string | string[] | HybridInput;
   options?: {
     correctOrientation?: boolean;
     scheduler: Tesseract.Scheduler | null;

@@ -46,6 +46,7 @@ export const zerox = async ({
   credentials = { apiKey: "" },
   customModelFunction,
   directImageExtraction = false,
+  enableHybridExtraction = false,
   errorMode = ErrorMode.IGNORE,
   extractionCredentials,
   extractionLlmParams,
@@ -106,6 +107,9 @@ export const zerox = async ({
   }
   if (extractOnly && maintainFormat) {
     throw new Error("Maintain format is only supported in OCR mode");
+  }
+  if (enableHybridExtraction && !schema) {
+    throw new Error("");
   }
 
   if (extractOnly) directImageExtraction = true;
@@ -356,7 +360,7 @@ export const zerox = async ({
       const extractionTasks: Promise<any>[] = [];
 
       const processExtraction = async (
-        input: string | string[],
+        input: string | string[] | { imagePaths: string[]; text: string },
         pageNumber: number,
         schema: Record<string, unknown>
       ): Promise<Record<string, unknown>> => {
@@ -416,6 +420,11 @@ export const zerox = async ({
         const inputs =
           directImageExtraction && !isStructuredDataFile(localPath)
             ? imagePaths.map((imagePath) => [imagePath])
+            : enableHybridExtraction
+            ? imagePaths.map((imagePath, index) => ({
+                imagePaths: [imagePath],
+                text: pages[index].content || "",
+              }))
             : pages.map((page) => page.content || "");
 
         extractionTasks.push(
@@ -429,6 +438,15 @@ export const zerox = async ({
         const input =
           directImageExtraction && !isStructuredDataFile(localPath)
             ? imagePaths
+            : enableHybridExtraction
+            ? {
+                imagePaths,
+                text: pages
+                  .map((page, i) =>
+                    i === 0 ? page.content : "\n<hr><hr>\n" + page.content
+                  )
+                  .join(""),
+              }
             : pages
                 .map((page, i) =>
                   i === 0 ? page.content : "\n<hr><hr>\n" + page.content
