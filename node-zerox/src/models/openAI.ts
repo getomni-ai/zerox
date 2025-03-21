@@ -56,9 +56,9 @@ export default class OpenAIModel implements ModelInterface {
     input,
     options,
   }: MessageContentArgs): Promise<any> {
-    if (Array.isArray(input)) {
+    const processImages = async (imagePaths: string[]) => {
       return Promise.all(
-        input.map(async (imagePath) => {
+        imagePaths.map(async (imagePath) => {
           const imageBuffer = await fs.readFile(imagePath);
           const correctedBuffer = await cleanupImage({
             correctOrientation: options?.correctOrientation ?? false,
@@ -76,9 +76,19 @@ export default class OpenAIModel implements ModelInterface {
           };
         })
       );
+    };
+
+    if (Array.isArray(input)) {
+      return processImages(input);
     }
 
-    return [{ text: input, type: "text" }];
+    if (typeof input === "string") {
+      return [{ text: input, type: "text" }];
+    }
+
+    const { imagePaths, text } = input;
+    const images = await processImages(imagePaths);
+    return [...images, { text, type: "text" }];
   }
 
   private async handleOCR({
