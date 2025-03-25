@@ -1,14 +1,15 @@
+import { convert } from "libreoffice-convert";
 import { fromPath } from "pdf2pic";
 import { pipeline } from "stream/promises";
-import axios from "axios";
-import fs from "fs-extra";
-import mime from "mime-types";
-import path from "path";
 import { promisify } from "util";
 import { v4 as uuidv4 } from "uuid";
-import { convert } from "libreoffice-convert";
 import { WriteImageResponse } from "pdf2pic/dist/types/convertResponse";
+import axios from "axios";
+import fs from "fs-extra";
 import heicConvert from "heic-convert";
+import mime from "mime-types";
+import path from "path";
+import PDFParser from "pdf2json";
 import xlsx from "xlsx";
 
 import { isValidUrl } from "./common";
@@ -133,16 +134,19 @@ export const convertPdfToImages = async ({
   pagesToConvertAsImages,
   tempDir,
 }: {
-  imageDensity: number;
-  imageHeight: number;
+  imageDensity?: number;
+  imageHeight?: number;
   pdfPath: string;
   pagesToConvertAsImages: number | number[];
   tempDir: string;
 }): Promise<string[]> => {
+  const pdfInfo = await getPdfInfo(pdfPath);
+  const aspectRatio = pdfInfo ? pdfInfo.heightPoints / pdfInfo.widthPoints : 1;
+  const height = Math.max(imageHeight, Math.round(aspectRatio * imageHeight));
   const options = {
     density: imageDensity,
     format: "png",
-    height: imageHeight,
+    height,
     preserveAspectRatio: true,
     saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
     savePath: tempDir,
@@ -274,4 +278,25 @@ export const extractPagesFromStructuredDataFile = async (
   }
 
   return [];
+};
+
+// Gets the height and width of the first page of the PDF
+const getPdfInfo = async (
+  pdfPath: string
+): Promise<{ heightPoints: number; widthPoints: number } | undefined> => {
+  return new Promise((resolve) => {
+    const pdfParser = new PDFParser();
+
+    pdfParser.on("pdfParser_dataReady", (pdfData) => {
+      const heightPoints = pdfData.Pages[0].Height;
+      const widthPoints = pdfData.Pages[0].Width;
+      resolve({ heightPoints, widthPoints });
+    });
+
+    pdfParser.on("pdfParser_dataError", () => {
+      resolve(undefined);
+    });
+
+    pdfParser.loadPDF(pdfPath);
+  });
 };
