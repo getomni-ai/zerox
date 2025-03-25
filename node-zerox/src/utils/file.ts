@@ -9,6 +9,7 @@ import fs from "fs-extra";
 import heicConvert from "heic-convert";
 import mime from "mime-types";
 import path from "path";
+import pdf from "pdf-parse";
 import PDFParser from "pdf2json";
 import xlsx from "xlsx";
 
@@ -243,22 +244,6 @@ export const convertExcelToHtml = async (
   }
 };
 
-// Checks if a file is an Excel file
-export const isExcelFile = (filePath: string): boolean => {
-  const extension = path.extname(filePath).toLowerCase();
-  return (
-    extension === ".xlsx" ||
-    extension === ".xls" ||
-    extension === ".xlsm" ||
-    extension === ".xlsb"
-  );
-};
-
-// Checks if a file is a structured data file (like Excel)
-export const isStructuredDataFile = (filePath: string): boolean => {
-  return isExcelFile(filePath);
-};
-
 // Extracts pages from a structured data file (like Excel)
 export const extractPagesFromStructuredDataFile = async (
   filePath: string
@@ -280,6 +265,17 @@ export const extractPagesFromStructuredDataFile = async (
   return [];
 };
 
+// Gets the number of pages from a PDF
+export const getNumberOfPagesFromPdf = async ({
+  pdfPath,
+}: {
+  pdfPath: string;
+}): Promise<number> => {
+  const dataBuffer = await fs.readFile(pdfPath);
+  const data = await pdf(dataBuffer);
+  return data.numpages;
+};
+
 // Gets the height and width of the first page of the PDF
 const getPdfInfo = async (
   pdfPath: string
@@ -299,4 +295,20 @@ const getPdfInfo = async (
 
     pdfParser.loadPDF(pdfPath);
   });
+};
+
+// Checks if a file is an Excel file
+export const isExcelFile = (filePath: string): boolean => {
+  const extension = path.extname(filePath).toLowerCase();
+  return (
+    extension === ".xlsx" ||
+    extension === ".xls" ||
+    extension === ".xlsm" ||
+    extension === ".xlsb"
+  );
+};
+
+// Checks if a file is a structured data file (like Excel)
+export const isStructuredDataFile = (filePath: string): boolean => {
+  return isExcelFile(filePath);
 };
