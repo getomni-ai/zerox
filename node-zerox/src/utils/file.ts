@@ -141,13 +141,21 @@ export const convertPdfToImages = async ({
   pagesToConvertAsImages: number | number[];
   tempDir: string;
 }): Promise<string[]> => {
-  const pdfInfo = await getPdfInfo(pdfPath);
-  const aspectRatio = pdfInfo ? pdfInfo.heightPoints / pdfInfo.widthPoints : 1;
-  const height = Math.max(imageHeight, Math.round(aspectRatio * imageHeight));
+  const pageDimensions = await getPdfPageDimensions(pdfPath);
+  const maxHeight = (() => {
+    if (!pageDimensions || pageDimensions.length === 0) return imageHeight;
+    return Math.max(
+      imageHeight,
+      ...pageDimensions.map(({ width, height }) => {
+        const ratio = height / width;
+        return Math.round(imageHeight * ratio);
+      })
+    );
+  })();
   const options = {
     density: imageDensity,
     format: "png",
-    height,
+    height: maxHeight,
     preserveAspectRatio: true,
     saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
     savePath: tempDir,
@@ -276,17 +284,19 @@ export const getNumberOfPagesFromPdf = async ({
   return data.numpages;
 };
 
-// Gets the height and width of the first page of the PDF
-const getPdfInfo = async (
+// Gets the height and width of each page in the PDF
+const getPdfPageDimensions = async (
   pdfPath: string
-): Promise<{ heightPoints: number; widthPoints: number } | undefined> => {
+): Promise<{ height: number; width: number }[] | undefined> => {
   return new Promise((resolve) => {
     const pdfParser = new PDFParser();
 
     pdfParser.on("pdfParser_dataReady", (pdfData) => {
-      const heightPoints = pdfData.Pages[0].Height;
-      const widthPoints = pdfData.Pages[0].Width;
-      resolve({ heightPoints, widthPoints });
+      const pages = pdfData.Pages.map((p) => ({
+        width: p.Width,
+        height: p.Height,
+      }));
+      resolve(pages);
     });
 
     pdfParser.on("pdfParser_dataError", () => {
