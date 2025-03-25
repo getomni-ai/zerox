@@ -15,6 +15,7 @@ import {
   convertPdfToImages,
   downloadFile,
   extractPagesFromStructuredDataFile,
+  getNumberOfPagesFromPdf,
   getTesseractScheduler,
   isCompletionResponse,
   isStructuredDataFile,
@@ -187,6 +188,12 @@ export const zerox = async ({
             localPath,
             tempDir: sourceDirectory,
           });
+        }
+        if (Array.isArray(pagesToConvertAsImages)) {
+          const totalPages = await getNumberOfPagesFromPdf({ pdfPath });
+          pagesToConvertAsImages = pagesToConvertAsImages.filter(
+            (page) => page > 0 && page <= totalPages
+          );
         }
         imagePaths = await convertPdfToImages({
           pdfPath,
