@@ -4,6 +4,7 @@ import { fromPath } from "pdf2pic";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
 import { v4 as uuidv4 } from "uuid";
+import { WriteImageResponse } from "pdf2pic/dist/types/convertResponse";
 import axios from "axios";
 import fs from "fs-extra";
 import heicConvert from "heic-convert";
@@ -16,8 +17,6 @@ import { isValidUrl } from "./common";
 import { ExcelSheetContent, Page, PageStatus } from "../types";
 
 const convertAsync = promisify(convert);
-
-const execPromise = promisify(exec);
 
 // Save file to local tmp directory
 export const downloadFile = async ({
@@ -142,52 +141,39 @@ export const convertPdfToImages = async ({
   pagesToConvertAsImages: number | number[];
   tempDir: string;
 }): Promise<string[]> => {
-  const baseFilename = path.basename(pdfPath, path.extname(pdfPath));
-  const pageDimensions = await getPdfPageDimensions(pdfPath);
-  const totalPages = pageDimensions?.length ?? 0;
+  const dimensions = await getPdfPageDimensions(pdfPath);
+  const ratio = dimensions ? dimensions.height / dimensions.width : 1;
+  const adjustedHeight = Math.max(imageHeight, Math.round(imageHeight * ratio));
 
-  const pageNumbers =
-    pagesToConvertAsImages === -1
-      ? Array.from({ length: totalPages }, (_, i) => i + 1)
-      : Array.isArray(pagesToConvertAsImages)
-      ? pagesToConvertAsImages
-      : [pagesToConvertAsImages];
+  const options = {
+    density: imageDensity,
+    format: "png",
+    height: adjustedHeight,
+    preserveAspectRatio: true,
+    saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
+    savePath: tempDir,
+  };
+  const storeAsImage = fromPath(pdfPath, options);
 
-  const convertPagePromises = pageNumbers.map(async (page) => {
-    const pageIndex = page - 1;
-    const dimensions = pageDimensions?.[pageIndex];
-    const ratio = dimensions ? dimensions.height / dimensions.width : 1;
-    const adjustedHeight = Math.max(
-      imageHeight,
-      Math.round(imageHeight * ratio)
-    );
-    const options = {
-      density: imageDensity,
-      format: "png",
-      height: adjustedHeight,
-      preserveAspectRatio: true,
-      saveFilename: baseFilename,
-      savePath: tempDir,
-    };
-    const storeAsImage = fromPath(pdfPath, options);
-
-    const result = await storeAsImage(page);
-    if (!result.page || !result.path) {
-      throw new Error("Could not identify page data");
-    }
-
-    return result.path;
-  });
-
-  let outputPaths: string[] = [];
   try {
-    outputPaths = await Promise.all(convertPagePromises);
+    const convertResults: WriteImageResponse[] = await storeAsImage.bulk(
+      pagesToConvertAsImages
+    );
+
+    // Validate that all pages were converted
+    let imagePaths: string[] = [];
+    convertResults.forEach((result) => {
+      if (!result.page || !result.path) {
+        throw new Error("Could not identify page data");
+      }
+      imagePaths.push(result.path);
+    });
+
+    return imagePaths;
   } catch (err) {
     console.error("Error during PDF conversion:", err);
     throw err;
   }
-
-  return outputPaths;
 };
 
 // Converts an Excel file to HTML format
@@ -294,41 +280,24 @@ export const getNumberOfPagesFromPdf = async ({
 // Gets the height and width of each page in the PDF
 const getPdfPageDimensions = async (
   pdfPath: string
-): Promise<{ height: number; width: number }[] | undefined> => {
-  try {
-    const { stdout: infoOut } = await execPromise(`pdfinfo "${pdfPath}"`);
-    const pageCountMatch = infoOut.match(/Pages:\s+(\d+)/);
-    if (!pageCountMatch) {
-      return undefined;
-    }
-
-    const totalPages = parseInt(pageCountMatch[1], 10);
-    const dimensions: { height: number; width: number }[] = [];
-    const DEFAULT_DIMENSIONS = { height: 792, width: 612 };
-
-    for (let page = 1; page <= totalPages; page++) {
-      const { stdout } = await execPromise(
-        `pdfinfo -f ${page} -l ${page} "${pdfPath}"`
-      );
-      const sizeMatch = stdout.match(
-        /Page\s+\d+\s+size:\s+([\d.]+)\s+x\s+([\d.]+)/
-      );
-
-      if (sizeMatch) {
-        dimensions.push({
-          height: parseFloat(sizeMatch[2]),
-          width: parseFloat(sizeMatch[1]),
-        });
-      } else {
-        dimensions.push(DEFAULT_DIMENSIONS);
+): Promise<{ height: number; width: number } | undefined> => {
+  return new Promise((resolve) => {
+    exec(`pdfinfo "${pdfPath}"`, (error, stdout) => {
+      if (error) {
+        return resolve(undefined);
       }
-    }
 
-    return dimensions;
-  } catch (error) {
-    console.error("Error getting PDF dimensions:", error);
-    return undefined;
-  }
+      const sizeMatch = stdout.match(/Page size:\s+([\d.]+)\s+x\s+([\d.]+)/);
+      if (sizeMatch) {
+        console.log("sizeMatch", sizeMatch);
+        const height = parseFloat(sizeMatch[2]);
+        const width = parseFloat(sizeMatch[1]);
+        resolve({ height, width });
+      } else {
+        resolve(undefined);
+      }
+    });
+  });
 };
 
 // Checks if a file is an Excel file
