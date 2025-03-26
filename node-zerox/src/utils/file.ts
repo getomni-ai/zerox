@@ -289,7 +289,6 @@ const getPdfPageDimensions = async (
 
       const sizeMatch = stdout.match(/Page size:\s+([\d.]+)\s+x\s+([\d.]+)/);
       if (sizeMatch) {
-        console.log("sizeMatch", sizeMatch);
         const height = parseFloat(sizeMatch[2]);
         const width = parseFloat(sizeMatch[1]);
         resolve({ height, width });
