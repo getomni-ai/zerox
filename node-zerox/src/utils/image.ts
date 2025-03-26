@@ -17,8 +17,11 @@ export const cleanupImage = async ({
   imageBuffer,
   scheduler,
   trimEdges,
-}: CleanupImageProps) => {
+}: CleanupImageProps): Promise<Buffer[]> => {
   const image = sharp(imageBuffer);
+  const metadata = await image.metadata();
+  const height = metadata.height || 0;
+  const width = metadata.width || 0;
 
   // Trim extra space around the content in the image
   if (trimEdges) {
@@ -40,7 +43,13 @@ export const cleanupImage = async ({
 
   // Correct the image orientation
   const correctedBuffer = await image.toBuffer();
-  return correctedBuffer;
+  const ratio = height / width;
+
+  if (ratio > 3) {
+    return await splitTallImage(correctedBuffer);
+  }
+
+  return [correctedBuffer];
 };
 
 // Determine the optimal image orientation based on OCR confidence
@@ -108,4 +117,37 @@ export const compressImage = async (
   } catch (error) {
     return image;
   }
+};
+
+export const splitTallImage = async (
+  imageBuffer: Buffer,
+  maxRatioPerSection = 3
+): Promise<Buffer[]> => {
+  const image = sharp(imageBuffer);
+  const metadata = await image.metadata();
+
+  const height = metadata.height || 0;
+  const width = metadata.width || 0;
+
+  const ratio = height / width;
+
+  if (ratio <= maxRatioPerSection) return [await image.toBuffer()];
+
+  const numSections = Math.ceil(ratio / maxRatioPerSection);
+  const sectionHeight = Math.floor(height / numSections);
+
+  const buffers: Buffer[] = [];
+
+  for (let i = 0; i < numSections; i++) {
+    const top = i * sectionHeight;
+    const heightToUse = i === numSections - 1 ? height - top : sectionHeight;
+
+    const sectionBuffer = await sharp(imageBuffer)
+      .extract({ left: 0, top, width, height: heightToUse })
+      .toBuffer();
+
+    buffers.push(sectionBuffer);
+  }
+
+  return buffers;
 };

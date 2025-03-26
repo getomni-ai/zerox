@@ -7,7 +7,7 @@ export interface ZeroxArgs {
   correctOrientation?: boolean;
   credentials?: ModelCredentials;
   customModelFunction?: (params: {
-    buffer: Buffer;
+    buffers: Buffer[];
     image: string;
     maintainFormat: boolean;
     priorPage: string;
@@ -128,7 +128,7 @@ export interface Page {
 }
 
 export interface CompletionArgs {
-  image: Buffer;
+  buffers: Buffer[];
   maintainFormat: boolean;
   priorPage: string;
   prompt?: string;

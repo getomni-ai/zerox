@@ -1,5 +1,4 @@
 import { convert } from "libreoffice-convert";
-import { exec } from "child_process";
 import { fromPath } from "pdf2pic";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
@@ -141,14 +140,10 @@ export const convertPdfToImages = async ({
   pagesToConvertAsImages: number | number[];
   tempDir: string;
 }): Promise<string[]> => {
-  const dimensions = await getPdfPageDimensions(pdfPath);
-  const ratio = dimensions ? dimensions.height / dimensions.width : 1;
-  const adjustedHeight = Math.max(imageHeight, Math.round(imageHeight * ratio));
-
   const options = {
     density: imageDensity,
     format: "png",
-    height: adjustedHeight,
+    height: imageHeight,
     preserveAspectRatio: true,
     saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
     savePath: tempDir,
@@ -275,28 +270,6 @@ export const getNumberOfPagesFromPdf = async ({
   const dataBuffer = await fs.readFile(pdfPath);
   const data = await pdf(dataBuffer);
   return data.numpages;
-};
-
-// Gets the height and width of each page in the PDF
-const getPdfPageDimensions = async (
-  pdfPath: string
-): Promise<{ height: number; width: number } | undefined> => {
-  return new Promise((resolve) => {
-    exec(`pdfinfo "${pdfPath}"`, (error, stdout) => {
-      if (error) {
-        return resolve(undefined);
-      }
-
-      const sizeMatch = stdout.match(/Page size:\s+([\d.]+)\s+x\s+([\d.]+)/);
-      if (sizeMatch) {
-        const height = parseFloat(sizeMatch[2]);
-        const width = parseFloat(sizeMatch[1]);
-        resolve({ height, width });
-      } else {
-        resolve(undefined);
-      }
-    });
-  });
 };
 
 // Checks if a file is an Excel file

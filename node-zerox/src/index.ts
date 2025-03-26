@@ -250,7 +250,7 @@ export const zerox = async ({
           maintainFormat: boolean
         ): Promise<Page> => {
           const imageBuffer = await fs.readFile(imagePath);
-          const correctedBuffer = await cleanupImage({
+          const buffers = await cleanupImage({
             correctOrientation,
             imageBuffer,
             scheduler,
@@ -264,7 +264,7 @@ export const zerox = async ({
               rawResponse = await runRetries(
                 () =>
                   customModelFunction({
-                    buffer: correctedBuffer,
+                    buffers,
                     image: imagePath,
                     maintainFormat,
                     priorPage,
@@ -276,7 +276,7 @@ export const zerox = async ({
               rawResponse = await runRetries(
                 () =>
                   modelInstance.getCompletion(OperationMode.OCR, {
-                    image: correctedBuffer,
+                    buffers,
                     maintainFormat,
                     priorPage,
                     prompt,
