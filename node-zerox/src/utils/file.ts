@@ -1,22 +1,23 @@
 import { convert } from "libreoffice-convert";
+import { exec } from "child_process";
 import { fromPath } from "pdf2pic";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
 import { v4 as uuidv4 } from "uuid";
-import { WriteImageResponse } from "pdf2pic/dist/types/convertResponse";
 import axios from "axios";
 import fs from "fs-extra";
 import heicConvert from "heic-convert";
 import mime from "mime-types";
 import path from "path";
 import pdf from "pdf-parse";
-import PDFParser from "pdf2json";
 import xlsx from "xlsx";
 
 import { isValidUrl } from "./common";
 import { ExcelSheetContent, Page, PageStatus } from "../types";
 
 const convertAsync = promisify(convert);
+
+const execPromise = promisify(exec);
 
 // Save file to local tmp directory
 export const downloadFile = async ({
@@ -294,23 +295,40 @@ export const getNumberOfPagesFromPdf = async ({
 const getPdfPageDimensions = async (
   pdfPath: string
 ): Promise<{ height: number; width: number }[] | undefined> => {
-  return new Promise((resolve) => {
-    const pdfParser = new PDFParser();
+  try {
+    const { stdout: infoOut } = await execPromise(`pdfinfo "${pdfPath}"`);
+    const pageCountMatch = infoOut.match(/Pages:\s+(\d+)/);
+    if (!pageCountMatch) {
+      return undefined;
+    }
 
-    pdfParser.on("pdfParser_dataReady", (pdfData) => {
-      const pages = pdfData.Pages.map((p) => ({
-        width: p.Width,
-        height: p.Height,
-      }));
-      resolve(pages);
-    });
+    const totalPages = parseInt(pageCountMatch[1], 10);
+    const dimensions: { height: number; width: number }[] = [];
+    const DEFAULT_DIMENSIONS = { height: 792, width: 612 };
 
-    pdfParser.on("pdfParser_dataError", () => {
-      resolve(undefined);
-    });
+    for (let page = 1; page <= totalPages; page++) {
+      const { stdout } = await execPromise(
+        `pdfinfo -f ${page} -l ${page} "${pdfPath}"`
+      );
+      const sizeMatch = stdout.match(
+        /Page\s+\d+\s+size:\s+([\d.]+)\s+x\s+([\d.]+)/
+      );
 
-    pdfParser.loadPDF(pdfPath);
-  });
+      if (sizeMatch) {
+        dimensions.push({
+          height: parseFloat(sizeMatch[2]),
+          width: parseFloat(sizeMatch[1]),
+        });
+      } else {
+        dimensions.push(DEFAULT_DIMENSIONS);
+      }
+    }
+
+    return dimensions;
+  } catch (error) {
+    console.error("Error getting PDF dimensions:", error);
+    return undefined;
+  }
 };
 
 // Checks if a file is an Excel file
