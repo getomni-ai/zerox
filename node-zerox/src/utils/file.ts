@@ -141,46 +141,52 @@ export const convertPdfToImages = async ({
   pagesToConvertAsImages: number | number[];
   tempDir: string;
 }): Promise<string[]> => {
+  const baseFilename = path.basename(pdfPath, path.extname(pdfPath));
   const pageDimensions = await getPdfPageDimensions(pdfPath);
-  const maxHeight = (() => {
-    if (!pageDimensions || pageDimensions.length === 0) return imageHeight;
-    return Math.max(
+  const totalPages = pageDimensions?.length ?? 0;
+
+  const pageNumbers =
+    pagesToConvertAsImages === -1
+      ? Array.from({ length: totalPages }, (_, i) => i + 1)
+      : Array.isArray(pagesToConvertAsImages)
+      ? pagesToConvertAsImages
+      : [pagesToConvertAsImages];
+
+  const convertPagePromises = pageNumbers.map(async (page) => {
+    const pageIndex = page - 1;
+    const dimensions = pageDimensions?.[pageIndex];
+    const ratio = dimensions ? dimensions.height / dimensions.width : 1;
+    const adjustedHeight = Math.max(
       imageHeight,
-      ...pageDimensions.map(({ width, height }) => {
-        const ratio = height / width;
-        return Math.round(imageHeight * ratio);
-      })
+      Math.round(imageHeight * ratio)
     );
-  })();
-  const options = {
-    density: imageDensity,
-    format: "png",
-    height: maxHeight,
-    preserveAspectRatio: true,
-    saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
-    savePath: tempDir,
-  };
-  const storeAsImage = fromPath(pdfPath, options);
+    const options = {
+      density: imageDensity,
+      format: "png",
+      height: adjustedHeight,
+      preserveAspectRatio: true,
+      saveFilename: baseFilename,
+      savePath: tempDir,
+    };
+    const storeAsImage = fromPath(pdfPath, options);
 
+    const result = await storeAsImage(page);
+    if (!result.page || !result.path) {
+      throw new Error("Could not identify page data");
+    }
+
+    return result.path;
+  });
+
+  let outputPaths: string[] = [];
   try {
-    const convertResults: WriteImageResponse[] = await storeAsImage.bulk(
-      pagesToConvertAsImages
-    );
-
-    // validate that all pages were converted
-    let imagePaths: string[] = [];
-    convertResults.forEach((result) => {
-      if (!result.page || !result.path) {
-        throw new Error("Could not identify page data");
-      }
-      imagePaths.push(result.path);
-    });
-
-    return imagePaths;
+    outputPaths = await Promise.all(convertPagePromises);
   } catch (err) {
     console.error("Error during PDF conversion:", err);
     throw err;
   }
+
+  return outputPaths;
 };
 
 // Converts an Excel file to HTML format
