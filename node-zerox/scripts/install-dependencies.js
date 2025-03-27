@@ -1,6 +1,5 @@
 const { exec } = require("child_process");
 const { promisify } = require("util");
-const fs = require("fs");
 
 const execPromise = promisify(exec);
 
@@ -86,8 +85,7 @@ const checkAndInstall = async () => {
 
     // Check and install Poppler
     try {
-      await execPromise("pdfinfo -v");
-      await execPromise("pdftoppm -v");
+      await execPromise("pdfinfo -v || pdftoppm -v");
     } catch {
       if (process.platform === "darwin") {
         await installPackage("brew install poppler", "Poppler");
@@ -99,6 +97,26 @@ const checkAndInstall = async () => {
       } else {
         throw new Error(
           "Please install Poppler manually from https://poppler.freedesktop.org/"
+        );
+      }
+    }
+
+    // Check and install OpenCV
+    try {
+      await execPromise(
+        "pkg-config --modversion opencv4 || pkg-config --modversion opencv"
+      );
+    } catch {
+      if (process.platform === "darwin") {
+        await installPackage("brew install opencv", "OpenCV");
+      } else if (process.platform === "linux") {
+        const command = sudoAvailable
+          ? "sudo apt-get update && sudo apt-get install -y libopencv-dev"
+          : "apt-get update && apt-get install -y libopencv-dev";
+        await installPackage(command, "OpenCV");
+      } else {
+        throw new Error(
+          "Please install OpenCV manually from https://opencv.org/releases/"
         );
       }
     }
