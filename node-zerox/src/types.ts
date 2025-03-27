@@ -7,7 +7,7 @@ export interface ZeroxArgs {
   correctOrientation?: boolean;
   credentials?: ModelCredentials;
   customModelFunction?: (params: {
-    buffer: Buffer;
+    buffers: Buffer[];
     image: string;
     maintainFormat: boolean;
     priorPage: string;
@@ -127,8 +127,17 @@ export interface Page {
   status: PageStatus;
 }
 
+export interface ConvertPdfOptions {
+  density: number;
+  format: "png";
+  height: number;
+  preserveAspectRatio?: boolean;
+  saveFilename: string;
+  savePath: string;
+}
+
 export interface CompletionArgs {
-  image: Buffer;
+  buffers: Buffer[];
   maintainFormat: boolean;
   priorPage: string;
   prompt?: string;

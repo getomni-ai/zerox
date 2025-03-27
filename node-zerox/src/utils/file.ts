@@ -1,21 +1,31 @@
+import { convert } from "libreoffice-convert";
+import { exec } from "child_process";
 import { fromPath } from "pdf2pic";
 import { pipeline } from "stream/promises";
-import axios from "axios";
-import fs from "fs-extra";
-import mime from "mime-types";
-import path from "path";
 import { promisify } from "util";
 import { v4 as uuidv4 } from "uuid";
-import { convert } from "libreoffice-convert";
 import { WriteImageResponse } from "pdf2pic/dist/types/convertResponse";
+import axios from "axios";
+import fs from "fs-extra";
 import heicConvert from "heic-convert";
+import mime from "mime-types";
+import path from "path";
 import pdf from "pdf-parse";
+import util from "util";
 import xlsx from "xlsx";
 
+import { ASPECT_RATIO_THRESHOLD } from "../constants";
+import {
+  ConvertPdfOptions,
+  ExcelSheetContent,
+  Page,
+  PageStatus,
+} from "../types";
 import { isValidUrl } from "./common";
-import { ExcelSheetContent, Page, PageStatus } from "../types";
 
 const convertAsync = promisify(convert);
+
+const execAsync = util.promisify(exec);
 
 // Save file to local tmp directory
 export const downloadFile = async ({
@@ -130,41 +140,51 @@ export const convertFileToPdf = async ({
 export const convertPdfToImages = async ({
   imageDensity = 300,
   imageHeight = 2048,
-  pdfPath,
   pagesToConvertAsImages,
+  pdfPath,
   tempDir,
 }: {
-  imageDensity: number;
-  imageHeight: number;
-  pdfPath: string;
+  imageDensity?: number;
+  imageHeight?: number;
   pagesToConvertAsImages: number | number[];
+  pdfPath: string;
   tempDir: string;
 }): Promise<string[]> => {
-  const options = {
+  const aspectRatio = (await getPdfAspectRatio(pdfPath)) || 1;
+  const shouldAdjustHeight = aspectRatio > ASPECT_RATIO_THRESHOLD;
+  const adjustedHeight = shouldAdjustHeight
+    ? Math.max(imageHeight, Math.round(aspectRatio * imageHeight))
+    : imageHeight;
+
+  const options: ConvertPdfOptions = {
     density: imageDensity,
     format: "png",
-    height: imageHeight,
+    height: adjustedHeight,
     preserveAspectRatio: true,
     saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
     savePath: tempDir,
   };
-  const storeAsImage = fromPath(pdfPath, options);
 
   try {
-    const convertResults: WriteImageResponse[] = await storeAsImage.bulk(
-      pagesToConvertAsImages
-    );
-
-    // validate that all pages were converted
-    let imagePaths: string[] = [];
-    convertResults.forEach((result) => {
-      if (!result.page || !result.path) {
-        throw new Error("Could not identify page data");
-      }
-      imagePaths.push(result.path);
-    });
-
-    return imagePaths;
+    try {
+      const storeAsImage = fromPath(pdfPath, options);
+      const convertResults: WriteImageResponse[] = await storeAsImage.bulk(
+        pagesToConvertAsImages
+      );
+      // Validate that all pages were converted
+      return convertResults.map((result) => {
+        if (!result.page || !result.path) {
+          throw new Error("Could not identify page data");
+        }
+        return result.path;
+      });
+    } catch (err) {
+      return await convertPdfWithPoppler(
+        pagesToConvertAsImages,
+        pdfPath,
+        options
+      );
+    }
   } catch (err) {
     console.error("Error during PDF conversion:", err);
     throw err;
@@ -240,6 +260,38 @@ export const convertExcelToHtml = async (
   }
 };
 
+// Alternative PDF to PNG conversion using Poppler
+const convertPdfWithPoppler = async (
+  pagesToConvertAsImages: number | number[],
+  pdfPath: string,
+  options: ConvertPdfOptions
+): Promise<string[]> => {
+  const { density, format, height, saveFilename, savePath } = options;
+  const outputPrefix = path.join(savePath, saveFilename);
+
+  const run = async (from?: number, to?: number) => {
+    const pageArgs = from && to ? `-f ${from} -l ${to}` : "";
+    const cmd = `pdftoppm -${format} -r ${density} -scale-to-y ${height} -scale-to-x -1 ${pageArgs} "${pdfPath}" "${outputPrefix}"`;
+    await execAsync(cmd);
+  };
+
+  if (pagesToConvertAsImages === -1) {
+    await run();
+  } else if (typeof pagesToConvertAsImages === "number") {
+    await run(pagesToConvertAsImages, pagesToConvertAsImages);
+  } else if (Array.isArray(pagesToConvertAsImages)) {
+    await Promise.all(pagesToConvertAsImages.map((page) => run(page, page)));
+  }
+
+  const convertResults = await fs.readdir(savePath);
+  return convertResults
+    .filter(
+      (result) =>
+        result.startsWith(saveFilename) && result.endsWith(`.${format}`)
+    )
+    .map((result) => path.join(savePath, result));
+};
+
 // Extracts pages from a structured data file (like Excel)
 export const extractPagesFromStructuredDataFile = async (
   filePath: string
@@ -270,6 +322,26 @@ export const getNumberOfPagesFromPdf = async ({
   const dataBuffer = await fs.readFile(pdfPath);
   const data = await pdf(dataBuffer);
   return data.numpages;
+};
+
+// Gets the aspect ratio (height/width) of a PDF
+const getPdfAspectRatio = async (
+  pdfPath: string
+): Promise<number | undefined> => {
+  return new Promise((resolve) => {
+    exec(`pdfinfo "${pdfPath}"`, (error, stdout) => {
+      if (error) return resolve(undefined);
+
+      const sizeMatch = stdout.match(/Page size:\s+([\d.]+)\s+x\s+([\d.]+)/);
+      if (sizeMatch) {
+        const height = parseFloat(sizeMatch[2]);
+        const width = parseFloat(sizeMatch[1]);
+        return resolve(height / width);
+      }
+
+      resolve(undefined);
+    });
+  });
 };
 
 // Checks if a file is an Excel file

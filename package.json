@@ -16,6 +16,7 @@
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.734.0",
     "@google/generative-ai": "^0.21.0",
+    "@u4/opencv4nodejs": "^7.1.2",
     "axios": "^1.7.2",
     "child_process": "^1.0.2",
     "fs-extra": "^11.2.0",
@@ -42,6 +43,7 @@
     "@types/node": "^20.14.11",
     "@types/pdf-parse": "^1.1.4",
     "@types/prompts": "^2.4.9",
+    "@types/xlsx": "^0.0.35",
     "dotenv": "^16.4.5",
     "jest": "^29.7.0",
     "prompts": "^2.4.2",

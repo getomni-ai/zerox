@@ -58,8 +58,8 @@ export const zerox = async ({
   extractOnly = false,
   extractPerPage,
   filePath,
-  imageDensity = 300,
-  imageHeight = 2048,
+  imageDensity,
+  imageHeight,
   llmParams = {},
   maintainFormat = false,
   maxImageSize = 15,
@@ -189,17 +189,20 @@ export const zerox = async ({
             tempDir: sourceDirectory,
           });
         }
-        if (Array.isArray(pagesToConvertAsImages)) {
+        if (pagesToConvertAsImages !== -1) {
           const totalPages = await getNumberOfPagesFromPdf({ pdfPath });
+          pagesToConvertAsImages = Array.isArray(pagesToConvertAsImages)
+            ? pagesToConvertAsImages
+            : [pagesToConvertAsImages];
           pagesToConvertAsImages = pagesToConvertAsImages.filter(
             (page) => page > 0 && page <= totalPages
           );
         }
         imagePaths = await convertPdfToImages({
-          pdfPath,
           imageDensity,
           imageHeight,
           pagesToConvertAsImages,
+          pdfPath,
           tempDir: sourceDirectory,
         });
       }
@@ -250,7 +253,7 @@ export const zerox = async ({
           maintainFormat: boolean
         ): Promise<Page> => {
           const imageBuffer = await fs.readFile(imagePath);
-          const correctedBuffer = await cleanupImage({
+          const buffers = await cleanupImage({
             correctOrientation,
             imageBuffer,
             scheduler,
@@ -264,7 +267,7 @@ export const zerox = async ({
               rawResponse = await runRetries(
                 () =>
                   customModelFunction({
-                    buffer: correctedBuffer,
+                    buffers,
                     image: imagePath,
                     maintainFormat,
                     priorPage,
@@ -276,7 +279,7 @@ export const zerox = async ({
               rawResponse = await runRetries(
                 () =>
                   modelInstance.getCompletion(OperationMode.OCR, {
-                    image: correctedBuffer,
+                    buffers,
                     maintainFormat,
                     priorPage,
                     prompt,
