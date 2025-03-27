@@ -1,4 +1,3 @@
-import * as cv from "@u4/opencv4nodejs";
 import sharp from "sharp";
 import Tesseract from "tesseract.js";
 
@@ -128,16 +127,64 @@ export const splitTallImage = async (
     return [await image.toBuffer()];
   }
 
-  const cvImg = cv.imdecode(imageBuffer);
-  const edges = cvImg.cvtColor(cv.COLOR_BGR2GRAY).canny(50, 150);
+  const { data: imageData } = await image
+    .grayscale()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
 
-  const edgeDensity = new Array(height);
+  const emptySpaces = new Array(height).fill(0);
+
+  // Analyze each row to find empty spaces
   for (let y = 0; y < height; y++) {
-    let rowSum = 0;
+    let emptyPixels = 0;
     for (let x = 0; x < width; x++) {
-      rowSum += edges.at(y, x);
+      const pixelIndex = y * width + x;
+      if (imageData[pixelIndex] > 230) {
+        emptyPixels++;
+      }
     }
-    edgeDensity[y] = rowSum;
+    // Calculate percentage of empty pixels in this row
+    const emptyRatio = emptyPixels / width;
+    // Mark rows that are mostly empty (whitespace)
+    emptySpaces[y] = emptyRatio > 0.95 ? 1 : 0;
+  }
+
+  const significantEmptySpaces = [];
+  let currentEmptyStart = -1;
+
+  for (let y = 0; y < height; y++) {
+    if (emptySpaces[y] === 1) {
+      if (currentEmptyStart === -1) {
+        currentEmptyStart = y;
+      }
+    } else {
+      if (currentEmptyStart !== -1) {
+        const emptyHeight = y - currentEmptyStart;
+        if (emptyHeight >= 5) {
+          // Minimum height for a significant empty space
+          significantEmptySpaces.push({
+            center: Math.floor(currentEmptyStart + emptyHeight / 2),
+            end: y - 1,
+            height: emptyHeight,
+            start: currentEmptyStart,
+          });
+        }
+        currentEmptyStart = -1;
+      }
+    }
+  }
+
+  // Handle if there's an empty space at the end
+  if (currentEmptyStart !== -1) {
+    const emptyHeight = height - currentEmptyStart;
+    if (emptyHeight >= 5) {
+      significantEmptySpaces.push({
+        center: Math.floor(currentEmptyStart + emptyHeight / 2),
+        end: height - 1,
+        height: emptyHeight,
+        start: currentEmptyStart,
+      });
+    }
   }
 
   const numSections = Math.ceil(aspectRatio);
@@ -147,21 +194,28 @@ export const splitTallImage = async (
   for (let i = 1; i < numSections; i++) {
     const targetY = i * approxSectionHeight;
 
-    const windowSize = Math.min(100, approxSectionHeight / 4);
-    const searchStart = Math.max(targetY - windowSize, splitPoints[i - 1] + 50);
-    const searchEnd = Math.min(targetY + windowSize, height - 50);
+    // Find empty spaces near the target position
+    const searchRadius = Math.min(150, approxSectionHeight / 3);
+    const nearbyEmptySpaces = significantEmptySpaces.filter(
+      (space) =>
+        Math.abs(space.center - targetY) < searchRadius &&
+        space.start > splitPoints[splitPoints.length - 1] + 50
+    );
 
-    let bestY = targetY;
-    let minEdgeValue = Infinity;
+    if (nearbyEmptySpaces.length > 0) {
+      // Sort by proximity to target
+      nearbyEmptySpaces.sort(
+        (a, b) => Math.abs(a.center - targetY) - Math.abs(b.center - targetY)
+      );
 
-    for (let y = searchStart; y <= searchEnd; y++) {
-      if (edgeDensity[y] < minEdgeValue) {
-        minEdgeValue = edgeDensity[y];
-        bestY = y;
-      }
+      // Choose center of the best empty space
+      splitPoints.push(nearbyEmptySpaces[0].center);
+    } else {
+      // Fallback if no good empty spaces found
+      const minY = splitPoints[splitPoints.length - 1] + 50;
+      const maxY = Math.min(height - 50, targetY + searchRadius);
+      splitPoints.push(Math.max(minY, Math.min(maxY, targetY)));
     }
-
-    splitPoints.push(bestY);
   }
 
   splitPoints.push(height);
