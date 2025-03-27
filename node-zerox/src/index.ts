@@ -189,8 +189,11 @@ export const zerox = async ({
             tempDir: sourceDirectory,
           });
         }
-        if (Array.isArray(pagesToConvertAsImages)) {
+        if (pagesToConvertAsImages !== -1) {
           const totalPages = await getNumberOfPagesFromPdf({ pdfPath });
+          pagesToConvertAsImages = Array.isArray(pagesToConvertAsImages)
+            ? pagesToConvertAsImages
+            : [pagesToConvertAsImages];
           pagesToConvertAsImages = pagesToConvertAsImages.filter(
             (page) => page > 0 && page <= totalPages
           );
