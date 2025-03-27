@@ -1,4 +1,3 @@
-import * as cv from "@u4/opencv4nodejs";
 import sharp from "sharp";
 import Tesseract from "tesseract.js";
 
@@ -128,14 +127,19 @@ export const splitTallImage = async (
     return [await image.toBuffer()];
   }
 
-  const cvImg = cv.imdecode(imageBuffer);
-  const edges = cvImg.cvtColor(cv.COLOR_BGR2GRAY).canny(50, 150);
+  const edges = await sharp(imageBuffer)
+    .greyscale()
+    .sharpen({ sigma: 2 })
+    .normalise()
+    .raw()
+    .toBuffer();
 
   const edgeDensity = new Array(height);
   for (let y = 0; y < height; y++) {
     let rowSum = 0;
     for (let x = 0; x < width; x++) {
-      rowSum += edges.at(y, x);
+      const pixelIndex = y * width + x;
+      rowSum += edges[pixelIndex];
     }
     edgeDensity[y] = rowSum;
   }

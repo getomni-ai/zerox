@@ -100,26 +100,6 @@ const checkAndInstall = async () => {
         );
       }
     }
-
-    // Check and install OpenCV
-    try {
-      await execPromise(
-        "pkg-config --modversion opencv4 || pkg-config --modversion opencv"
-      );
-    } catch {
-      if (process.platform === "darwin") {
-        await installPackage("brew install opencv", "OpenCV");
-      } else if (process.platform === "linux") {
-        const command = sudoAvailable
-          ? "sudo apt-get update && sudo apt-get install -y libopencv-dev"
-          : "apt-get update && apt-get install -y libopencv-dev";
-        await installPackage(command, "OpenCV");
-      } else {
-        throw new Error(
-          "Please install OpenCV manually from https://opencv.org/releases/"
-        );
-      }
-    }
   } catch (err) {
     console.error(`Error during installation: ${err.message}`);
     process.exit(1);
