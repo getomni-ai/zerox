@@ -277,12 +277,12 @@ const convertPdfWithPoppler = async (
   }
 
   const convertResults = await fs.readdir(savePath);
-  return convertResults.map((result) => {
-    if (!result) {
-      throw new Error("Could not identify page data");
-    }
-    return path.join(savePath, result);
-  });
+  return convertResults
+    .filter(
+      (result) =>
+        result.startsWith(saveFilename) && result.endsWith(`.${format}`)
+    )
+    .map((result) => path.join(savePath, result));
 };
 
 // Extracts pages from a structured data file (like Excel)
