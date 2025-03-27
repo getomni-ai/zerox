@@ -1,4 +1,5 @@
 import { convert } from "libreoffice-convert";
+import { exec } from "child_process";
 import { fromPath } from "pdf2pic";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
@@ -10,12 +11,20 @@ import heicConvert from "heic-convert";
 import mime from "mime-types";
 import path from "path";
 import pdf from "pdf-parse";
+import util from "util";
 import xlsx from "xlsx";
 
+import {
+  ConvertPdfOptions,
+  ExcelSheetContent,
+  Page,
+  PageStatus,
+} from "../types";
 import { isValidUrl } from "./common";
-import { ExcelSheetContent, Page, PageStatus } from "../types";
 
 const convertAsync = promisify(convert);
+
+const execAsync = util.promisify(exec);
 
 // Save file to local tmp directory
 export const downloadFile = async ({
@@ -140,7 +149,7 @@ export const convertPdfToImages = async ({
   pagesToConvertAsImages: number | number[];
   tempDir: string;
 }): Promise<string[]> => {
-  const options = {
+  const options: ConvertPdfOptions = {
     density: imageDensity,
     format: "png",
     height: imageHeight,
@@ -148,23 +157,27 @@ export const convertPdfToImages = async ({
     saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
     savePath: tempDir,
   };
-  const storeAsImage = fromPath(pdfPath, options);
 
   try {
-    const convertResults: WriteImageResponse[] = await storeAsImage.bulk(
-      pagesToConvertAsImages
-    );
-
-    // Validate that all pages were converted
-    let imagePaths: string[] = [];
-    convertResults.forEach((result) => {
-      if (!result.page || !result.path) {
-        throw new Error("Could not identify page data");
-      }
-      imagePaths.push(result.path);
-    });
-
-    return imagePaths;
+    try {
+      const storeAsImage = fromPath(pdfPath, options);
+      const convertResults: WriteImageResponse[] = await storeAsImage.bulk(
+        pagesToConvertAsImages
+      );
+      // Validate that all pages were converted
+      return convertResults.map((result) => {
+        if (!result.page || !result.path) {
+          throw new Error("Could not identify page data");
+        }
+        return result.path;
+      });
+    } catch (err) {
+      return await convertPdfWithPoppler(
+        pagesToConvertAsImages,
+        pdfPath,
+        options
+      );
+    }
   } catch (err) {
     console.error("Error during PDF conversion:", err);
     throw err;
@@ -238,6 +251,38 @@ export const convertExcelToHtml = async (
   } catch (error) {
     throw error;
   }
+};
+
+// Alternative PDF to PNG conversion using Poppler
+const convertPdfWithPoppler = async (
+  pagesToConvertAsImages: number | number[],
+  pdfPath: string,
+  options: ConvertPdfOptions
+): Promise<string[]> => {
+  const { density, format, height, saveFilename, savePath } = options;
+  const outputPrefix = path.join(savePath, saveFilename);
+
+  const run = async (from?: number, to?: number) => {
+    const pageArgs = from && to ? `-f ${from} -l ${to}` : "";
+    const cmd = `pdftoppm -${format} -r ${density} -scale-to-y ${height} -scale-to-x -1 ${pageArgs} "${pdfPath}" "${outputPrefix}"`;
+    await execAsync(cmd);
+  };
+
+  if (pagesToConvertAsImages === -1) {
+    await run();
+  } else if (typeof pagesToConvertAsImages === "number") {
+    await run(pagesToConvertAsImages, pagesToConvertAsImages);
+  } else if (Array.isArray(pagesToConvertAsImages)) {
+    await Promise.all(pagesToConvertAsImages.map((page) => run(page, page)));
+  }
+
+  const convertResults = await fs.readdir(savePath);
+  return convertResults.map((result) => {
+    if (!result) {
+      throw new Error("Could not identify page data");
+    }
+    return path.join(savePath, result);
+  });
 };
 
 // Extracts pages from a structured data file (like Excel)

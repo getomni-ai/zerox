@@ -83,6 +83,24 @@ const checkAndInstall = async () => {
         );
       }
     }
+
+    // Check and install Poppler
+    try {
+      await execPromise("pdftoppm -v");
+    } catch {
+      if (process.platform === "darwin") {
+        await installPackage("brew install poppler", "Poppler");
+      } else if (process.platform === "linux") {
+        const command = sudoAvailable
+          ? "sudo apt-get update && sudo apt-get install -y poppler-utils"
+          : "apt-get update && apt-get install -y poppler-utils";
+        await installPackage(command, "Poppler");
+      } else {
+        throw new Error(
+          "Please install Poppler manually from https://poppler.freedesktop.org/"
+        );
+      }
+    }
   } catch (err) {
     console.error(`Error during installation: ${err.message}`);
     process.exit(1);

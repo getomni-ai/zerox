@@ -127,6 +127,15 @@ export interface Page {
   status: PageStatus;
 }
 
+export interface ConvertPdfOptions {
+  density: number;
+  format: "png";
+  height: number;
+  preserveAspectRatio?: boolean;
+  saveFilename: string;
+  savePath: string;
+}
+
 export interface CompletionArgs {
   buffers: Buffer[];
   maintainFormat: boolean;
