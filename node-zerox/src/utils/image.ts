@@ -1,3 +1,4 @@
+import * as cv from "@u4/opencv4nodejs";
 import sharp from "sharp";
 import Tesseract from "tesseract.js";
 
@@ -19,9 +20,6 @@ export const cleanupImage = async ({
   trimEdges,
 }: CleanupImageProps): Promise<Buffer[]> => {
   const image = sharp(imageBuffer);
-  const metadata = await image.metadata();
-  const height = metadata.height || 0;
-  const width = metadata.width || 0;
 
   // Trim extra space around the content in the image
   if (trimEdges) {
@@ -43,13 +41,8 @@ export const cleanupImage = async ({
 
   // Correct the image orientation
   const correctedBuffer = await image.toBuffer();
-  const ratio = height / width;
 
-  if (ratio > 3) {
-    return await splitTallImage(correctedBuffer);
-  }
-
-  return [correctedBuffer];
+  return await splitTallImage(correctedBuffer);
 };
 
 // Determine the optimal image orientation based on OCR confidence
@@ -120,34 +113,63 @@ export const compressImage = async (
 };
 
 export const splitTallImage = async (
-  imageBuffer: Buffer,
-  maxRatioPerSection = 3
+  imageBuffer: Buffer
 ): Promise<Buffer[]> => {
   const image = sharp(imageBuffer);
   const metadata = await image.metadata();
 
   const height = metadata.height || 0;
   const width = metadata.width || 0;
+  const aspectRatio = height / width;
 
-  const ratio = height / width;
-
-  if (ratio <= maxRatioPerSection) return [await image.toBuffer()];
-
-  const numSections = Math.ceil(ratio / maxRatioPerSection);
-  const sectionHeight = Math.floor(height / numSections);
-
-  const buffers: Buffer[] = [];
-
-  for (let i = 0; i < numSections; i++) {
-    const top = i * sectionHeight;
-    const heightToUse = i === numSections - 1 ? height - top : sectionHeight;
-
-    const sectionBuffer = await sharp(imageBuffer)
-      .extract({ left: 0, top, width, height: heightToUse })
-      .toBuffer();
-
-    buffers.push(sectionBuffer);
+  if (aspectRatio <= 5) {
+    return [await image.toBuffer()];
   }
 
-  return buffers;
+  const cvImg = cv.imdecode(imageBuffer);
+  const edges = cvImg.cvtColor(cv.COLOR_BGR2GRAY).canny(50, 150);
+
+  const edgeDensity = new Array(height);
+  for (let y = 0; y < height; y++) {
+    let rowSum = 0;
+    for (let x = 0; x < width; x++) {
+      rowSum += edges.at(y, x);
+    }
+    edgeDensity[y] = rowSum;
+  }
+
+  const numSections = Math.ceil(aspectRatio);
+  const splitPoints = [0];
+  const approxSectionHeight = Math.floor(height / numSections);
+
+  for (let i = 1; i < numSections; i++) {
+    const targetY = i * approxSectionHeight;
+
+    const windowSize = Math.min(100, approxSectionHeight / 4);
+    const searchStart = Math.max(targetY - windowSize, splitPoints[i - 1] + 50);
+    const searchEnd = Math.min(targetY + windowSize, height - 50);
+
+    let bestY = targetY;
+    let minEdgeValue = Infinity;
+
+    for (let y = searchStart; y <= searchEnd; y++) {
+      if (edgeDensity[y] < minEdgeValue) {
+        minEdgeValue = edgeDensity[y];
+        bestY = y;
+      }
+    }
+
+    splitPoints.push(bestY);
+  }
+
+  splitPoints.push(height);
+
+  return Promise.all(
+    splitPoints.slice(0, -1).map((top, i) => {
+      const sectionHeight = splitPoints[i + 1] - top;
+      return sharp(imageBuffer)
+        .extract({ left: 0, top, width, height: sectionHeight })
+        .toBuffer();
+    })
+  );
 };

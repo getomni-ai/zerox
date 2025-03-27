@@ -86,6 +86,7 @@ const checkAndInstall = async () => {
 
     // Check and install Poppler
     try {
+      await execPromise("pdfinfo -v");
       await execPromise("pdftoppm -v");
     } catch {
       if (process.platform === "darwin") {

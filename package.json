@@ -16,6 +16,7 @@
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.734.0",
     "@google/generative-ai": "^0.21.0",
+    "@u4/opencv4nodejs": "^7.1.2",
     "axios": "^1.7.2",
     "child_process": "^1.0.2",
     "fs-extra": "^11.2.0",

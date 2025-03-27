@@ -199,10 +199,10 @@ export const zerox = async ({
           );
         }
         imagePaths = await convertPdfToImages({
-          pdfPath,
           imageDensity,
           imageHeight,
           pagesToConvertAsImages,
+          pdfPath,
           tempDir: sourceDirectory,
         });
       }

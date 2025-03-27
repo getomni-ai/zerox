@@ -139,20 +139,26 @@ export const convertFileToPdf = async ({
 export const convertPdfToImages = async ({
   imageDensity = 300,
   imageHeight = 2048,
-  pdfPath,
   pagesToConvertAsImages,
+  pdfPath,
   tempDir,
 }: {
   imageDensity?: number;
   imageHeight?: number;
-  pdfPath: string;
   pagesToConvertAsImages: number | number[];
+  pdfPath: string;
   tempDir: string;
 }): Promise<string[]> => {
+  const aspectRatio = (await getPdfAspectRatio(pdfPath)) || 1;
+  const adjustedHeight = Math.max(
+    imageHeight,
+    Math.round(aspectRatio * imageHeight)
+  );
+
   const options: ConvertPdfOptions = {
     density: imageDensity,
     format: "png",
-    height: imageHeight,
+    height: adjustedHeight,
     preserveAspectRatio: true,
     saveFilename: path.basename(pdfPath, path.extname(pdfPath)),
     savePath: tempDir,
@@ -315,6 +321,26 @@ export const getNumberOfPagesFromPdf = async ({
   const dataBuffer = await fs.readFile(pdfPath);
   const data = await pdf(dataBuffer);
   return data.numpages;
+};
+
+// Gets the aspect ratio (height/width) of a PDF
+const getPdfAspectRatio = async (
+  pdfPath: string
+): Promise<number | undefined> => {
+  return new Promise((resolve) => {
+    exec(`pdfinfo "${pdfPath}"`, (error, stdout) => {
+      if (error) return resolve(undefined);
+
+      const sizeMatch = stdout.match(/Page size:\s+([\d.]+)\s+x\s+([\d.]+)/);
+      if (sizeMatch) {
+        const height = parseFloat(sizeMatch[2]);
+        const width = parseFloat(sizeMatch[1]);
+        return resolve(height / width);
+      }
+
+      resolve(undefined);
+    });
+  });
 };
 
 // Checks if a file is an Excel file
