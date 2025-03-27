@@ -2,6 +2,8 @@ import * as cv from "@u4/opencv4nodejs";
 import sharp from "sharp";
 import Tesseract from "tesseract.js";
 
+import { ASPECT_RATIO_THRESHOLD } from "../constants";
+
 interface CleanupImageProps {
   correctOrientation: boolean;
   imageBuffer: Buffer;
@@ -122,7 +124,7 @@ export const splitTallImage = async (
   const width = metadata.width || 0;
   const aspectRatio = height / width;
 
-  if (aspectRatio <= 5) {
+  if (aspectRatio <= ASPECT_RATIO_THRESHOLD) {
     return [await image.toBuffer()];
   }
 
@@ -139,8 +141,8 @@ export const splitTallImage = async (
   }
 
   const numSections = Math.ceil(aspectRatio);
-  const splitPoints = [0];
   const approxSectionHeight = Math.floor(height / numSections);
+  const splitPoints = [0];
 
   for (let i = 1; i < numSections; i++) {
     const targetY = i * approxSectionHeight;

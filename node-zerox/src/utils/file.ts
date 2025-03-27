@@ -14,6 +14,7 @@ import pdf from "pdf-parse";
 import util from "util";
 import xlsx from "xlsx";
 
+import { ASPECT_RATIO_THRESHOLD } from "../constants";
 import {
   ConvertPdfOptions,
   ExcelSheetContent,
@@ -150,10 +151,10 @@ export const convertPdfToImages = async ({
   tempDir: string;
 }): Promise<string[]> => {
   const aspectRatio = (await getPdfAspectRatio(pdfPath)) || 1;
-  const adjustedHeight = Math.max(
-    imageHeight,
-    Math.round(aspectRatio * imageHeight)
-  );
+  const shouldAdjustHeight = aspectRatio > ASPECT_RATIO_THRESHOLD;
+  const adjustedHeight = shouldAdjustHeight
+    ? Math.max(imageHeight, Math.round(aspectRatio * imageHeight))
+    : imageHeight;
 
   const options: ConvertPdfOptions = {
     density: imageDensity,
