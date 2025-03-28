@@ -60,7 +60,7 @@ export default class AzureModel implements ModelInterface {
     options,
   }: MessageContentArgs): Promise<any> {
     const processImages = async (imagePaths: string[]) => {
-      return Promise.all(
+      const nestedImages = await Promise.all(
         imagePaths.map(async (imagePath) => {
           const imageBuffer = await fs.readFile(imagePath);
           const buffers = await cleanupImage({
@@ -77,6 +77,7 @@ export default class AzureModel implements ModelInterface {
           }));
         })
       );
+      return nestedImages.flat();
     };
 
     if (Array.isArray(input)) {
