@@ -36,6 +36,7 @@ import {
   OperationMode,
   Page,
   PageStatus,
+  ValidationLog,
   ZeroxArgs,
   ZeroxOutput,
 } from "./types";
@@ -85,6 +86,7 @@ export const zerox = async ({
   let priorPage: string = "";
   let pages: Page[] = [];
   let imagePaths: string[] = [];
+  let validationLog: ValidationLog = { extracted: [] };
   const startTime = new Date();
 
   if (openaiAPIKey && openaiAPIKey.length > 0) {
@@ -296,10 +298,10 @@ export const zerox = async ({
               });
             }
 
-            const response = CompletionProcessor.process(
-              OperationMode.OCR,
-              rawResponse
-            );
+            const response = CompletionProcessor.process({
+              mode: OperationMode.OCR,
+              response: rawResponse as CompletionResponse,
+            });
 
             inputTokenCount += response.inputTokens;
             outputTokenCount += response.outputTokens;
@@ -381,6 +383,7 @@ export const zerox = async ({
         schema: Record<string, unknown>
       ): Promise<Record<string, unknown>> => {
         let result: Record<string, unknown> = {};
+        let validationResult: Record<string, unknown> | null = null;
         try {
           await runRetries(
             async () => {
@@ -401,16 +404,19 @@ export const zerox = async ({
                 });
               }
 
-              const response = CompletionProcessor.process(
-                OperationMode.EXTRACTION,
-                rawResponse
-              );
+              const response = CompletionProcessor.process({
+                mode: OperationMode.EXTRACTION,
+                response: rawResponse as ExtractionResponse,
+                schema,
+              });
 
               inputTokenCount += response.inputTokens;
               outputTokenCount += response.outputTokens;
 
               numSuccessfulExtractionRequests++;
-
+              if (response.issues && response.issues.length > 0) {
+                validationResult = { page: pageNumber, issues: response.issues };
+              }
               for (const key of Object.keys(schema?.properties ?? {})) {
                 const value = response.extracted[key];
                 if (value !== null && value !== undefined) {
@@ -429,7 +435,7 @@ export const zerox = async ({
           throw error;
         }
 
-        return result;
+        return { result, validationResult };
       };
 
       if (perPageSchema) {
@@ -472,6 +478,7 @@ export const zerox = async ({
         extractionTasks.push(
           (async () => {
             let result: Record<string, unknown> = {};
+            let validationResult: Record<string, unknown> | null = null;
             try {
               await runRetries(
                 async () => {
@@ -493,20 +500,25 @@ export const zerox = async ({
                     });
                   }
 
-                  const response = CompletionProcessor.process(
-                    OperationMode.EXTRACTION,
-                    rawResponse
-                  );
+                  const response = CompletionProcessor.process({
+                    mode: OperationMode.EXTRACTION,
+                    response: rawResponse as ExtractionResponse,
+                    schema,
+                  });
 
                   inputTokenCount += response.inputTokens;
                   outputTokenCount += response.outputTokens;
                   numSuccessfulExtractionRequests++;
+                  if (response.issues && response.issues.length > 0) {
+                    validationResult = { page: null, issues: response.issues };
+                  }
+
                   result = response.extracted;
                 },
                 maxRetries,
                 0
               );
-              return result;
+              return { result, validationResult };
             } catch (error) {
               numFailedExtractionRequests++;
               throw error;
@@ -516,8 +528,12 @@ export const zerox = async ({
       }
 
       const results = await Promise.all(extractionTasks);
-      extracted = results.reduce((acc, result) => {
-        Object.entries(result || {}).forEach(([key, value]) => {
+      validationLog.extracted = results.reduce(
+        (acc, result) => (result.validationResult ? [...acc, result.validationResult] : acc),
+        []
+      );
+      extracted = results.reduce((acc, resultObj) => {
+        Object.entries(resultObj?.result || {}).forEach(([key, value]) => {
           if (!acc[key]) {
             acc[key] = [];
           }
@@ -607,6 +623,7 @@ export const zerox = async ({
             }
           : null,
       },
+      validationLog,
     };
   } finally {
     if (correctOrientation && scheduler) {

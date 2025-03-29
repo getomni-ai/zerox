@@ -50,6 +50,7 @@ export interface ZeroxOutput {
   outputTokens: number;
   pages: Page[];
   summary: Summary;
+  validationLog: ValidationLog;
 }
 
 export interface AzureCredentials {
@@ -187,7 +188,11 @@ export interface ExtractionResponse {
   outputTokens: number;
 }
 
-export type ProcessedExtractionResponse = Omit<ExtractionResponse, "logprobs">;
+// export type ProcessedExtractionResponse = Omit<ExtractionResponse, "logprobs">;
+
+export interface ProcessedExtractionResponse extends Omit<ExtractionResponse, "logprobs"> {
+  issues: any;
+}
 
 export interface HybridInput {
   imagePaths: string[];
@@ -268,4 +273,25 @@ export interface ExcelSheetContent {
   content: string;
   contentLength: number;
   sheetName: string;
+}
+
+// Define extraction-specific parameters
+export interface ExtractionProcessParams {
+  mode: OperationMode.EXTRACTION;
+  response: ExtractionResponse;
+  schema: Record<string, unknown>;
+}
+
+// Define OCR-specific parameters
+export interface CompletionProcessParams {
+  mode: OperationMode.OCR;
+  response: CompletionResponse;
+  schema?: undefined;
+}
+
+// Union type for all possible parameter combinations
+export type ProcessParams = ExtractionProcessParams | CompletionProcessParams;
+
+export interface ValidationLog {
+  extracted: { page: number | null, issues: any }[];
 }

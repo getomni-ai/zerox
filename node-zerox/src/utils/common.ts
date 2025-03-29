@@ -1,3 +1,5 @@
+import { parse } from "flatted";
+
 export const camelToSnakeCase = (str: string) =>
   str.replace(/[A-Z]/g, (letter: string) => `_${letter.toLowerCase()}`);
 
@@ -118,4 +120,18 @@ export const splitSchema = (
         }
       : null,
   };
+};
+
+export const formatJsonValue = (
+  value: any,
+  useFlatted: boolean = false
+): any => {
+  if (typeof value === "string") {
+    try {
+      return useFlatted ? parse(value) : JSON.parse(value);
+    } catch {
+      return value;
+    }
+  }
+  return value;
 };
