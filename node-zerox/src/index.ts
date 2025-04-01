@@ -7,6 +7,7 @@ import Tesseract from "tesseract.js";
 import "./handleWarnings";
 import {
   addWorkersToTesseractScheduler,
+  checkIsCFBFile,
   cleanupImage,
   CompletionProcessor,
   compressImage,
@@ -179,7 +180,8 @@ export const zerox = async ({
         imagePaths = [imagePath];
       } else {
         let pdfPath: string;
-        if (extension === ".pdf") {
+        const isCFBFile = await checkIsCFBFile(localPath);
+        if (extension === ".pdf" && !isCFBFile) {
           pdfPath = localPath;
         } else {
           // Convert file to PDF if necessary

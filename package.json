@@ -18,6 +18,7 @@
     "@google/generative-ai": "^0.21.0",
     "axios": "^1.7.2",
     "child_process": "^1.0.2",
+    "file-type": "^16.5.4",
     "fs-extra": "^11.2.0",
     "heic-convert": "^2.1.0",
     "libreoffice-convert": "^1.6.0",
