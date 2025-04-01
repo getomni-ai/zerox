@@ -6,6 +6,7 @@ import { promisify } from "util";
 import { v4 as uuidv4 } from "uuid";
 import { WriteImageResponse } from "pdf2pic/dist/types/convertResponse";
 import axios from "axios";
+import fileType from "file-type";
 import fs from "fs-extra";
 import heicConvert from "heic-convert";
 import mime from "mime-types";
@@ -82,6 +83,12 @@ export const downloadFile = async ({
   }
 
   return { extension, localPath };
+};
+
+// Check if file is a Compound File Binary (legacy Office format)
+export const checkIsCFBFile = async (filePath: string): Promise<boolean> => {
+  const type = await fileType.fromFile(filePath);
+  return type?.mime === "application/x-cfb";
 };
 
 // Convert HEIC file to JPEG
