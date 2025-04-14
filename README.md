@@ -211,11 +211,13 @@ Zerox supports a wide range of models across different providers:
 
   - GPT-4 Vision (gpt-4o)
   - GPT-4 Vision Mini (gpt-4o-mini)
+  - GPT-4.1 (gpt-4.1)
 
 - **OpenAI**
 
   - GPT-4 Vision (gpt-4o)
   - GPT-4 Vision Mini (gpt-4o-mini)
+  - GPT-4.1 (gpt-4.1)
 
 - **AWS Bedrock**
 
