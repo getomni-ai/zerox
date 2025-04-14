@@ -89,6 +89,7 @@ export enum ModelOptions {
 
   // OpenAI GPT-4 Models
   OPENAI_GPT_4_1 = "gpt-4.1",
+  OPENAI_GPT_4_1_MINI = "gpt-4.1-mini",
   OPENAI_GPT_4O = "gpt-4o",
   OPENAI_GPT_4O_MINI = "gpt-4o-mini",
 
