@@ -251,9 +251,23 @@ export const zerox = async ({
       if (!extractOnly) {
         const processOCR = async (
           imagePath: string,
-          pageNumber: number,
+          pageIndex: number,
           maintainFormat: boolean
         ): Promise<Page> => {
+          let pageNumber: number;
+          // If we convert all pages, just use the array index
+          if (pagesToConvertAsImages === -1) {
+            pageNumber = pageIndex + 1;
+          }
+          // Else if we convert specific pages, use the page number from the parameter
+          else if (Array.isArray(pagesToConvertAsImages)) {
+            pageNumber = pagesToConvertAsImages[pageIndex];
+          }
+          // Else, the parameter is a number and use it for the page number
+          else {
+            pageNumber = pagesToConvertAsImages;
+          }
+
           const imageBuffer = await fs.readFile(imagePath);
           const buffers = await cleanupImage({
             correctOrientation,
@@ -272,6 +286,7 @@ export const zerox = async ({
                     buffers,
                     image: imagePath,
                     maintainFormat,
+                    pageNumber,
                     priorPage,
                   }),
                 maxRetries,
@@ -338,7 +353,7 @@ export const zerox = async ({
         if (maintainFormat) {
           // Use synchronous processing
           for (let i = 0; i < imagePaths.length; i++) {
-            const page = await processOCR(imagePaths[i], i + 1, true);
+            const page = await processOCR(imagePaths[i], i, true);
             pages.push(page);
             if (page.status === PageStatus.ERROR) {
               break;
@@ -349,7 +364,7 @@ export const zerox = async ({
           await Promise.all(
             imagePaths.map((imagePath, i) =>
               limit(() =>
-                processOCR(imagePath, i + 1, false).then((page) => {
+                processOCR(imagePath, i, false).then((page) => {
                   pages[i] = page;
                 })
               )
@@ -555,30 +570,6 @@ export const zerox = async ({
     const endTime = new Date();
     const completionTime = endTime.getTime() - startTime.getTime();
 
-    const formattedPages = pages.map((page, i) => {
-      let correctPageNumber;
-      // If we convert all pages, just use the array index
-      if (pagesToConvertAsImages === -1) {
-        correctPageNumber = i + 1;
-      }
-      // Else if we convert specific pages, use the page number from the parameter
-      else if (Array.isArray(pagesToConvertAsImages)) {
-        correctPageNumber = pagesToConvertAsImages[i];
-      }
-      // Else, the parameter is a number and use it for the page number
-      else {
-        correctPageNumber = pagesToConvertAsImages;
-      }
-
-      // Return the page with the correct page number
-      const result: Page = {
-        ...page,
-        page: correctPageNumber,
-      };
-
-      return result;
-    });
-
     return {
       completionTime,
       extracted,
@@ -593,7 +584,7 @@ export const zerox = async ({
           }
         : {}),
       outputTokens: outputTokenCount,
-      pages: formattedPages,
+      pages,
       summary: {
         totalPages: pages.length,
         ocr: !extractOnly

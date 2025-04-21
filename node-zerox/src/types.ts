@@ -10,6 +10,7 @@ export interface ZeroxArgs {
     buffers: Buffer[];
     image: string;
     maintainFormat: boolean;
+    pageNumber: number;
     priorPage: string;
   }) => Promise<CompletionResponse>;
   directImageExtraction?: boolean;
