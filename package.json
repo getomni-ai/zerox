@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.734.0",
-    "@google/generative-ai": "^0.21.0",
+    "@google/genai": "^0.9.0",
     "axios": "^1.7.2",
     "child_process": "^1.0.2",
     "file-type": "^16.5.4",
