@@ -15,11 +15,11 @@ import {
   OperationMode,
 } from "../types";
 import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI, createPartFromBase64 } from "@google/genai";
 import fs from "fs-extra";
 
 export default class GoogleModel implements ModelInterface {
-  private client: GoogleGenerativeAI;
+  private client: GoogleGenAI;
   private model: string;
   private llmParams?: Partial<GoogleLLMParams>;
 
@@ -28,7 +28,7 @@ export default class GoogleModel implements ModelInterface {
     model: string,
     llmParams?: Partial<GoogleLLMParams>
   ) {
-    this.client = new GoogleGenerativeAI(credentials.apiKey);
+    this.client = new GoogleGenAI({ apiKey: credentials.apiKey });
     this.model = model;
     this.llmParams = llmParams;
   }
@@ -65,12 +65,9 @@ export default class GoogleModel implements ModelInterface {
             scheduler: options?.scheduler ?? null,
             trimEdges: options?.trimEdges ?? false,
           });
-          return buffers.map((buffer) => ({
-            inlineData: {
-              data: encodeImageToBase64(buffer),
-              mimeType: "image/png",
-            },
-          }));
+          return buffers.map((buffer) =>
+            createPartFromBase64(encodeImageToBase64(buffer), "image/png")
+          );
         })
       );
       return nestedImages.flat();
@@ -95,13 +92,17 @@ export default class GoogleModel implements ModelInterface {
     priorPage,
     prompt,
   }: CompletionArgs): Promise<CompletionResponse> {
-    const generativeModel = this.client.getGenerativeModel({
-      generationConfig: convertKeysToSnakeCase(this.llmParams ?? null),
-      model: this.model,
-    });
+    // Insert the text prompt after the image contents array
+    // https://ai.google.dev/gemini-api/docs/image-understanding?lang=node#technical-details-image
 
     // Build the prompt parts
     const promptParts: any = [];
+
+    // Add image contents
+    const imageContents = buffers.map((buffer) =>
+      createPartFromBase64(encodeImageToBase64(buffer), "image/png")
+    );
+    promptParts.push(...imageContents);
 
     // Add system prompt
     promptParts.push({ text: prompt || SYSTEM_PROMPT_BASE });
@@ -111,24 +112,15 @@ export default class GoogleModel implements ModelInterface {
       promptParts.push({ text: CONSISTENCY_PROMPT(priorPage) });
     }
 
-    // Add image to request
-    const imageContents = buffers.map((buffer) => ({
-      inlineData: {
-        data: encodeImageToBase64(buffer),
-        mimeType: "image/png",
-      },
-    }));
-    promptParts.push(...imageContents);
-
     try {
-      const result = await generativeModel.generateContent({
-        contents: [{ role: "user", parts: promptParts }],
+      const response = await this.client.models.generateContent({
+        config: convertKeysToSnakeCase(this.llmParams ?? null),
+        contents: promptParts,
+        model: this.model,
       });
 
-      const response = await result.response;
-
       return {
-        content: response.text(),
+        content: response.text || "",
         inputTokens: response.usageMetadata?.promptTokenCount || 0,
         outputTokens: response.usageMetadata?.candidatesTokenCount || 0,
       };
@@ -144,33 +136,28 @@ export default class GoogleModel implements ModelInterface {
     prompt,
     schema,
   }: ExtractionArgs): Promise<ExtractionResponse> {
-    const generativeModel = this.client.getGenerativeModel({
-      generationConfig: {
-        ...convertKeysToSnakeCase(this.llmParams ?? null),
-        responseMimeType: "application/json",
-        responseSchema: schema,
-      },
-      model: this.model,
-    });
-
     // Build the prompt parts
     const promptParts: any = [];
-
-    // Add system prompt
-    promptParts.push({ text: prompt || "Extract schema data" });
 
     const parts = await this.createMessageContent({ input, options });
     promptParts.push(...parts);
 
+    // Add system prompt
+    promptParts.push({ text: prompt || "Extract schema data" });
+
     try {
-      const result = await generativeModel.generateContent({
-        contents: [{ role: "user", parts: promptParts }],
+      const response = await this.client.models.generateContent({
+        config: {
+          ...convertKeysToSnakeCase(this.llmParams ?? null),
+          responseMimeType: "application/json",
+          responseSchema: schema,
+        },
+        contents: promptParts,
+        model: this.model,
       });
 
-      const response = await result.response;
-
       return {
-        extracted: JSON.parse(response.text()),
+        extracted: response.text ? JSON.parse(response.text) : {},
         inputTokens: response.usageMetadata?.promptTokenCount || 0,
         outputTokens: response.usageMetadata?.candidatesTokenCount || 0,
       };

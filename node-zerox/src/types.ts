@@ -98,6 +98,7 @@ export enum ModelOptions {
   GOOGLE_GEMINI_1_5_FLASH = "gemini-1.5-flash",
   GOOGLE_GEMINI_1_5_FLASH_8B = "gemini-1.5-flash-8b",
   GOOGLE_GEMINI_1_5_PRO = "gemini-1.5-pro",
+  GOOGLE_GEMINI_2_5_PRO = "gemini-2.5-pro-preview-03-25",
   GOOGLE_GEMINI_2_FLASH = "gemini-2.0-flash-001",
   GOOGLE_GEMINI_2_FLASH_LITE = "gemini-2.0-flash-lite-preview-02-05",
 }
