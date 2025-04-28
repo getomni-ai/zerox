@@ -92,19 +92,19 @@ export default class GoogleModel implements ModelInterface {
     priorPage,
     prompt,
   }: CompletionArgs): Promise<CompletionResponse> {
-    // Place the text prompt after the image part in the contents array
+    // Insert the text prompt after the image contents array
     // https://ai.google.dev/gemini-api/docs/image-understanding?lang=node#technical-details-image
 
     // Build the prompt parts
     const promptParts: any = [];
 
-    // 1. Add image to request
+    // Add image contents
     const imageContents = buffers.map((buffer) =>
       createPartFromBase64(encodeImageToBase64(buffer), "image/png")
     );
     promptParts.push(...imageContents);
 
-    // 2. Add system prompt
+    // Add system prompt
     promptParts.push({ text: prompt || SYSTEM_PROMPT_BASE });
 
     // If content has already been generated, add it to context
@@ -139,11 +139,11 @@ export default class GoogleModel implements ModelInterface {
     // Build the prompt parts
     const promptParts: any = [];
 
-    // Add system prompt
-    promptParts.push({ text: prompt || "Extract schema data" });
-
     const parts = await this.createMessageContent({ input, options });
     promptParts.push(...parts);
+
+    // Add system prompt
+    promptParts.push({ text: prompt || "Extract schema data" });
 
     try {
       const response = await this.client.models.generateContent({
@@ -157,7 +157,7 @@ export default class GoogleModel implements ModelInterface {
       });
 
       return {
-        extracted: JSON.parse(response.text || "{}"),
+        extracted: response.text ? JSON.parse(response.text) : {},
         inputTokens: response.usageMetadata?.promptTokenCount || 0,
         outputTokens: response.usageMetadata?.candidatesTokenCount || 0,
       };
