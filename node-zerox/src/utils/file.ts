@@ -91,6 +91,12 @@ export const checkIsCFBFile = async (filePath: string): Promise<boolean> => {
   return type?.mime === "application/x-cfb";
 };
 
+// Check if file is a PDF by inspecting its magic number ("%PDF" at the beginning)
+export const checkIsPdfFile = async (filePath: string): Promise<boolean> => {
+  const buffer = await fs.readFile(filePath);
+  return buffer.subarray(0, 4).toString() === "%PDF";
+};
+
 // Convert HEIC file to JPEG
 export const convertHeicToJpeg = async ({
   localPath,
