@@ -42,7 +42,7 @@ const isGoogleCredentials = (
 const isOpenAICredentials = (
   credentials: any
 ): credentials is OpenAICredentials => {
-  return credentials && typeof credentials.apiKey === "string";
+  return credentials && typeof credentials.apiKey === "string" && credentials.baseUrl;
 };
 
 export const createModel = ({
