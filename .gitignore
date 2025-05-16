@@ -16,6 +16,9 @@ node-zerox/tests/results
 eng.traineddata
 .DS_Store
 
+# Ignore Tesseract's data
+osd.traineddata
+
 # ==========================
 #         Python
 # ==========================

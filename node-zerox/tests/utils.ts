@@ -1,5 +1,7 @@
+import { Page } from "../src/types";
+
 export const compareKeywords = (
-  pages: { content: string }[],
+  pages: Page[],
   expectedKeywords: string[][]
 ) => {
   const keywordCounts: {
@@ -15,7 +17,7 @@ export const compareKeywords = (
     const keywordsFound: string[] = [];
     const keywordsMissing: string[] = [];
 
-    if (page && keywords) {
+    if (page && keywords && page.content !== undefined) {
       const pageContent = page.content.toLowerCase();
 
       keywords.forEach((keyword) => {

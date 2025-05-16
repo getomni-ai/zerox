@@ -48,7 +48,7 @@ async function main() {
           cleanup: false,
           filePath,
           maintainFormat: false,
-          model: ModelOptions.gpt_4o,
+          model: ModelOptions.OPENAI_GPT_4O,
           openaiAPIKey: process.env.OPENAI_API_KEY,
           outputDir: OUTPUT_DIR,
           tempDir: TEMP_DIR,
@@ -73,14 +73,16 @@ async function main() {
   // Filter out any null results (due to missing files)
   const filteredResults = results.filter((result) => result !== null);
   const tableData = filteredResults.map((result) => {
-    const totalFound = result.keywordCounts.reduce(
-      (sum, page) => sum + page.keywordsFound.length,
-      0
-    );
-    const totalMissing = result.keywordCounts.reduce(
-      (sum, page) => sum + page.keywordsMissing.length,
-      0
-    );
+    const totalFound =
+      result?.keywordCounts.reduce(
+        (sum, page) => sum + page.keywordsFound.length,
+        0
+      ) ?? 0;
+    const totalMissing =
+      result?.keywordCounts.reduce(
+        (sum, page) => sum + page.keywordsMissing.length,
+        0
+      ) ?? 0;
     const totalKeywords = totalFound + totalMissing;
     const percentage =
       totalKeywords > 0
@@ -88,7 +90,7 @@ async function main() {
         : "N/A";
 
     return {
-      fileName: result.file,
+      fileName: result?.file,
       keywordsFound: totalFound,
       keywordsMissing: totalMissing,
       percentage,
@@ -108,19 +110,19 @@ async function main() {
   const totalKeywordsFound = filteredResults.reduce(
     (sum, result) =>
       sum +
-      result.keywordCounts.reduce(
-        (s, page) => s + page.keywordsFound.length,
+      (result?.keywordCounts?.reduce(
+        (s, page) => s + (page.keywordsFound?.length ?? 0),
         0
-      ),
+      ) ?? 0),
     0
   );
   const totalKeywordsMissing = filteredResults.reduce(
     (sum, result) =>
       sum +
-      result.keywordCounts.reduce(
-        (s, page) => s + page.keywordsMissing.length,
+      (result?.keywordCounts?.reduce(
+        (s, page) => s + (page.keywordsMissing?.length ?? 0),
         0
-      ),
+      ) ?? 0),
     0
   );
   const totalKeywords = totalKeywordsFound + totalKeywordsMissing;
@@ -130,7 +132,7 @@ async function main() {
       : "N/A";
 
   const pagesTested = filteredResults.reduce(
-    (sum, result) => sum + result.keywordCounts.length,
+    (sum, result) => sum + (result?.keywordCounts?.length ?? 0),
     0
   );
 
