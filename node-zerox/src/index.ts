@@ -61,6 +61,7 @@ export const zerox = async ({
   extractPerPage,
   filePath,
   imageDensity,
+  imageFormat = "png",
   imageHeight,
   llmParams = {},
   maintainFormat = false,
@@ -204,6 +205,7 @@ export const zerox = async ({
         }
         imagePaths = await convertPdfToImages({
           imageDensity,
+          imageFormat,
           imageHeight,
           pagesToConvertAsImages,
           pdfPath,

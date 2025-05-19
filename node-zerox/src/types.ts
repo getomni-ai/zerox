@@ -26,6 +26,7 @@ export interface ZeroxArgs {
   filePath: string;
   imageDensity?: number;
   imageHeight?: number;
+  imageFormat?: "png" | "jpeg";
   llmParams?: Partial<LLMParams>;
   maintainFormat?: boolean;
   maxImageSize?: number;
@@ -133,7 +134,7 @@ export interface Page {
 
 export interface ConvertPdfOptions {
   density: number;
-  format: "png";
+  format: "png" | "jpeg";
   height: number;
   preserveAspectRatio?: boolean;
   saveFilename: string;
