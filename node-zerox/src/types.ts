@@ -71,6 +71,7 @@ export interface GoogleCredentials {
 }
 
 export interface OpenAICredentials {
+  baseUrl: string;
   apiKey: string;
 }
 
