@@ -1,5 +1,5 @@
-import { ModelOptions, ModelProvider } from "zerox/node-zerox/dist/types";
-import { zerox } from "zerox";
+import { zerox } from "../../node-zerox/src";
+import { ModelProvider } from "../../node-zerox/src/types";
 
 /**
  * Example using Bedrock Anthropic with Zerox to extract structured data from documents.
@@ -44,7 +44,7 @@ async function main() {
       extractOnly: true, // Skip OCR, only perform extraction (defaults to false)
       filePath:
         "https://omni-demo-data.s3.amazonaws.com/test/property_report.png",
-      model: ModelOptions.BEDROCK_CLAUDE_3_HAIKU_2024_03,
+      model: "anthropic.claude-3-haiku-20240307-v1:0",
       modelProvider: ModelProvider.BEDROCK,
       schema,
     });

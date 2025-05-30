@@ -1,6 +1,5 @@
-import { ModelOptions, ModelProvider } from "zerox/node-zerox/dist/types";
-import { zerox } from "zerox";
-
+import { zerox } from "../../node-zerox/src";
+import { ModelProvider } from "../../node-zerox/src/types";
 /**
  * Example using Azure OpenAI with Zerox to extract structured data from documents.
  * This shows extraction setup with schema definition for a property report document.
@@ -43,7 +42,7 @@ async function main() {
       extractOnly: true, // Skip OCR, only perform extraction (defaults to false)
       filePath:
         "https://omni-demo-data.s3.amazonaws.com/test/property_report.png",
-      model: ModelOptions.OPENAI_GPT_4O,
+      model: "gpt-4o",
       modelProvider: ModelProvider.AZURE,
       schema,
     });

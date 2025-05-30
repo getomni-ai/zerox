@@ -1,17 +1,35 @@
-import { compareKeywords } from "./utils";
-import { ModelOptions } from "../src/types";
-import { zerox } from "../src";
-import dotenv from "dotenv";
+import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
 import pLimit from "p-limit";
-
-dotenv.config({ path: path.join(__dirname, "../.env") });
-
+import { zerox } from "../src";
+import { ModelProvider } from "../src/types";
+import { compareKeywords } from "./utils";
 interface TestInput {
   expectedKeywords: string[][];
   file: string;
 }
+
+// Parse command line arguments
+const parseArgs = () => {
+  const args = process.argv.slice(2);
+  let maxFiles: number | undefined;
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === "--files" && i + 1 < args.length) {
+      const fileCount = parseInt(args[i + 1], 10);
+      if (!isNaN(fileCount) && fileCount > 0) {
+        maxFiles = fileCount;
+      } else {
+        console.error("Error: --files must be followed by a positive number");
+        process.exit(1);
+      }
+      break;
+    }
+  }
+
+  return { maxFiles };
+};
 
 const FILE_CONCURRENCY = 10;
 const INPUT_DIR = path.join(__dirname, "../../shared/inputs");
@@ -21,11 +39,25 @@ const TEMP_DIR = path.join(OUTPUT_DIR, "temp");
 
 async function main() {
   const T1 = new Date();
+  const { maxFiles } = parseArgs();
 
   // Read the test inputs and expected keywords
-  const testInputs: TestInput[] = JSON.parse(
+  const allTestInputs: TestInput[] = JSON.parse(
     fs.readFileSync(TEST_JSON_PATH, "utf-8")
   );
+
+  // Limit the number of files if --files flag is provided
+  const testInputs = maxFiles
+    ? allTestInputs.slice(0, maxFiles)
+    : allTestInputs;
+
+  if (maxFiles) {
+    console.log(
+      `Processing first ${testInputs.length} files (limited by --files ${maxFiles})`
+    );
+  } else {
+    console.log(`Processing all ${testInputs.length} files`);
+  }
 
   // Create the output directory
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
@@ -43,13 +75,21 @@ async function main() {
           return null;
         }
 
+        const apiKey = process.env.OPENROUTER_API_KEY;
+        if (!apiKey) {
+          throw new Error("OPENROUTER_API_KEY is not set");
+        }
+
         // Run OCR on the file
         const ocrResult = await zerox({
+          credentials: {
+            apiKey,
+          },
+          modelProvider: ModelProvider.OPENROUTER,
           cleanup: false,
           filePath,
           maintainFormat: false,
-          model: ModelOptions.OPENAI_GPT_4O,
-          openaiAPIKey: process.env.OPENAI_API_KEY,
+          model: "meta-llama/llama-4-maverick:free",
           outputDir: OUTPUT_DIR,
           tempDir: TEMP_DIR,
         });

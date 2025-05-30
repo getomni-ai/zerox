@@ -121,8 +121,8 @@ const result = await zerox({
   maxImageSize: 15, // Maximum size of images to compress, defaults to 15MB
   maxRetries: 1, // Number of retries to attempt on a failed page, defaults to 1
   maxTesseractWorkers: -1, // Maximum number of Tesseract workers. Zerox will start with a lower number and only reach maxTesseractWorkers if needed
-  model: ModelOptions.OPENAI_GPT_4O, // Model to use (supports various models from different providers)
-  modelProvider: ModelProvider.OPENAI, // Choose from OPENAI, BEDROCK, GOOGLE, or AZURE
+  model: "gpt-4o", // Model to use
+  modelProvider: ModelProvider.OPENAI, // Built-in provider or custom AI SDK provider
   outputDir: undefined, // Save combined result.md to a file
   pagesToConvertAsImages: -1, // Page numbers to convert to image as array (e.g. `[1, 2, 3]`) or a number (e.g. `1`). Set to -1 to convert all pages
   prompt: "", // LLM instructions for processing the document
@@ -203,81 +203,71 @@ Use `extractPerPage` to extract data per page instead of from the whole document
 
 You can also set `extractionModel`, `extractionModelProvider`, and `extractionCredentials` to use a different model for extraction than OCR. By default, the same model is used.
 
-### Supported Models
+### Custom Providers
 
-Zerox supports a wide range of models across different providers:
+Zerox supports any AI SDK provider from the Vercel AI SDK ecosystem. You can use custom providers in two ways:
 
-- **Azure OpenAI**
-
-  - GPT-4 Vision (gpt-4o)
-  - GPT-4 Vision Mini (gpt-4o-mini)
-  - GPT-4.1 (gpt-4.1)
-  - GPT-4.1 Mini (gpt-4.1-mini)
-
-- **OpenAI**
-
-  - GPT-4 Vision (gpt-4o)
-  - GPT-4 Vision Mini (gpt-4o-mini)
-  - GPT-4.1 (gpt-4.1)
-  - GPT-4.1 Mini (gpt-4.1-mini)
-
-- **AWS Bedrock**
-
-  - Claude 3 Haiku (2024.03, 2024.10)
-  - Claude 3 Sonnet (2024.02, 2024.06, 2024.10)
-  - Claude 3 Opus (2024.02)
-
-- **Google Gemini**
-  - Gemini 1.5 (Flash, Flash-8B, Pro)
-  - Gemini 2.0 (Flash, Flash-Lite)
+**Built-in Providers (OpenAI, Azure, Google, Bedrock, OpenRouter)**
 
 ```ts
-import { zerox } from "zerox";
-import { ModelOptions, ModelProvider } from "zerox/node-zerox/dist/types";
+import { zerox, ModelProvider } from "zerox";
 
-// OpenAI
-const openaiResult = await zerox({
+const result = await zerox({
   filePath: "path/to/file.pdf",
   modelProvider: ModelProvider.OPENAI,
-  model: ModelOptions.OPENAI_GPT_4O,
   credentials: {
     apiKey: process.env.OPENAI_API_KEY,
   },
+  model: "gpt-4o",
 });
 
 // Azure OpenAI
 const azureResult = await zerox({
   filePath: "path/to/file.pdf",
   modelProvider: ModelProvider.AZURE,
-  model: ModelOptions.OPENAI_GPT_4O,
   credentials: {
+    resourceName: process.env.AZURE_RESOURCE_NAME, // your-resource-name
     apiKey: process.env.AZURE_API_KEY,
-    endpoint: process.env.AZURE_ENDPOINT,
   },
-});
-
-// AWS Bedrock
-const bedrockResult = await zerox({
-  filePath: "path/to/file.pdf",
-  modelProvider: ModelProvider.BEDROCK,
-  model: ModelOptions.BEDROCK_CLAUDE_3_SONNET_2024_10,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    region: process.env.AWS_REGION,
-  },
-});
-
-// Google Gemini
-const geminiResult = await zerox({
-  filePath: "path/to/file.pdf",
-  modelProvider: ModelProvider.GOOGLE,
-  model: ModelOptions.GOOGLE_GEMINI_1_5_PRO,
-  credentials: {
-    apiKey: process.env.GEMINI_API_KEY,
-  },
+  model: "your-deployment-name", // Use your deployment name, not the model name
 });
 ```
+
+**Custom AI SDK Providers**
+
+```ts
+import { zerox } from "zerox";
+import { createAnthropic } from "@ai-sdk/anthropic";
+
+// Option 1: Provider function with credentials
+const result = await zerox({
+  filePath: "path/to/file.pdf",
+  modelProvider: createAnthropic,
+  credentials: {
+    apiKey: process.env.ANTHROPIC_API_KEY,
+  },
+  model: "claude-3-sonnet-20240229",
+});
+
+// Option 2: Pre-configured provider instance (recommended)
+const result = await zerox({
+  filePath: "path/to/file.pdf",
+  modelProvider: createAnthropic({
+    apiKey: process.env.ANTHROPIC_API_KEY,
+  }),
+  model: "claude-3-sonnet-20240229",
+});
+```
+
+**Supported Custom Providers**
+
+Any AI SDK provider that implements a `languageModel` method:
+
+- `@ai-sdk/anthropic` - Anthropic Claude models
+- `@ai-sdk/cohere` - Cohere models
+- `@ai-sdk/mistral` - Mistral AI models
+- `@openrouter/ai-sdk-provider` - OpenRouter models
+- And many more from the [Vercel AI SDK ecosystem](https://sdk.vercel.ai/providers)
 
 ## Python Zerox
 
@@ -304,7 +294,7 @@ import os
 import json
 import asyncio
 
-### Model Setup (Use only Vision Models) Refer: https://docs.litellm.ai/docs/providers ###
+### Model Setup (Use only Vision Model) Refer: https://docs.litellm.ai/docs/providers ###
 
 ## placeholder for additional model kwargs which might be required for some models
 kwargs = {}
@@ -459,7 +449,7 @@ ZeroxOutput(
                     'char firstInitial;\n' +
                     'boolean isStudent;\n' +
                     '```\n\n' +
-                    'Each declaration specifies the variable’s type followed by the identifier and ending with a ' +
+                    'Each declaration specifies the variable's type followed by the identifier and ending with a ' +
                     'semicolon. The identifier rules are fairly standard: a name can consist of lowercase and ' +
                     'uppercase alphabetic characters, numbers, and underscores but may not begin with a numeric ' +
                     'character. We adopt the modern camelCasing naming convention for variables in our code. In ' +

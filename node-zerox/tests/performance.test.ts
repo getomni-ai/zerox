@@ -1,7 +1,6 @@
-import path from "path";
 import fs from "fs-extra";
+import path from "path";
 import { zerox } from "../src";
-import { ModelOptions } from "../src/types";
 
 const MOCK_OPENAI_TIME = 0;
 const TEST_FILES_DIR = path.join(__dirname, "data");
@@ -55,7 +54,7 @@ describe("Zerox Performance Tests", () => {
       cleanup: true,
       concurrency,
       filePath,
-      model: ModelOptions.OPENAI_GPT_4O,
+      model: "gpt-4o",
       openaiAPIKey: "mock-key",
     });
 

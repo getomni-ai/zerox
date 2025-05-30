@@ -1,11 +1,11 @@
-import { ChatCompletionTokenLogprob } from "openai/resources";
+import type { LanguageModelV1 } from "ai";
 import Tesseract from "tesseract.js";
 
 export interface ZeroxArgs {
   cleanup?: boolean;
   concurrency?: number;
   correctOrientation?: boolean;
-  credentials?: ModelCredentials;
+  credentials?: unknown;
   customModelFunction?: (params: {
     buffers: Buffer[];
     image: string;
@@ -16,10 +16,10 @@ export interface ZeroxArgs {
   directImageExtraction?: boolean;
   enableHybridExtraction?: boolean;
   errorMode?: ErrorMode;
-  extractionCredentials?: ModelCredentials;
+  extractionCredentials?: unknown;
   extractionLlmParams?: Partial<LLMParams>;
-  extractionModel?: ModelOptions | string;
-  extractionModelProvider?: ModelProvider | string;
+  extractionModel?: Model;
+  extractionModelProvider?: ModelProviderType;
   extractionPrompt?: string;
   extractOnly?: boolean;
   extractPerPage?: string[];
@@ -32,8 +32,8 @@ export interface ZeroxArgs {
   maxImageSize?: number;
   maxRetries?: number;
   maxTesseractWorkers?: number;
-  model?: ModelOptions | string;
-  modelProvider?: ModelProvider | string;
+  model?: Model;
+  modelProvider?: ModelProviderType;
   openaiAPIKey?: string;
   outputDir?: string;
   pagesToConvertAsImages?: number | number[];
@@ -56,7 +56,9 @@ export interface ZeroxOutput {
 
 export interface AzureCredentials {
   apiKey: string;
-  endpoint: string;
+  resourceName?: string;
+  apiVersion?: string;
+  baseURL?: string;
 }
 
 export interface BedrockCredentials {
@@ -74,41 +76,64 @@ export interface OpenAICredentials {
   apiKey: string;
 }
 
+export interface OpenRouterCredentials {
+  apiKey: string;
+}
+
 export type ModelCredentials =
   | AzureCredentials
   | BedrockCredentials
   | GoogleCredentials
-  | OpenAICredentials;
+  | OpenAICredentials
+  | OpenRouterCredentials;
 
-export enum ModelOptions {
-  // Bedrock Claude 3 Models
-  BEDROCK_CLAUDE_3_HAIKU_2024_10 = "anthropic.claude-3-5-haiku-20241022-v1:0",
-  BEDROCK_CLAUDE_3_SONNET_2024_06 = "anthropic.claude-3-5-sonnet-20240620-v1:0",
-  BEDROCK_CLAUDE_3_SONNET_2024_10 = "anthropic.claude-3-5-sonnet-20241022-v2:0",
-  BEDROCK_CLAUDE_3_HAIKU_2024_03 = "anthropic.claude-3-haiku-20240307-v1:0",
-  BEDROCK_CLAUDE_3_OPUS_2024_02 = "anthropic.claude-3-opus-20240229-v1:0",
-  BEDROCK_CLAUDE_3_SONNET_2024_02 = "anthropic.claude-3-sonnet-20240229-v1:0",
+// Model options as string literals with fallback to any string
+export type Model =
+  // predefined strings for better Developer Experience
+  // Bedrock Claude 3 Model
+  | "anthropic.claude-3-5-haiku-20241022-v1:0"
+  | "anthropic.claude-3-5-sonnet-20240620-v1:0"
+  | "anthropic.claude-3-5-sonnet-20241022-v2:0"
+  | "anthropic.claude-3-haiku-20240307-v1:0"
+  | "anthropic.claude-3-opus-20240229-v1:0"
+  | "anthropic.claude-3-sonnet-20240229-v1:0"
+  // OpenAI GPT-4 Model
+  | "gpt-4.1"
+  | "gpt-4.1-mini"
+  | "gpt-4o"
+  | "gpt-4o-mini"
+  // Google Gemini Model
+  | "gemini-1.5-flash"
+  | "gemini-1.5-flash-8b"
+  | "gemini-1.5-pro"
+  | "gemini-2.5-pro-preview-03-25"
+  | "gemini-2.0-flash-001"
+  | "gemini-2.0-flash-lite-preview-02-05"
+  // Allow any other string
+  | (string & {});
 
-  // OpenAI GPT-4 Models
-  OPENAI_GPT_4_1 = "gpt-4.1",
-  OPENAI_GPT_4_1_MINI = "gpt-4.1-mini",
-  OPENAI_GPT_4O = "gpt-4o",
-  OPENAI_GPT_4O_MINI = "gpt-4o-mini",
+// Type for any provider creation function - flexible enough for AI SDK providers
+export type ProviderFunction = (options?: any) => {
+  languageModel: (modelId: string) => LanguageModelV1;
+};
 
-  // Google Gemini Models
-  GOOGLE_GEMINI_1_5_FLASH = "gemini-1.5-flash",
-  GOOGLE_GEMINI_1_5_FLASH_8B = "gemini-1.5-flash-8b",
-  GOOGLE_GEMINI_1_5_PRO = "gemini-1.5-pro",
-  GOOGLE_GEMINI_2_5_PRO = "gemini-2.5-pro-preview-03-25",
-  GOOGLE_GEMINI_2_FLASH = "gemini-2.0-flash-001",
-  GOOGLE_GEMINI_2_FLASH_LITE = "gemini-2.0-flash-lite-preview-02-05",
-}
+// Type for provider instances (the result of calling a provider creation function)
+export type ProviderInstance = {
+  languageModel: (modelId: string) => LanguageModelV1;
+};
+
+// Update the provider type to accept enum, provider function, or provider instance
+export type ModelProviderType =
+  | ModelProvider
+  | ProviderFunction
+  | ProviderInstance;
 
 export enum ModelProvider {
   AZURE = "AZURE",
   BEDROCK = "BEDROCK",
   GOOGLE = "GOOGLE",
   OPENAI = "OPENAI",
+  OPENROUTER = "OPENROUTER",
 }
 
 export enum OperationMode {
@@ -151,7 +176,7 @@ export interface CompletionArgs {
 export interface CompletionResponse {
   content: string;
   inputTokens: number;
-  logprobs?: ChatCompletionTokenLogprob[] | null;
+  logprobs?: TokenLogprob[] | null;
   outputTokens: number;
 }
 
@@ -163,10 +188,10 @@ export type ProcessedCompletionResponse = Omit<
 };
 
 export interface CreateModelArgs {
-  credentials: ModelCredentials;
+  credentials: unknown;
   llmParams: Partial<LLMParams>;
-  model: ModelOptions | string;
-  provider: ModelProvider | string;
+  model: Model;
+  provider: ModelProviderType;
 }
 
 export enum ErrorMode {
@@ -188,7 +213,7 @@ export interface ExtractionArgs {
 export interface ExtractionResponse {
   extracted: Record<string, unknown>;
   inputTokens: number;
-  logprobs?: ChatCompletionTokenLogprob[] | null;
+  logprobs?: TokenLogprob[] | null;
   outputTokens: number;
 }
 
@@ -224,16 +249,22 @@ export interface OpenAILLMParams extends BaseLLMParams {
   maxTokens: number;
 }
 
+export interface OpenRouterLLMParams extends BaseLLMParams {
+  logprobs: boolean;
+  maxTokens: number;
+}
+
 // Union type of all provider params
 export type LLMParams =
   | AzureLLMParams
   | BedrockLLMParams
   | GoogleLLMParams
-  | OpenAILLMParams;
+  | OpenAILLMParams
+  | OpenRouterLLMParams;
 
 export interface LogprobPage {
   page: number | null;
-  value: ChatCompletionTokenLogprob[];
+  value: TokenLogprob[];
 }
 
 interface Logprobs {
@@ -274,3 +305,30 @@ export interface ExcelSheetContent {
   contentLength: number;
   sheetName: string;
 }
+
+// AI SDK compatibility types - removed AISDKCredentials as it's no longer needed
+
+// Unified LLM parameters for AI SDK
+export interface UnifiedLLMParams {
+  maxTokens?: number;
+  temperature?: number;
+  topP?: number;
+  frequencyPenalty?: number;
+  presencePenalty?: number;
+  logprobs?: boolean;
+}
+
+// Generic logprob type to replace OpenAI-specific import
+export interface TokenLogprob {
+  token: string;
+  logprob: number;
+  bytes?: number[] | null;
+  top_logprobs?: Array<{
+    token: string;
+    logprob: number;
+    bytes?: number[] | null;
+  }> | null;
+}
+
+// AI SDK model type
+export type AIModel = LanguageModelV1;

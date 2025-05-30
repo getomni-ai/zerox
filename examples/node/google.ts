@@ -1,5 +1,5 @@
-import { ModelOptions, ModelProvider } from "zerox/node-zerox/dist/types";
-import { zerox } from "zerox";
+import { zerox } from "../../node-zerox/src";
+import { ModelProvider } from "../../node-zerox/src/types";
 
 /**
  * Example using Google Gemini with Zerox to extract structured data from documents.
@@ -42,7 +42,7 @@ async function main() {
       extractOnly: true, // Skip OCR, only perform extraction (defaults to false)
       filePath:
         "https://omni-demo-data.s3.amazonaws.com/test/property_report.png",
-      model: ModelOptions.GOOGLE_GEMINI_2_FLASH,
+      model: "gemini-2.0-flash-001",
       modelProvider: ModelProvider.GOOGLE,
       schema,
     });
