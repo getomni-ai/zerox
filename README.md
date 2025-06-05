@@ -328,13 +328,25 @@ os.environ["AZURE_API_VERSION"] = "" # "2023-05-15"
 
 
 ###################### Example for Gemini ######################
-model = "gemini/gpt-4o-mini" ## "gemini/<gemini_model>" -> format <provider>/<model>
+model = "gemini/gemini-1.5-flash" ## "gemini/<gemini_model>" -> format <provider>/<model>
 os.environ['GEMINI_API_KEY'] = "" # your-gemini-api-key
 
 
 ###################### Example for Anthropic ######################
 model="claude-3-opus-20240229"
 os.environ["ANTHROPIC_API_KEY"] = "" # your-anthropic-api-key
+
+
+###################### Example for AWS Bedrock ######################
+# AWS Bedrock requires the library `boto3`
+# !pip install boto3
+model = "bedrock/anthropic.claude-3-haiku-20240307-v1:0"
+model = "bedrock/amazon.nova-pro-v1:0"
+model = "bedrock/amazon.nova-lite-v1:0"
+os.environ["AWS_ACCESS_KEY_ID"] = ""     # your-aws-access-api-key
+os.environ["AWS_SECRET_ACCESS_KEY"] = "" # your-aws-secret-access-key
+os.environ["AWS_REGION_NAME"] = ""       # your-region-name
+
 
 ###################### Vertex ai ######################
 model = "vertex_ai/gemini-1.5-flash-001" ## "vertex_ai/<model_name>" -> format <provider>/<model>
