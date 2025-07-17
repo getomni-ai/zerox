@@ -1,4 +1,5 @@
-from typing import List, Optional, Dict, Any, Union, Iterable
+from typing import List, Optional, Dict, Any, Union, Iterable, Callable
+from ..processor import format_markdown
 from dataclasses import dataclass, field
 
 
@@ -12,11 +13,13 @@ class ZeroxArgs:
     cleanup: bool = True
     concurrency: int = 10
     maintain_format: bool = False
-    model: str = "gpt-4o-mini",
-    output_dir: Optional[str] = None
+    model: str = "gpt-4o-mini"
+    output_file_path: Optional[str] = None
+    page_separator: Optional[str] = None
     temp_dir: Optional[str] = None
     custom_system_prompt: Optional[str] = None
     select_pages: Optional[Union[int, Iterable[int]]] = None
+    post_process_function: Optional[Callable[[str], str]] = format_markdown
     kwargs: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass
