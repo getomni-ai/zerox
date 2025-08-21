@@ -125,15 +125,30 @@ async def zerox(
         # Truncate file name to 255 characters to prevent ENAMETOOLONG errors
         file_name = file_name[:255]
 
-        # create a subset pdf in temp dir with only the requested pages if select_pages is provided
-        if select_pages is not None:
-            subset_pdf_create_kwargs = {"original_pdf_path":local_path, "select_pages":select_pages, 
-                                    "save_directory":temp_directory, "suffix":"_selected_pages"}
-            local_path = await asyncio.to_thread(create_selected_pages_pdf, 
-                                                 **subset_pdf_create_kwargs)
+        # Check if the input is already an image file
+        file_extension = os.path.splitext(local_path)[1].lower()
+        image_extensions = {'.png', '.jpg', '.jpeg', '.gif', '.bmp', '.tiff', '.webp'}
+        
+        if file_extension in image_extensions:
+            # Input is an image - use it directly, no PDF conversion needed
+            if select_pages is not None:
+                # For images, select_pages doesn't apply - warn the user
+                import warnings
+                warnings.warn("select_pages parameter is ignored for image files - processing the entire image")
+            
+            images = [local_path]
+        else:
+            # Input is likely a PDF or other document - proceed with normal processing
+            
+            # create a subset pdf in temp dir with only the requested pages if select_pages is provided
+            if select_pages is not None:
+                subset_pdf_create_kwargs = {"original_pdf_path":local_path, "select_pages":select_pages, 
+                                        "save_directory":temp_directory, "suffix":"_selected_pages"}
+                local_path = await asyncio.to_thread(create_selected_pages_pdf, 
+                                                     **subset_pdf_create_kwargs)
 
-        # Convert the file to a series of images, below function returns a list of image paths in page order
-        images = await convert_pdf_to_images(image_density=image_density, image_height=image_height, local_path=local_path, temp_dir=temp_directory)
+            # Convert the file to a series of images, below function returns a list of image paths in page order
+            images = await convert_pdf_to_images(image_density=image_density, image_height=image_height, local_path=local_path, temp_dir=temp_directory)
 
         if maintain_format:
             for image in images:
