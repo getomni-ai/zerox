@@ -52,7 +52,12 @@ class litellmmodel(BaseModel):
     ## custom method on top of BaseModel
     def validate_environment(self) -> None:
         """Validates the environment variables required for the model."""
-        env_config = litellm.validate_environment(model=self.model)
+        env_config = litellm.validate_environment(
+            model=self.model,
+            api_key=self.kwargs.get("api_key"),
+            api_base=self.kwargs.get("api_base"),
+            api_version=self.kwargs.get("api_version"),
+        )
 
         if not env_config["keys_in_environment"]:
             raise MissingEnvironmentVariables(extra_info=env_config)
@@ -64,7 +69,7 @@ class litellmmodel(BaseModel):
         
     def validate_access(self) -> None:
         """Validates access to the model -> if environment variables are set correctly with correct values."""
-        if not litellm.check_valid_key(model=self.model,api_key=None):
+        if not litellm.check_valid_key(model=self.model, api_key=self.kwargs.get("api_key")):
             raise ModelAccessError(extra_info={"model": self.model})
         
 
