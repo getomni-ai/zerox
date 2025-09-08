@@ -132,6 +132,14 @@ const result = await zerox({
 });
 ```
 
+// For GPT-5 models, you can control the reasoning effort:
+// Allowed values: "minimal", "low", "medium", "high"
+// Example:
+// ...
+//   model: ModelOptions.OPENAI_GPT_5,
+//   reasoning_effort: "medium",
+// ...
+
 The `maintainFormat` option tries to return the markdown in a consistent format by passing the output of a prior page in as additional context for the next page. This requires the requests to run synchronously, so it's a lot slower. But valuable if your documents have a lot of tabular data, or frequently have tables that cross pages.
 
 ```
@@ -213,6 +221,9 @@ Zerox supports a wide range of models across different providers:
   - GPT-4 Vision Mini (gpt-4o-mini)
   - GPT-4.1 (gpt-4.1)
   - GPT-4.1 Mini (gpt-4.1-mini)
+  - GPT-5 (gpt-5)
+  - GPT-5 Mini (gpt-5-mini)
+  - GPT-5 Nano (gpt-5-nano)
 
 - **OpenAI**
 
@@ -220,6 +231,9 @@ Zerox supports a wide range of models across different providers:
   - GPT-4 Vision Mini (gpt-4o-mini)
   - GPT-4.1 (gpt-4.1)
   - GPT-4.1 Mini (gpt-4.1-mini)
+  - GPT-5 (gpt-5)
+  - GPT-5 Mini (gpt-5-mini)
+  - GPT-5 Nano (gpt-5-nano)  
 
 - **AWS Bedrock**
 
@@ -380,7 +394,6 @@ print(result)
 
 ### Parameters
 
-```python
 async def zerox(
     cleanup: bool = True,
     concurrency: int = 10,
@@ -395,6 +408,12 @@ async def zerox(
 ) -> ZeroxOutput:
   ...
 ```
+
+# For GPT-5 models, you can control the reasoning effort:
+# Allowed values: "minimal", "low", "medium", "high"
+# Example:
+# result = await zerox(file_path=..., model="gpt-5", reasoning_effort="medium")
+
 
 Parameters
 
@@ -417,6 +436,8 @@ Parameters
   The system prompt to use for the model, this overrides the default system prompt of Zerox.Generally it is not required unless you want some specific behavior. Defaults to None.
 - **select_pages** (Optional[Union[int, Iterable[int]]], optional):
   Pages to process, can be a single page number or an iterable of page numbers. Defaults to None
+- **reasoning_effort** (str, optional, GPT-5 only):
+  Controls the reasoning effort for GPT-5 models. Allowed values: "minimal", "low", "medium", "high". Defaults to None.
 - **kwargs** (dict, optional):
   Additional keyword arguments to pass to the litellm.completion method.
   Refer to the LiteLLM Documentation and Completion Input for details.

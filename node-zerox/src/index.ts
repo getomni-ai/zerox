@@ -64,6 +64,7 @@ export const zerox = async ({
   imageFormat = "png",
   imageHeight,
   llmParams = {},
+  reasoning_effort,
   maintainFormat = false,
   maxImageSize = 15,
   maxRetries = 1,
@@ -79,6 +80,10 @@ export const zerox = async ({
   trimEdges = true,
 }: ZeroxArgs): Promise<ZeroxOutput> => {
   let extracted: Record<string, unknown> | null = null;
+  // If reasoning is provided, add to llmParams
+  if (reasoning_effort) {
+    llmParams = { ...llmParams, reasoning_effort };
+  }
   let extractedLogprobs: LogprobPage[] = [];
   let inputTokenCount: number = 0;
   let outputTokenCount: number = 0;

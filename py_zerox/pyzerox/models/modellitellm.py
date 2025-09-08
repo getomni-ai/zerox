@@ -92,7 +92,13 @@ class litellmmodel(BaseModel):
         )
 
         try:
-            response = await litellm.acompletion(model=self.model, messages=messages, **self.kwargs)
+            # If model is GPT-5 and reasoning_effort is provided, add it to kwargs
+            call_kwargs = dict(self.kwargs)
+            if self.model and self.model.startswith("gpt-5") and "reasoning_effort" in call_kwargs:
+                allowed = {"minimal", "low", "medium", "high"}
+                if call_kwargs["reasoning_effort"] not in allowed:
+                    raise ValueError(f"reasoning_effort must be one of {allowed}")
+            response = await litellm.acompletion(model=self.model, messages=messages, **call_kwargs)
 
             ## completion response
             response = CompletionResponse(

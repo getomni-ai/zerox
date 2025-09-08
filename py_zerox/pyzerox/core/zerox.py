@@ -35,6 +35,7 @@ async def zerox(
     temp_dir: Optional[str] = None,
     custom_system_prompt: Optional[str] = None,
     select_pages: Optional[Union[int, Iterable[int]]] = None,
+    reasoning_effort: Optional[str] = None,
     **kwargs
 ) -> ZeroxOutput:
     """
@@ -76,6 +77,11 @@ async def zerox(
         raise FileUnavailable()
     
     # Create an instance of the litellm model interface
+    if reasoning_effort is not None:
+        allowed = {"minimal", "low", "medium", "high"}
+        if reasoning_effort not in allowed:
+            raise ValueError(f"reasoning_effort must be one of {allowed}")
+        kwargs["reasoning_effort"] = reasoning_effort
     vision_model = litellmmodel(model=model,**kwargs)
 
     # override the system prompt if a custom prompt is provided

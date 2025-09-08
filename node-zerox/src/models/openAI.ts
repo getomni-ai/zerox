@@ -96,7 +96,7 @@ export default class OpenAIModel implements ModelInterface {
     priorPage,
     prompt,
   }: CompletionArgs): Promise<CompletionResponse> {
-    const systemPrompt = prompt || SYSTEM_PROMPT_BASE;
+  const systemPrompt = prompt || SYSTEM_PROMPT_BASE;
 
     // Default system message
     const messages: any = [{ role: "system", content: systemPrompt }];
@@ -120,13 +120,18 @@ export default class OpenAIModel implements ModelInterface {
     messages.push({ role: "user", content: imageContents });
 
     try {
+      // If model is GPT-5 and reasoning_effort is provided, add it to payload
+      let payload: any = {
+        messages,
+        model: this.model,
+        ...convertKeysToSnakeCase(this.llmParams ?? null),
+      };
+      if (this.model && this.model.startsWith("gpt-5") && this.llmParams?.reasoning_effort) {
+        payload.reasoning_effort = this.llmParams.reasoning_effort;
+      }
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
-        {
-          messages,
-          model: this.model,
-          ...convertKeysToSnakeCase(this.llmParams ?? null),
-        },
+        payload,
         {
           headers: {
             Authorization: `Bearer ${this.apiKey}`,
