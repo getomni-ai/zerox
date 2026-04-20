@@ -8,11 +8,16 @@ from pdf2image import convert_from_path
 from .image import save_image
 from .text import format_markdown
 from ..constants import PDFConversionDefaultOptions, Messages
+from ..core.types import ErrorMode, PageStatus
 from ..models import litellmmodel
 
 
 async def convert_pdf_to_images(image_density: int, image_height: tuple[Optional[int], int], local_path: str, temp_dir: str) -> List[str]:
-    """Converts a PDF file to a series of images in the temp_dir. Returns a list of image paths in page order."""
+    """Converts a PDF file to a series of images in the temp_dir. Returns a list of image paths in page order.
+    
+    Raises RuntimeError if conversion fails, so callers can handle the error
+    according to their error_mode policy.
+    """
     options = {
         "pdf_path": local_path,
         "output_folder": temp_dir,
@@ -28,9 +33,16 @@ async def convert_pdf_to_images(image_density: int, image_height: tuple[Optional
         image_paths = await asyncio.to_thread(
             convert_from_path, **options
         )
+        if image_paths is None:
+            raise RuntimeError(
+                "PDF to image conversion returned None. "
+                "Is poppler installed and in PATH? "
+                "See: https://github.com/Belval/pdf2image#how-to-install"
+            )
         return image_paths
     except Exception as err:
         logging.error(f"Error converting PDF to images: {err}")
+        raise RuntimeError(f"Error converting PDF to images: {err}") from err
 
 
 async def process_page(
@@ -41,8 +53,14 @@ async def process_page(
     output_token_count: int = 0,
     prior_page: str = "",
     semaphore: Optional[asyncio.Semaphore] = None,
-) -> Tuple[str, int, int, str]:
-    """Process a single page of a PDF"""
+    error_mode: ErrorMode = ErrorMode.IGNORE,
+) -> Tuple[str, int, int, str, PageStatus, Optional[str]]:
+    """Process a single page of a PDF.
+    
+    Returns a tuple of (content, input_tokens, output_tokens, prior_page, status, error_message).
+    When error_mode is THROW, exceptions propagate directly.
+    When error_mode is IGNORE, errors are captured in the returned status and error_message.
+    """
 
     # If semaphore is provided, acquire it before processing the page
     if semaphore:
@@ -54,6 +72,7 @@ async def process_page(
                 input_token_count,
                 output_token_count,
                 prior_page,
+                error_mode=error_mode,
             )
 
     image_path = os.path.join(temp_directory, image)
@@ -71,11 +90,13 @@ async def process_page(
         output_token_count += completion.output_tokens
         prior_page = formatted_markdown
 
-        return formatted_markdown, input_token_count, output_token_count, prior_page
+        return formatted_markdown, input_token_count, output_token_count, prior_page, PageStatus.SUCCESS, None
 
     except Exception as error:
         logging.error(f"{Messages.FAILED_TO_PROCESS_IMAGE} Error:{error}")
-        return "", input_token_count, output_token_count, ""
+        if error_mode == ErrorMode.THROW:
+            raise
+        return "", input_token_count, output_token_count, "", PageStatus.ERROR, str(error)
 
 
 async def process_pages_in_batches(
@@ -86,6 +107,7 @@ async def process_pages_in_batches(
     input_token_count: int = 0,
     output_token_count: int = 0,
     prior_page: str = "",
+    error_mode: ErrorMode = ErrorMode.IGNORE,
 ):
     # Create a semaphore to limit the number of concurrent tasks
     semaphore = asyncio.Semaphore(concurrency)
@@ -100,6 +122,7 @@ async def process_pages_in_batches(
             output_token_count,
             prior_page,
             semaphore,
+            error_mode=error_mode,
         )
         for image in images
     ]
