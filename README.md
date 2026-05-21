@@ -220,6 +220,7 @@ Zerox supports a wide range of models across different providers:
   - GPT-4 Vision Mini (gpt-4o-mini)
   - GPT-4.1 (gpt-4.1)
   - GPT-4.1 Mini (gpt-4.1-mini)
+  - OpenAI-compatible vision endpoints via `credentials.baseUrl`
 
 - **AWS Bedrock**
 
@@ -244,6 +245,21 @@ const openaiResult = await zerox({
     apiKey: process.env.OPENAI_API_KEY,
   },
 });
+
+// OpenAI-compatible endpoint (Baidu Qianfan ERNIE-VL)
+// Set QIANFAN_API_KEY in your environment before running this example.
+const qianfanResult = await zerox({
+  filePath: "path/to/file.pdf",
+  modelProvider: ModelProvider.OPENAI,
+  model: "ernie-4.5-vl-28b-a3b",
+  credentials: {
+    apiKey: process.env.QIANFAN_API_KEY || "",
+    baseUrl: "https://qianfan.baidubce.com/v2",
+  },
+});
+
+// You can also run the Qianfan smoke example in examples/node/qianfan.ts
+// after setting QIANFAN_API_KEY in your local environment.
 
 // Azure OpenAI
 const azureResult = await zerox({
