@@ -72,6 +72,7 @@ export interface GoogleCredentials {
 
 export interface OpenAICredentials {
   apiKey: string;
+  baseUrl?: string;
 }
 
 export type ModelCredentials =

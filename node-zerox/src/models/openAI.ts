@@ -19,8 +19,11 @@ import { CONSISTENCY_PROMPT, SYSTEM_PROMPT_BASE } from "../constants";
 import axios from "axios";
 import fs from "fs-extra";
 
+const DEFAULT_OPENAI_BASE_URL = "https://api.openai.com/v1";
+
 export default class OpenAIModel implements ModelInterface {
   private apiKey: string;
+  private baseUrl: string;
   private model: string;
   private llmParams?: Partial<OpenAILLMParams>;
 
@@ -30,8 +33,16 @@ export default class OpenAIModel implements ModelInterface {
     llmParams?: Partial<OpenAILLMParams>
   ) {
     this.apiKey = credentials.apiKey;
+    this.baseUrl = (credentials.baseUrl || DEFAULT_OPENAI_BASE_URL).replace(
+      /\/+$/,
+      ""
+    );
     this.model = model;
     this.llmParams = llmParams;
+  }
+
+  private get chatCompletionsUrl(): string {
+    return `${this.baseUrl}/chat/completions`;
   }
 
   async getCompletion(
@@ -121,7 +132,7 @@ export default class OpenAIModel implements ModelInterface {
 
     try {
       const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
+        this.chatCompletionsUrl,
         {
           messages,
           model: this.model,
@@ -175,7 +186,7 @@ export default class OpenAIModel implements ModelInterface {
       });
 
       const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
+        this.chatCompletionsUrl,
         {
           messages,
           model: this.model,
