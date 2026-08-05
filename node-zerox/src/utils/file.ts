@@ -1,5 +1,5 @@
 import { convert } from "libreoffice-convert";
-import { exec } from "child_process";
+import { execFile } from "child_process";
 import { fromPath } from "pdf2pic";
 import { pipeline } from "stream/promises";
 import { promisify } from "util";
@@ -26,7 +26,9 @@ import { isValidUrl } from "./common";
 
 const convertAsync = promisify(convert);
 
-const execAsync = util.promisify(exec);
+// Runs a binary without a shell, so arguments (notably file paths) are passed
+// through literally and cannot be interpreted as shell syntax.
+const execFileAsync = util.promisify(execFile);
 
 // Save file to local tmp directory
 export const downloadFile = async ({
@@ -285,9 +287,22 @@ const convertPdfWithPoppler = async (
   const outputPrefix = path.join(savePath, saveFilename);
 
   const run = async (from?: number, to?: number) => {
-    const pageArgs = from && to ? `-f ${from} -l ${to}` : "";
-    const cmd = `pdftoppm -${format} -r ${density} -scale-to-y ${height} -scale-to-x -1 ${pageArgs} "${pdfPath}" "${outputPrefix}"`;
-    await execAsync(cmd);
+    const pageArgs =
+      from && to ? ["-f", String(from), "-l", String(to)] : [];
+    // Arguments are passed as an array so no shell is involved. Quoting is a
+    // shell concern — adding quotes back here would make them part of the path.
+    await execFileAsync("pdftoppm", [
+      `-${format}`,
+      "-r",
+      String(density),
+      "-scale-to-y",
+      String(height),
+      "-scale-to-x",
+      "-1",
+      ...pageArgs,
+      pdfPath,
+      outputPrefix,
+    ]);
   };
 
   if (pagesToConvertAsImages === -1) {
@@ -344,7 +359,8 @@ const getPdfAspectRatio = async (
   pdfPath: string
 ): Promise<number | undefined> => {
   return new Promise((resolve) => {
-    exec(`pdfinfo "${pdfPath}"`, (error, stdout) => {
+    // execFile: pdfPath is passed to pdfinfo literally, never through a shell.
+    execFile("pdfinfo", [pdfPath], (error, stdout) => {
       if (error) return resolve(undefined);
 
       const sizeMatch = stdout.match(/Page size:\s+([\d.]+)\s+x\s+([\d.]+)/);
