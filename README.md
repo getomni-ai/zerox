@@ -245,6 +245,18 @@ const openaiResult = await zerox({
   },
 });
 
+// Any OpenAI-compatible endpoint (self-hosted vLLM/Ollama, or hosted OCR
+// services like PennyOCR) via the optional baseUrl:
+const compatibleResult = await zerox({
+  filePath: "path/to/file.pdf",
+  modelProvider: ModelProvider.OPENAI,
+  model: "pennyocr-markdown",
+  credentials: {
+    apiKey: process.env.PENNYOCR_API_KEY,
+    baseUrl: "https://api.pennyocr.com/v1",
+  },
+});
+
 // Azure OpenAI
 const azureResult = await zerox({
   filePath: "path/to/file.pdf",
