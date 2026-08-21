@@ -72,6 +72,8 @@ export interface GoogleCredentials {
 
 export interface OpenAICredentials {
   apiKey: string;
+  /** Optional OpenAI-compatible endpoint base, e.g. "https://api.pennyocr.com/v1" or "http://localhost:11434/v1". Defaults to OpenAI. */
+  baseUrl?: string;
 }
 
 export type ModelCredentials =

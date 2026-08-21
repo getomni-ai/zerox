@@ -21,6 +21,7 @@ import fs from "fs-extra";
 
 export default class OpenAIModel implements ModelInterface {
   private apiKey: string;
+  private baseUrl: string;
   private model: string;
   private llmParams?: Partial<OpenAILLMParams>;
 
@@ -30,6 +31,7 @@ export default class OpenAIModel implements ModelInterface {
     llmParams?: Partial<OpenAILLMParams>
   ) {
     this.apiKey = credentials.apiKey;
+    this.baseUrl = (credentials.baseUrl ?? "https://api.openai.com/v1").replace(/\/+$/, "");
     this.model = model;
     this.llmParams = llmParams;
   }
@@ -121,7 +123,7 @@ export default class OpenAIModel implements ModelInterface {
 
     try {
       const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
+        `${this.baseUrl}/chat/completions`,
         {
           messages,
           model: this.model,
@@ -175,7 +177,7 @@ export default class OpenAIModel implements ModelInterface {
       });
 
       const response = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
+        `${this.baseUrl}/chat/completions`,
         {
           messages,
           model: this.model,
